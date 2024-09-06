@@ -1,0 +1,332 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Account {
+  address: String!
+  avatarUrl: String
+  email: String
+  githubUrl: String
+  id: String!
+  jwt: String
+  mineral: Float!
+  name: String
+}
+
+type BuildAccount {
+  avatarUrl: String
+  id: String
+  name: String
+}
+
+type BuildActivity {
+  account: BuildAccount
+  description: String
+  detail: BuildDetail
+  id: String!
+  reward: Float
+  timestamp: String!
+  type: String
+}
+
+type BuildDetail {
+  added: [String]
+  history: [String]
+  modified: [String]
+  removed: [String]
+  timestamp: String
+  url: String
+}
+
+type CardBoardTarget {
+  id: String
+  index: Int
+  owner: String
+  place: String
+}
+
+type CardCommandTarget {
+  from: CardBoardTarget
+  to: CardBoardTarget
+}
+
+type CardDuel {
+  config: CardDuelConfig
+  history: [CardDuelCommandBundle]
+  id: String
+}
+
+type CardDuelAttributes {
+  attack: Int
+  charge: Int
+  defense: Int
+  gameOver: Boolean
+  health: Int
+  perTurnHero: Int
+  perTurnTroop: Int
+  turn: Int
+}
+
+type CardDuelCommand {
+  owner: String
+  payload: CardDuelAttributes
+  target: CardCommandTarget
+  type: String!
+}
+
+type CardDuelCommandBundle {
+  commands: [CardDuelCommand]
+  group: String
+  phase: String
+  phaseOf: String
+  turn: Int
+}
+
+type CardDuelConfig {
+  firstMover: String!
+  firstPlayer: CardPlayerConfig!
+  secondPlayer: CardPlayerConfig!
+  setting: CardDuelSetting!
+  version: String!
+}
+
+type CardDuelHistory {
+  duel: CardDuel!
+  enemy: Profile
+  id: String
+  timestamp: String!
+  victory: Boolean
+}
+
+type CardDuelSetting {
+  groundSize: Int
+  handSize: Int
+  maxAttachment: Int
+  perTurnHero: Int
+  perTurnTroop: Int
+  playerHealth: Int
+}
+
+type CardPlayerConfig {
+  deck: [String]
+  id: String
+}
+
+type Comment {
+  body: String
+  histories: [CommentHistory]
+  id: String
+  owner: Profile
+  reply: Comment
+  replyHistories: [Comment]
+  timestamp: String
+  upCount: Int
+  updatedAt: String
+}
+
+type CommentHistory {
+  body: String
+  id: String
+  timestamp: String
+}
+
+type GameInvitation {
+  enemy: Profile!
+  game: String!
+  id: String!
+  owner: Profile!
+  timestamp: String!
+}
+
+type GameSubscription {
+  email: String!
+  game: MetacraftGames
+  timestamp: String!
+}
+
+type Mutation {
+  acceptGame(invitationId: String!): Boolean
+  archiveThread(id: String): Boolean
+  claimTokenFromOrder(orderId: String!, signature: String!): TokenOrder
+  confirmTokenOrder(input: ConfirmTokenOrderInput): TokenOrder
+  "Connect User's profile to Github, so their contribute in Github could be tracked"
+  connectGitHub(code: String!): Account
+  createComment(input: CreateCommentInput!): Comment
+  createThread(input: CreateThreadInput!): Thread
+  createTokenOrder(input: CreateTokenOrderInput): TokenOrder
+  deleteComment(id: String!): Boolean
+  editComment(input: EditCommentInput!): Comment
+  editThread(input: EditThreadInput!): Thread
+  emailConfirmedOrder(input: EmailConfirmedOrderInput): TokenOrder
+  increaseCounter(amount: Float): Float
+  inviteGame(input: InviteGameInput!): GameInvitation
+  registerTokenOrderNonce(orderId: String!): String
+  stopMatchFind: Boolean
+  subscribeGame(input: SubscribeGameInput): GameSubscription
+  "Up vote any Entity, could be Thread, Comment now.. and more to come"
+  upVote(
+    "id of any Commentable entity, e.g Thread, other Comment"
+    id: String!
+  ): Boolean
+}
+
+type Profile {
+  address: String!
+  avatarUrl: String
+  email: String
+  githubId: String
+  githubUrl: String
+  id: String!
+  isOnline: Boolean
+  jwt: String
+  linkedId: String
+  mineral: Float!
+  name: String
+}
+
+type Query {
+  account(address: String): Account
+  buddies: [Profile]
+  buildActivities: [BuildActivity]
+  cardDuel(id: String!): CardDuel
+  cardDuelHistory(limit: Int): [CardDuelHistory]
+  cardDuelPlaying: CardDuelHistory
+  counter: Float
+  feedThreads: [Thread]
+  findThreads(keyword: String!): [Thread]
+  gameInvitations: [GameInvitation]
+  gameJwt(duelId: String): String
+  greeting: String
+  personalBuildActivities(address: String): [BuildActivity]
+  personalThreads(id: String): [Thread]
+  profile(address: String): Profile
+  thread(id: String): Thread
+  tokenOrders: [TokenOrder]
+}
+
+type Subscription {
+  counterIncreased: Float
+  gameInvitation(opponent: String!): GameInvitation
+  matchFind(game: MetacraftGames!, userId: String): CardDuel
+  matchFound(game: MetacraftGames!, userId: String): CardDuel
+}
+
+type Thread {
+  body: String
+  comments: [Comment]
+  histories: [ThreadHistory]
+  id: String
+  owner: Profile
+  timestamp: String
+  title: String
+  upCount: Int
+  updatedAt: String
+}
+
+type ThreadHistory {
+  body: String
+  id: String
+  timestamp: String
+  title: String
+}
+
+type TokenOrder {
+  id: String
+  investAmount: Float!
+  investCurrency: SupportedCurrencies!
+  investUsdRatio: Float!
+  mineralAmount: Float!
+  mineralUnitPrice: Float!
+  nonce: String
+  nonceTime: String
+  owner: Profile
+  pendingUnlocks: [TokenUnlock]
+  round: String
+  status: OrderStatuses!
+  timestamp: String!
+  unlockAmount: Float
+  unlockCount: Int
+}
+
+type TokenUnlock {
+  amount: Float!
+  id: String
+  percentage: Float!
+  round: String
+  total: Float!
+  unlockOrder: Int
+}
+
+enum MetacraftGames {
+  MURG
+}
+
+enum OrderStatuses {
+  CANCELLED
+  INITIATED
+  PAID
+}
+
+enum SupportedCurrencies {
+  SOL
+  USDC
+  USDT
+}
+
+input ConfirmTokenOrderInput {
+  orderId: String!
+  signature: String!
+}
+
+input CreateCommentInput {
+  body: String!
+  id: String
+  parentId: String!
+  replyId: String
+}
+
+input CreateThreadInput {
+  body: String!
+  title: String
+}
+
+input CreateTokenOrderInput {
+  investAmount: Float
+  investCurrency: SupportedCurrencies
+}
+
+input EditCommentInput {
+  body: String!
+  id: String!
+}
+
+input EditThreadInput {
+  body: String
+  id: String
+  title: String
+}
+
+input EmailConfirmedOrderInput {
+  email: String!
+  name: String
+  order: String
+}
+
+input InviteGameInput {
+  game: MetacraftGames!
+  opponent: String!
+}
+
+input LoginInput {
+  publicKey: String!
+  signature: String!
+}
+
+input SubscribeGameInput {
+  email: String!
+  game: MetacraftGames
+}

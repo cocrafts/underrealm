@@ -1,0 +1,10 @@
+{
+  "extends": "@metacraft/tsconfig/application.json",
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}

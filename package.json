@@ -4,11 +4,32 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "game"
+    "api",
+    "engine",
+    "game",
+    "launcher"
   ],
   "scripts": {
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "type-check": "turbo run type-check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@metacraft/eslint-config": "^0.1.3",
+    "@metacraft/tsconfig": "^0.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.4.0",
+    "@typescript-eslint/parser": "^8.4.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.34.0",
+    "prettier": "^3.0.3",
+    "sst": "^2.41.2",
+    "turbo": "^2.1.1",
+    "typescript": "5.3.3"
+  },
+  "packageManager": "yarn@4.4.1"
 }
