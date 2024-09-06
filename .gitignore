@@ -5,6 +5,7 @@
 .idea
 .vscode
 .yarn
+.turbo
 
 metacraft/
 wings/
