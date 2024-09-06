@@ -1,0 +1,34 @@
+# OSX
+#
+.DS_Store
+
+.idea
+.vscode
+.yarn
+
+metacraft/
+wings/
+assets/cg
+assets/murg
+
+# Terraform automations
+/*.tf
+.terraform
+.terraform.lock.hcl
+.sst
+
+cdk.context.json
+
+node_modules/
+npm-debug.log
+yarn-error.log
+
+game/library/
+game/temp/
+game/local/
+game/build/
+game/profiles/
+game/native
+
+.env*
+!.env.example
