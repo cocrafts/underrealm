@@ -51,3 +51,7 @@ In `launcher` directory
 ```
 yarn deploy launcher --stage <production | development>
 ```
+
+## Core engine
+
+![](assets/demo.png)
