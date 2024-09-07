@@ -1,6 +1,5 @@
 {
   "extends": "@metacraft/tsconfig/application.json",
-  "include": ["index.web.js", "**/*.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

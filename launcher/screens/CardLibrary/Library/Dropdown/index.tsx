@@ -67,7 +67,8 @@ const Dropdown: FC<Props> = ({
 	};
 
 	const toggleDropdown = (): void => {
-		visible ? setVisible(false) : showDropdown();
+		if (visible) setVisible(false);
+		else showDropdown();
 	};
 
 	const renderDropDown = () => {

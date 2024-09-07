@@ -74,8 +74,8 @@ export const useWalletSugar = (sugarId: string): SugarEffect => {
 
 				isWhitelistUser = parseInt(balance.value.amount) > 0;
 				setIsWhitelistUser(isWhitelistUser);
-			} catch (e) {
-				console.log('Could not fetch Whitelist token balance');
+			} catch (err) {
+				console.log('Could not fetch Whitelist token balance', err);
 			}
 		}
 
@@ -89,8 +89,8 @@ export const useWalletSugar = (sugarId: string): SugarEffect => {
 				const purchasePrice = parseAmount(purchaseAmount as never, 6);
 
 				setIsValidBalance(parseInt(balance.value.amount) > purchasePrice);
-			} catch (e) {
-				console.log('Could not fetch Mint token balance');
+			} catch (err) {
+				console.log('Could not fetch Mint token balance', err);
 			}
 		}
 

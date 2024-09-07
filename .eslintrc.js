@@ -18,4 +18,8 @@ module.exports = {
 		document: true,
 		ethereum: true,
 	},
+	rules: {
+		'@typescript-eslint/no-require-imports': 'off',
+		'@typescript-eslint/no-duplicate-enum-values': 'off',
+	},
 };

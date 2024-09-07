@@ -8,4 +8,3 @@ const root = createRoot(container);
 configure();
 
 root.render(<App />);
-
