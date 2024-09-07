@@ -40,5 +40,10 @@ cd launcher && yarn dev
 
 In `launcher` directory
 
-- Prepare game build as previous section
-- Prepare .env file for sst deployment with format `.env.{stage}`, used by bundling and runtime. See `.env.example`
+- Prepare game build as the previous `game` section
+- Prepare .env file with format `.env.{stage}`, See `.env.example`
+- Deploy using `sst`, running
+
+```
+yarn deploy launcher --stage <production | development>
+```

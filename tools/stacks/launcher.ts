@@ -6,7 +6,7 @@ import { constructDomainName, hostedZone, loadEnvsFromStage } from './shared';
 export const launcher = ({ stack, app }: StackContext): void => {
 	loadEnvsFromStage(app.stage);
 
-	const domainName = constructDomainName("launcher", app.stage);
+	const domainName = constructDomainName('launcher', app.stage);
 
 	const site = new StaticSite(stack, 'site', {
 		buildCommand: 'metacraft bundle',
@@ -21,4 +21,3 @@ export const launcher = ({ stack, app }: StackContext): void => {
 };
 
 export default launcher;
-
