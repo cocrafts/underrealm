@@ -2,9 +2,9 @@ import type { FC } from 'react';
 import type { ScaledSize } from 'react-native';
 import { Image, Linking, View } from 'react-native';
 import { Markdown, Text } from '@metacraft/ui';
-import UnderRealmButton from 'launcher/components/Marketplace/Button';
-import resources from 'launcher/utils/resources';
-import { iStyles } from 'launcher/utils/styles';
+import UnderRealmButton from 'components/Marketplace/Button';
+import resources from 'utils/resources';
+import { iStyles } from 'utils/styles';
 
 import { styles, whyBuyNft } from './internal';
 

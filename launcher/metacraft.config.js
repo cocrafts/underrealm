@@ -6,7 +6,7 @@ const {
 	injectEnvironments,
 	extraPolyfills,
 	babelLoaderAsFallback,
-} = require('./tool/webpack');
+} = require('./webpack');
 
 module.exports = {
 	publicPath: () => process.env.PUBLIC_URL || '/',
@@ -26,7 +26,7 @@ module.exports = {
 	moduleAlias: {
 		global: {
 			'react-native': 'react-native-web',
-			'react-native-inappbrowser-reborn': 'launcher/vendor/inAppBrowser',
+			'react-native-inappbrowser-reborn': 'vendor/inAppBrowser',
 		},
 	},
 };

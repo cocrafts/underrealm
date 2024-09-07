@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from '@metacraft/ui';
-import { iStyles } from 'launcher/utils/styles';
+import { iStyles } from 'utils/styles';
 
 import FaqItem from './FaqItem';
 import { faqList } from './internal';

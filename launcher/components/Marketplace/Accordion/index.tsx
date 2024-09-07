@@ -8,8 +8,8 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { Text } from '@metacraft/ui';
-import { idleLayout } from 'launcher/utils/helper';
-import resources from 'launcher/utils/resources';
+import { idleLayout } from 'utils/helper';
+import resources from 'utils/resources';
 
 interface Props {
 	title?: string | ReactNode;

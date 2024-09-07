@@ -13,9 +13,9 @@ import Countdown from 'components/Countdown';
 import Accordion from 'components/Marketplace/Accordion';
 import Card from 'components/Marketplace/Card';
 import SignInOptions from 'components/modals/SignInOptions';
-import resources from 'launcher/utils/resources';
 import type { PackStats, Rarity } from 'screens/Mint/shared';
 import type { SugarEffect } from 'utils/hook';
+import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 
 import PurchaseButton from './PurchaseButton';
