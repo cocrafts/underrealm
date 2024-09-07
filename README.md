@@ -1,4 +1,8 @@
-# underrealm
+# Under Realm
+
+Free-to-play Strategy Trading Card game
+
+Under Realm: Rise of Magic takes place in the chaotic, fragmented world of ATEM, where humans and other races are constantly fighting each other, to quench the endless thirst for power, and wealth, and gradually take control over ATEM.
 
 ## Installation
 
