@@ -1,0 +1,21 @@
+{
+	"name": "@underrealm/card",
+	"description": "core game algorithm for Under Realm - raise of magic",
+	"version": "0.0.14",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"license": "MIT",
+	"files": [
+		"dist/**/**"
+	],
+	"scripts": {
+		"lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+		"lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+		"type-check": "tsc --noEmit",
+		"build": "rm -rf ./dist && tsc",
+		"release": "npm run build && npm publish --access public"
+	},
+	"devDependencies": {
+		"typescript": "5.3.3"
+	}
+}

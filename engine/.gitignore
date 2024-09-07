@@ -1,0 +1,14 @@
+# OSX
+#
+.DS_Store
+selfsigned.*
+
+.vscode
+.idea
+dist
+duel.json
+
+.yarn
+node_modules
+npm-debug.log
+yarn-error.log

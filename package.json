@@ -6,6 +6,7 @@
   "workspaces": [
     "api",
     "engine",
+    "engine/*",
     "game",
     "launcher"
   ],
