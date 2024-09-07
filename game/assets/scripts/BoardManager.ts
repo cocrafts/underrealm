@@ -1,4 +1,4 @@
-import Engine, { PlayerState } from '@metacraft/murg-engine';
+import Engine, { PlayerState } from '@underrealm/murg';
 import { _decorator, Animation, Component, Label } from 'cc';
 
 import { getPositionExpos } from './util/layout';

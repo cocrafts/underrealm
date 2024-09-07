@@ -6839,13 +6839,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metacraft/engines-under-realm@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "@metacraft/engines-under-realm@npm:0.0.14"
-  checksum: 10c0/21d38b50e84b6a4af479709282c02029887fe35c02fac5cdfe2d37795a89236350714adaecabc7f804d0ef0ec947f38c9efa5752a48d5b7a2f4fbc8538f7a495
-  languageName: node
-  linkType: hard
-
 "@metacraft/eslint-config@npm:^0.1.3":
   version: 0.1.3
   resolution: "@metacraft/eslint-config@npm:0.1.3"
@@ -6873,24 +6866,6 @@ __metadata:
     react: "npm:^18.0.0"
     react-native-svg: "npm:^13.0.0"
   checksum: 10c0/b338ce48d9742aa308f0eb0b7200830aaf2c6fb2998dd378f73afa0fc7918acc501443c334fa6a669c07c2c27032367ec323104fc3c020e88c8cec8d6f5cd3eb
-  languageName: node
-  linkType: hard
-
-"@metacraft/murg-engine@npm:^0.0.72":
-  version: 0.0.72
-  resolution: "@metacraft/murg-engine@npm:0.0.72"
-  dependencies:
-    mustache: "npm:^4.2.0"
-  checksum: 10c0/89d762cdf3536c9aaa967ba1e814f8956bc47dc0d5af4285e1bedd472e091358b635a9d3adc8c06a8cdac6f00d61799086e91e901e7fa3b6fea3211b6736bd14
-  languageName: node
-  linkType: hard
-
-"@metacraft/murg-engine@npm:^0.0.73":
-  version: 0.0.73
-  resolution: "@metacraft/murg-engine@npm:0.0.73"
-  dependencies:
-    mustache: "npm:^4.2.0"
-  checksum: 10c0/a549de7bb59772fdd1f8825c20c36e96b3d0547aee56c5824426da26dc943121989e7a082b704787b613f9572372a9e7d61d9d67fc9111281133ccb13d78e9d5
   languageName: node
   linkType: hard
 
@@ -10087,7 +10062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@underrealm/card@workspace:engine/card":
+"@underrealm/card@npm:*, @underrealm/card@workspace:engine/card":
   version: 0.0.0-use.local
   resolution: "@underrealm/card@workspace:engine/card"
   dependencies:
@@ -10129,8 +10104,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@underrealm/game@workspace:game"
   dependencies:
-    "@metacraft/murg-engine": "npm:^0.0.73"
     "@types/lodash": "npm:^4.14.191"
+    "@underrealm/murg": "npm:*"
     lodash: "npm:^4.17.21"
   languageName: unknown
   linkType: soft
@@ -10144,9 +10119,7 @@ __metadata:
     "@babel/plugin-proposal-export-default-from": "npm:^7.18.10"
     "@babel/preset-env": "npm:^7.20.0"
     "@metacraft/cli-web3-polyfills": "npm:^0.0.8"
-    "@metacraft/engines-under-realm": "npm:^0.0.14"
     "@metacraft/icons": "npm:^0.0.26"
-    "@metacraft/murg-engine": "npm:^0.0.72"
     "@metacraft/ui": "npm:^0.1.1"
     "@metaplex-foundation/js": "npm:0.19.4"
     "@react-native-async-storage/async-storage": "npm:^1.22.3"
@@ -10166,6 +10139,8 @@ __metadata:
     "@types/numeral": "npm:^2.0.2"
     "@types/react": "npm:^18.2.0"
     "@types/react-native": "npm:^0.71.2"
+    "@underrealm/card": "npm:*"
+    "@underrealm/murg": "npm:*"
     "@walless/adapter-solana-base": "npm:^0.0.2"
     aws-amplify: "npm:^4.3.35"
     aws-sdk: "npm:^2.1206.0"
@@ -10203,7 +10178,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@underrealm/murg@workspace:engine/murg":
+"@underrealm/murg@npm:*, @underrealm/murg@workspace:engine/murg":
   version: 0.0.0-use.local
   resolution: "@underrealm/murg@workspace:engine/murg"
   dependencies:

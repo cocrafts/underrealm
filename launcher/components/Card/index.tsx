@@ -6,8 +6,8 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import type { Card as ICard, TemplateFragment } from '@metacraft/murg-engine';
-import { ClassType, ElementalType } from '@metacraft/murg-engine';
+import type { Card as ICard, TemplateFragment } from '@underrealm/murg';
+import { ClassType, ElementalType } from '@underrealm/murg';
 import { Text } from '@metacraft/ui';
 import { navigate } from 'stacks/Browser/shared';
 import resources from 'utils/resources';

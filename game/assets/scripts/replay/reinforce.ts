@@ -1,4 +1,4 @@
-import Engine, { DuelCommandBundle } from '@metacraft/murg-engine';
+import Engine, { DuelCommandBundle } from '@underrealm/murg';
 
 import { animateRelocate } from '../tween';
 import { getGroundExpos } from '../util/layout';

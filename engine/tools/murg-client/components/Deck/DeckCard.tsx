@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import type { Card, CardState } from '@metacraft/murg-engine';
-import { CardType } from '@metacraft/murg-engine';
+import type { Card, CardState } from '@underrealm/murg';
+import { CardType } from '@underrealm/murg';
 import { Box, Text } from 'ink';
 
 interface Props {

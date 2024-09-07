@@ -3,7 +3,7 @@ import Engine, {
 	DuelConfig,
 	DuelState,
 	PlayerState,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import { AudioSource, Node } from 'cc';
 import lodash from 'lodash';
 

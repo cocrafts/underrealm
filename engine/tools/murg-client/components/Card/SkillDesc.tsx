@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { Skill, TemplateFragment } from '@metacraft/murg-engine';
+import type { Skill, TemplateFragment } from '@underrealm/murg';
 import { Text } from 'ink';
 
 interface Props {

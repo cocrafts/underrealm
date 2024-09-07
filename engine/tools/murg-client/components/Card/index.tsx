@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { Fragment } from 'react';
-import type { DuelState } from '@metacraft/murg-engine';
+import type { DuelState } from '@underrealm/murg';
 import {
 	getCard,
 	getCardState,
 	getComputedAttribute,
 	getElementalDisplay,
 	getPlaceDisplay,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import { Box, Text } from 'ink';
 
 import Attribute from './Attribute';

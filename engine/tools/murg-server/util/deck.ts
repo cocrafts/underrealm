@@ -1,5 +1,5 @@
-import type { CardMeta } from '@metacraft/murg-engine';
-import { CardType } from '@metacraft/murg-engine';
+import type { CardMeta } from '@underrealm/murg';
+import { CardType } from '@underrealm/murg';
 
 export const generateRandomDeck = (meta: CardMeta, size = 36) => {
 	const sources = pickSkillReadyCards(meta);

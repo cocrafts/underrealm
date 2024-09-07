@@ -1,4 +1,4 @@
-import { nanoId } from '@metacraft/murg-engine';
+import { nanoId } from '@underrealm/murg';
 import express from 'express';
 import injectSocket from 'express-ws';
 import { sign, verify } from 'jsonwebtoken';

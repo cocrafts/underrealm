@@ -4,13 +4,13 @@ import type {
 	DuelCommandBundle,
 	DuelConfig,
 	DuelState,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import {
 	getInitialState,
 	mergeFragmentToState,
 	move,
 	runCommand,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import { Box, Text, useInput } from 'ink';
 import { cloneDeep } from 'lodash';
 

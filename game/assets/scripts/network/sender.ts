@@ -1,4 +1,4 @@
-import Engine, { DuelCommandBundle } from '@metacraft/murg-engine';
+import Engine, { DuelCommandBundle } from '@underrealm/murg';
 import lodash from 'lodash';
 
 import { replay } from '../replay';

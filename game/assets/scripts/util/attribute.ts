@@ -1,4 +1,4 @@
-import Engine from '@metacraft/murg-engine';
+import Engine from '@underrealm/murg';
 import { Label } from 'cc';
 
 import { getPositiveColor } from '../util/helper';

@@ -1,6 +1,6 @@
-import type { DuelCommandBundle, DuelState } from '@metacraft/murg-engine';
-import { mergeFragmentToState, runCommand } from '@metacraft/murg-engine';
-import { getInitialState } from '@metacraft/murg-engine';
+import type { DuelCommandBundle, DuelState } from '@underrealm/murg';
+import { mergeFragmentToState, runCommand } from '@underrealm/murg';
+import { getInitialState } from '@underrealm/murg';
 
 import { fetchDuel } from './internal';
 import { selectBestMove } from './selectedBestMove';

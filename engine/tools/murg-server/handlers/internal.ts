@@ -1,10 +1,10 @@
-import type { DuelConfig, PlayerConfig } from '@metacraft/murg-engine';
+import type { DuelConfig, PlayerConfig } from '@underrealm/murg';
 import {
 	defaultSetting,
 	getInitialState,
 	makeMeta,
 	move,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 
 import { generateRandomDeck } from '../util/deck';
 import type { DuelRecord } from '../util/type';

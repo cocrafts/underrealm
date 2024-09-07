@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { DuelState } from '@metacraft/murg-engine';
+import type { DuelState } from '@underrealm/murg';
 import { Box } from 'ink';
 
 import Card from './Card';

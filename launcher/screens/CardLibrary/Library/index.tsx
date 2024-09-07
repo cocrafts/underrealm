@@ -7,12 +7,12 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import type { Card as ICard } from '@metacraft/murg-engine';
+import type { Card as ICard } from '@underrealm/murg';
 import {
 	CardType,
 	CardType as ICardType,
 	getCardList,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import Card, { CARD_WIDTH } from 'components/Card';

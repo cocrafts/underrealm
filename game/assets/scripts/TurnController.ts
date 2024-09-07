@@ -1,4 +1,4 @@
-import Engine from '@metacraft/murg-engine';
+import Engine from '@underrealm/murg';
 import { _decorator, Button, Color, Component, Node } from 'cc';
 
 import { setCursor } from './util/helper';

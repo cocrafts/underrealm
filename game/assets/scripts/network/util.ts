@@ -1,4 +1,4 @@
-import { DuelCommandBundle } from '@metacraft/murg-engine';
+import { DuelCommandBundle } from '@underrealm/murg';
 
 import { system } from '../util/system';
 

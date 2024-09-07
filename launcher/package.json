@@ -20,9 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/client": "^3.6.9",
-    "@metacraft/engines-under-realm": "^0.0.14",
     "@metacraft/icons": "^0.0.26",
-    "@metacraft/murg-engine": "^0.0.72",
     "@metacraft/ui": "^0.1.1",
     "@metaplex-foundation/js": "0.19.4",
     "@react-native-async-storage/async-storage": "^1.22.3",
@@ -36,6 +34,8 @@
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-solflare": "^0.6.28",
     "@solana/web3.js": "1.78.4",
+    "@underrealm/card": "*",
+    "@underrealm/murg": "*",
     "@walless/adapter-solana-base": "^0.0.2",
     "aws-amplify": "^4.3.35",
     "bn.js": "^5.2.1",

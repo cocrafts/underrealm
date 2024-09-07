@@ -1,4 +1,4 @@
-import { DuelCommandBundle, DuelConfig } from '@metacraft/murg-engine';
+import { DuelCommandBundle, DuelConfig } from '@underrealm/murg';
 
 export enum DuelCommands {
 	ConnectMatch = 'ConnectMatch',

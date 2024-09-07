@@ -1,4 +1,4 @@
-import { ClassType, ElementalType } from '@metacraft/murg-engine';
+import { ClassType, ElementalType } from '@underrealm/murg';
 import type { CardTypeProps } from 'screens/CardLibrary/Library/shared';
 import resources from 'utils/resources';
 

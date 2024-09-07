@@ -2,7 +2,7 @@ import Engine, {
 	DuelConfig,
 	DuelState,
 	TemplateFragment,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import { Color, Node, Vec2, Vec3 } from 'cc';
 
 import { CardManager } from '../CardManager';

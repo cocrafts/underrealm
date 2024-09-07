@@ -2,14 +2,14 @@ import type {
 	DuelCommandBundle,
 	DuelState,
 	MoveResult,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import {
 	DuelPlace,
 	getInitialState,
 	mergeFragmentToState,
 	move,
 	runCommand,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import clone from 'lodash/cloneDeep';
 
 const cache = require('./cache.json');

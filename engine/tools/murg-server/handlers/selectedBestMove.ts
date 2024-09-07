@@ -3,8 +3,8 @@ import type {
 	DuelCommandBundle,
 	DuelState,
 	MoveResult,
-} from '@metacraft/murg-engine';
-import { DuelPlace, mergeFragmentToState, move } from '@metacraft/murg-engine';
+} from '@underrealm/murg';
+import { DuelPlace, mergeFragmentToState, move } from '@underrealm/murg';
 import clone from 'lodash/cloneDeep';
 
 function addMove(curDuel: DuelState, card1, card2, pos1, pos2) {

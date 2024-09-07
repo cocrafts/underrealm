@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { DuelCommandBundle, PlayerState } from '@metacraft/murg-engine';
+import type { DuelCommandBundle, PlayerState } from '@underrealm/murg';
 import { Box, Text } from 'ink';
 
 import { selectColor } from '../../util';

@@ -1,4 +1,4 @@
-import Engine, { DuelCommand } from '@metacraft/murg-engine';
+import Engine, { DuelCommand } from '@underrealm/murg';
 
 const { DuelCommandType, DuelPlace } = Engine;
 

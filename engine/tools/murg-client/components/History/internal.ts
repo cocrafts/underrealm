@@ -1,5 +1,5 @@
-import type { DuelCommand } from '@metacraft/murg-engine';
-import { DuelCommandType, DuelPlace } from '@metacraft/murg-engine';
+import type { DuelCommand } from '@underrealm/murg';
+import { DuelCommandType, DuelPlace } from '@underrealm/murg';
 
 interface CommandInfo {
 	id: string;

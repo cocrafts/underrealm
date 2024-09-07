@@ -1,4 +1,4 @@
-import Engine, { CardState } from '@metacraft/murg-engine';
+import Engine, { CardState } from '@underrealm/murg';
 import {
 	_decorator,
 	Component,

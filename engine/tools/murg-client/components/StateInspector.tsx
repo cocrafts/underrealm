@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import type { DuelState } from '@metacraft/murg-engine';
-import { getPlaceDisplay } from '@metacraft/murg-engine';
+import type { DuelState } from '@underrealm/murg';
+import { getPlaceDisplay } from '@underrealm/murg';
 import { Box, Text } from 'ink';
 
 interface Props {

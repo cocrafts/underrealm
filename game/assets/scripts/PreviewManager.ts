@@ -1,4 +1,4 @@
-import Engine from '@metacraft/murg-engine';
+import Engine from '@underrealm/murg';
 import { _decorator, Component, EventMouse, Node, UIOpacity, Vec2 } from 'cc';
 
 import { cardIdFromNode, setCursor } from './util/helper';

@@ -3,10 +3,6 @@
     "allowJs": false,
     "jsx": "react-native",
     "baseUrl": ".",
-    "paths": {
-      "@metacraft/engines-under-realm": ["package/card"],
-      "@metacraft/murg-engine": ["package/murg"]
-    },
     "allowSyntheticDefaultImports": true
   },
   "exclude": ["node_modules"]

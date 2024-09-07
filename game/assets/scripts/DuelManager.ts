@@ -1,4 +1,4 @@
-import Engine from '@metacraft/murg-engine';
+import Engine from '@underrealm/murg';
 import {
 	_decorator,
 	AudioSource,

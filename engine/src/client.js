@@ -7,7 +7,7 @@ const { addAlias } = require('module-alias');
 const React = require('react');
 const { render } = require('ink');
 
-addAlias('@metacraft/murg-engine', resolve(__dirname, './package/murg'));
+addAlias('@underrealm/murg', resolve(__dirname, './package/murg'));
 
 const { measureExecutionTime } = require('./tool/murg-client/util');
 let App = require('./tool/murg-client').MURG;

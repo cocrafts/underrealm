@@ -2,14 +2,14 @@ import type {
 	DuelCommandBundle,
 	DuelState,
 	PlayerState,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import {
 	CardType,
 	makeDuel,
 	makeMeta,
 	mergeFragmentToState,
 	runCommand,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 
 export const generateRandomDeck = (version = '00001', size = 36): string[] => {
 	let count = 0;

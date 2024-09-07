@@ -1,11 +1,11 @@
-import type { MoveResult } from '@metacraft/murg-engine';
+import type { MoveResult } from '@underrealm/murg';
 import {
 	DuelPlace,
 	getInitialState,
 	mergeFragmentToState,
 	move,
 	runCommand,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 // import clone from 'lodash/cloneDeep';
 // import { selectBestMove } from '../../botTemp/botTest';
 

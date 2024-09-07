@@ -2,8 +2,7 @@
 	"name": "@underrealm/murg",
 	"description": "core game algorithm for Under Realm - raise of magic",
 	"version": "0.0.73",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "index.ts",
 	"license": "MIT",
 	"files": [
 		"dist/**/**"

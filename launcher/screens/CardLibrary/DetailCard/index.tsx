@@ -6,11 +6,11 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import type { TemplateFragment } from '@metacraft/murg-engine';
-import { ClassType, ElementalType, getCardList } from '@metacraft/murg-engine';
-import { CardType } from '@metacraft/murg-engine/dist/utils/type';
 import { Text } from '@metacraft/ui';
 import { useRoute } from '@react-navigation/native';
+import type { TemplateFragment } from '@underrealm/murg';
+import { ClassType, ElementalType, getCardList } from '@underrealm/murg';
+import { CardType } from '@underrealm/murg';
 import Card from 'components/Card';
 import ScrollLayout from 'components/layouts/Scroll';
 import { getRarity } from 'screens/CardLibrary/DetailCard/shared';

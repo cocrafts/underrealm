@@ -2,7 +2,7 @@ import type {
 	DuelCommandBundle,
 	DuelState,
 	MoveResult,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 import {
 	BundleGroup,
 	getInitialState,
@@ -10,7 +10,7 @@ import {
 	mergeFragmentToState,
 	move,
 	runCommand,
-} from '@metacraft/murg-engine';
+} from '@underrealm/murg';
 
 import type { CommandHandler } from '../util/type';
 import { DuelCommands } from '../util/type';
