@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "paths": {
       "types/*": ["./types/*"],
       "resolvers/*": ["./resolvers/*"],

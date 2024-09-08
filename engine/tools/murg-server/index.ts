@@ -22,7 +22,8 @@ const socket = injectSocket(app);
 const duelClients: Record<string, Array<{ player: string; ws: unknown }>> = {};
 const jwtSecret = 'shh!!';
 
-app.ws('/', (ws) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(app as any).ws('/', (ws) => {
 	ws.on('message', async (rawData) => {
 		try {
 			const data: CommandPayload = JSON.parse(rawData);

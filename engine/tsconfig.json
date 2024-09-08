@@ -3,7 +3,8 @@
     "allowJs": false,
     "jsx": "react-native",
     "baseUrl": ".",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules"]
 }

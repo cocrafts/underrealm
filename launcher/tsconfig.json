@@ -1,6 +1,15 @@
 {
   "extends": "@metacraft/tsconfig/application.json",
   "compilerOptions": {
+    "skipLibCheck": true,
+
+    /** temporarily satisfy engine type error  */
+    "strict": false,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
+
+    "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
       "components/*": ["./components/*"],

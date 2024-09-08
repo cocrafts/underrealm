@@ -10849,7 +10849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:^4.17.30, @types/express-serve-static-core@npm:^4.17.33":
+"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.30, @types/express-serve-static-core@npm:^4.17.33":
   version: 4.19.5
   resolution: "@types/express-serve-static-core@npm:4.19.5"
   dependencies:
@@ -10861,7 +10861,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:^4, @types/express@npm:^4.17.13":
+"@types/express-ws@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "@types/express-ws@npm:3.0.5"
+  dependencies:
+    "@types/express": "npm:*"
+    "@types/express-serve-static-core": "npm:*"
+    "@types/ws": "npm:*"
+  checksum: 10c0/c364faed8f0c25ebc19329faa60dd5d03e8890cccf8edd5a383042d717c4c11f8b9a289763730f8569cb858d307e9ddeb7c57b34a34390ba556837c1952854fe
+  languageName: node
+  linkType: hard
+
+"@types/express@npm:*, @types/express@npm:^4, @types/express@npm:^4.17.13":
   version: 4.17.21
   resolution: "@types/express@npm:4.17.21"
   dependencies:
@@ -11039,6 +11050,13 @@ __metadata:
   version: 2.0.4
   resolution: "@types/module-alias@npm:2.0.4"
   checksum: 10c0/73e0993763526093d9e0993923e93a43186fac9b73e6ee6f785a34a79db6130468b2c9d9798c092ae5d50e8a2e6f7ab51a7f638ee7671037c15b5dde15dc5787
+  languageName: node
+  linkType: hard
+
+"@types/mustache@npm:^4.2.0":
+  version: 4.2.5
+  resolution: "@types/mustache@npm:4.2.5"
+  checksum: 10c0/624975c39068d47407eadb89628aaff5ef60f3b7a71eef92a254310896a4e90518a01dcf71d95779ab2c986034a6ca5403d22fea237c67ff87f2e2b3fb794ea6
   languageName: node
   linkType: hard
 
@@ -11553,6 +11571,7 @@ __metadata:
     "@swc/core": "npm:^1.3.25"
     "@swc/jest": "npm:^0.2.21"
     "@swc/register": "npm:^0.1.10"
+    "@types/express-ws": "npm:^3.0.5"
     "@types/jest": "npm:^28.1.1"
     "@types/node": "npm:^17.0.43"
     "@types/react": "npm:^18.0.5"
@@ -11656,6 +11675,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@underrealm/murg@workspace:engine/murg"
   dependencies:
+    "@types/mustache": "npm:^4.2.0"
     mustache: "npm:^4.2.0"
     rimraf: "npm:^5.0.5"
     typescript: "npm:5.3.3"

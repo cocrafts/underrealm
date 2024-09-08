@@ -18,6 +18,7 @@
 		"mustache": "^4.2.0"
 	},
 	"devDependencies": {
+		"@types/mustache": "^4.2.0",
 		"rimraf": "^5.0.5",
 		"typescript": "5.3.3"
 	}

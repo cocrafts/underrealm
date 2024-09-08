@@ -186,7 +186,7 @@ export const interpolate = (card: Card): Card => {
 	const { charge, activation, template, attribute, passiveAttribute, inspire } =
 		card.skill;
 	const scope = attribute || passiveAttribute || {};
-	const interpolated = Mustache.render(template, scope);
+	const interpolated = Mustache.render(template as string, scope);
 	const isInspire = activation === ActivationType.Inspire;
 	const suffix = isInspire
 		? ` ${InspireSourceDisplays[inspire]}`

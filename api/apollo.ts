@@ -1,7 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 
 import { GameMutation, GameQuery, GameSubscription } from './game';
-import typeDefs from './schema';
+import typeDefs from './graphqlSchema';
 
 export const apolloServer = new ApolloServer({
 	typeDefs,
