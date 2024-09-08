@@ -1,4 +1,3 @@
-// import { ForbiddenError } from 'apollo-server-lambda';
 import type { ContextFunction } from '@apollo/server';
 import { getParameter } from 'aws/parameter';
 import jwt from 'jsonwebtoken';
@@ -12,14 +11,7 @@ export interface ApiContext {
 	client: ClientProfile;
 }
 
-export type Resolver<A, R = void> = (
-	root: unknown,
-	args: A,
-	context: ApiContext,
-) => Promise<R>;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const graphqlContext: ContextFunction<any[], ApiContext> = async ({
+export const graphqlContext: ContextFunction<unknown[], ApiContext> = async ({
 	event,
 	req,
 }) => {

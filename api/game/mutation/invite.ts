@@ -1,17 +1,11 @@
 import { getItem, putItem } from 'aws/dynamo';
 import { publish, topicGenerator } from 'aws/pubsub';
-import type { Resolver } from 'utils/runtime';
-// import { InviteGameInput } from 'types/graphql';
+import type { GameInvitation, MutationResolvers } from 'types/graphql';
 import { nanoId } from 'utils/uuid';
 
 import type { GameInvitationRecord } from '../types';
 
-interface Args {
-	// input: InviteGameInput;
-	input: never;
-}
-
-export const inviteGame: Resolver<Args, GameInvitationRecord> = async (
+export const inviteGame: MutationResolvers['inviteGame'] = async (
 	root,
 	{ input },
 	{ user },
@@ -47,5 +41,6 @@ export const inviteGame: Resolver<Args, GameInvitationRecord> = async (
 	promises.push(publish(inviteTopic, inviteData));
 
 	await Promise.all(promises);
-	return inviteRecord;
+
+	return inviteRecord as GameInvitation;
 };

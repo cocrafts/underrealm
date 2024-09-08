@@ -1,17 +1,12 @@
 import type { PlayerConfig } from '@metacraft/murg-engine';
 import { makeDuel, makeMeta, move } from '@metacraft/murg-engine';
 import { batchWrite, deleteItem, getItem } from 'aws/dynamo';
-// import { GameInvitation } from 'types/graphql';
+import type { MutationResolvers } from 'types/graphql';
 import { nanoId } from 'utils/uuid';
 
-import type { Resolver } from '../../utils/runtime';
 import { generateRandomDeck } from '../duel';
 
-interface Args {
-	invitationId: string;
-}
-
-export const acceptGame: Resolver<Args, boolean> = async (
+export const acceptGame: MutationResolvers['acceptGame'] = async (
 	root,
 	{ invitationId },
 ) => {

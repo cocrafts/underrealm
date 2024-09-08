@@ -7,14 +7,14 @@ import {
 	wrapDeleteRequest,
 } from 'aws/dynamo';
 import { publish, topicGenerator } from 'aws/pubsub';
+import type { MutationResolvers } from 'types/graphql';
 import type { DynamoRecord } from 'types/internal';
-import type { Resolver } from 'utils/runtime';
 import { microId } from 'utils/uuid';
 
 import { makeDuel } from '../duel';
 import type { CardDuelRecord, MatchFindRecord } from '../types';
 
-export const stopMatchFind: Resolver<never, boolean> = async (
+export const stopMatchFind: MutationResolvers['stopMatchFind'] = async (
 	root,
 	args,
 	{ user },
@@ -29,12 +29,8 @@ export const stopMatchFind: Resolver<never, boolean> = async (
 	return true;
 };
 
-interface Args {
-	game: 'MURG';
-	version: string;
-}
-
-export const findMatch: Resolver<Args, CardDuelRecord> = async (
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const findMatch = async (
 	root,
 	{ game = 'MURG', version = '00001' },
 	{ user },
@@ -92,7 +88,7 @@ export const findMatch: Resolver<Args, CardDuelRecord> = async (
 		];
 
 		const matchFoundTopic = topicGenerator.matchFound({
-			game,
+			game: game as never,
 			userId: foundMatch.playerId,
 		});
 

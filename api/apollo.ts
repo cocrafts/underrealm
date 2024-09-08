@@ -1,19 +1,26 @@
+import { readFileSync } from 'fs';
+
 import { ApolloServer } from '@apollo/server';
+import type { Resolvers } from 'types/graphql';
 
-import { GameMutation, GameQuery, GameSubscription } from './game';
-import typeDefs from './graphqlSchema';
+import {
+	GameMutationResolvers,
+	GameQueryResolvers,
+	GameSubscription,
+} from './game';
 
-export const apolloServer = new ApolloServer({
-	typeDefs,
-	resolvers: {
-		Query: {
-			...GameQuery,
-		},
-		Mutation: {
-			...GameMutation,
-		},
-		Subscription: {
-			...GameSubscription,
-		},
+const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
+
+const resolvers: Resolvers = {
+	Query: {
+		...GameQueryResolvers,
 	},
-});
+	Mutation: {
+		...GameMutationResolvers,
+	},
+	Subscription: {
+		...GameSubscription,
+	},
+};
+
+export const apolloServer = new ApolloServer({ typeDefs, resolvers });

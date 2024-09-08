@@ -1,11 +1,7 @@
 import { getItem, rangeQuery } from 'aws/dynamo';
-// import { CardDuel } from 'types/graphql';
-import type { Resolver } from 'utils/runtime';
+import type { QueryResolvers } from 'types/graphql';
 
-// type HistoryResolver = Resolver<{ limit: number }, CardDuel[]>;
-type HistoryResolver = Resolver<{ limit: number }, unknown[]>;
-
-export const cardDuelHistory: HistoryResolver = async (
+export const cardDuelHistory: QueryResolvers['cardDuelHistory'] = async (
 	root,
 	{ limit },
 	{ user },
@@ -31,10 +27,7 @@ export const cardDuelPlaying = async (root, args, { user }) => {
 	return duels[0];
 };
 
-// type DuelResolver = Resolver<{ id: string }, CardDuel>;
-type DuelResolver = Resolver<{ id: string }, unknown>;
-
-export const cardDuel: DuelResolver = async (root, { id }) => {
+export const cardDuel: QueryResolvers['cardDuel'] = async (root, { id }) => {
 	const result = await getItem(`cardDuel#${id}`);
 	return result.Item;
 };

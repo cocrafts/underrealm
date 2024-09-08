@@ -1,18 +1,12 @@
 import { getItem, rangeQuery } from 'aws/dynamo';
 import { getParameter } from 'aws/parameter';
 import jwt from 'jsonwebtoken';
+import type { QueryResolvers } from 'types/graphql';
 import { requireConditions } from 'utils/helper';
-import type { Resolver } from 'utils/runtime';
 
-import type {
-	CardDuelRecord,
-	GameInvitationRecord,
-	JwtPayload,
-} from '../types';
+import type { CardDuelRecord, JwtPayload } from '../types';
 
-type InvitationsSignature = Resolver<never, GameInvitationRecord[]>;
-
-export const gameInvitations: InvitationsSignature = async (
+export const gameInvitations: QueryResolvers['gameInvitations'] = async (
 	root,
 	args,
 	{ user },
@@ -31,9 +25,11 @@ export const gameInvitations: InvitationsSignature = async (
 	return invitations.filter(filterRecent) as never;
 };
 
-type JwtSignature = Resolver<{ duelId: string }, string>;
-
-export const gameJwt: JwtSignature = async (root, { duelId }, { user }) => {
+export const gameJwt: QueryResolvers['gameJwt'] = async (
+	root,
+	{ duelId },
+	{ user },
+) => {
 	const duel = (await getItem(`cardDuel#${duelId}`))?.Item as CardDuelRecord;
 
 	requireConditions([
