@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "types/*": ["./types/*"],
+      "resolvers/*": ["./resolvers/*"],
+      "aws/*": ["./aws/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

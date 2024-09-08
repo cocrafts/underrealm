@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
     "@metacraft/eslint-config": "^0.1.3",
     "@metacraft/tsconfig": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
