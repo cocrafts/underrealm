@@ -27,5 +27,8 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Create fake jwt
+        run: touch api/jwk.json && echo "{}" >> api/jwk.json
+
       - name: Typecheck
         run: yarn type-check
