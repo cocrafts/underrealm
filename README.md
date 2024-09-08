@@ -54,7 +54,8 @@ yarn deploy launcher --stage <production | development>
 
 ## API
 
-Prepare .env file at `api`, follow `api/.env.example`
+- `.env` file at `api` dir, follow `api/.env.example`
+- `jwk.json` at `api` dir to load by `jsonwebtoken`
 
 Run the API
 
