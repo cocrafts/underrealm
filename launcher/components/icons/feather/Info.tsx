@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Circle, Line, Svg } from 'react-native-svg';
 
-import type { IconProps } from '../shared';
+import type { IconProps } from '../shard';
 
 export const InfoIcon: FC<IconProps> = ({
 	style,

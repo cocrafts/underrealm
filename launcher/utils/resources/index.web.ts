@@ -285,4 +285,14 @@ export default {
 			troop: { uri: '/card/type-troop.png' },
 		},
 	},
+	quest: {
+		headingBackground: { uri: '/quest/heading.png' },
+		charm: { uri: '/quest/charm.png' },
+		titleCharm: { uri: '/quest/title-charm.png' },
+		activeTab: { uri: '/quest/active-tab.png' },
+		inactiveTab: { uri: '/quest/inactive-tab.png' },
+		refreshButton: { uri: '/quest/refresh-button.png' },
+		discord: { uri: '/quest/discord.png' },
+		twitter: { uri: '/quest/twitter.png' },
+	},
 };
