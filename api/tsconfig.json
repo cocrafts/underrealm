@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2017",
     "baseUrl": ".",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
       "types/*": ["./types/*"],
