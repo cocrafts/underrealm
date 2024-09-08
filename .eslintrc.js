@@ -9,6 +9,7 @@ module.exports = {
 		'game/assets/scripts/util/graphql.ts',
 		'game',
 		'!api/game',
+		'api/types/graphql.ts',
 	],
 	env: {
 		node: true,
