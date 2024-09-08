@@ -1,5 +1,4 @@
-import { ForbiddenError } from 'apollo-server-lambda';
-
+import { ForbiddenError } from './errors';
 import type { UserProfile } from './internal';
 
 export const requireAuthentication = (

@@ -1,6 +1,7 @@
-import { ForbiddenError } from 'apollo-server-lambda';
+// import { ForbiddenError } from 'apollo-server-lambda';
+import type { ContextFunction } from '@apollo/server';
 import { getParameter } from 'aws/parameter';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 import { configs } from './config';
 import type { ClientProfile, UserProfile } from './internal';
@@ -17,7 +18,11 @@ export type Resolver<A, R = void> = (
 	context: ApiContext,
 ) => Promise<R>;
 
-export const graphqlContext = async ({ event, req }): Promise<ApiContext> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const graphqlContext: ContextFunction<any[], ApiContext> = async ({
+	event,
+	req,
+}) => {
 	let user = { id: null } as UserProfile;
 	let client = { id: null } as ClientProfile;
 
@@ -27,11 +32,10 @@ export const graphqlContext = async ({ event, req }): Promise<ApiContext> => {
 
 	if (clientKey) {
 		const { Parameter } = await getParameter('metacraft-admin-jwt');
-		client = verify(clientKey, Parameter.Value) as UserProfile;
+		client = jwt.verify(clientKey, Parameter.Value) as UserProfile;
 	}
 
-	if (configs.IS_LAMBDA && !client?.id)
-		throw new ForbiddenError('invalid client');
+	if (configs.IS_LAMBDA && !client?.id) throw new Error('invalid client');
 
 	if (authorization) {
 		try {

@@ -1,7 +1,8 @@
-import { gql } from 'apollo-server-lambda';
+import gql from 'graphql-tag';
 
 export const typeDefs = gql`
 	type Query {
+		greeting: String
 		profile(address: String): Profile
 		gameJwt(duelId: String): String
 		gameInvitations: [GameInvitation]
@@ -121,6 +122,10 @@ export const typeDefs = gql`
 		enemy: Profile
 		victory: Boolean
 		timestamp: String!
+	}
+
+	enum MetacraftGames {
+		MURG
 	}
 `;
 

@@ -1,5 +1,5 @@
 import type { JwtPayload } from 'jsonwebtoken';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 
 import jwkJSON from '../jwk.json';
@@ -23,7 +23,7 @@ export const verifyAsync = (
 	kid: string,
 ): Promise<string | JwtPayload> =>
 	new Promise((resolve, reject) => {
-		return verify(
+		return jwt.verify(
 			token,
 			pemMap[kid],
 			{ algorithms: ['RS256'] },
