@@ -33,3 +33,5 @@ game/native
 
 .env*
 !.env.example
+
+jwk.json

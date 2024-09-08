@@ -1,14 +1,14 @@
-import { sign } from 'jsonwebtoken';
-
 import { getItem, rangeQuery } from 'aws/dynamo';
 import { getParameter } from 'aws/parameter';
-import {
+import jwt from 'jsonwebtoken';
+import { requireConditions } from 'utils/helper';
+import type { Resolver } from 'utils/runtime';
+
+import type {
 	CardDuelRecord,
 	GameInvitationRecord,
 	JwtPayload,
 } from '../types';
-import { requireConditions } from 'utils/helper';
-import { Resolver } from 'utils/runtime';
 
 type InvitationsSignature = Resolver<never, GameInvitationRecord[]>;
 
@@ -45,5 +45,5 @@ export const gameJwt: JwtSignature = async (root, { duelId }, { user }) => {
 	const payload: JwtPayload = { userId: user.id, duelId };
 	const options = { expiresIn: '1d' };
 
-	return sign(payload, Parameter.Value, options);
+	return jwt.sign(payload, Parameter.Value, options);
 };

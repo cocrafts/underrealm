@@ -1,10 +1,11 @@
-import { makeDuel, makeMeta, move, PlayerConfig } from '@metacraft/murg-engine';
-
+import type { PlayerConfig } from '@metacraft/murg-engine';
+import { makeDuel, makeMeta, move } from '@metacraft/murg-engine';
 import { batchWrite, deleteItem, getItem } from 'aws/dynamo';
-import { generateRandomDeck } from '../duel';
 // import { GameInvitation } from 'types/graphql';
 import { nanoId } from 'utils/uuid';
-import { Resolver } from '../../utils/runtime';
+
+import type { Resolver } from '../../utils/runtime';
+import { generateRandomDeck } from '../duel';
 
 interface Args {
 	invitationId: string;

@@ -1,11 +1,13 @@
-import {
+import type {
 	CardMeta,
+	DuelConfig,
+	PlayerConfig,
+} from '@metacraft/murg-engine';
+import {
 	CardType,
 	defaultSetting,
-	DuelConfig,
 	getInitialState,
 	makeMeta,
-	PlayerConfig,
 } from '@metacraft/murg-engine';
 
 export const makeDuel = (
@@ -83,4 +85,3 @@ const pickSkillReadyCards = ({ map, entities }: CardMeta) => {
 
 	return result;
 };
-

@@ -8,6 +8,7 @@ module.exports = {
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',
 		'game',
+		'!api/game',
 	],
 	env: {
 		node: true,

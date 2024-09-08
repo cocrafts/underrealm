@@ -1,13 +1,14 @@
 import { getItem, putItem } from 'aws/dynamo';
 import { publish, topicGenerator } from 'aws/pubsub';
-import { GameInvitationRecord } from '../types';
+import type { Resolver } from 'utils/runtime';
 // import { InviteGameInput } from 'types/graphql';
 import { nanoId } from 'utils/uuid';
-import { Resolver } from 'utils/runtime';
+
+import type { GameInvitationRecord } from '../types';
 
 interface Args {
 	// input: InviteGameInput;
-	input: any;
+	input: never;
 }
 
 export const inviteGame: Resolver<Args, GameInvitationRecord> = async (
@@ -37,7 +38,7 @@ export const inviteGame: Resolver<Args, GameInvitationRecord> = async (
 		enemy: opponentRec as never,
 		timestamp: new Date().toISOString(),
 		ttl: Math.floor(Date.now() / 1000) + 30,
-	} as any;
+	} as unknown;
 
 	const inviteTopic = topicGenerator.gameInvitation({ opponent });
 	const inviteData = { gameInvitation: inviteRecord };

@@ -1,5 +1,4 @@
 import { move } from '@metacraft/murg-engine';
-
 import {
 	batchWrite,
 	deleteItem,
@@ -8,12 +7,12 @@ import {
 	wrapDeleteRequest,
 } from 'aws/dynamo';
 import { publish, topicGenerator } from 'aws/pubsub';
-import { CardDuelRecord, MatchFindRecord } from '../types';
-import { DynamoRecord } from 'types/internal';
+import type { DynamoRecord } from 'types/internal';
+import type { Resolver } from 'utils/runtime';
 import { microId } from 'utils/uuid';
-import { Resolver } from 'utils/runtime';
 
 import { makeDuel } from '../duel';
+import type { CardDuelRecord, MatchFindRecord } from '../types';
 
 export const stopMatchFind: Resolver<never, boolean> = async (
 	root,
@@ -31,13 +30,13 @@ export const stopMatchFind: Resolver<never, boolean> = async (
 };
 
 interface Args {
-	game: "MURG"
+	game: 'MURG';
 	version: string;
 }
 
 export const findMatch: Resolver<Args, CardDuelRecord> = async (
 	root,
-	{ game = "MURG", version = '00001' },
+	{ game = 'MURG', version = '00001' },
 	{ user },
 ) => {
 	const operations = [];

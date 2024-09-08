@@ -11,5 +11,3 @@ export const GameSubscription = {
 		subscribe: subscribe(topicGenerator.matchFound),
 	},
 };
-
-
