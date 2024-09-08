@@ -52,6 +52,25 @@ In `launcher` directory
 yarn deploy launcher --stage <production | development>
 ```
 
+## API
+
+Prepare .env file at `api`, follow `api/.env.example`
+
+Run the API
+
+```
+yarn dev
+```
+
+To add new query/mutation, you need to define it in `api/schema.graphql`. And run codegen to generate resolver types, object types, the implement the resolver.
+
+_Note: codegen will run by fetching introspection from API endpoint, remember to run the API first_
+
+```
+# at root
+yarn codegen:graphql
+```
+
 ## Core engine
 
 ![](assets/demo.png)
