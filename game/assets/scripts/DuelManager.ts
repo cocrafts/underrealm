@@ -1,12 +1,11 @@
-import Engine from '@underrealm/murg';
 import {
-	_decorator,
-	AudioSource,
-	Component,
-	EventMouse,
-	Node,
-	UIOpacity,
-} from 'cc';
+	getFirstEmptyLeft,
+	getFirstEmptyRight,
+	selectGround,
+	selectHand,
+} from '@underrealm/murg';
+import type { EventMouse } from 'cc';
+import { _decorator, AudioSource, Component, Node, UIOpacity } from 'cc';
 
 import { cardIdFromNode, getMyGround } from './util/helper';
 import { getGroundExpos, getHandExpos } from './util/layout';
@@ -18,8 +17,6 @@ import { raiseHandCard, raiseHandPreview, simpleMove } from './tween';
 import { UnitManager } from './UnitManager';
 
 const { ccclass } = _decorator;
-const { selectHand, selectGround, getFirstEmptyLeft, getFirstEmptyRight } =
-	Engine;
 const NodeEvents = Node.EventType;
 
 @ccclass('DuelManager')

@@ -1,13 +1,7 @@
-import Engine, { CardState } from '@underrealm/murg';
-import {
-	_decorator,
-	Component,
-	Node,
-	resources,
-	Sprite,
-	SpriteFrame,
-	UIOpacity,
-} from 'cc';
+import type { CardState } from '@underrealm/murg';
+import { ActivationType, getCard, getCardState } from '@underrealm/murg';
+import type { SpriteFrame } from 'cc';
+import { _decorator, Component, Node, resources, Sprite, UIOpacity } from 'cc';
 
 import { updateUnit } from './util/attribute';
 import { getFoilUri, getVisualUri, setCursor } from './util/helper';
@@ -17,7 +11,6 @@ import { CardManager } from './CardManager';
 import { raiseUnitPreview } from './tween';
 
 const { ccclass } = _decorator;
-const { getCard, getCardState, ActivationType } = Engine;
 const NodeEvents = Node.EventType;
 
 @ccclass('UnitManager')

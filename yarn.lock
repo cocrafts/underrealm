@@ -11593,6 +11593,7 @@ __metadata:
     "@types/jest": "npm:^28.1.1"
     "@types/node": "npm:^17.0.43"
     "@types/react": "npm:^18.0.5"
+    "@underrealm/murg": "npm:*"
     chalk: "npm:^5.2.0"
     chokidar: "npm:^3.5.3"
     express: "npm:^4.18.2"

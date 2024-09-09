@@ -1,5 +1,16 @@
-import Engine, { PlayerState } from '@underrealm/murg';
-import { _decorator, Animation, Component, Label } from 'cc';
+import type { PlayerState } from '@underrealm/murg';
+import {
+	CardType,
+	DuelPhases,
+	DuelPlace,
+	getCard,
+	selectHand,
+	selectPlayer,
+	selectStateKey,
+	version as engineVersion,
+} from '@underrealm/murg';
+import type { Animation } from 'cc';
+import { _decorator, Component, Label } from 'cc';
 
 import { getPositionExpos } from './util/layout';
 import { switchBackgroundSound } from './util/resources';
@@ -8,17 +19,6 @@ import { sendConnect } from './network';
 import { animateGlowOff, animateGlowOn, simpleMove } from './tween';
 
 const { ccclass } = _decorator;
-const {
-	CardType,
-	DuelPlace,
-	DuelPhases,
-	selectStateKey,
-	selectPlayer,
-	selectHand,
-	getCard,
-	version: engineVersion,
-} = Engine;
-
 interface Props {
 	animation?: Animation;
 	enemyDeckCount?: Label;
@@ -197,9 +197,17 @@ export class BoardManager extends Component {
 
 			if (node) {
 				if (isTroopCard) {
-					system.isCommandAble ? animateGlowOn(node) : animateGlowOff(node);
+					if (system.isCommandAble) {
+						animateGlowOn(node);
+					} else {
+						animateGlowOff(node);
+					}
 				} else if (isHeroCard) {
-					isHeroAvailable ? animateGlowOn(node) : animateGlowOff(node);
+					if (isHeroAvailable) {
+						animateGlowOn(node);
+					} else {
+						animateGlowOff(node);
+					}
 				}
 			}
 		});
