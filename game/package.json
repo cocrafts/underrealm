@@ -3,7 +3,7 @@
   "uuid": "0ba8ea60-0477-4df9-9163-48999c7acd7d",
   "version": "3.6.3",
   "creator": {
-    "version": "3.7.1"
+    "version": "3.8.3"
   },
   "dependencies": {
     "@underrealm/murg": "*",

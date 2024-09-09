@@ -686,7 +686,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 4,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 22,
+      "g": 22,
+      "b": 22,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -703,14 +712,6 @@
     "__prefab": {
       "__id__": 30
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 22,
-      "g": 22,
-      "b": 22,
-      "a": 255
-    },
-    "_width": 4,
     "_id": ""
   },
   {

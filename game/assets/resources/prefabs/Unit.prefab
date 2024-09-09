@@ -803,7 +803,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -820,14 +829,6 @@
     "__prefab": {
       "__id__": 33
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
@@ -1100,7 +1101,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -1117,14 +1127,6 @@
     "__prefab": {
       "__id__": 47
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
@@ -1397,7 +1399,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -1414,14 +1425,6 @@
     "__prefab": {
       "__id__": 61
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
@@ -1747,7 +1750,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 5,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -1764,14 +1776,6 @@
     "__prefab": {
       "__id__": 76
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 5,
     "_id": ""
   },
   {
@@ -2065,7 +2069,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -2082,14 +2095,6 @@
     "__prefab": {
       "__id__": 93
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
@@ -2229,7 +2234,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -2246,14 +2260,6 @@
     "__prefab": {
       "__id__": 101
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
@@ -2393,7 +2399,16 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_id": ""
+    "_id": "",
+    "_enableOutline": true,
+    "_outlineWidth": 8,
+    "_outlineColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -2410,14 +2425,6 @@
     "__prefab": {
       "__id__": 109
     },
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    },
-    "_width": 8,
     "_id": ""
   },
   {
