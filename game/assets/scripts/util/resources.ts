@@ -1,12 +1,5 @@
-import {
-	Asset,
-	AudioClip,
-	instantiate,
-	Node,
-	Prefab,
-	resources,
-	sys,
-} from 'cc';
+import type { Asset, AudioClip, Node, Prefab } from 'cc';
+import { instantiate, resources, sys } from 'cc';
 
 import { delay } from './helper';
 import { system } from './system';
@@ -16,7 +9,9 @@ export interface AudioSource {
 	buffer?: AudioBuffer;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const backgroundSounds = ['bgm-dungeon-crawl', 'bgm-dungeon-peak'] as const;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const effectSounds = [
 	'attack',
 	'ground-hit',
@@ -34,8 +29,8 @@ const effectSounds = [
 ] as const;
 
 export type GameSounds =
-	| typeof backgroundSounds[number]
-	| typeof effectSounds[number];
+	| (typeof backgroundSounds)[number]
+	| (typeof effectSounds)[number];
 
 const audioCache: Partial<Record<GameSounds, AudioSource>> = {};
 

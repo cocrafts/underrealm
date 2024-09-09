@@ -1,4 +1,5 @@
-import { Node, Vec3 } from 'cc';
+import type { Node } from 'cc';
+import { Vec3 } from 'cc';
 
 import { getGroundSize } from './helper';
 import { system } from './system';
