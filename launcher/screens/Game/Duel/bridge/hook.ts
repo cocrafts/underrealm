@@ -16,6 +16,6 @@ export const useBridge = (
 	}, [duelId]);
 
 	useEffect(() => {
-		frame.current && setFrame(frame.current);
+		if (frame.current) setFrame(frame.current);
 	}, [frame.current]);
 };

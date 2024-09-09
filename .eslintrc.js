@@ -7,8 +7,6 @@ module.exports = {
 		'launcher/components/DrawerNavigation',
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',
-		'game',
-		'!api/game',
 		'api/types/graphql.ts',
 	],
 	env: {
