@@ -3,14 +3,11 @@ require('@swc/register');
 const { relative, resolve } = require('path');
 const { watch } = require('chokidar');
 const invalidate = require('invalidate-module');
-const { addAlias } = require('module-alias');
 const React = require('react');
 const { render } = require('ink');
 
-addAlias('@underrealm/murg', resolve(__dirname, './package/murg'));
-
-const { measureExecutionTime } = require('./tool/murg-client/util');
-let App = require('./tool/murg-client').MURG;
+const { measureExecutionTime } = require('./tools/murg-client/util');
+let App = require('./tools/murg-client').MURG;
 let lastRenderTime = 0;
 
 const makeElement = (el, config, history) => {
@@ -23,7 +20,7 @@ const makeElement = (el, config, history) => {
 	return React.createElement(el, props);
 };
 
-const { config, history } = require('./tool/murg-client/duels').default;
+const { config, history } = require('./tools/murg-client/duels').default;
 
 measureExecutionTime('initial-render', 'time to render App');
 const { rerender } = render(makeElement(App, config, history));
@@ -40,13 +37,13 @@ watch(process.cwd(), {
 	require(resolve(filename));
 
 	measureExecutionTime('render', 'time to render App');
-	if (relativeUri.startsWith('tool/murg-client/duels')) {
-		const { config, history } = require('./tool/murg-client/duels').default;
+	if (relativeUri.startsWith('tools/murg-client/duels')) {
+		const { config, history } = require('./tools/murg-client/duels').default;
 		element = makeElement(App, config, history);
 	}
 
 	if (relativeUri.endsWith('.tsx')) {
-		App = require('./tool/murg-client').MURG;
+		App = require('./tools/murg-client').MURG;
 		element = makeElement(App, config, history);
 	}
 
