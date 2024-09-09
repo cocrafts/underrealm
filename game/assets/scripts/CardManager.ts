@@ -1,14 +1,14 @@
-import Engine, { CardState } from '@underrealm/murg';
+import type { CardState } from '@underrealm/murg';
+import { getCard } from '@underrealm/murg';
+import type { Node, SpriteFrame } from 'cc';
 import {
 	_decorator,
 	Animation,
 	Component,
 	Label,
-	Node,
 	resources,
 	RichText,
 	Sprite,
-	SpriteFrame,
 	UIOpacity,
 } from 'cc';
 
@@ -23,7 +23,6 @@ import {
 import { system } from './util/system';
 
 const { ccclass } = _decorator;
-const { getCard } = Engine;
 
 @ccclass('CardManager')
 export class CardManager extends Component {

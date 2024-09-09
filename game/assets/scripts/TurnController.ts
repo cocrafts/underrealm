@@ -1,4 +1,4 @@
-import Engine from '@underrealm/murg';
+import { DuelPhases } from '@underrealm/murg';
 import { _decorator, Button, Color, Component, Node } from 'cc';
 
 import { setCursor } from './util/helper';
@@ -8,7 +8,6 @@ import { sendEndTurn } from './network';
 import { animateFade, animateSwapLabel } from './tween';
 
 const { ccclass } = _decorator;
-const { DuelPhases } = Engine;
 const NodeEvents = Node.EventType;
 const ButtonEvents = Button.EventType;
 
