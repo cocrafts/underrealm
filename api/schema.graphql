@@ -38,6 +38,7 @@ type Profile {
   avatarUrl: String
   mineral: Float!
   isOnline: Boolean
+  referralCode: String!
 }
 
 type CardDuelSetting {

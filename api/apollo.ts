@@ -2,6 +2,7 @@ import { readFileSync } from 'fs';
 
 import { ApolloServer } from '@apollo/server';
 import type { Resolvers } from 'types/graphql';
+import { UserQueryResolver } from 'user';
 
 import {
 	GameMutationResolvers,
@@ -16,6 +17,7 @@ const resolvers: Resolvers = {
 	Query: {
 		...GameQueryResolvers,
 		...SocialQueryResolvers,
+		...UserQueryResolver,
 	},
 	Mutation: {
 		...GameMutationResolvers,
