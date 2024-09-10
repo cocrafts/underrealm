@@ -25,6 +25,11 @@ npm install -g @metacraft/cli@latest
 - Install deps for Game by `yarn install` under `game` folder
 - Open `game` folder with Cocos creator
 - Configure network endpoint under `./game/assets/scripts/network/util.ts` (line 6), either use remove endpoint or local endpoint at [Card Engine](https://github.com/cocrafts/engines)
+- Game depends on `@underrealm/murg` core engine implemented in `engine/murg` need to be pre-build to Javascript
+
+```
+cd engine && yarn build
+```
 
 ### Build game
 

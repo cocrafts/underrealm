@@ -1,4 +1,4 @@
-import { Animation, Node } from 'cc';
+import type { Animation, Node } from 'cc';
 
 export const playAnimation = (
 	node: Node,

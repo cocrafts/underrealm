@@ -1,4 +1,13 @@
-import { _decorator, Component, Node, MeshRenderer, Mesh, utils, Prefab, Camera, RenderTexture, Vec3, instantiate, Material, RichText } from 'cc';
+import {
+	_decorator,
+	Camera,
+	Component,
+	Material,
+	MeshRenderer,
+	Node,
+	RenderTexture,
+	RichText,
+} from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Card3D')
@@ -16,9 +25,9 @@ export class Card3D extends Component {
 	private textMaterial: Material = null;
 
 	onLoad() {
-		this.initRenderTexture();	
+		this.initRenderTexture();
 		this.setupCardMaterial();
-		this.updateCardText("name of the card", "skill of the card");
+		this.updateCardText('name of the card', 'skill of the card');
 	}
 
 	private initRenderTexture() {
@@ -52,9 +61,9 @@ export class Card3D extends Component {
 		this.uiCamera.targetTexture = this.renderTexture;
 
 		this.nameText.active = true;
-		this.nameText.setPosition(0,0, 0);
+		this.nameText.setPosition(0, 0, 0);
 		this.skillText.active = true;
-		this.skillText.setPosition(0,0, 10);
+		this.skillText.setPosition(0, 0, 10);
 		this.uiCamera.node.setPosition(0, 0, 0);
 
 		// Wait for the next frame to ensure rendering happens
@@ -65,4 +74,3 @@ export class Card3D extends Component {
 		});
 	}
 }
-

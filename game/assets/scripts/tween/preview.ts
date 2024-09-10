@@ -1,4 +1,5 @@
-import { Node, tween, Vec3 } from 'cc';
+import type { Node } from 'cc';
+import { tween, Vec3 } from 'cc';
 
 export const raiseUnitPreview = async (
 	node: Node,

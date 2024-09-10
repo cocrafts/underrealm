@@ -1,14 +1,12 @@
-import Engine, {
-	DuelConfig,
-	DuelState,
-	TemplateFragment,
-} from '@underrealm/murg';
-import { Color, Node, Vec2, Vec3 } from 'cc';
+import type { DuelConfig, DuelState, TemplateFragment } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
+import type { Node } from 'cc';
+import { Color, Vec2, Vec3 } from 'cc';
 
 import { CardManager } from '../CardManager';
 
 import { system } from './system';
-import { PlayerIds } from './types';
+import type { PlayerIds } from './types';
 
 const { ElementalType, ClassType, selectHand, selectGround } = Engine;
 
