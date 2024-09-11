@@ -1,4 +1,5 @@
-import { Node, Quat, Tween, tween, UIOpacity, Vec3 } from 'cc';
+import type { Node, Tween } from 'cc';
+import { Quat, tween, UIOpacity, Vec3 } from 'cc';
 
 import { playEffectSound } from '../util/resources';
 

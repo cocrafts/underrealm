@@ -1,4 +1,5 @@
-import Engine, { DuelCommandBundle } from '@underrealm/murg';
+import type { DuelCommandBundle } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import { instantiate } from 'cc';
 
 import { CardManager } from '../CardManager';

@@ -1,4 +1,5 @@
-import { Color, Label, Node, tween, UIOpacity, Vec3 } from 'cc';
+import type { Color, Node } from 'cc';
+import { Label, tween, UIOpacity, Vec3 } from 'cc';
 
 import { system } from '../util/system';
 

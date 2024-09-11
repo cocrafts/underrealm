@@ -1,4 +1,5 @@
-import { Animation, Node, Quat, tween, Vec3 } from 'cc';
+import type { Node } from 'cc';
+import { Animation, Quat, tween, Vec3 } from 'cc';
 
 import { updatePlayers, updateUnit } from '../util/attribute';
 import { instantiatePrefab, playEffectSound } from '../util/resources';

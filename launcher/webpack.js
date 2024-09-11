@@ -89,15 +89,16 @@ const swcOptions = () => ({
 				}
 			: {},
 	},
-	env: {
-		targets: {
-			chrome: '67',
-			edge: '79',
-			firefox: '68',
-			opera: '54',
-			safari: '14',
-		},
-	},
+	// TODO: temporarily resolve "Error: `env` and `jsc.target` cannot be used together"
+	// env: {
+	// 	targets: {
+	// 		chrome: '67',
+	// 		edge: '79',
+	// 		firefox: '68',
+	// 		opera: '54',
+	// 		safari: '14',
+	// 	},
+	// },
 });
 
 const extraPolyfills = (configs) => {
