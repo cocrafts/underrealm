@@ -1,4 +1,4 @@
-import { DuelCommandBundle } from '@underrealm/murg';
+import type { DuelCommandBundle } from '@underrealm/murg';
 
 import { system } from '../util/system';
 

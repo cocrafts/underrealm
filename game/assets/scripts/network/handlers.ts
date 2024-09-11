@@ -1,14 +1,16 @@
-import Engine, { DuelCommandBundle } from '@underrealm/murg';
+import type { DuelCommandBundle } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 
 import { replay } from '../replay';
 import { raiseHandCard, showEndGameRibbon } from '../tween';
 import { extractPlayerIds } from '../util/helper';
 import { system } from '../util/system';
-import { CardDuel, JwtPayload } from '../util/types';
+import type { CardDuel, JwtPayload } from '../util/types';
 
 import { mergeRemoteHistory } from './util';
 
 const { selectHand, getInitialState, mergeFragmentToState } = Engine;
+
 interface ConnectPayload {
 	jwt: string;
 	context: JwtPayload;

@@ -1,16 +1,18 @@
-import Engine, {
+import type {
 	DuelCommandBundle,
 	DuelConfig,
 	DuelState,
 	PlayerState,
 } from '@underrealm/murg';
-import { AudioSource, Node } from 'cc';
+import Engine from '@underrealm/murg';
+import type { AudioSource, Node } from 'cc';
 import lodash from 'lodash';
 
-import { JwtPayload, PlayerIds, ServerState } from '../util/types';
+import type { JwtPayload, PlayerIds, ServerState } from '../util/types';
 
 const { defaultSetting, DuelPhases, nanoId } = Engine;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ProxyListener = (value: any, lastValue?: any) => void;
 
 type DuelProxy = DuelState & {

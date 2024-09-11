@@ -1,4 +1,5 @@
-import Engine, { DuelCommandBundle } from '@underrealm/murg';
+import type { DuelCommandBundle } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import lodash from 'lodash';
 
 import { showTurnRibbon } from '../tween';
