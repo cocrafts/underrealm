@@ -13,6 +13,7 @@ type Mutation {
   inviteGame(input: InviteGameInput!): GameInvitation
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
+  makeReferral(referralCode: String!): Boolean
 }
 
 type Subscription {
