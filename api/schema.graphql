@@ -7,6 +7,9 @@ type Query {
   cardDuelPlaying: CardDuelHistory
   cardDuel(id: String!): CardDuel
   quests: [Quest]
+  activeQuests: [Quest]
+  quest(id: ID!): Quest
+	questActions: [QuestAction]
 }
 
 type Mutation {
@@ -14,6 +17,10 @@ type Mutation {
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
   makeReferral(referralCode: String!): Boolean
+  createQuest(title: String!, description: String!, type: String!, url: String, points: Int!): Quest
+  updateQuest(id: ID!, status: String!): Quest
+  deleteQuest(id: ID!): Boolean
+  createQuestAction(questId: ID!, claimedPoints: Int!): QuestAction
 }
 
 type Subscription {
@@ -129,5 +136,18 @@ enum MetacraftGames {
 }
 
 type Quest {
-  id: String
+  id: ID!
+  title: String!
+	description: String!
+	type: String!
+	status: String!
+	url: String!
+	points: Int!
+}
+
+type QuestAction {
+  id: ID!
+	questId: ID!
+	userId: String!
+  claimedPoints: Int!
 }

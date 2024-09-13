@@ -18,7 +18,8 @@ export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
 	questId: Types.ObjectId,
-	userId: Types.ObjectId,
+	userId: String,
+	claimedPoints: Number,
 });
 
 questActionSchema.index({ questId: 1, userId: 1 }, { unique: true });

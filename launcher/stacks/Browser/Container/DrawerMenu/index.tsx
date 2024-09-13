@@ -18,8 +18,7 @@ import resources from 'utils/resources';
 
 import { naviItemList } from './internal';
 
-export const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
-	const { navigation } = props;
+export const DrawerMenu: FC<DrawerContentComponentProps> = ({ navigation }) => {
 	const activeOpacity = 0.7;
 	const onClosePress = () => navigation.closeDrawer();
 	const onLogoPress = () => navigation.navigate('Home');

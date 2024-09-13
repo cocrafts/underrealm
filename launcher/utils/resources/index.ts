@@ -251,4 +251,14 @@ export default {
 			troop: require('../../../assets/card/type-troop.png'),
 		},
 	},
+	quest: {
+		headingBackground: require('../../../assets/quest/heading.png'),
+		charm: require('../../../assets/quest/charm.png'),
+		titleCharm: require('../../../assets/quest/title-charm.png'),
+		activeTab: require('../../../assets/quest/active-tab.png'),
+		inactiveTab: require('../../../assets/quest/inactive-tab.png'),
+		refreshButton: require('../../../assets/quest/refresh-button.png'),
+		discord: require('../../../assets/quest/discord.png'),
+		twitter: require('../../../assets/quest/twitter.png'),
+	},
 };
