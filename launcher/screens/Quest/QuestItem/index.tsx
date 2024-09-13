@@ -9,14 +9,26 @@ import { useSnapshot } from 'valtio';
 import Action from './Action';
 import Info from './Info';
 
-export enum Platform {
+export enum SocialPlatform {
 	DISCORD = 'Discord',
 	X = 'X',
 }
 
+export enum SocialQuestType {
+	LIKE_X = 'LIKE_X',
+	RETWEET_X = 'RETWEET_X',
+	JOIN_DISCORD = 'JOIN_DISCORD',
+}
+
+const questPlatformMapping: Record<SocialQuestType, SocialPlatform> = {
+	[SocialQuestType.LIKE_X]: SocialPlatform.X,
+	[SocialQuestType.RETWEET_X]: SocialPlatform.X,
+	[SocialQuestType.JOIN_DISCORD]: SocialPlatform.DISCORD,
+};
+
 export interface QuestProps {
 	id: string;
-	platform: Platform;
+	type: SocialQuestType;
 	title: string;
 	description: string;
 	points: number;
@@ -26,7 +38,7 @@ export interface QuestProps {
 }
 
 const QuestItem: FC<QuestProps> = ({
-	platform,
+	type,
 	title,
 	description,
 	points,
@@ -56,7 +68,11 @@ const QuestItem: FC<QuestProps> = ({
 			onHoverIn={() => setIsHovered(true)}
 			onHoverOut={() => setIsHovered(false)}
 		>
-			<Info title={title} platform={platform} description={description} />
+			<Info
+				title={title}
+				platform={questPlatformMapping[type]}
+				description={description}
+			/>
 
 			<Action
 				points={points}

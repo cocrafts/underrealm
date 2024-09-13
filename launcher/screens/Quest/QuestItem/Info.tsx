@@ -6,16 +6,16 @@ import { dimensionState, Text } from '@metacraft/ui';
 import resources from 'utils/resources';
 import { useSnapshot } from 'valtio';
 
-import { Platform } from '.';
+import { SocialPlatform } from '.';
 
-const getIconByPlatform = (platform: Platform) => {
-	if (platform === Platform.DISCORD) return resources.quest.discord;
+const getIconByPlatform = (platform: SocialPlatform) => {
+	if (platform === SocialPlatform.DISCORD) return resources.quest.discord;
 
 	return resources.quest.twitter;
 };
 
 interface Props {
-	platform: Platform;
+	platform: SocialPlatform;
 	title: string;
 	description: string;
 }

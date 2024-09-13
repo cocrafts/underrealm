@@ -7,7 +7,8 @@ import resources from 'utils/resources';
 import { questActions, questState } from 'utils/state/social/internal';
 import { useSnapshot } from 'valtio';
 
-import QuestItem, { Platform } from './QuestItem';
+import type { SocialQuestType } from './QuestItem';
+import QuestItem from './QuestItem';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
@@ -87,7 +88,7 @@ const QuestContent: FC = () => {
 								id={quest.id}
 								description={quest.description}
 								title={quest.title}
-								platform={Platform.DISCORD}
+								type={quest.type as SocialQuestType}
 								points={quest.points}
 								url={quest.url}
 								isDone={isDone}
