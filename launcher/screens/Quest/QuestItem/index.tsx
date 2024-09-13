@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import { Linking } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState } from '@metacraft/ui';
 import { useSnapshot } from 'valtio';
@@ -14,12 +15,14 @@ export enum Platform {
 }
 
 export interface QuestProps {
+	id: string;
 	platform: Platform;
 	title: string;
 	description: string;
 	points: number;
-	url?: string;
+	url: string;
 	onVerify?: () => void;
+	isDone?: boolean;
 }
 
 const QuestItem: FC<QuestProps> = ({
@@ -27,10 +30,22 @@ const QuestItem: FC<QuestProps> = ({
 	title,
 	description,
 	points,
+	url,
+	id,
+	isDone = false,
+	onVerify,
 }) => {
 	const { isMobile } = useSnapshot<DimensionState>(dimensionState);
-
+	const [isClicked, setIsClicked] = useState(
+		localStorage.getItem(`quest${id}`) === 'true',
+	);
 	const [isHovered, setIsHovered] = useState(false);
+	const handleGoToTask = () => {
+		Linking.openURL(url);
+		setIsClicked(true);
+		localStorage.setItem(`quest${id}`, 'true');
+	};
+
 	return (
 		<Pressable
 			style={[
@@ -43,7 +58,13 @@ const QuestItem: FC<QuestProps> = ({
 		>
 			<Info title={title} platform={platform} description={description} />
 
-			<Action points={points} />
+			<Action
+				points={points}
+				onGo={handleGoToTask}
+				isClicked={isClicked}
+				isDone={isDone}
+				onVerify={onVerify}
+			/>
 		</Pressable>
 	);
 };
