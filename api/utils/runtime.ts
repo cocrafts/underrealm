@@ -23,8 +23,12 @@ export const graphqlContext: ContextFunction<unknown[], ApiContext> = async ({
 	const clientKey = headers['Client-Key'] || headers['client-key'];
 
 	if (clientKey) {
-		const { Parameter } = await getParameter('metacraft-admin-jwt');
-		client = jwt.verify(clientKey, Parameter.Value) as UserProfile;
+		try {
+			const { Parameter } = await getParameter('metacraft-admin-jwt');
+			client = jwt.verify(clientKey, Parameter.Value) as ClientProfile;
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	if (configs.IS_LAMBDA && !client?.id) throw new Error('invalid client');
@@ -42,6 +46,7 @@ export const graphqlContext: ContextFunction<unknown[], ApiContext> = async ({
 			user = cognitoToProfile(cognitoUser);
 		} catch (err) {
 			console.log('something went wrong during jwt decode:', err);
+			throw new Error('Failed to decode JWT');
 		}
 	}
 
