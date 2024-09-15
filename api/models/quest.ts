@@ -7,7 +7,7 @@ const questSchema = createSchema({
 	description: String,
 	type: {
 		type: String,
-		enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD'],
+		enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD', 'COMMENT_X'],
 	},
 	status: {
 		type: String,
