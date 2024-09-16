@@ -7,13 +7,21 @@ import { dimensionState, Text } from '@metacraft/ui';
 import resources from 'utils/resources';
 import { useSnapshot } from 'valtio';
 
+import type { TabId } from './internal';
+
 interface Props {
-	onChangeTab?: () => void;
+	onChangeTab?: (value: TabId) => void;
 	title: string;
+	value: TabId;
 	isActive?: boolean;
 }
 
-const TabSelection: FC<Props> = ({ onChangeTab, title, isActive = false }) => {
+const TabSelection: FC<Props> = ({
+	onChangeTab,
+	title,
+	value,
+	isActive = false,
+}) => {
 	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
 	const containerStyle = useMemo(() => {
 		if (isMobile) return { width: (180 * windowSize.width) / 430 };
@@ -22,7 +30,7 @@ const TabSelection: FC<Props> = ({ onChangeTab, title, isActive = false }) => {
 	return (
 		<TouchableOpacity
 			style={[styles.container, containerStyle]}
-			onPress={onChangeTab}
+			onPress={() => onChangeTab(value)}
 		>
 			<Text
 				style={[

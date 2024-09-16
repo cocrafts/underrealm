@@ -1,17 +1,19 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import resources from 'utils/resources';
 import { useSnapshot } from 'valtio';
 
-import { mockQuests } from './internal';
+import { mockQuests, TabId } from './internal';
 import QuestItem from './QuestItem';
+import ReferralSection from './Referral';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
 	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
+	const [tab, setTab] = useState(TabId.QUEST);
 
 	const frameCharmStyle = useMemo(() => {
 		return {
@@ -41,6 +43,10 @@ const QuestContent: FC = () => {
 		};
 	}, [windowSize]);
 
+	const onChangeTab = (tabId: TabId) => {
+		setTab(tabId);
+	};
+
 	return (
 		<View style={[styles.container, containerStyle]}>
 			<Image
@@ -57,15 +63,29 @@ const QuestContent: FC = () => {
 			</View>
 
 			<View style={styles.tabsContainer}>
-				<TabSelection title="Social Quest" isActive={true} />
-				<TabSelection title="Referral" />
+				<TabSelection
+					title="Social Quest"
+					value={TabId.QUEST}
+					onChangeTab={onChangeTab}
+					isActive={tab === TabId.QUEST}
+				/>
+				<TabSelection
+					title="Referral"
+					value={TabId.REFERRAL}
+					onChangeTab={onChangeTab}
+					isActive={tab === TabId.REFERRAL}
+				/>
 			</View>
 
-			<View style={[styles.quests, isMobile ? styles.questsOnMobile : {}]}>
-				{mockQuests.map((quest) => (
-					<QuestItem key={quest.title} {...quest} />
-				))}
-			</View>
+			{tab === TabId.QUEST ? (
+				<View style={[styles.quests, isMobile ? styles.questsOnMobile : {}]}>
+					{mockQuests.map((quest) => (
+						<QuestItem key={quest.title} {...quest} />
+					))}
+				</View>
+			) : (
+				<ReferralSection />
+			)}
 		</View>
 	);
 };

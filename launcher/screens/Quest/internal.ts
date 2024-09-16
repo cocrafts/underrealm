@@ -33,3 +33,8 @@ export const mockQuests: QuestProps[] = [
 		points: 100,
 	},
 ];
+
+export enum TabId {
+	QUEST = 'Social Quest',
+	REFERRAL = 'Referral',
+}
