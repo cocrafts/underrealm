@@ -260,5 +260,9 @@ export default {
 		refreshButton: require('../../../assets/quest/refresh-button.png'),
 		discord: require('../../../assets/quest/discord.png'),
 		twitter: require('../../../assets/quest/twitter.png'),
+		referral: {
+			backgroundMain: require('../../../assets/referral/main-bg.png'),
+			uCoin: require('../../../assets/u-coin.png'),
+		},
 	},
 };

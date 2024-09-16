@@ -294,5 +294,9 @@ export default {
 		refreshButton: { uri: '/quest/refresh-button.png' },
 		discord: { uri: '/quest/discord.png' },
 		twitter: { uri: '/quest/twitter.png' },
+		referral: {
+			backgroundMain: { uri: '/referral/main-bg.png' },
+			uCoin: { uri: '/u-coin.png' },
+		},
 	},
 };
