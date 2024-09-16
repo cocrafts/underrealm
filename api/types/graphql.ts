@@ -187,13 +187,14 @@ export type Query = {
   cardDuel?: Maybe<CardDuel>;
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
+  disableQuests?: Maybe<Array<Maybe<Quest>>>;
   gameInvitations?: Maybe<Array<Maybe<GameInvitation>>>;
   gameJwt?: Maybe<Scalars['String']['output']>;
   greeting?: Maybe<Scalars['String']['output']>;
+  initQuests?: Maybe<Array<Maybe<Quest>>>;
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
-  quests?: Maybe<Array<Maybe<Quest>>>;
 };
 
 
@@ -512,13 +513,14 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   cardDuel?: Resolver<Maybe<ResolversTypes['CardDuel']>, ParentType, ContextType, RequireFields<QueryCardDuelArgs, 'id'>>;
   cardDuelHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardDuelHistory']>>>, ParentType, ContextType, Partial<QueryCardDuelHistoryArgs>>;
   cardDuelPlaying?: Resolver<Maybe<ResolversTypes['CardDuelHistory']>, ParentType, ContextType>;
+  disableQuests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType>;
   gameInvitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['GameInvitation']>>>, ParentType, ContextType>;
   gameJwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryGameJwtArgs>>;
   greeting?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  initQuests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<QueryQuestArgs, 'id'>>;
   questActions?: Resolver<Maybe<Array<Maybe<ResolversTypes['QuestAction']>>>, ParentType, ContextType>;
-  quests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType>;
 }>;
 
 export type QuestResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Quest'] = ResolversParentTypes['Quest']> = ResolversObject<{

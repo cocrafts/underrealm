@@ -6,10 +6,6 @@ import type {
 	QuestAction as QuestActionType,
 } from 'types/graphql';
 
-export const quests: QueryResolvers['quests'] = async () => {
-	return await Quest.find();
-};
-
 export const quest: QueryResolvers['quest'] = async (
 	_,
 	{ id }: { id: string },
@@ -19,6 +15,14 @@ export const quest: QueryResolvers['quest'] = async (
 
 export const activeQuests: QueryResolvers['activeQuests'] = async () => {
 	return await Quest.find({ status: 'LIVE' } as RootFilterQuery<QuestType>);
+};
+
+export const initQuests: QueryResolvers['initQuests'] = async () => {
+	return await Quest.find({ status: 'INIT' } as RootFilterQuery<QuestType>);
+};
+
+export const disableQuests: QueryResolvers['disableQuests'] = async () => {
+	return await Quest.find({ status: 'DISABLE' } as RootFilterQuery<QuestType>);
 };
 
 export const questActions: QueryResolvers['questActions'] = async (

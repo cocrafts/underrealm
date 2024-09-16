@@ -6,8 +6,9 @@ type Query {
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   cardDuel(id: String!): CardDuel
-  quests: [Quest]
   activeQuests: [Quest]
+  initQuests: [Quest]
+  disableQuests: [Quest]
   quest(id: ID!): Quest
 	questActions: [QuestAction]
 }

@@ -3,20 +3,28 @@ import * as mutations from 'utils/graphql/mutation';
 import * as queries from 'utils/graphql/query';
 import type { Quest, QuestAction } from 'utils/types';
 
-export const getQuests = async (): Promise<Quest[]> => {
-	const { data } = await graphQlClient.query({
-		query: queries.quests,
-	});
-
-	return data.quests;
-};
-
 export const getActiveQuests = async (): Promise<Quest[]> => {
 	const { data } = await graphQlClient.query({
 		query: queries.activeQuests,
 	});
 
-	return data.quests;
+	return data.activeQuests;
+};
+
+export const getInitQuests = async (): Promise<Quest[]> => {
+	const { data } = await graphQlClient.query({
+		query: queries.initQuests,
+	});
+
+	return data.initQuests;
+};
+
+export const getDisableQuests = async (): Promise<Quest[]> => {
+	const { data } = await graphQlClient.query({
+		query: queries.disableQuests,
+	});
+
+	return data.disableQuests;
 };
 
 export const createQuestAction = async (

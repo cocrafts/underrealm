@@ -5,26 +5,37 @@ import {
 	createQuestAction,
 	getActiveDoneQuests,
 	getActiveQuests,
+	getDisableQuests,
+	getInitQuests,
 } from './quest';
 
 export interface QuestState {
-	activeQuests: Quest[];
+	quests: Quest[];
 	activeDoneQuests: Quest[];
 }
 
 export const questState = proxy<QuestState>({
-	activeQuests: [],
+	quests: [],
 	activeDoneQuests: [],
 });
 
 export const questActions = {
-	getActiveQuests: async () => {
-		const activeQuests = await getActiveQuests();
-		questState.activeQuests = activeQuests;
+	getQuests: async (status?: string) => {
+		let quests = [];
+		console.log('status', status);
+		if (status === 'INIT') {
+			quests = await getInitQuests();
+			console.log();
+		} else if (status === 'DISABLE') {
+			quests = await getDisableQuests();
+		} else {
+			quests = await getActiveQuests();
+		}
+		questState.quests = quests;
 	},
 	getDoneQuests: async () => {
 		const doneQuests = await getActiveDoneQuests();
-		const activeDoneQuests = questState.activeQuests.filter((quest) =>
+		const activeDoneQuests = questState.quests.filter((quest) =>
 			doneQuests.some((questAction) => questAction.questId === quest.id),
 		);
 
@@ -33,7 +44,7 @@ export const questActions = {
 	verifyAndClaimQuest: async (questId: string, claimedPoints: number) => {
 		const questAction = await createQuestAction(questId, claimedPoints);
 
-		const activeDoneQuests = questState.activeQuests.find(
+		const activeDoneQuests = questState.quests.find(
 			(quest) => questAction.questId === quest.id,
 		);
 
