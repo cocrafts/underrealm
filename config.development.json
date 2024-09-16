@@ -1,0 +1,10 @@
+{
+    "quests": [
+        {
+            "type": "LIKE_X",
+            "status": "INIT",
+            "url": "https://underrealm.io",
+            "points": 100
+        }
+    ]
+}

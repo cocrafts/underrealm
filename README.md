@@ -91,6 +91,12 @@ Run the CLI
 ur --help
 ```
 
+Each time having any change, you just need to rebuild to apply change (no need to link as it's already linked). Or you can re-run `yarn setup` for a fresh build and link.
+
+```
+yarn build
+```
+
 ## Core engine
 
 ![](assets/demo.png)

@@ -1,3 +1,12 @@
 #!/usr/bin/env node
 
-console.log('hello world');
+import yargs from 'yargs/yargs';
+
+import { questCommand } from './quest';
+
+yargs(process.argv.slice(2))
+	.command(questCommand)
+	.help()
+	.alias('help', 'h')
+	.alias('version', 'v')
+	.parse();

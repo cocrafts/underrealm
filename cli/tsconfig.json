@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "target": "es2017",
     "baseUrl": ".",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "utils/*": ["./utils/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

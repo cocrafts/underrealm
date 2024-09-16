@@ -1,5 +1,6 @@
 {
   "name": "@underrealm/cli",
+  "description": "",
   "version": "0.0.1",
   "bin": {
     "ur": "./dist/index.js"
@@ -8,13 +9,17 @@
   "scripts": {
     "build": "tsc",
     "link": "npm link",
-    "setup": "yarn build && yarn link",
+    "setup": "rimraf dist && yarn build && yarn link",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "typescript": "5.3.3"
+  "dependencies": {
+    "@underrealm/api": "*",
+    "prompts": "^2.4.2",
+    "yargs": "^17.7.2"
   },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "devDependencies": {
+    "@types/prompts": "^2",
+    "rimraf": "^6.0.1",
+    "typescript": "5.3.3"
+  }
 }
