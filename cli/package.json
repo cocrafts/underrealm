@@ -8,8 +8,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
-    "link": "npm link",
-    "setup": "rimraf dist && yarn build && yarn link",
+    "setup": "rimraf dist && yarn build && npm link",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
