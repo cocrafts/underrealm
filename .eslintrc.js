@@ -2,6 +2,7 @@ module.exports = {
 	root: true,
 	extends: ['@metacraft/eslint-config'],
 	ignorePatterns: [
+		'dist',
 		'node_modules',
 		'launcher/utils/types/graphql.ts',
 		'launcher/components/DrawerNavigation',
