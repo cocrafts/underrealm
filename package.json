@@ -5,6 +5,7 @@
   "main": "index.js",
   "workspaces": [
     "api",
+    "cli",
     "engine",
     "engine/*",
     "game",
