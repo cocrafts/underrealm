@@ -57,7 +57,6 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 		const result = new QuestAction({ questId, userId, claimedPoints });
 		return await result.save();
 	} catch (err) {
-		// Handle duplicate action error
 		throw new Error('User has already interacted with this quest.');
 	}
 };

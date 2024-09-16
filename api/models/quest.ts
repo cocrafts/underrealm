@@ -5,7 +5,10 @@ import { createSchema } from './utils';
 const questSchema = createSchema({
 	title: String,
 	description: String,
-	type: String,
+	type: {
+		type: String,
+		enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD'],
+	},
 	status: {
 		type: String,
 		enum: ['INIT', 'LIVE', 'DISABLE'],

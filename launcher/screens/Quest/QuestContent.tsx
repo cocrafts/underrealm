@@ -1,12 +1,14 @@
 import type { FC } from 'react';
-import { useMemo, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import resources from 'utils/resources';
+import { questActions, questState } from 'utils/state/social/internal';
 import { useSnapshot } from 'valtio';
 
-import { mockQuests, TabId } from './internal';
+import { TabId } from './internal';
+import type { SocialQuestType } from './QuestItem';
 import QuestItem from './QuestItem';
 import ReferralSection from './Referral';
 import TabSelection from './TabSelection';
@@ -14,6 +16,8 @@ import TabSelection from './TabSelection';
 const QuestContent: FC = () => {
 	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
 	const [tab, setTab] = useState(TabId.QUEST);
+	const { activeQuests, activeDoneQuests } = useSnapshot(questState);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const frameCharmStyle = useMemo(() => {
 		return {
@@ -46,6 +50,14 @@ const QuestContent: FC = () => {
 	const onChangeTab = (tabId: TabId) => {
 		setTab(tabId);
 	};
+	useEffect(() => {
+		const getQuestData = async () => {
+			await questActions.getActiveQuests();
+			await questActions.getDoneQuests();
+		};
+
+		getQuestData().then(() => setIsLoading(false));
+	}, []);
 
 	return (
 		<View style={[styles.container, containerStyle]}>
@@ -77,11 +89,31 @@ const QuestContent: FC = () => {
 				/>
 			</View>
 
-			{tab === TabId.QUEST ? (
+			{isLoading ? (
+				<ActivityIndicator />
+			) : tab === TabId.QUEST ? (
 				<View style={[styles.quests, isMobile ? styles.questsOnMobile : {}]}>
-					{mockQuests.map((quest) => (
-						<QuestItem key={quest.title} {...quest} />
-					))}
+					{activeQuests.map((quest) => {
+						const isDone = Array.from(activeDoneQuests).some(
+							(doneQuest) => doneQuest.id === quest.id,
+						);
+
+						return (
+							<QuestItem
+								key={quest.id}
+								id={quest.id}
+								description={quest.description}
+								title={quest.title}
+								type={quest.type as SocialQuestType}
+								points={quest.points}
+								url={quest.url}
+								isDone={isDone}
+								onVerify={() =>
+									questActions.verifyAndClaimQuest(quest.id, quest.points)
+								}
+							/>
+						);
+					})}
 				</View>
 			) : (
 				<ReferralSection />
