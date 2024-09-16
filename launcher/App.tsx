@@ -18,6 +18,8 @@ import { accountState } from 'utils/state/account';
 import { appState } from 'utils/state/app';
 import { launcherTheme } from 'utils/theme';
 
+import './utils/unistyles';
+
 export const App: FC = () => {
 	const { network } = useSnapshot(appState);
 	const endpoint = useMemo(() => clusterUrl(network), [network]);

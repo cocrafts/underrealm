@@ -11695,6 +11695,7 @@ __metadata:
     react-native-safe-area-context: "npm:^4.2.4"
     react-native-screens: "npm:^3.17.0"
     react-native-svg: "npm:^13.1.0"
+    react-native-unistyles: "npm:^2.9.2"
     react-native-web: "npm:^0.18.9"
     sst: "npm:^2.41.2"
     subscriptions-transport-ws: "npm:^0.11.0"
@@ -22714,6 +22715,27 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/4889d07dc51605842eedc6a6537580e88c61faa8b10771dfddb5b11e5df92e0fe9bfa64ba1d19375c70be9bddd8d3b27c09af42a3a9b17841408bc3f0eef0acb
+  languageName: node
+  linkType: hard
+
+"react-native-unistyles@npm:^2.9.2":
+  version: 2.9.2
+  resolution: "react-native-unistyles@npm:2.9.2"
+  peerDependencies:
+    "@react-native/normalize-colors": "*"
+    react: "*"
+    react-native: "*"
+    react-native-macos: "*"
+    react-native-web: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    react-native-macos:
+      optional: true
+    react-native-web:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10c0/25ffb726bcc6935f5f74500284f437f20361788f89c6df06526f46a63c4e14a738bd6f4ca11664e74c1141ca69461f22e0288aedeb362e3195d1d0cd6d0bcf8d
   languageName: node
   linkType: hard
 
