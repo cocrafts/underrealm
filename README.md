@@ -77,6 +77,20 @@ _Note: codegen will run by fetching introspection from API endpoint, remember to
 yarn codegen:graphql
 ```
 
+## CLI
+
+Build and link CLI to global scope
+
+```
+cd cli && yarn setup
+```
+
+Run the CLI
+
+```
+ur --help
+```
+
 ## Core engine
 
 ![](assets/demo.png)

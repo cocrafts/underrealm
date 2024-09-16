@@ -11570,6 +11570,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@underrealm/cli@workspace:cli":
+  version: 0.0.0-use.local
+  resolution: "@underrealm/cli@workspace:cli"
+  dependencies:
+    typescript: "npm:5.3.3"
+  bin:
+    ur: ./dist/index.js
+  languageName: unknown
+  linkType: soft
+
 "@underrealm/engine@workspace:engine":
   version: 0.0.0-use.local
   resolution: "@underrealm/engine@workspace:engine"

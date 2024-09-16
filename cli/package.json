@@ -1,0 +1,20 @@
+{
+  "name": "@underrealm/cli",
+  "version": "0.0.1",
+  "bin": {
+    "ur": "./dist/index.js"
+  },
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "link": "npm link",
+    "setup": "yarn build && yarn link",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
