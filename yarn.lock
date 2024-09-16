@@ -8892,6 +8892,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/normalize-colors@npm:^0.75.3":
+  version: 0.75.3
+  resolution: "@react-native/normalize-colors@npm:0.75.3"
+  checksum: 10c0/1dae85647ffaf8306f9f35ae4dc1cd438a03075e9a2c245c52a119fd643f9ce98813b7036e2665efed788dd82c071c6c9e25b92666320a374af332aae50f949d
+  languageName: node
+  linkType: hard
+
 "@react-native/polyfills@npm:2.0.0":
   version: 2.0.0
   resolution: "@react-native/polyfills@npm:2.0.0"
@@ -11650,6 +11657,7 @@ __metadata:
     "@metacraft/ui": "npm:^0.1.1"
     "@metaplex-foundation/js": "npm:0.19.4"
     "@react-native-async-storage/async-storage": "npm:^1.22.3"
+    "@react-native/normalize-colors": "npm:^0.75.3"
     "@react-navigation/drawer": "npm:^6.7.2"
     "@react-navigation/native": "npm:^6.0.12"
     "@react-navigation/stack": "npm:^6.2.3"
@@ -11695,6 +11703,7 @@ __metadata:
     react-native-safe-area-context: "npm:^4.2.4"
     react-native-screens: "npm:^3.17.0"
     react-native-svg: "npm:^13.1.0"
+    react-native-unistyles: "npm:^2.9.2"
     react-native-web: "npm:^0.18.9"
     sst: "npm:^2.41.2"
     subscriptions-transport-ws: "npm:^0.11.0"
@@ -22714,6 +22723,27 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/4889d07dc51605842eedc6a6537580e88c61faa8b10771dfddb5b11e5df92e0fe9bfa64ba1d19375c70be9bddd8d3b27c09af42a3a9b17841408bc3f0eef0acb
+  languageName: node
+  linkType: hard
+
+"react-native-unistyles@npm:^2.9.2":
+  version: 2.9.2
+  resolution: "react-native-unistyles@npm:2.9.2"
+  peerDependencies:
+    "@react-native/normalize-colors": "*"
+    react: "*"
+    react-native: "*"
+    react-native-macos: "*"
+    react-native-web: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    react-native-macos:
+      optional: true
+    react-native-web:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10c0/25ffb726bcc6935f5f74500284f437f20361788f89c6df06526f46a63c4e14a738bd6f4ca11664e74c1141ca69461f22e0288aedeb362e3195d1d0cd6d0bcf8d
   languageName: node
   linkType: hard
 
