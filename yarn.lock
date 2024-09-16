@@ -8892,6 +8892,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/normalize-colors@npm:^0.75.3":
+  version: 0.75.3
+  resolution: "@react-native/normalize-colors@npm:0.75.3"
+  checksum: 10c0/1dae85647ffaf8306f9f35ae4dc1cd438a03075e9a2c245c52a119fd643f9ce98813b7036e2665efed788dd82c071c6c9e25b92666320a374af332aae50f949d
+  languageName: node
+  linkType: hard
+
 "@react-native/polyfills@npm:2.0.0":
   version: 2.0.0
   resolution: "@react-native/polyfills@npm:2.0.0"
@@ -11650,6 +11657,7 @@ __metadata:
     "@metacraft/ui": "npm:^0.1.1"
     "@metaplex-foundation/js": "npm:0.19.4"
     "@react-native-async-storage/async-storage": "npm:^1.22.3"
+    "@react-native/normalize-colors": "npm:^0.75.3"
     "@react-navigation/drawer": "npm:^6.7.2"
     "@react-navigation/native": "npm:^6.0.12"
     "@react-navigation/stack": "npm:^6.2.3"

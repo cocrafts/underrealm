@@ -65,6 +65,7 @@
     "@babel/plugin-proposal-export-default-from": "^7.18.10",
     "@babel/preset-env": "^7.20.0",
     "@metacraft/cli-web3-polyfills": "^0.0.8",
+    "@react-native/normalize-colors": "^0.75.3",
     "@types/bn.js": "^5",
     "@types/color": "^3.0.6",
     "@types/fbjs": "^3.0.2",
