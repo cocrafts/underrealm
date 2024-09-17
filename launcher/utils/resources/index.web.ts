@@ -292,6 +292,8 @@ export default {
 		activeTab: { uri: '/quest/active-tab.png' },
 		inactiveTab: { uri: '/quest/inactive-tab.png' },
 		refreshButton: { uri: '/quest/refresh-button.png' },
+		imageTitle: { uri: '/quest/image-title.png' },
+		pointsBoard: { uri: '/quest/points-board.png' },
 		discord: { uri: '/quest/discord.png' },
 		twitter: { uri: '/quest/twitter.png' },
 	},

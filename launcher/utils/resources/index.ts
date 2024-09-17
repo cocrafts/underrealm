@@ -258,6 +258,8 @@ export default {
 		activeTab: require('../../../assets/quest/active-tab.png'),
 		inactiveTab: require('../../../assets/quest/inactive-tab.png'),
 		refreshButton: require('../../../assets/quest/refresh-button.png'),
+		imageTitle: require('../../../assets/quest/image-title.png'),
+		pointsBoard: require('../../../assets/quest/points-board.png'),
 		discord: require('../../../assets/quest/discord.png'),
 		twitter: require('../../../assets/quest/twitter.png'),
 	},

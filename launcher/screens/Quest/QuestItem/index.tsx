@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Linking } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
-import { dimensionState } from '@metacraft/ui';
+import { AnimateDirections, dimensionState, modalActions } from '@metacraft/ui';
+import SignInOptions from 'components/modals/SignInOptions';
+import { accountState } from 'utils/state/account';
 import { useSnapshot } from 'valtio';
 
 import Action from './Action';
@@ -50,14 +52,23 @@ const QuestItem: FC<QuestProps> = ({
 	onVerify,
 }) => {
 	const { isMobile } = useSnapshot<DimensionState>(dimensionState);
+	const { profile } = useSnapshot(accountState);
 	const [isClicked, setIsClicked] = useState(
 		localStorage.getItem(`quest${id}`) === 'true',
 	);
 	const [isHovered, setIsHovered] = useState(false);
 	const handleGoToTask = () => {
-		Linking.openURL(url);
-		setIsClicked(true);
-		localStorage.setItem(`quest${id}`, 'true');
+		if (profile.id && profile.id !== '') {
+			Linking.openURL(url);
+			setIsClicked(true);
+			localStorage.setItem(`quest${id}`, 'true');
+		} else {
+			modalActions.show({
+				id: 'signInOptions',
+				component: SignInOptions,
+				animateDirection: AnimateDirections.BottomLeft,
+			});
+		}
 	};
 
 	return (
