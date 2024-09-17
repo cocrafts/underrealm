@@ -6,7 +6,7 @@ import { dimensionState, Text } from '@metacraft/ui';
 import resources from 'utils/resources';
 import { useSnapshot } from 'valtio';
 
-import { SocialPlatform } from '.';
+import { SocialPlatform } from './shared';
 
 const getIconByPlatform = (platform: SocialPlatform) => {
 	if (platform === SocialPlatform.DISCORD) return resources.quest.discord;

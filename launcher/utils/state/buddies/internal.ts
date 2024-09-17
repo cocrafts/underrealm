@@ -1,4 +1,4 @@
-import type { Profile } from 'utils/types/graphql';
+import type { Profile } from 'utils/graphql';
 import { proxy } from 'valtio';
 
 export interface BuddyState {

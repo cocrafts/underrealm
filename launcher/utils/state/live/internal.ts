@@ -1,5 +1,5 @@
+import type { CardDuelHistory, GameInvitation } from 'utils/graphql';
 import { accountState } from 'utils/state/account';
-import type { CardDuelHistory, GameInvitation } from 'utils/types/graphql';
 import { proxy, subscribe } from 'valtio';
 
 export interface LiveState {

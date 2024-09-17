@@ -1,4 +1,4 @@
-import type { Quest } from 'utils/types/graphql';
+import type { Quest } from 'utils/graphql';
 import { proxy } from 'valtio';
 
 import {
@@ -25,7 +25,6 @@ export const questActions = {
 		console.log('status', status);
 		if (status === 'INIT') {
 			quests = await getInitQuests();
-			console.log();
 		} else if (status === 'DISABLE') {
 			quests = await getDisableQuests();
 		} else {

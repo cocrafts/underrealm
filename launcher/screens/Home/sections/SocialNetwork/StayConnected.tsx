@@ -5,9 +5,9 @@ import { useMutation } from '@apollo/client';
 import { Hyperlink, modalActions, Text } from '@metacraft/ui';
 import Subscribed from 'components/modals/GameSubscribe/Subscribed';
 import { headingSize, sharedStyle } from 'screens/Home/shared';
+import { MetacraftGames } from 'utils/graphql';
 import * as mutations from 'utils/graphql/mutation';
 import { useInput } from 'utils/hook';
-import { MetacraftGames } from 'utils/types';
 import { validateEmail } from 'utils/validation';
 
 import { socialLinkList } from './shared';

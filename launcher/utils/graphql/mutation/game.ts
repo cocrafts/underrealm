@@ -15,13 +15,13 @@ export const acceptGame = gql`
 `;
 
 export const subscribeGame = gql`
-	mutation SubscribeGame($input: SubscribeGameInput!) {
-		subscribeGame(input: $input) {
-			game
-			email
-			timestamp
-		}
-	}
+	# mutation SubscribeGame($input: SubscribeGameInput!) {
+	# 	subscribeGame(input: $input) {
+	# 		game
+	# 		email
+	# 		timestamp
+	# 	}
+	# }
 `;
 
 export const stopMatchFind = gql`
