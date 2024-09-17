@@ -1,19 +1,18 @@
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { ImageBackground, StyleSheet } from 'react-native';
-import { useBreakpoints } from 'utils/hook';
+import { ImageBackground } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import resources from 'utils/resources';
 
 import { ReferralLink } from './Link';
 import ReferralStatistic from './Statistic';
 
 export const ReferralSection = () => {
-	const { mobileScreen } = useBreakpoints();
+	const { styles } = useStyles(stylesheet);
 
 	return (
 		<ImageBackground
 			source={resources.quest.referral.backgroundMain}
 			resizeMode="contain"
-			style={[styles.container, mobileScreen && responsiveStyle.container]}
+			style={styles.container}
 		>
 			<ReferralStatistic />
 			<ReferralLink />
@@ -23,16 +22,11 @@ export const ReferralSection = () => {
 
 export default ReferralSection;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet({
 	container: {
-		padding: 64,
+		padding: { lg: 64 },
+		paddingHorizontal: { xs: 13, lg: 64 },
+		paddingVertical: { xs: 24, lg: 64 },
 		marginTop: 40,
 	},
 });
-
-const responsiveStyle: Record<string, StyleProp<ViewStyle | TextStyle>> = {
-	container: {
-		paddingHorizontal: 13,
-		paddingVertical: 24,
-	},
-};

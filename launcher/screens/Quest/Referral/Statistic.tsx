@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UserSolidIcon from 'components/icons/UserSolid';
 import { useBreakpoints } from 'utils/hook';
@@ -7,9 +8,10 @@ import resources from 'utils/resources';
 
 export const ReferralStatistic: FC = () => {
 	const { mobileScreen } = useBreakpoints();
+	const { styles } = useStyles(stylesheet);
 
 	return (
-		<View style={[styles.statistic, mobileScreen && responsiveStyle.statistic]}>
+		<View style={styles.container}>
 			<View style={[styles.bonusContainer]}>
 				<Text
 					style={[
@@ -66,10 +68,10 @@ export const ReferralStatistic: FC = () => {
 
 export default ReferralStatistic;
 
-const styles = StyleSheet.create({
-	statistic: {
+const stylesheet = createStyleSheet({
+	container: {
 		flexDirection: 'row',
-		gap: 24,
+		gap: { xs: 12, md: 24 },
 	},
 	bonusContainer: {
 		alignItems: 'center',
@@ -88,14 +90,14 @@ const styles = StyleSheet.create({
 	},
 	statisticTitle: {
 		fontFamily: 'Vollkorn',
-		fontSize: 18,
+		fontSize: { xs: 14, md: 18 },
 		fontWeight: '700',
 		lineHeight: 28,
 		textAlign: 'center',
 	},
 	statisticNumber: {
 		fontFamily: 'Vollkorn',
-		fontSize: 24,
+		fontSize: { xs: 16, md: 24 },
 		fontWeight: '700',
 		color: '#F2E0C3',
 	},
@@ -108,10 +110,13 @@ const styles = StyleSheet.create({
 		borderColor: '#9F835F',
 		paddingHorizontal: 20,
 		paddingVertical: 16,
-		width: 240,
+		width: { xs: 'auto', lg: 240 },
 		alignItems: 'center',
 		gap: 8,
 		justifyContent: 'center',
+		flexGrow: { xs: 1, lg: 0 },
+		// flexShrink: { xs: 1, lg: 0 },
+		flexBasis: { xs: 0, lg: 'auto' },
 	},
 });
 

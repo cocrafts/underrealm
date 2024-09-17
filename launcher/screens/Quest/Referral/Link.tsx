@@ -1,11 +1,12 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { Mask, Path, Svg } from 'react-native-svg';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
-import { useBreakpoints } from 'utils/hook';
+import resources from 'utils/resources';
 
 export const ReferralLink = () => {
-	const { mobileScreen } = useBreakpoints();
+	const { styles } = useStyles(stylesheet);
 	const referralLink = `https://underrealm.io/ref=${1234567}`;
 
 	const onCopy = () => {
@@ -13,16 +14,11 @@ export const ReferralLink = () => {
 	};
 
 	return (
-		<View style={[styles.container, mobileScreen && responsiveStyle.container]}>
+		<View style={styles.container}>
 			<Text style={styles.label}>Your Referral Link:</Text>
-			<View style={[styles.linkBox, mobileScreen && responsiveStyle.linkBox]}>
+			<View style={styles.linkBox}>
 				<Text style={styles.link}>{referralLink}</Text>
-				<View
-					style={[
-						styles.buttonGroup,
-						mobileScreen && responsiveStyle.buttonGroup,
-					]}
-				>
+				<View style={styles.buttonGroup}>
 					<TouchableOpacity onPress={onCopy}>
 						<View>
 							<Svg width="100" height="45" viewBox="0 0 90 40" fill="none">
@@ -45,13 +41,24 @@ export const ReferralLink = () => {
 					<UnderRealmButton title="Share" style={{ width: 140 }} />
 				</View>
 			</View>
+			<View style={styles.description}>
+				<Text style={styles.descriptionText}>Get </Text>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<Image
+						source={resources.quest.referral.uCoin}
+						style={styles.coinImg}
+					/>
+					<Text style={styles.shadowText}> 80</Text>
+				</View>
+				<Text style={styles.descriptionText}> for each invited user</Text>
+			</View>
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet({
 	container: {
-		marginTop: 40,
+		marginTop: { xs: 18, md: 40 },
 	},
 	label: {
 		fontSize: 16,
@@ -60,10 +67,10 @@ const styles = StyleSheet.create({
 		color: '#929292',
 	},
 	linkBox: {
-		marginTop: 12,
+		marginTop: { xs: 8, lg: 12 },
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 24,
+		gap: { xs: 8, lg: 24 },
 		borderColor: '#5A5A5A',
 		borderWidth: 1,
 		paddingVertical: 20,
@@ -75,7 +82,7 @@ const styles = StyleSheet.create({
 	},
 	buttonGroup: {
 		flexDirection: 'row',
-		gap: 24,
+		gap: { xs: 8, lg: 24 },
 	},
 	svgButton: {
 		position: 'absolute',
@@ -86,17 +93,29 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-});
-
-const responsiveStyle = StyleSheet.create({
-	container: {
-		marginTop: 18,
+	coinImg: {
+		width: 24,
+		height: 24,
 	},
-	linkBox: {
+	description: {
 		marginTop: 8,
-		gap: 8,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
-	buttonGroup: {
-		gap: 8,
+	descriptionText: {
+		fontWeight: '500',
+		lineHeight: 28,
+	},
+	shadowText: {
+		fontFamily: 'Vollkorn',
+		fontWeight: '500',
+		fontSize: 18,
+		lineHeight: 25,
+		textShadowColor: '#FFF9A0',
+		textShadowRadius: 5,
+		textShadowOffset: {
+			width: 0,
+			height: 0,
+		},
 	},
 });
