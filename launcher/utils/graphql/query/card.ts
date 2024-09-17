@@ -1,17 +1,17 @@
 import { gql } from '@apollo/client';
 
 export const cardDuelPlaying = gql`
-	query CardDuelPlaying {
-		cardDuelPlaying {
-			id
-			opponent {
-				id
-				name
-				avatarUrl
-			}
-			timestamp
-		}
-	}
+	# query CardDuelPlaying {
+	# 	cardDuelPlaying {
+	# 		id
+	# 		opponent {
+	# 			id
+	# 			name
+	# 			avatarUrl
+	# 		}
+	# 		timestamp
+	# 	}
+	# }
 `;
 
 export const cardDuel = gql`

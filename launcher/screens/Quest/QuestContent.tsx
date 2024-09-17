@@ -1,32 +1,19 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
+import { useActiveQuestsQuery } from 'utils/graphql';
 import resources from 'utils/resources';
-import { questActions, questState } from 'utils/state/social/internal';
-import { useSnapshot } from 'valtio';
 
-import type { SocialQuestType } from './QuestItem';
 import QuestItem from './QuestItem';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
-	const { quests, activeDoneQuests } = useSnapshot(questState);
-	const [isLoading, setIsLoading] = useState(true);
+	const { data, loading, error } = useActiveQuestsQuery();
 	const { styles } = useStyles(stylesheet);
 
-	useEffect(() => {
-		const getQuestData = async () => {
-			await questActions.getQuests();
-			await questActions.getDoneQuests();
-		};
-
-		getQuestData().then(() => setIsLoading(false));
-	}, []);
-
 	return (
-		<View style={[styles.container]}>
+		<View style={styles.container}>
 			<Image style={styles.frameCharm} source={resources.quest.charm} />
 
 			<View style={styles.titleContainer}>
@@ -39,30 +26,16 @@ const QuestContent: FC = () => {
 				<TabSelection title="Referral" />
 			</View>
 
-			{isLoading ? (
+			{loading ? (
 				<ActivityIndicator />
+			) : error ? (
+				<View>
+					<Text>{error.message}</Text>
+				</View>
 			) : (
-				<View style={[styles.quests]}>
-					{quests.map((quest) => {
-						const isDone = Array.from(activeDoneQuests).some(
-							(doneQuest) => doneQuest.id === quest.id,
-						);
-
-						return (
-							<QuestItem
-								key={quest.id}
-								id={quest.id}
-								description={quest.description}
-								title={quest.title}
-								type={quest.type as SocialQuestType}
-								points={quest.points}
-								url={quest.url}
-								isDone={isDone}
-								onVerify={() =>
-									questActions.verifyAndClaimQuest(quest.id, quest.points)
-								}
-							/>
-						);
+				<View style={styles.quests}>
+					{data.activeQuests.map((quest) => {
+						return <QuestItem key={quest.id} quest={quest} />;
 					})}
 				</View>
 			)}

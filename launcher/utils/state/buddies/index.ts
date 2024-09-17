@@ -1,6 +1,6 @@
+import type { Profile } from 'utils/graphql';
 import { graphQlClient } from 'utils/graphql';
 import * as queries from 'utils/graphql/query';
-import type { Profile } from 'utils/types/graphql';
 
 import { buddyState } from './internal';
 

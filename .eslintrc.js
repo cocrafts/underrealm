@@ -4,7 +4,7 @@ module.exports = {
 	ignorePatterns: [
 		'dist',
 		'node_modules',
-		'launcher/utils/types/graphql.ts',
+		'launcher/utils/graphql/graphql.ts',
 		'launcher/components/DrawerNavigation',
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',

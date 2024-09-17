@@ -9,7 +9,7 @@ import UnderRealmModal from 'components/layouts/UnderRealmModal';
 import UnderRealmButton from 'components/Marketplace/Button';
 import * as mutations from 'utils/graphql/mutation';
 import { useInput } from 'utils/hook';
-import { MetacraftGames } from 'utils/types';
+import { MetacraftGames } from 'utils/graphql';
 import { validateEmail } from 'utils/validation';
 
 import Subscribed from './Subscribed';

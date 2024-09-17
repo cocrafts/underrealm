@@ -3,8 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import type { ModalConfigs } from '@metacraft/ui';
 import { Button, modalActions } from '@metacraft/ui';
 import Avatar from 'components/Avatar';
+import type { CardDuelHistory } from 'utils/graphql';
 import { liveActions } from 'utils/state/live';
-import type { CardDuelHistory } from 'utils/types/graphql';
 
 interface Props {
 	config: ModalConfigs;

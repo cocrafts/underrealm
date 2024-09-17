@@ -23,6 +23,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@graphql-codegen/typescript-resolvers": "^4.2.1",
     "@metacraft/eslint-config": "^0.1.3",
     "@metacraft/tsconfig": "^0.0.2",

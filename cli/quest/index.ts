@@ -1,6 +1,6 @@
 import type { PromptObject } from 'prompts';
 import prompts from 'prompts';
-import type { StrictCommandModule } from 'utils/types';
+import type { StrictCommandModule } from 'utils/graphql';
 import yargs from 'yargs';
 
 export const questCommand: StrictCommandModule<object, unknown> = {

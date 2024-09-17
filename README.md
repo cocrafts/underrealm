@@ -45,6 +45,37 @@ Run launcher
 cd launcher && yarn dev
 ```
 
+### Convention
+
+A component inside a feature/screen will be treated as section/fragment which is stateful with the feature's context, no need to pass all as props, it also can do API query/mutation by itself.
+
+#### Working with GraphQL, Apollo, Codegen
+
+Update schema, generated types from API
+
+```
+# at root
+yarn codegen:graphql
+```
+
+The command will generate code in `launcher/utils/graphql/sdk.ts` which includes graphql types, hooks, utils for working with API.
+
+For new query/mutation, write it inside `launcher/utils/graphql/query` or `launcher/utils/graphql/mutation`. Codegen will ready the files in these directories to generate code.
+
+```graphql
+query profile {}
+```
+
+After codegen, you will have a hook name `useProfileQuery`, usage:
+
+```typescript
+const ProfileScreen = () => {
+    const { data, loading, error } = useProfileQuery();
+
+    return ...
+}
+```
+
 ### Deploy launcher
 
 In `launcher` directory
