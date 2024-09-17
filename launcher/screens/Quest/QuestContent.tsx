@@ -16,7 +16,7 @@ import TabSelection from './TabSelection';
 const QuestContent: FC = () => {
 	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
 	const [tab, setTab] = useState(TabId.QUEST);
-	const { activeQuests, activeDoneQuests } = useSnapshot(questState);
+	const { quests, activeDoneQuests } = useSnapshot(questState);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const frameCharmStyle = useMemo(() => {
@@ -28,14 +28,11 @@ const QuestContent: FC = () => {
 	}, [windowSize]);
 
 	const containerStyle = useMemo(() => {
-		if (isMobile)
-			return {
-				width: windowSize.width - (windowSize.width * 24) / 430,
-				marginTop: (windowSize.height * 80) / 960,
-			};
+		const widthRatio = isMobile ? 203 / 215 : 5 / 6;
+		const heightRatio = isMobile ? 1 / 12 : 60 / 227;
 		return {
-			marginTop: (windowSize.height * 360) / 1362,
-			width: windowSize.width - (windowSize.width * 120) / 720,
+			marginTop: windowSize.height * heightRatio,
+			width: windowSize.width * widthRatio,
 		};
 	}, [windowSize, isMobile]);
 
@@ -52,7 +49,7 @@ const QuestContent: FC = () => {
 	};
 	useEffect(() => {
 		const getQuestData = async () => {
-			await questActions.getActiveQuests();
+			await questActions.getQuests();
 			await questActions.getDoneQuests();
 		};
 
@@ -93,7 +90,7 @@ const QuestContent: FC = () => {
 				<ActivityIndicator />
 			) : tab === TabId.QUEST ? (
 				<View style={[styles.quests, isMobile ? styles.questsOnMobile : {}]}>
-					{activeQuests.map((quest) => {
+					{quests.map((quest) => {
 						const isDone = Array.from(activeDoneQuests).some(
 							(doneQuest) => doneQuest.id === quest.id,
 						);

@@ -82,7 +82,7 @@ yarn codegen:graphql
 Build and link CLI to global scope
 
 ```
-cd cli && yarn setup
+cd cli && yarn install && yarn setup
 ```
 
 Run the CLI
