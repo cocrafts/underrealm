@@ -1,8 +1,8 @@
 import type { FC, RefObject } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { AnimateDirections, BindDirections, modalActions } from '@metacraft/ui';
+import type { Profile } from 'utils/graphql';
 import { useBuddies } from 'utils/hook';
-import type { Profile } from 'utils/types/graphql';
 
 import type { BuddyProps } from './BuddyItem';
 import BuddyItem from './BuddyItem';

@@ -1,64 +1,22 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { Linking } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState } from '@metacraft/ui';
+import type { Quest } from 'utils/graphql';
 import { useSnapshot } from 'valtio';
 
 import Action from './Action';
 import Info from './Info';
+import { questPlatformMapping } from './shared';
 
-export enum SocialPlatform {
-	DISCORD = 'Discord',
-	X = 'X',
-}
-
-export enum SocialQuestType {
-	LIKE_X = 'LIKE_X',
-	RETWEET_X = 'RETWEET_X',
-	JOIN_DISCORD = 'JOIN_DISCORD',
-	COMMENT_X = 'COMMENT_X',
-}
-
-const questPlatformMapping: Record<SocialQuestType, SocialPlatform> = {
-	[SocialQuestType.LIKE_X]: SocialPlatform.X,
-	[SocialQuestType.RETWEET_X]: SocialPlatform.X,
-	[SocialQuestType.COMMENT_X]: SocialPlatform.X,
-	[SocialQuestType.JOIN_DISCORD]: SocialPlatform.DISCORD,
+type Props = {
+	quest: Quest;
 };
 
-export interface QuestProps {
-	id: string;
-	type: SocialQuestType;
-	title: string;
-	description: string;
-	points: number;
-	url: string;
-	onVerify?: () => void;
-	isDone?: boolean;
-}
-
-const QuestItem: FC<QuestProps> = ({
-	type,
-	title,
-	description,
-	points,
-	url,
-	id,
-	isDone = false,
-	onVerify,
-}) => {
+const QuestItem: FC<Props> = ({ quest }) => {
 	const { isMobile } = useSnapshot<DimensionState>(dimensionState);
-	const [isClicked, setIsClicked] = useState(
-		localStorage.getItem(`quest${id}`) === 'true',
-	);
 	const [isHovered, setIsHovered] = useState(false);
-	const handleGoToTask = () => {
-		Linking.openURL(url);
-		setIsClicked(true);
-		localStorage.setItem(`quest${id}`, 'true');
-	};
 
 	return (
 		<Pressable
@@ -71,18 +29,12 @@ const QuestItem: FC<QuestProps> = ({
 			onHoverOut={() => setIsHovered(false)}
 		>
 			<Info
-				title={title}
-				platform={questPlatformMapping[type]}
-				description={description}
+				title={quest.title}
+				platform={questPlatformMapping[quest.type]}
+				description={quest.description}
 			/>
 
-			<Action
-				points={points}
-				onGo={handleGoToTask}
-				isClicked={isClicked}
-				isDone={isDone}
-				onVerify={onVerify}
-			/>
+			<Action quest={quest} />
 		</Pressable>
 	);
 };

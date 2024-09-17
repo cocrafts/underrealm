@@ -46,7 +46,7 @@ export const ScrollLayout: FC<Props> = ({
 	const contentContainer = {};
 
 	const containerStyle = {
-		paddingTop: isMobile ? 0 : FIXED_HEADER_HEIGHT,
+		paddingTop: FIXED_HEADER_HEIGHT,
 	};
 
 	const navigationStyle = useAnimatedStyle(() => {

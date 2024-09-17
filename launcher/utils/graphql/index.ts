@@ -54,3 +54,5 @@ export const graphQlClient = new ApolloClient({
 	cache: memoryCache,
 	defaultOptions,
 });
+
+export * from './sdk';

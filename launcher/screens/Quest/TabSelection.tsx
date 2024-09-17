@@ -1,11 +1,8 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { StyleSheet } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState, Text } from '@metacraft/ui';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { Text } from '@metacraft/ui';
 import resources from 'utils/resources';
-import { useSnapshot } from 'valtio';
 
 import type { TabId } from './internal';
 
@@ -18,18 +15,15 @@ interface Props {
 
 const TabSelection: FC<Props> = ({
 	onChangeTab,
-	title,
 	value,
+	title,
 	isActive = false,
 }) => {
-	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
-	const containerStyle = useMemo(() => {
-		if (isMobile) return { width: (180 * windowSize.width) / 430 };
-	}, [windowSize.width, isMobile]);
+	const { styles } = useStyles(stylesheet);
 
 	return (
 		<TouchableOpacity
-			style={[styles.container, containerStyle]}
+			style={[styles.container]}
 			onPress={() => onChangeTab(value)}
 		>
 			<Text
@@ -43,10 +37,7 @@ const TabSelection: FC<Props> = ({
 			{isActive ? (
 				<Image source={resources.quest.activeTab} style={styles.activeIcon} />
 			) : (
-				<Image
-					source={resources.quest.inactiveTab}
-					style={styles.inactiveIcon}
-				/>
+				<View style={styles.inactiveIcon} />
 			)}
 		</TouchableOpacity>
 	);
@@ -54,40 +45,44 @@ const TabSelection: FC<Props> = ({
 
 export default TabSelection;
 
-export const styles = StyleSheet.create({
-	container: {
-		width: 200,
-		alignItems: 'center',
-		gap: 12,
-		paddingTop: 20,
-		borderBottomColor: '#2E2E2E',
-		borderBottomWidth: 1,
-	},
-	title: {
-		fontFamily: 'Volkhov',
-		color: '#ffffff',
-		fontWeight: '500',
-		fontSize: 16,
-	},
-	activeTitle: {
-		textShadowColor: '#FFF9A0',
-		textShadowOffset: {
-			height: 0,
-			width: 0,
+const stylesheet = createStyleSheet(() => {
+	return {
+		container: {
+			width: { xs: 152, lg: 200 },
+			alignItems: 'center',
+			gap: 12,
+			paddingTop: 20,
 		},
-		textShadowRadius: 6,
-	},
-	inactiveTitle: {
-		opacity: 0.5,
-	},
-	activeIcon: {
-		width: 16,
-		height: 16,
-		marginBottom: -8,
-	},
-	inactiveIcon: {
-		width: 12,
-		height: 12,
-		marginBottom: -12,
-	},
+		title: {
+			fontFamily: 'Volkhov',
+			color: '#ffffff',
+			fontWeight: '500',
+			fontSize: 16,
+		},
+		activeTitle: {
+			textShadowColor: '#FFF9A0',
+			textShadowOffset: {
+				height: 0,
+				width: 0,
+			},
+			textShadowRadius: 6,
+		},
+		inactiveTitle: {
+			opacity: 0.5,
+		},
+		activeIcon: {
+			width: 16,
+			height: 16,
+			marginBottom: -8,
+		},
+		inactiveIcon: {
+			position: 'absolute',
+			bottom: -5,
+			width: 9,
+			height: 9,
+			transform: [{ rotateZ: '45deg' }],
+			backgroundColor: '#ffffff',
+			opacity: 0.3,
+		},
+	};
 });

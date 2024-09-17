@@ -1,93 +1,64 @@
 import type { FC } from 'react';
-import { useMemo, useState } from 'react';
-import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState, Text } from '@metacraft/ui';
+import { useState } from 'react';
+import { ImageBackground, Linking, StyleSheet, View } from 'react-native';
+import { Text } from '@metacraft/ui';
+import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
 import UnderRealmButton from 'components/Marketplace/Button';
+import {
+	type Quest,
+	useActiveQuestsQuery,
+	useCreateQuestActionMutation,
+} from 'utils/graphql';
 import resources from 'utils/resources';
-import { useSnapshot } from 'valtio';
 
-interface Props {
-	points: number;
-	onGo?: () => void;
-	onVerify?: () => void;
-	isClicked?: boolean;
-	isDone?: boolean;
-}
+type Props = {
+	quest: Quest;
+};
 
-const Action: FC<Props> = ({
-	points,
-	onGo,
-	onVerify,
-	isClicked = false,
-	isDone = false,
-}) => {
-	const { isMobile, windowSize } = useSnapshot<DimensionState>(dimensionState);
-	const [isRefreshHovered, setIsRefreshHovered] = useState(false);
-	const buttonStyle = useMemo(() => {
-		return {
-			gap: (40 * windowSize.width) / 1440,
-		};
-	}, [windowSize.width]);
+const Action: FC<Props> = ({ quest }) => {
+	const [isTaskOpened, setIsTaskOpened] = useState(false);
+	const { refetch } = useActiveQuestsQuery();
+	const [createQuestAction] = useCreateQuestActionMutation();
+
+	const handleGoToTask = () => {
+		Linking.openURL(quest.url);
+		setIsTaskOpened(true);
+	};
+
+	const handlePressVerify = async () => {
+		// claimedPoints should no be here
+		await createQuestAction({
+			variables: { questId: quest.id, claimedPoints: 0 },
+		});
+		await refetch();
+	};
 
 	return (
-		<View style={isMobile ? styles.containerOnMobile : styles.contentPart}>
-			{!isDone && (
-				<View
-					style={[styles.buttonsContainer, buttonStyle, isMobile && { gap: 0 }]}
-				>
-					{isClicked && (
-						<View style={styles.refreshButtonContainer}>
-							<Pressable
-								onPress={onVerify}
-								onHoverIn={() => {
-									setIsRefreshHovered(true);
-								}}
-								onHoverOut={() => {
-									setIsRefreshHovered(false);
-								}}
-								style={[
-									styles.refreshButton,
-									isMobile && styles.refreshButtonOnMobile,
-									isRefreshHovered ? styles.hovered : {},
-								]}
+		<View style={styles.container}>
+			<View style={styles.buttonsContainer}>
+				{isTaskOpened && (
+					<View style={styles.refreshButtonContainer}>
+						<HoverableButton
+							onPress={handlePressVerify}
+							style={styles.refreshButton}
+							hoverStyle={styles.hovered}
+						>
+							<ImageBackground
+								source={resources.quest.refreshButton}
+								style={styles.refreshButtonImage}
 							>
-								<ImageBackground
-									source={resources.quest.refreshButton}
-									style={
-										isMobile
-											? styles.refreshButtonImageOnMobile
-											: styles.refreshButtonImage
-									}
-								>
-									<Refresh size={isMobile ? 16 : 20} />
-								</ImageBackground>
-							</Pressable>
+								<Refresh size={16} />
+							</ImageBackground>
+						</HoverableButton>
 
-							{!isMobile && <Text style={styles.buttonText}>Verify</Text>}
-						</View>
-					)}
-
-					{!isMobile && (
-						<UnderRealmButton onPress={onGo} style={styles.goButton}>
-							<Text style={styles.buttonText}>Go</Text>
-						</UnderRealmButton>
-					)}
-				</View>
-			)}
-
-			<View style={styles.pointContainer}>
-				<Text style={isMobile ? styles.pointTextOnMobile : styles.pointText}>
-					+{points} pts
-				</Text>
-				{!isDone && isMobile && (
-					<UnderRealmButton onPress={onGo} style={styles.goButtonOnMobile}>
-						<Text style={[styles.buttonText, styles.buttonTextOnMobile]}>
-							Go
-						</Text>
-					</UnderRealmButton>
+						<Text style={styles.buttonText}>Verify</Text>
+					</View>
 				)}
+
+				<UnderRealmButton onPress={handleGoToTask} style={styles.goButton}>
+					<Text style={styles.buttonText}>Go</Text>
+				</UnderRealmButton>
 			</View>
 		</View>
 	);
@@ -129,7 +100,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		gap: 40,
 	},
-	contentPart: {
+	container: {
 		flexDirection: 'row',
 		gap: 20,
 		alignItems: 'center',
@@ -146,7 +117,7 @@ const styles = StyleSheet.create({
 	goButtonOnMobile: {
 		width: 64,
 		alignItems: 'center',
-		height: 24,
+		height: 36,
 	},
 	buttonText: {
 		color: '#ffffff',
