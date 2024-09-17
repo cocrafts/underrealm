@@ -6,6 +6,7 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "type-check": "tsc --noEmit",
+    "test": "jest",
     "dev": "tsx watch --clear-screen=false ./index.server.ts",
     "build": "rm -rf dist && yarn swc src -d dist"
   },
@@ -47,5 +48,18 @@
     "morgan": "^1.10.0",
     "tsx": "^4.19.0",
     "typescript": "5.3.3"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }
