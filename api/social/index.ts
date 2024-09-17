@@ -1,4 +1,5 @@
 import { createQuestAction, deleteQuest, updateQuest } from './mutation/quest';
+import { makeReferral } from './mutation/referral';
 import {
 	activeQuests,
 	disableQuests,

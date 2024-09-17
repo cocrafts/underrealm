@@ -125,6 +125,7 @@ export type Mutation = {
   createQuestAction?: Maybe<QuestAction>;
   deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
+  makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
   updateQuest?: Maybe<Quest>;
 };
@@ -160,6 +161,11 @@ export type MutationInviteGameArgs = {
 };
 
 
+export type MutationMakeReferralArgs = {
+  referralCode: Scalars['String']['input'];
+};
+
+
 export type MutationUpdateQuestArgs = {
   id: Scalars['ID']['input'];
   status: Scalars['String']['input'];
@@ -178,6 +184,7 @@ export type Profile = {
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral: Scalars['Float']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  referralCode: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -488,6 +495,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'claimedPoints' | 'questId'>>;
   deleteQuest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteQuestArgs, 'id'>>;
   inviteGame?: Resolver<Maybe<ResolversTypes['GameInvitation']>, ParentType, ContextType, RequireFields<MutationInviteGameArgs, 'input'>>;
+  makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
   stopMatchFind?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   updateQuest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<MutationUpdateQuestArgs, 'id' | 'status'>>;
 }>;
@@ -504,6 +512,7 @@ export type ProfileResolvers<ContextType = any, ParentType extends ResolversPare
   linkedId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mineral?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
