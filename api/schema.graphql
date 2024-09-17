@@ -48,6 +48,7 @@ type Profile {
   mineral: Float!
   isOnline: Boolean
   referralCode: String!
+  referralHistory: ReferralHistory
 }
 
 type CardDuelSetting {
@@ -151,4 +152,17 @@ type QuestAction {
 	questId: ID!
 	userId: String!
   claimedPoints: Int!
+}
+
+type ReferralHistory {
+    count: Int!
+    points: Int!
+    detail: [ReferralHistoryDetail]
+}
+
+type ReferralHistoryDetail {
+    id: ID!
+    referredId: String!
+    claimedPoints: Int!
+    timestamp: String!
 }

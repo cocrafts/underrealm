@@ -10,6 +10,7 @@ const referralSchema = new Schema({
 		min: 0,
 		default: 80,
 	},
+	timestamp: Date,
 });
 
 referralSchema.index({ referrer: 1, referee: 1 }, { unique: true });
@@ -29,9 +30,18 @@ export const createReferralRecord = async (
 			referrerId: referrer.id,
 			referredId,
 			claimedPoints: 80,
+			timestamp: new Date(Date.now()),
 		});
 		await referralRecord.save();
 		return true;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+
+export const getReferralByReferrerId = async (referrerId: string) => {
+	try {
+		return await Referral.find({ referrerId });
 	} catch (err) {
 		throw new Error(err);
 	}
