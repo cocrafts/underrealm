@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 			} else if (level === 'warn') {
 				return chalk.yellow(msg);
 			} else {
-				return chalk.green(msg);
+				return chalk.blue(msg);
 			}
 		},
 	);
