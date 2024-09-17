@@ -17,9 +17,6 @@ type Mutation {
   inviteGame(input: InviteGameInput!): GameInvitation
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
-  createQuest(title: String!, description: String!, type: String!, url: String, points: Int!): Quest
-	updateQuest(id: ID!, status: String!): Quest
-	deleteQuest(id: ID!): Boolean
 	createQuestAction(questId: ID!, claimedPoints: Int!): QuestAction
 }
 
@@ -142,6 +139,7 @@ type Quest {
 	status: String!
 	url: String!
 	points: Int!
+  createdAt: DateTime!
 }
 
 type QuestAction {
@@ -149,4 +147,5 @@ type QuestAction {
 	questId: ID!
 	userId: String!
   claimedPoints: Int!
+  createdAt: DateTime!
 }
