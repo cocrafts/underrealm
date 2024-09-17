@@ -2,7 +2,6 @@ import { readFileSync } from 'fs';
 
 import { ApolloServer } from '@apollo/server';
 import type { Resolvers } from 'types/graphql';
-import { UserQueryResolver } from 'user';
 
 import {
 	GameMutationResolvers,
@@ -10,6 +9,7 @@ import {
 	GameSubscription,
 } from './game';
 import { SocialMutationResolvers, SocialQueryResolvers } from './social';
+import { UserQueryResolver } from './user';
 
 const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
 
