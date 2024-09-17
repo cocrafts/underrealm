@@ -1,10 +1,13 @@
 import type { FC } from 'react';
-import { useState } from 'react';
-import { ImageBackground, Linking, StyleSheet, View } from 'react-native';
+import { Image, ImageBackground, View } from 'react-native';
+import {
+	createStyleSheet,
+	UnistylesRuntime,
+	useStyles,
+} from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
-import UnderRealmButton from 'components/Marketplace/Button';
 import {
 	type Quest,
 	useActiveQuestsQuery,
@@ -14,143 +17,123 @@ import resources from 'utils/resources';
 
 type Props = {
 	quest: Quest;
+	isTaskOpened: boolean;
+	isDone: boolean;
 };
 
-const Action: FC<Props> = ({ quest }) => {
-	const [isTaskOpened, setIsTaskOpened] = useState(false);
+const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 	const { refetch } = useActiveQuestsQuery();
 	const [createQuestAction] = useCreateQuestActionMutation();
-
-	const handleGoToTask = () => {
-		Linking.openURL(quest.url);
-		setIsTaskOpened(true);
-	};
+	const { styles } = useStyles(stylesheet);
+	const isMobile = UnistylesRuntime.breakpoint === 'xs';
 
 	const handlePressVerify = async () => {
 		// claimedPoints should no be here
 		await createQuestAction({
-			variables: { questId: quest.id, claimedPoints: 0 },
+			variables: { questId: quest.id, claimedPoints: quest.points },
 		});
 		await refetch();
 	};
 
-	return (
-		<View style={styles.container}>
-			<View style={styles.buttonsContainer}>
-				{isTaskOpened && (
-					<View style={styles.refreshButtonContainer}>
-						<HoverableButton
-							onPress={handlePressVerify}
-							style={styles.refreshButton}
-							hoverStyle={styles.hovered}
-						>
-							<ImageBackground
-								source={resources.quest.refreshButton}
-								style={styles.refreshButtonImage}
-							>
-								<Refresh size={16} />
-							</ImageBackground>
-						</HoverableButton>
-
-						<Text style={styles.buttonText}>Verify</Text>
-					</View>
-				)}
-
-				<UnderRealmButton onPress={handleGoToTask} style={styles.goButton}>
-					<Text style={styles.buttonText}>Go</Text>
-				</UnderRealmButton>
+	return !isDone ? (
+		<View style={styles.buttonsContainer}>
+			<View style={styles.pointContainer}>
+				<Image source={resources.quest.coinU} style={styles.coinU} />
+				<Text style={styles.pointText}>{quest.points}</Text>
 			</View>
+
+			{isTaskOpened && (
+				<HoverableButton
+					onPress={handlePressVerify}
+					style={styles.refreshButton}
+					hoverStyle={styles.hovered}
+				>
+					<ImageBackground
+						source={
+							isMobile
+								? resources.quest.smallRefreshButton
+								: resources.quest.refreshButton
+						}
+						style={styles.refreshButtonImage}
+					>
+						<Refresh size={16} />
+						{!isMobile && <Text style={styles.buttonText}>Verify</Text>}
+					</ImageBackground>
+				</HoverableButton>
+			)}
+		</View>
+	) : (
+		<View style={styles.completeContainer}>
+			{!isMobile && <Text style={styles.pointText}>Completed</Text>}
+			<Image source={resources.quest.checked} style={styles.checked} />
 		</View>
 	);
 };
 
 export default Action;
 
-const styles = StyleSheet.create({
-	refreshButton: {
-		width: 36,
-		height: 36,
-		borderRadius: 20,
-		overflow: 'visible',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	refreshButtonOnMobile: {
-		width: 20,
-		height: 20,
-	},
-	refreshButtonImage: {
-		width: 39,
-		height: 44,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	refreshButtonImageOnMobile: {
-		width: 24,
-		height: 30,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	refreshButtonContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 12,
-	},
-	buttonsContainer: {
-		flexDirection: 'row',
-		gap: 40,
-	},
-	container: {
-		flexDirection: 'row',
-		gap: 20,
-		alignItems: 'center',
-	},
-	containerOnMobile: {
-		flexDirection: 'row',
-		gap: 8,
-		alignItems: 'center',
-	},
-	goButton: {
-		width: 135,
-		alignItems: 'center',
-	},
-	goButtonOnMobile: {
-		width: 64,
-		alignItems: 'center',
-		height: 36,
-	},
-	buttonText: {
-		color: '#ffffff',
-		fontSize: 16,
-		fontWeight: '500',
-		textAlign: 'center',
-	},
-	pointText: {
-		color: '#F2E0C3',
-		fontFamily: 'Volkhov',
-		fontWeight: '600',
-		fontSize: 16,
-	},
-	pointTextOnMobile: {
-		color: '#F2E0C3',
-		fontFamily: 'Volkhov',
-		fontWeight: '500',
-		fontSize: 12,
-		marginBottom: 4,
-	},
-	hovered: {
-		shadowColor: '#FFF9A0',
-		shadowOffset: {
-			height: 0,
-			width: 0,
+const stylesheet = createStyleSheet(() => {
+	return {
+		refreshButton: {
+			overflow: 'visible',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
-		shadowOpacity: 0.5,
-		shadowRadius: 12,
-	},
-	buttonTextOnMobile: {
-		fontSize: 12,
-	},
-	pointContainer: {
-		alignItems: 'center',
-	},
+		refreshButtonImage: {
+			flexDirection: 'row',
+			width: { xs: 40, sm: 90 },
+			height: { xs: 40, sm: 40 },
+			alignItems: 'center',
+			justifyContent: 'center',
+			gap: 8,
+		},
+		refreshButtonContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 12,
+		},
+		buttonsContainer: {
+			flexDirection: { xs: 'column', sm: 'row' },
+			gap: { xs: 8, sm: 20 },
+		},
+		buttonText: {
+			color: '#ffffff',
+			fontSize: 12,
+			fontWeight: '500',
+			textAlign: 'center',
+		},
+		pointText: {
+			color: '#F2E0C3',
+			fontFamily: 'Volkhov',
+			fontWeight: '600',
+			fontSize: { xs: 12, lg: 16 },
+		},
+		hovered: {
+			shadowColor: '#FFF9A0',
+			shadowOffset: {
+				height: 0,
+				width: 0,
+			},
+			shadowOpacity: 0.5,
+			shadowRadius: 12,
+		},
+		pointContainer: {
+			alignItems: 'center',
+			flexDirection: 'row',
+			gap: 8,
+		},
+		coinU: {
+			width: { xs: 20, md: 24 },
+			height: { xs: 20, md: 24 },
+		},
+		completeContainer: {
+			flexDirection: 'row',
+			gap: 12,
+			alignItems: 'center',
+		},
+		checked: {
+			width: 32,
+			height: 32,
+		},
+	};
 });
