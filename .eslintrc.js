@@ -22,5 +22,7 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-require-imports': 'off',
 		'@typescript-eslint/no-duplicate-enum-values': 'off',
+		'@typescript-eslint/no-empty-interface': 'off',
+		'@typescript-eslint/no-empty-object-type': 'off',
 	},
 };

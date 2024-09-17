@@ -1,37 +1,16 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
-import { Image } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState } from '@metacraft/ui';
+import { ImageBackground, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import resources from 'utils/resources';
-import { useSnapshot } from 'valtio';
+import { launcherTheme } from 'utils/theme';
 
 const HeadingSection: FC = () => {
-	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
-	const logoSize = useMemo(() => {
-		const ratio = isMobile ? 248 / 375 : 31 / 72;
-		return windowSize.width * ratio;
-	}, [windowSize.width, isMobile]);
+	const { styles } = useStyles(stylesheet);
 
 	return (
 		<View style={styles.container}>
-			<Image
-				source={resources.quest.imageTitle}
-				style={{
-					position: 'absolute',
-					margin: 'auto',
-					zIndex: -1,
-					width: (windowSize.width * 700) / 1440,
-					height: (windowSize.width * 414) / 1440,
-				}}
-			/>
-			<UnderRealmLogo
-				style={{ marginTop: (windowSize.width * 167) / 1440 }}
-				size={logoSize}
-			/>
-
+			<UnderRealmLogo size={'90%'} />
 			<ImageBackground
 				source={resources.quest.pointsBoard}
 				style={{ width: 392, height: 68, flexDirection: 'row' }}
@@ -45,22 +24,19 @@ const HeadingSection: FC = () => {
 
 export default HeadingSection;
 
-const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-	},
-	subtitle: {
-		color: '#ffffff',
-		fontWeight: '500',
-		fontSize: 18,
-		textAlign: 'center',
-		maxWidth: 280,
-		marginTop: 20,
-	},
-	pointInfoContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		gap: 8,
-		justifyContent: 'center',
-	},
+const stylesheet = createStyleSheet(() => {
+	return {
+		container: {
+			alignItems: 'center',
+		},
+		subtitle: {
+			color: launcherTheme.colors.text,
+			fontWeight: '500',
+			textAlign: 'center',
+			fontSize: { xs: 14, md: 16, lg: 18 },
+			maxWidth: { xs: 280, sm: '50%' },
+			marginTop: { sm: 20, md: 0, lg: -20 },
+		},
+		pointInfoContainer: {},
+	};
 });
