@@ -1,7 +1,7 @@
+import type { Quest, QuestAction } from 'utils/graphql';
 import { graphQlClient } from 'utils/graphql';
 import * as mutations from 'utils/graphql/mutation';
 import * as queries from 'utils/graphql/query';
-import type { Quest, QuestAction } from 'utils/types';
 
 export const getActiveQuests = async (): Promise<Quest[]> => {
 	const { data } = await graphQlClient.query({

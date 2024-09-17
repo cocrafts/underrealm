@@ -1,68 +1,22 @@
 import type { FC } from 'react';
-import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState, Text } from '@metacraft/ui';
+import { Text } from '@metacraft/ui';
+import { useActiveQuestsQuery } from 'utils/graphql';
 import resources from 'utils/resources';
-import { questActions, questState } from 'utils/state/social/internal';
-import { useSnapshot } from 'valtio';
 
-import type { SocialQuestType } from './QuestItem';
 import QuestItem from './QuestItem';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
-	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
-	const { quests, activeDoneQuests } = useSnapshot(questState);
-	const [isLoading, setIsLoading] = useState(true);
-
-	const frameCharmStyle = useMemo(() => {
-		return {
-			width: (windowSize.width * 400) / 1440,
-			height: (windowSize.height * 20) / 1362,
-			marginTop: -(windowSize.height * 20) / 1362,
-		};
-	}, [windowSize]);
-
-	const containerStyle = useMemo(() => {
-		const widthRatio = isMobile ? 203 / 215 : 5 / 6;
-		const heightRatio = isMobile ? 1 / 12 : 60 / 227;
-		return {
-			marginTop: windowSize.height * heightRatio,
-			width: windowSize.width * widthRatio,
-		};
-	}, [windowSize, isMobile]);
-
-	const titleCharmStyle = useMemo(() => {
-		return {
-			width: (windowSize.width * 400) / 1440,
-			height: (windowSize.height * 13) / 1024,
-			bottom: -(windowSize.height * 13) / 1024,
-		};
-	}, [windowSize]);
-
-	useEffect(() => {
-		const getQuestData = async () => {
-			await questActions.getQuests();
-			await questActions.getDoneQuests();
-		};
-
-		getQuestData().then(() => setIsLoading(false));
-	}, []);
+	const { data, loading, error } = useActiveQuestsQuery();
 
 	return (
-		<View style={[styles.container, containerStyle]}>
-			<Image
-				style={[styles.frameCharm, frameCharmStyle]}
-				source={resources.quest.charm}
-			/>
+		<View style={styles.container}>
+			<Image style={styles.frameCharm} source={resources.quest.charm} />
 
 			<View style={styles.titleContainer}>
 				<Text style={styles.title}>Quest To Conquer</Text>
-				<Image
-					source={resources.quest.titleCharm}
-					style={[titleCharmStyle, styles.titleCharm]}
-				/>
+				<Image source={resources.quest.titleCharm} style={styles.titleCharm} />
 			</View>
 
 			<View style={styles.tabsContainer}>
@@ -70,30 +24,16 @@ const QuestContent: FC = () => {
 				<TabSelection title="Referral" />
 			</View>
 
-			{isLoading ? (
+			{loading ? (
 				<ActivityIndicator />
+			) : error ? (
+				<View>
+					<Text>{error.message}</Text>
+				</View>
 			) : (
-				<View style={[styles.quests, isMobile ? styles.questsOnMobile : {}]}>
-					{quests.map((quest) => {
-						const isDone = Array.from(activeDoneQuests).some(
-							(doneQuest) => doneQuest.id === quest.id,
-						);
-
-						return (
-							<QuestItem
-								key={quest.id}
-								id={quest.id}
-								description={quest.description}
-								title={quest.title}
-								type={quest.type as SocialQuestType}
-								points={quest.points}
-								url={quest.url}
-								isDone={isDone}
-								onVerify={() =>
-									questActions.verifyAndClaimQuest(quest.id, quest.points)
-								}
-							/>
-						);
+				<View style={styles.quests}>
+					{data.activeQuests.map((quest) => {
+						return <QuestItem key={quest.id} quest={quest} />;
 					})}
 				</View>
 			)}

@@ -1,6 +1,6 @@
+import type { CardDuel } from 'utils/graphql';
 import { graphQlClient } from 'utils/graphql';
 import * as queries from 'utils/graphql/query';
-import type { CardDuel } from 'utils/types/graphql';
 import { subscribeKey } from 'valtio/utils';
 
 import { bridgeState } from './state';

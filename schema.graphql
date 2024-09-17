@@ -1,47 +1,3 @@
-# This file was generated based on ".graphqlconfig". Do not edit manually.
-
-schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-}
-
-type Account {
-  address: String!
-  avatarUrl: String
-  email: String
-  githubUrl: String
-  id: String!
-  jwt: String
-  mineral: Float!
-  name: String
-}
-
-type BuildAccount {
-  avatarUrl: String
-  id: String
-  name: String
-}
-
-type BuildActivity {
-  account: BuildAccount
-  description: String
-  detail: BuildDetail
-  id: String!
-  reward: Float
-  timestamp: String!
-  type: String
-}
-
-type BuildDetail {
-  added: [String]
-  history: [String]
-  modified: [String]
-  removed: [String]
-  timestamp: String
-  url: String
-}
-
 type CardBoardTarget {
   id: String
   index: Int
@@ -116,24 +72,6 @@ type CardPlayerConfig {
   id: String
 }
 
-type Comment {
-  body: String
-  histories: [CommentHistory]
-  id: String
-  owner: Profile
-  reply: Comment
-  replyHistories: [Comment]
-  timestamp: String
-  upCount: Int
-  updatedAt: String
-}
-
-type CommentHistory {
-  body: String
-  id: String
-  timestamp: String
-}
-
 type GameInvitation {
   enemy: Profile!
   game: String!
@@ -142,36 +80,23 @@ type GameInvitation {
   timestamp: String!
 }
 
-type GameSubscription {
-  email: String!
-  game: MetacraftGames
-  timestamp: String!
+input InviteGameInput {
+  game: MetacraftGames!
+  opponent: String!
+}
+
+enum MetacraftGames {
+  MURG
 }
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
-  archiveThread(id: String): Boolean
-  claimTokenFromOrder(orderId: String!, signature: String!): TokenOrder
-  confirmTokenOrder(input: ConfirmTokenOrderInput): TokenOrder
-  "Connect User's profile to Github, so their contribute in Github could be tracked"
-  connectGitHub(code: String!): Account
-  createComment(input: CreateCommentInput!): Comment
-  createThread(input: CreateThreadInput!): Thread
-  createTokenOrder(input: CreateTokenOrderInput): TokenOrder
-  deleteComment(id: String!): Boolean
-  editComment(input: EditCommentInput!): Comment
-  editThread(input: EditThreadInput!): Thread
-  emailConfirmedOrder(input: EmailConfirmedOrderInput): TokenOrder
-  increaseCounter(amount: Float): Float
+  createQuest(description: String!, points: Int!, title: String!, type: String!, url: String): Quest
+  createQuestAction(claimedPoints: Int!, questId: ID!): QuestAction
+  deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
-  registerTokenOrderNonce(orderId: String!): String
   stopMatchFind: Boolean
-  subscribeGame(input: SubscribeGameInput): GameSubscription
-  "Up vote any Entity, could be Thread, Comment now.. and more to come"
-  upVote(
-    "id of any Commentable entity, e.g Thread, other Comment"
-    id: String!
-  ): Boolean
+  updateQuest(id: ID!, status: String!): Quest
 }
 
 type Profile {
@@ -189,144 +114,39 @@ type Profile {
 }
 
 type Query {
-  account(address: String): Account
-  buddies: [Profile]
-  buildActivities: [BuildActivity]
+  activeQuests: [Quest]
   cardDuel(id: String!): CardDuel
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
-  counter: Float
-  feedThreads: [Thread]
-  findThreads(keyword: String!): [Thread]
+  disableQuests: [Quest]
   gameInvitations: [GameInvitation]
   gameJwt(duelId: String): String
   greeting: String
-  personalBuildActivities(address: String): [BuildActivity]
-  personalThreads(id: String): [Thread]
+  initQuests: [Quest]
   profile(address: String): Profile
-  thread(id: String): Thread
-  tokenOrders: [TokenOrder]
+  quest(id: ID!): Quest
+  questActions: [QuestAction]
+}
+
+type Quest {
+  description: String!
+  id: ID!
+  points: Int!
+  status: String!
+  title: String!
+  type: String!
+  url: String!
+}
+
+type QuestAction {
+  claimedPoints: Int!
+  id: ID!
+  questId: ID!
+  userId: String!
 }
 
 type Subscription {
-  counterIncreased: Float
   gameInvitation(opponent: String!): GameInvitation
   matchFind(game: MetacraftGames!, userId: String): CardDuel
   matchFound(game: MetacraftGames!, userId: String): CardDuel
-}
-
-type Thread {
-  body: String
-  comments: [Comment]
-  histories: [ThreadHistory]
-  id: String
-  owner: Profile
-  timestamp: String
-  title: String
-  upCount: Int
-  updatedAt: String
-}
-
-type ThreadHistory {
-  body: String
-  id: String
-  timestamp: String
-  title: String
-}
-
-type TokenOrder {
-  id: String
-  investAmount: Float!
-  investCurrency: SupportedCurrencies!
-  investUsdRatio: Float!
-  mineralAmount: Float!
-  mineralUnitPrice: Float!
-  nonce: String
-  nonceTime: String
-  owner: Profile
-  pendingUnlocks: [TokenUnlock]
-  round: String
-  status: OrderStatuses!
-  timestamp: String!
-  unlockAmount: Float
-  unlockCount: Int
-}
-
-type TokenUnlock {
-  amount: Float!
-  id: String
-  percentage: Float!
-  round: String
-  total: Float!
-  unlockOrder: Int
-}
-
-enum MetacraftGames {
-  MURG
-}
-
-enum OrderStatuses {
-  CANCELLED
-  INITIATED
-  PAID
-}
-
-enum SupportedCurrencies {
-  SOL
-  USDC
-  USDT
-}
-
-input ConfirmTokenOrderInput {
-  orderId: String!
-  signature: String!
-}
-
-input CreateCommentInput {
-  body: String!
-  id: String
-  parentId: String!
-  replyId: String
-}
-
-input CreateThreadInput {
-  body: String!
-  title: String
-}
-
-input CreateTokenOrderInput {
-  investAmount: Float
-  investCurrency: SupportedCurrencies
-}
-
-input EditCommentInput {
-  body: String!
-  id: String!
-}
-
-input EditThreadInput {
-  body: String
-  id: String
-  title: String
-}
-
-input EmailConfirmedOrderInput {
-  email: String!
-  name: String
-  order: String
-}
-
-input InviteGameInput {
-  game: MetacraftGames!
-  opponent: String!
-}
-
-input LoginInput {
-  publicKey: String!
-  signature: String!
-}
-
-input SubscribeGameInput {
-  email: String!
-  game: MetacraftGames
 }

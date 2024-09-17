@@ -22,9 +22,9 @@ export const profile = gql`
 
 export const buddies = gql`
 	${profileFields}
-	query Buddies {
-		buddies {
-			...ProfileFields
-		}
-	}
+	# query Buddies {
+	# 	buddies {
+	# 		...ProfileFields
+	# 	}
+	# }
 `;
