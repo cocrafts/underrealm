@@ -1,3 +1,5 @@
+scalar DateTime
+
 type Query {
   greeting: String
   profile(address: String): Profile
@@ -131,11 +133,18 @@ enum MetacraftGames {
   MURG
 }
 
+enum QuestType {
+  LIKE_X
+	RETWEET_X
+	JOIN_DISCORD
+	COMMENT_X
+}
+
 type Quest {
   id: ID!
   title: String!
 	description: String!
-	type: String!
+	type: QuestType!
 	status: String!
 	url: String!
 	points: Int!

@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { ApiContext } from '../utils/runtime';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -122,26 +123,14 @@ export enum MetacraftGames {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptGame?: Maybe<Scalars['Boolean']['output']>;
-  createQuest?: Maybe<Quest>;
   createQuestAction?: Maybe<QuestAction>;
-  deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
-  updateQuest?: Maybe<Quest>;
 };
 
 
 export type MutationAcceptGameArgs = {
   invitationId: Scalars['String']['input'];
-};
-
-
-export type MutationCreateQuestArgs = {
-  description: Scalars['String']['input'];
-  points: Scalars['Int']['input'];
-  title: Scalars['String']['input'];
-  type: Scalars['String']['input'];
-  url?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -151,19 +140,8 @@ export type MutationCreateQuestActionArgs = {
 };
 
 
-export type MutationDeleteQuestArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type MutationInviteGameArgs = {
   input: InviteGameInput;
-};
-
-
-export type MutationUpdateQuestArgs = {
-  id: Scalars['ID']['input'];
-  status: Scalars['String']['input'];
 };
 
 export type Profile = {
@@ -224,22 +202,31 @@ export type QueryQuestArgs = {
 
 export type Quest = {
   __typename?: 'Quest';
+  createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
   status: Scalars['String']['output'];
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: QuestType;
   url: Scalars['String']['output'];
 };
 
 export type QuestAction = {
   __typename?: 'QuestAction';
   claimedPoints: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
   userId: Scalars['String']['output'];
 };
+
+export enum QuestType {
+  CommentX = 'COMMENT_X',
+  JoinDiscord = 'JOIN_DISCORD',
+  LikeX = 'LIKE_X',
+  RetweetX = 'RETWEET_X'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -348,6 +335,7 @@ export type ResolversTypes = ResolversObject<{
   CardDuelHistory: ResolverTypeWrapper<CardDuelHistory>;
   CardDuelSetting: ResolverTypeWrapper<CardDuelSetting>;
   CardPlayerConfig: ResolverTypeWrapper<CardPlayerConfig>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GameInvitation: ResolverTypeWrapper<GameInvitation>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -359,6 +347,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Quest: ResolverTypeWrapper<Quest>;
   QuestAction: ResolverTypeWrapper<QuestAction>;
+  QuestType: QuestType;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -376,6 +365,7 @@ export type ResolversParentTypes = ResolversObject<{
   CardDuelHistory: CardDuelHistory;
   CardDuelSetting: CardDuelSetting;
   CardPlayerConfig: CardPlayerConfig;
+  DateTime: Scalars['DateTime']['output'];
   Float: Scalars['Float']['output'];
   GameInvitation: GameInvitation;
   ID: Scalars['ID']['output'];
@@ -474,6 +464,10 @@ export type CardPlayerConfigResolvers<ContextType = ApiContext, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
 export type GameInvitationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['GameInvitation'] = ResolversParentTypes['GameInvitation']> = ResolversObject<{
   enemy?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>;
   game?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -485,12 +479,9 @@ export type GameInvitationResolvers<ContextType = ApiContext, ParentType extends
 
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   acceptGame?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptGameArgs, 'invitationId'>>;
-  createQuest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<MutationCreateQuestArgs, 'description' | 'points' | 'title' | 'type'>>;
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'claimedPoints' | 'questId'>>;
-  deleteQuest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteQuestArgs, 'id'>>;
   inviteGame?: Resolver<Maybe<ResolversTypes['GameInvitation']>, ParentType, ContextType, RequireFields<MutationInviteGameArgs, 'input'>>;
   stopMatchFind?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  updateQuest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<MutationUpdateQuestArgs, 'id' | 'status'>>;
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
@@ -524,18 +515,20 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
 }>;
 
 export type QuestResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Quest'] = ResolversParentTypes['Quest']> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['QuestType'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QuestActionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['QuestAction'] = ResolversParentTypes['QuestAction']> = ResolversObject<{
   claimedPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   questId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -559,6 +552,7 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   CardDuelHistory?: CardDuelHistoryResolvers<ContextType>;
   CardDuelSetting?: CardDuelSettingResolvers<ContextType>;
   CardPlayerConfig?: CardPlayerConfigResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   GameInvitation?: GameInvitationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;

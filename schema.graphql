@@ -72,6 +72,8 @@ type CardPlayerConfig {
   id: String
 }
 
+scalar DateTime
+
 type GameInvitation {
   enemy: Profile!
   game: String!
@@ -91,12 +93,9 @@ enum MetacraftGames {
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
-  createQuest(description: String!, points: Int!, title: String!, type: String!, url: String): Quest
   createQuestAction(claimedPoints: Int!, questId: ID!): QuestAction
-  deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
   stopMatchFind: Boolean
-  updateQuest(id: ID!, status: String!): Quest
 }
 
 type Profile {
@@ -129,20 +128,29 @@ type Query {
 }
 
 type Quest {
+  createdAt: DateTime!
   description: String!
   id: ID!
   points: Int!
   status: String!
   title: String!
-  type: String!
+  type: QuestType!
   url: String!
 }
 
 type QuestAction {
   claimedPoints: Int!
+  createdAt: DateTime!
   id: ID!
   questId: ID!
   userId: String!
+}
+
+enum QuestType {
+  COMMENT_X
+  JOIN_DISCORD
+  LIKE_X
+  RETWEET_X
 }
 
 type Subscription {
