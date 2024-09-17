@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from '@metacraft/ui';
 import UserSolidIcon from 'components/icons/UserSolid';
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const responsiveStyle: Record<string, StyleProp<ViewStyle | TextStyle>> = {
+const responsiveStyle = StyleSheet.create({
 	statistic: {
 		gap: 12,
 	},
@@ -130,4 +129,4 @@ const responsiveStyle: Record<string, StyleProp<ViewStyle | TextStyle>> = {
 		flex: 1,
 		width: 'auto',
 	},
-};
+});

@@ -3,6 +3,7 @@ import { ImageBackground, StyleSheet } from 'react-native';
 import { useBreakpoints } from 'utils/hook';
 import resources from 'utils/resources';
 
+import { ReferralLink } from './Link';
 import ReferralStatistic from './Statistic';
 
 export const ReferralSection = () => {
@@ -15,6 +16,7 @@ export const ReferralSection = () => {
 			style={[styles.container, mobileScreen && responsiveStyle.container]}
 		>
 			<ReferralStatistic />
+			<ReferralLink />
 		</ImageBackground>
 	);
 };
