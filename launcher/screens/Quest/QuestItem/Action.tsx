@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 	goButtonOnMobile: {
 		width: 64,
 		alignItems: 'center',
-		height: 24,
+		height: 36,
 	},
 	buttonText: {
 		color: '#ffffff',

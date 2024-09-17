@@ -1,38 +1,44 @@
 import type { FC } from 'react';
 import { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
+import { Image } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
-import { dimensionState, Text } from '@metacraft/ui';
+import { dimensionState } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
+import resources from 'utils/resources';
 import { useSnapshot } from 'valtio';
 
 const HeadingSection: FC = () => {
 	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
 	const logoSize = useMemo(() => {
-		if (isMobile) return (360 * windowSize.width) / 430;
-
-		return (785 * windowSize.width) / 1440;
+		const ratio = isMobile ? 248 / 375 : 31 / 72;
+		return windowSize.width * ratio;
 	}, [windowSize.width, isMobile]);
-
-	const subtitleStyle = useMemo(() => {
-		if (isMobile)
-			return {
-				fontSize: 14,
-			};
-
-		return {
-			maxWidth: (windowSize.width * 580) / 1440,
-			marginTop: (-22 * windowSize.height) / 1024,
-		};
-	}, [windowSize, isMobile]);
 
 	return (
 		<View style={styles.container}>
-			<UnderRealmLogo size={logoSize} />
-			<Text style={[styles.subtitle, subtitleStyle]}>
-				Embark on a thrilling adventure in UnderRealm, where strategic card play
-				meets cooperative quests!
-			</Text>
+			<Image
+				source={resources.quest.imageTitle}
+				style={{
+					position: 'absolute',
+					margin: 'auto',
+					zIndex: -1,
+					width: (windowSize.width * 700) / 1440,
+					height: (windowSize.width * 414) / 1440,
+				}}
+			/>
+			<UnderRealmLogo
+				style={{ marginTop: (windowSize.width * 167) / 1440 }}
+				size={logoSize}
+			/>
+
+			<ImageBackground
+				source={resources.quest.pointsBoard}
+				style={{ width: 392, height: 68, flexDirection: 'row' }}
+			>
+				<View style={styles.pointInfoContainer}></View>
+				<View style={styles.pointInfoContainer}></View>
+			</ImageBackground>
 		</View>
 	);
 };
@@ -50,5 +56,11 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		maxWidth: 280,
 		marginTop: 20,
+	},
+	pointInfoContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		gap: 8,
+		justifyContent: 'center',
 	},
 });
