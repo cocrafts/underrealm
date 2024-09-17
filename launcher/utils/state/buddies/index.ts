@@ -1,21 +1,19 @@
 import type { Profile } from 'utils/graphql';
-import { graphQlClient } from 'utils/graphql';
-import * as queries from 'utils/graphql/query';
-
-import { buddyState } from './internal';
 
 const fetchBuddies = async (): Promise<Profile[]> => {
-	try {
-		const { data } = await graphQlClient.query({ query: queries.buddies });
-		const buddies = data?.buddies || [];
+	// TODO: Fix error "Unexpected <EOF> while using graphql"
 
-		buddyState.list = buddies;
-		return buddies;
-	} catch (e) {
-		console.log(e);
-	} finally {
-		buddyState.loading = false;
-	}
+	// try {
+	// 	const { data } = await graphQlClient.query({ query: queries.buddies });
+	// 	const buddies = data?.buddies || [];
+
+	// 	buddyState.list = buddies;
+	// 	return buddies;
+	// } catch (e) {
+	// 	console.log(e);
+	// } finally {
+	// 	buddyState.loading = false;
+	// }
 
 	return [];
 };

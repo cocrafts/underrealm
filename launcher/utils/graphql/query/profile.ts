@@ -20,11 +20,13 @@ export const profile = gql`
 	}
 `;
 
-export const buddies = gql`
-	${profileFields}
-	# query Buddies {
-	# 	buddies {
-	# 		...ProfileFields
-	# 	}
-	# }
-`;
+// TODO: Fix error "Unexpected <EOF> while using graphql"
+
+// export const buddies = gql`
+// 	${profileFields}
+// 	# query Buddies {
+// 	# 	buddies {
+// 	# 		...ProfileFields
+// 	# 	}
+// 	# }
+// `;

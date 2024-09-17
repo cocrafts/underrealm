@@ -14,15 +14,17 @@ export const acceptGame = gql`
 	}
 `;
 
-export const subscribeGame = gql`
-	# mutation SubscribeGame($input: SubscribeGameInput!) {
-	# 	subscribeGame(input: $input) {
-	# 		game
-	# 		email
-	# 		timestamp
-	# 	}
-	# }
-`;
+// TODO: Fix error "Unexpected <EOF> while using graphql"
+
+// export const subscribeGame = gql`
+// 	mutation SubscribeGame($input: SubscribeGameInput!) {
+// 		// subscribeGame(input: $input) {
+// 		// 	game
+// 		// 	email
+// 		// 	timestamp
+// 		// }
+// 	}
+// `;
 
 export const stopMatchFind = gql`
 	mutation StopMatchFind {
