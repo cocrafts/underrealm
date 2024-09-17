@@ -110,6 +110,8 @@ yarn codegen:graphql
 
 ### Convention
 
+All mutations must have tests!
+
 Logger & Error handling
 
 - By default, any internal error will be logged out via a middleware, we need to throw wrapped the error with a meaningful message.
