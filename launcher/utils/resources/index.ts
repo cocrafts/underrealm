@@ -260,6 +260,8 @@ export default {
 		refreshButton: require('../../../assets/quest/refresh-button.png'),
 		imageTitle: require('../../../assets/quest/image-title.png'),
 		pointsBoard: require('../../../assets/quest/points-board.png'),
+		coinU: require('../../../assets/quest/coin-u.png'),
+		separateLine: require('../../../assets/quest/separate-line.png'),
 		discord: require('../../../assets/quest/discord.png'),
 		twitter: require('../../../assets/quest/twitter.png'),
 	},

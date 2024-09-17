@@ -294,6 +294,8 @@ export default {
 		refreshButton: { uri: '/quest/refresh-button.png' },
 		imageTitle: { uri: '/quest/image-title.png' },
 		pointsBoard: { uri: '/quest/points-board.png' },
+		separateLine: { uri: '/quest/separate-line.png' },
+		coinU: { uri: '/quest/coin-u.png' },
 		discord: { uri: '/quest/discord.png' },
 		twitter: { uri: '/quest/twitter.png' },
 	},
