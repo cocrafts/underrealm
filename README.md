@@ -108,6 +108,13 @@ _Note: codegen will run by fetching introspection from API endpoint, remember to
 yarn codegen:graphql
 ```
 
+### Convention
+
+Logger & Error handling
+
+- By default, any internal error will be logged out via a middleware, we need to throw wrapped the error with a meaningful message.
+- If catching error without re-throw, prefer using `logger.warn`. In normal case, use `logger.info`
+
 ## CLI
 
 Build and link CLI to global scope
