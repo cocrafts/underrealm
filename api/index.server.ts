@@ -1,6 +1,6 @@
 import 'utils/loadEnv';
 
-console.log('Underrealm API is running...');
+logger.info('Underrealm API is running...');
 
 import http from 'http';
 
@@ -10,6 +10,7 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import { configs } from 'utils/config';
+import { logger } from 'utils/logger';
 import { graphqlContext as context } from 'utils/runtime';
 
 import './models';
@@ -28,5 +29,5 @@ app.use('/graphql', expressMiddleware(apollo, { context }));
 
 const port = configs.PORT;
 httpServer.listen({ port }, () => {
-	console.log(`🚀  Server ready at port ${port}`);
+	logger.info(`🚀  Server ready at port ${port}`);
 });

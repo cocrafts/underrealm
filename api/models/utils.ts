@@ -9,7 +9,7 @@ type Definition<RawDocType> = SchemaDefinition<
 >;
 
 export const createSchema = <RawDocType>(
-	definition: Definition<RawDocType>,
+	definition: Definition<RawDocType> | RawDocType,
 	options?: SchemaParams[1],
 ) => {
 	const defaultOptions = {
