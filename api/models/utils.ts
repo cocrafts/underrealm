@@ -8,16 +8,24 @@ type Definition<RawDocType> = SchemaDefinition<
 	RawDocType
 >;
 
+type Options = SchemaParams[1];
+
+/**
+ * a wrapper for `new Schema()` with:
+ * - virtual `id` from default `_id objectId` for GraphQL field compatibility
+ * - auto `timestamps` on creating or updating
+ */
 export const createSchema = <RawDocType>(
 	definition: Definition<RawDocType> | RawDocType,
-	options?: SchemaParams[1],
+	options?: Options,
 ) => {
-	const defaultOptions = {
+	const defaultOptions: Options = {
 		toJSON: { virtuals: true },
 		toObject: { virtuals: true },
+		timestamps: true,
 	};
 
-	const mergedOption = { ...options, ...defaultOptions };
+	const mergedOption = { ...defaultOptions, ...options };
 
 	const schema = new Schema(definition, mergedOption);
 
