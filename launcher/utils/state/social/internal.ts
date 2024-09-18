@@ -40,8 +40,8 @@ export const questActions = {
 
 		questState.activeDoneQuests = activeDoneQuests;
 	},
-	verifyAndClaimQuest: async (questId: string, claimedPoints: number) => {
-		const questAction = await createQuestAction(questId, claimedPoints);
+	verifyAndClaimQuest: async (questId: string) => {
+		const questAction = await createQuestAction(questId);
 
 		const activeDoneQuests = questState.quests.find(
 			(quest) => questAction.questId === quest.id,

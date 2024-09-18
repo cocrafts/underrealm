@@ -93,7 +93,7 @@ enum MetacraftGames {
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
-  createQuestAction(claimedPoints: Int!, questId: ID!): QuestAction
+  createQuestAction(questId: ID!): QuestAction
   inviteGame(input: InviteGameInput!): GameInvitation
   stopMatchFind: Boolean
 }

@@ -135,7 +135,6 @@ export type MutationAcceptGameArgs = {
 
 
 export type MutationCreateQuestActionArgs = {
-  claimedPoints: Scalars['Int']['input'];
   questId: Scalars['ID']['input'];
 };
 
@@ -479,7 +478,7 @@ export type GameInvitationResolvers<ContextType = ApiContext, ParentType extends
 
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   acceptGame?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptGameArgs, 'invitationId'>>;
-  createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'claimedPoints' | 'questId'>>;
+  createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
   inviteGame?: Resolver<Maybe<ResolversTypes['GameInvitation']>, ParentType, ContextType, RequireFields<MutationInviteGameArgs, 'input'>>;
   stopMatchFind?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;

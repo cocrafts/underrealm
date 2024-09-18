@@ -6,7 +6,7 @@ export const createQuest = async (
 	_,
 	{ title, description, type, url, points },
 ) => {
-	const newQuest = new Quest({
+	await Quest.create({
 		title,
 		description,
 		type,
@@ -14,8 +14,6 @@ export const createQuest = async (
 		url,
 		points,
 	});
-
-	return await newQuest.save();
 };
 
 export const updateQuest = async (_, { id, status }) => {
@@ -29,13 +27,15 @@ export const deleteQuest = async (_, { id }) => {
 
 export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	_,
-	{ questId, claimedPoints },
+	{ questId },
 	context,
 ) => {
 	try {
 		const userId = context.user.id;
-		const result = new QuestAction({ questId, userId, claimedPoints });
-		return await result.save();
+		const quest = await Quest.findById(questId);
+		const claimedPoints = quest.points;
+
+		await QuestAction.create({ questId, userId, claimedPoints });
 	} catch (err) {
 		throw new Error(err);
 	}

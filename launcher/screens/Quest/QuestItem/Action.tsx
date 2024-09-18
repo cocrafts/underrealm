@@ -28,9 +28,8 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 	const isMobile = UnistylesRuntime.breakpoint === 'xs';
 
 	const handlePressVerify = async () => {
-		// claimedPoints should no be here
 		await createQuestAction({
-			variables: { questId: quest.id, claimedPoints: quest.points },
+			variables: { questId: quest.id },
 		});
 		await refetch();
 	};

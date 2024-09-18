@@ -19,7 +19,7 @@ type Mutation {
   inviteGame(input: InviteGameInput!): GameInvitation
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
-	createQuestAction(questId: ID!, claimedPoints: Int!): QuestAction
+	createQuestAction(questId: ID!): QuestAction
 }
 
 type Subscription {
