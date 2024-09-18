@@ -26,7 +26,7 @@ export const User = model('User', userSchema);
 const REFERRAL_CODE_LENGTH = 7;
 
 export const getOrCreateUserByBindingId = async (bindingId: string) => {
-	const user = await User.findOne({ bindingId }).exec();
+	const user = await User.findOne({ bindingId });
 	if (user) {
 		return user;
 	}
