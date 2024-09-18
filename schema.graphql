@@ -113,7 +113,6 @@ type Profile {
   mineral: Float!
   name: String
   referralCode: String!
-  referralHistory: ReferralHistory
 }
 
 type Query {
@@ -129,6 +128,7 @@ type Query {
   profile(address: String): Profile
   quest(id: ID!): Quest
   questActions: [QuestAction]
+  referralHistory: ReferralHistory
 }
 
 type Quest {
@@ -148,6 +148,12 @@ type QuestAction {
   userId: String!
 }
 
+type RefereeUser {
+  address: String
+  email: String
+  name: String
+}
+
 type ReferralHistory {
   count: Int!
   detail: [ReferralHistoryDetail]
@@ -156,10 +162,10 @@ type ReferralHistory {
 
 type ReferralHistoryDetail {
   claimedPoints: Int!
+  createdAt: String!
   id: ID!
-  referredId: String!
-  referredUser: Profile
-  timestamp: String!
+  refereeId: String!
+  refereeUser: RefereeUser
 }
 
 type Subscription {

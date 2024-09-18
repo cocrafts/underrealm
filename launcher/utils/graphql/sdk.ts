@@ -126,6 +126,7 @@ export type Mutation = {
   createQuestAction?: Maybe<QuestAction>;
   deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
+  makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
   updateQuest?: Maybe<Quest>;
 };
@@ -161,6 +162,11 @@ export type MutationInviteGameArgs = {
 };
 
 
+export type MutationMakeReferralArgs = {
+  referralCode: Scalars['String']['input'];
+};
+
+
 export type MutationUpdateQuestArgs = {
   id: Scalars['ID']['input'];
   status: Scalars['String']['input'];
@@ -179,6 +185,7 @@ export type Profile = {
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral: Scalars['Float']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  referralCode: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -195,6 +202,7 @@ export type Query = {
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
+  referralHistory?: Maybe<ReferralHistory>;
 };
 
 
@@ -239,6 +247,29 @@ export type QuestAction = {
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
   userId: Scalars['String']['output'];
+};
+
+export type RefereeUser = {
+  __typename?: 'RefereeUser';
+  address?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type ReferralHistory = {
+  __typename?: 'ReferralHistory';
+  count: Scalars['Int']['output'];
+  detail?: Maybe<Array<Maybe<ReferralHistoryDetail>>>;
+  points: Scalars['Int']['output'];
+};
+
+export type ReferralHistoryDetail = {
+  __typename?: 'ReferralHistoryDetail';
+  claimedPoints: Scalars['Int']['output'];
+  createdAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  refereeId: Scalars['String']['output'];
+  refereeUser?: Maybe<RefereeUser>;
 };
 
 export type Subscription = {
