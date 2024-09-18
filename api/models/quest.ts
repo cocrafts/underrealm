@@ -15,12 +15,18 @@ const questSchema = createSchema({
 	},
 	url: String,
 	points: Number,
+	questActions: [
+		{
+			type: Types.ObjectId,
+			ref: 'QuestAction',
+		},
+	],
 });
 
 export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
-	questId: Types.ObjectId,
+	questId: { type: Types.ObjectId, ref: 'Quest' },
 	userId: String,
 	claimedPoints: Number,
 });

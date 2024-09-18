@@ -35,7 +35,16 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 		const quest = await Quest.findById(questId);
 		const claimedPoints = quest.points;
 
-		await QuestAction.create({ questId, userId, claimedPoints });
+		const questAction = await QuestAction.create({
+			questId,
+			userId,
+			claimedPoints,
+		});
+
+		quest.questActions.push(questAction);
+		await quest.save();
+
+		return questAction;
 	} catch (err) {
 		throw new Error(err);
 	}
