@@ -1,16 +1,24 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 import { ActivityIndicator, Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import { useActiveQuestsQuery } from 'utils/graphql';
 import resources from 'utils/resources';
 
+import { TabId } from './internal';
 import QuestItem from './QuestItem';
+import ReferralSection from './Referral';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
+	const [tab, setTab] = useState(TabId.QUEST);
 	const { data, loading, error } = useActiveQuestsQuery();
 	const { styles } = useStyles(stylesheet);
+
+	const onChangeTab = (value: TabId) => {
+		setTab(value);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -22,8 +30,18 @@ const QuestContent: FC = () => {
 			</View>
 
 			<View style={styles.tabsContainer}>
-				<TabSelection title="Social Quest" isActive={true} />
-				<TabSelection title="Referral" />
+				<TabSelection
+					title="Social Quest"
+					value={TabId.QUEST}
+					onChangeTab={onChangeTab}
+					isActive={tab === TabId.QUEST}
+				/>
+				<TabSelection
+					title="Referral"
+					value={TabId.REFERRAL}
+					onChangeTab={onChangeTab}
+					isActive={tab === TabId.REFERRAL}
+				/>
 			</View>
 
 			{loading ? (
@@ -32,12 +50,14 @@ const QuestContent: FC = () => {
 				<View>
 					<Text>{error.message}</Text>
 				</View>
-			) : (
+			) : tab === TabId.QUEST ? (
 				<View style={styles.quests}>
 					{data.activeQuests.map((quest) => {
 						return <QuestItem key={quest.id} quest={quest} />;
 					})}
 				</View>
+			) : (
+				<ReferralSection />
 			)}
 		</View>
 	);

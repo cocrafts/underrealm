@@ -125,6 +125,7 @@ export type Mutation = {
   acceptGame?: Maybe<Scalars['Boolean']['output']>;
   createQuestAction?: Maybe<QuestAction>;
   inviteGame?: Maybe<GameInvitation>;
+  makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -144,6 +145,12 @@ export type MutationInviteGameArgs = {
   input: InviteGameInput;
 };
 
+
+export type MutationMakeReferralArgs = {
+  referralCode: Scalars['String']['input'];
+};
+
+
 export type Profile = {
   __typename?: 'Profile';
   address: Scalars['String']['output'];
@@ -157,6 +164,7 @@ export type Profile = {
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral: Scalars['Float']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  referralCode: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -173,6 +181,7 @@ export type Query = {
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
+  referralHistory?: Maybe<ReferralHistory>;
 };
 
 
@@ -222,11 +231,34 @@ export type QuestAction = {
 };
 
 export enum QuestType {
-  CommentX = 'COMMENT_X',
-  JoinDiscord = 'JOIN_DISCORD',
-  LikeX = 'LIKE_X',
-  RetweetX = 'RETWEET_X'
-}
+    CommentX = 'COMMENT_X',
+    JoinDiscord = 'JOIN_DISCORD',
+    LikeX = 'LIKE_X',
+    RetweetX = 'RETWEET_X'
+  }
+
+export type RefereeUser = {
+  __typename?: 'RefereeUser';
+  address?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type ReferralHistory = {
+  __typename?: 'ReferralHistory';
+  count: Scalars['Int']['output'];
+  detail?: Maybe<Array<Maybe<ReferralHistoryDetail>>>;
+  points: Scalars['Int']['output'];
+};
+
+export type ReferralHistoryDetail = {
+  __typename?: 'ReferralHistoryDetail';
+  claimedPoints: Scalars['Int']['output'];
+  createdAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  refereeId: Scalars['String']['output'];
+  refereeUser?: Maybe<RefereeUser>;
+};
 
 export type Subscription = {
   __typename?: 'Subscription';

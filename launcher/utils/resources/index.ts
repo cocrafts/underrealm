@@ -266,5 +266,9 @@ export default {
 		separateLine: require('../../../assets/quest/separate-line.png'),
 		discord: require('../../../assets/quest/discord.png'),
 		twitter: require('../../../assets/quest/twitter.png'),
+		referral: {
+			backgroundMain: require('../../../assets/referral/main-bg.png'),
+			uCoin: require('../../../assets/u-coin.png'),
+		},
 	},
 };
