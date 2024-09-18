@@ -1,3 +1,5 @@
+scalar DateTime
+
 type Query {
   greeting: String
   profile(address: String): Profile
@@ -22,7 +24,7 @@ type Mutation {
   createQuest(title: String!, description: String!, type: String!, url: String, points: Int!): Quest
   updateQuest(id: ID!, status: String!): Quest
   deleteQuest(id: ID!): Boolean
-  createQuestAction(questId: ID!, claimedPoints: Int!): QuestAction
+	createQuestAction(questId: ID!): QuestAction
 }
 
 type Subscription {
@@ -137,14 +139,22 @@ enum MetacraftGames {
   MURG
 }
 
+enum QuestType {
+  LIKE_X
+	RETWEET_X
+	JOIN_DISCORD
+	COMMENT_X
+}
+
 type Quest {
   id: ID!
   title: String!
 	description: String!
-	type: String!
+	type: QuestType!
 	status: String!
 	url: String!
 	points: Int!
+  createdAt: DateTime!
 }
 
 type QuestAction {
@@ -152,6 +162,7 @@ type QuestAction {
 	questId: ID!
 	userId: String!
   claimedPoints: Int!
+    createdAt: DateTime!
 }
 
 type ReferralHistory {

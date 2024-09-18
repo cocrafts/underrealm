@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -122,13 +123,10 @@ export enum MetacraftGames {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptGame?: Maybe<Scalars['Boolean']['output']>;
-  createQuest?: Maybe<Quest>;
   createQuestAction?: Maybe<QuestAction>;
-  deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
-  updateQuest?: Maybe<Quest>;
 };
 
 
@@ -137,23 +135,9 @@ export type MutationAcceptGameArgs = {
 };
 
 
-export type MutationCreateQuestArgs = {
-  description: Scalars['String']['input'];
-  points: Scalars['Int']['input'];
-  title: Scalars['String']['input'];
-  type: Scalars['String']['input'];
-  url?: InputMaybe<Scalars['String']['input']>;
-};
-
-
 export type MutationCreateQuestActionArgs = {
   claimedPoints: Scalars['Int']['input'];
   questId: Scalars['ID']['input'];
-};
-
-
-export type MutationDeleteQuestArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -166,11 +150,6 @@ export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
 
-
-export type MutationUpdateQuestArgs = {
-  id: Scalars['ID']['input'];
-  status: Scalars['String']['input'];
-};
 
 export type Profile = {
   __typename?: 'Profile';
@@ -232,22 +211,31 @@ export type QueryQuestArgs = {
 
 export type Quest = {
   __typename?: 'Quest';
+  createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
   status: Scalars['String']['output'];
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: QuestType;
   url: Scalars['String']['output'];
 };
 
 export type QuestAction = {
   __typename?: 'QuestAction';
   claimedPoints: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
   userId: Scalars['String']['output'];
 };
+
+export enum QuestType {
+    CommentX = 'COMMENT_X',
+    JoinDiscord = 'JOIN_DISCORD',
+    LikeX = 'LIKE_X',
+    RetweetX = 'RETWEET_X'
+  }
 
 export type RefereeUser = {
   __typename?: 'RefereeUser';
@@ -296,31 +284,24 @@ export type SubscriptionMatchFoundArgs = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CreateQuestMutationVariables = Exact<{
-  title: Scalars['String']['input'];
-  description: Scalars['String']['input'];
-  type: Scalars['String']['input'];
-  url: Scalars['String']['input'];
-  points: Scalars['Int']['input'];
+export type InviteGameMutationVariables = Exact<{
+  input: InviteGameInput;
 }>;
 
 
-export type CreateQuestMutation = { __typename?: 'Mutation', createQuest?: { __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null };
+export type InviteGameMutation = { __typename?: 'Mutation', inviteGame?: { __typename?: 'GameInvitation', game: string } | null };
 
-export type UpdateQuestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  status: Scalars['String']['input'];
+export type AcceptGameMutationVariables = Exact<{
+  invitationId: Scalars['String']['input'];
 }>;
 
 
-export type UpdateQuestMutation = { __typename?: 'Mutation', updateQuest?: { __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null };
+export type AcceptGameMutation = { __typename?: 'Mutation', acceptGame?: boolean | null };
 
-export type DeleteQuestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
+export type StopMatchFindMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DeleteQuestMutation = { __typename?: 'Mutation', deleteQuest?: boolean | null };
+export type StopMatchFindMutation = { __typename?: 'Mutation', stopMatchFind?: boolean | null };
 
 export type CreateQuestActionMutationVariables = Exact<{
   questId: Scalars['ID']['input'];
@@ -340,154 +321,144 @@ export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number };
+
+export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number } | null };
+
 export type ActiveQuestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActiveQuestsQuery = { __typename?: 'Query', activeQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null> | null };
+export type ActiveQuestsQuery = { __typename?: 'Query', activeQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: string, points: number } | null> | null };
 
 export type InitQuestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitQuestsQuery = { __typename?: 'Query', initQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null> | null };
+export type InitQuestsQuery = { __typename?: 'Query', initQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: string, points: number } | null> | null };
 
 export type DisableQuestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DisableQuestsQuery = { __typename?: 'Query', disableQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null> | null };
+export type DisableQuestsQuery = { __typename?: 'Query', disableQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: string, points: number } | null> | null };
 
 export type QuestByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: string, url: string, status: string, points: number } | null };
+export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: string, points: number } | null };
 
 export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null> | null };
 
-
-export const CreateQuestDocument = gql`
-    mutation CreateQuest($title: String!, $description: String!, $type: String!, $url: String!, $points: Int!) {
-  createQuest(
-    title: $title
-    description: $description
-    type: $type
-    url: $url
-    points: $points
-  ) {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
+export const ProfileFieldsFragmentDoc = gql`
+    fragment ProfileFields on Profile {
+  id
+  address
+  name
+  avatarUrl
+  githubUrl
+  mineral
+}
+    `;
+export const InviteGameDocument = gql`
+    mutation InviteGame($input: InviteGameInput!) {
+  inviteGame(input: $input) {
+    game
   }
 }
     `;
-export type CreateQuestMutationFn = Apollo.MutationFunction<CreateQuestMutation, CreateQuestMutationVariables>;
+export type InviteGameMutationFn = Apollo.MutationFunction<InviteGameMutation, InviteGameMutationVariables>;
 
 /**
- * __useCreateQuestMutation__
+ * __useInviteGameMutation__
  *
- * To run a mutation, you first call `useCreateQuestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateQuestMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useInviteGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteGameMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createQuestMutation, { data, loading, error }] = useCreateQuestMutation({
+ * const [inviteGameMutation, { data, loading, error }] = useInviteGameMutation({
  *   variables: {
- *      title: // value for 'title'
- *      description: // value for 'description'
- *      type: // value for 'type'
- *      url: // value for 'url'
- *      points: // value for 'points'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateQuestMutation(baseOptions?: Apollo.MutationHookOptions<CreateQuestMutation, CreateQuestMutationVariables>) {
+export function useInviteGameMutation(baseOptions?: Apollo.MutationHookOptions<InviteGameMutation, InviteGameMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateQuestMutation, CreateQuestMutationVariables>(CreateQuestDocument, options);
+        return Apollo.useMutation<InviteGameMutation, InviteGameMutationVariables>(InviteGameDocument, options);
       }
-export type CreateQuestMutationHookResult = ReturnType<typeof useCreateQuestMutation>;
-export type CreateQuestMutationResult = Apollo.MutationResult<CreateQuestMutation>;
-export type CreateQuestMutationOptions = Apollo.BaseMutationOptions<CreateQuestMutation, CreateQuestMutationVariables>;
-export const UpdateQuestDocument = gql`
-    mutation UpdateQuest($id: ID!, $status: String!) {
-  updateQuest(id: $id, status: $status) {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
+export type InviteGameMutationHookResult = ReturnType<typeof useInviteGameMutation>;
+export type InviteGameMutationResult = Apollo.MutationResult<InviteGameMutation>;
+export type InviteGameMutationOptions = Apollo.BaseMutationOptions<InviteGameMutation, InviteGameMutationVariables>;
+export const AcceptGameDocument = gql`
+    mutation AcceptGame($invitationId: String!) {
+  acceptGame(invitationId: $invitationId)
 }
     `;
-export type UpdateQuestMutationFn = Apollo.MutationFunction<UpdateQuestMutation, UpdateQuestMutationVariables>;
+export type AcceptGameMutationFn = Apollo.MutationFunction<AcceptGameMutation, AcceptGameMutationVariables>;
 
 /**
- * __useUpdateQuestMutation__
+ * __useAcceptGameMutation__
  *
- * To run a mutation, you first call `useUpdateQuestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateQuestMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAcceptGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptGameMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateQuestMutation, { data, loading, error }] = useUpdateQuestMutation({
+ * const [acceptGameMutation, { data, loading, error }] = useAcceptGameMutation({
  *   variables: {
- *      id: // value for 'id'
- *      status: // value for 'status'
+ *      invitationId: // value for 'invitationId'
  *   },
  * });
  */
-export function useUpdateQuestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuestMutation, UpdateQuestMutationVariables>) {
+export function useAcceptGameMutation(baseOptions?: Apollo.MutationHookOptions<AcceptGameMutation, AcceptGameMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateQuestMutation, UpdateQuestMutationVariables>(UpdateQuestDocument, options);
+        return Apollo.useMutation<AcceptGameMutation, AcceptGameMutationVariables>(AcceptGameDocument, options);
       }
-export type UpdateQuestMutationHookResult = ReturnType<typeof useUpdateQuestMutation>;
-export type UpdateQuestMutationResult = Apollo.MutationResult<UpdateQuestMutation>;
-export type UpdateQuestMutationOptions = Apollo.BaseMutationOptions<UpdateQuestMutation, UpdateQuestMutationVariables>;
-export const DeleteQuestDocument = gql`
-    mutation DeleteQuest($id: ID!) {
-  deleteQuest(id: $id)
+export type AcceptGameMutationHookResult = ReturnType<typeof useAcceptGameMutation>;
+export type AcceptGameMutationResult = Apollo.MutationResult<AcceptGameMutation>;
+export type AcceptGameMutationOptions = Apollo.BaseMutationOptions<AcceptGameMutation, AcceptGameMutationVariables>;
+export const StopMatchFindDocument = gql`
+    mutation StopMatchFind {
+  stopMatchFind
 }
     `;
-export type DeleteQuestMutationFn = Apollo.MutationFunction<DeleteQuestMutation, DeleteQuestMutationVariables>;
+export type StopMatchFindMutationFn = Apollo.MutationFunction<StopMatchFindMutation, StopMatchFindMutationVariables>;
 
 /**
- * __useDeleteQuestMutation__
+ * __useStopMatchFindMutation__
  *
- * To run a mutation, you first call `useDeleteQuestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteQuestMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useStopMatchFindMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopMatchFindMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteQuestMutation, { data, loading, error }] = useDeleteQuestMutation({
+ * const [stopMatchFindMutation, { data, loading, error }] = useStopMatchFindMutation({
  *   variables: {
- *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteQuestMutation(baseOptions?: Apollo.MutationHookOptions<DeleteQuestMutation, DeleteQuestMutationVariables>) {
+export function useStopMatchFindMutation(baseOptions?: Apollo.MutationHookOptions<StopMatchFindMutation, StopMatchFindMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteQuestMutation, DeleteQuestMutationVariables>(DeleteQuestDocument, options);
+        return Apollo.useMutation<StopMatchFindMutation, StopMatchFindMutationVariables>(StopMatchFindDocument, options);
       }
-export type DeleteQuestMutationHookResult = ReturnType<typeof useDeleteQuestMutation>;
-export type DeleteQuestMutationResult = Apollo.MutationResult<DeleteQuestMutation>;
-export type DeleteQuestMutationOptions = Apollo.BaseMutationOptions<DeleteQuestMutation, DeleteQuestMutationVariables>;
+export type StopMatchFindMutationHookResult = ReturnType<typeof useStopMatchFindMutation>;
+export type StopMatchFindMutationResult = Apollo.MutationResult<StopMatchFindMutation>;
+export type StopMatchFindMutationOptions = Apollo.BaseMutationOptions<StopMatchFindMutation, StopMatchFindMutationVariables>;
 export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!, $claimedPoints: Int!) {
   createQuestAction(questId: $questId, claimedPoints: $claimedPoints) {
@@ -608,6 +579,45 @@ export type GreetingQueryHookResult = ReturnType<typeof useGreetingQuery>;
 export type GreetingLazyQueryHookResult = ReturnType<typeof useGreetingLazyQuery>;
 export type GreetingSuspenseQueryHookResult = ReturnType<typeof useGreetingSuspenseQuery>;
 export type GreetingQueryResult = Apollo.QueryResult<GreetingQuery, GreetingQueryVariables>;
+export const ProfileDocument = gql`
+    query Profile {
+  profile {
+    ...ProfileFields
+  }
+}
+    ${ProfileFieldsFragmentDoc}`;
+
+/**
+ * __useProfileQuery__
+ *
+ * To run a query within a React component, call `useProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProfileQuery(baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
+      }
+export function useProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
+        }
+export function useProfileSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
+        }
+export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>;
+export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>;
+export type ProfileSuspenseQueryHookResult = ReturnType<typeof useProfileSuspenseQuery>;
+export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>;
 export const ActiveQuestsDocument = gql`
     query ActiveQuests {
   activeQuests {

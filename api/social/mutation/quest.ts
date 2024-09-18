@@ -2,23 +2,11 @@ import { Quest, QuestAction } from 'models/quest';
 
 import type { MutationResolvers } from './../../types/graphql';
 
-export const createQuest: MutationResolvers['createQuest'] = async (
+export const createQuest = async (
 	_,
-	{
-		title,
-		description,
-		type,
-		url,
-		points,
-	}: {
-		title: string;
-		description: string;
-		type: string;
-		url: string;
-		points: number;
-	},
+	{ title, description, type, url, points },
 ) => {
-	const newQuest = new Quest({
+	await Quest.create({
 		title,
 		description,
 		type,
@@ -26,37 +14,29 @@ export const createQuest: MutationResolvers['createQuest'] = async (
 		url,
 		points,
 	});
-
-	return await newQuest.save();
 };
 
-export const updateQuest: MutationResolvers['updateQuest'] = async (
-	_,
-	{ id, status }: { id: string; status: string },
-) => {
+export const updateQuest = async (_, { id, status }) => {
 	return await Quest.findByIdAndUpdate(id, { status }, { new: true });
 };
 
-export const deleteQuest: MutationResolvers['deleteQuest'] = async (
-	_,
-	{ id }: { id: string },
-) => {
+export const deleteQuest = async (_, { id }) => {
 	const result = await Quest.findByIdAndDelete(id);
 	return !!result;
 };
 
 export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	_,
-	{ questId, claimedPoints }: { questId: string; claimedPoints: number },
+	{ questId },
 	context,
 ) => {
 	try {
-		const { user } = context;
-		const userId = user.id;
+		const userId = context.user.id;
+		const quest = await Quest.findById(questId);
+		const claimedPoints = quest.points;
 
-		const result = new QuestAction({ questId, userId, claimedPoints });
-		return await result.save();
+		await QuestAction.create({ questId, userId, claimedPoints });
 	} catch (err) {
-		throw new Error('User has already interacted with this quest.');
+		throw new Error(err);
 	}
 };

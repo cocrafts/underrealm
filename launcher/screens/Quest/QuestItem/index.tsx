@@ -1,9 +1,11 @@
-import type { FC } from 'react';
-import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState } from '@metacraft/ui';
+import { type FC, useMemo, useState } from 'react';
+import { Linking, StyleSheet } from 'react-native';
+import { AnimateDirections, modalActions } from '@metacraft/ui';
+import HoverableButton from 'components/HoverableButton';
+import SignInOptions from 'components/modals/SignInOptions';
 import type { Quest } from 'utils/graphql';
+import { useQuestActionsQuery } from 'utils/graphql';
+import { accountState } from 'utils/state/account';
 import { useSnapshot } from 'valtio';
 
 import Action from './Action';
@@ -15,18 +17,34 @@ type Props = {
 };
 
 const QuestItem: FC<Props> = ({ quest }) => {
-	const { isMobile } = useSnapshot<DimensionState>(dimensionState);
-	const [isHovered, setIsHovered] = useState(false);
+	const { profile } = useSnapshot(accountState);
+	const [isTaskOpened, setIsTaskOpened] = useState(false);
+	const { data } = useQuestActionsQuery();
+	const isDone = useMemo(() => {
+		return data?.questActions.some(
+			(questAction) => quest.id === questAction.questId,
+		);
+	}, [data]);
+
+	const handleGoToTask = () => {
+		if (profile.id && profile.id !== '') {
+			Linking.openURL(quest.url);
+			setIsTaskOpened(true);
+		} else {
+			modalActions.show({
+				id: 'signInOptions',
+				component: SignInOptions,
+				animateDirection: AnimateDirections.BottomLeft,
+			});
+		}
+	};
 
 	return (
-		<Pressable
-			style={[
-				styles.container,
-				isHovered ? styles.hovered : {},
-				isMobile ? styles.containerOnMobile : {},
-			]}
-			onHoverIn={() => setIsHovered(true)}
-			onHoverOut={() => setIsHovered(false)}
+		<HoverableButton
+			onPress={handleGoToTask}
+			style={[styles.container, isDone ? { opacity: 0.5 } : {}]}
+			hoverStyle={isDone ? {} : styles.hovered}
+			disabled={isDone}
 		>
 			<Info
 				title={quest.title}
@@ -34,8 +52,8 @@ const QuestItem: FC<Props> = ({ quest }) => {
 				description={quest.description}
 			/>
 
-			<Action quest={quest} />
-		</Pressable>
+			<Action quest={quest} isTaskOpened={isTaskOpened} isDone={isDone} />
+		</HoverableButton>
 	);
 };
 

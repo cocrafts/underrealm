@@ -1,10 +1,9 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import type { DimensionState } from '@metacraft/ui';
-import { dimensionState, Text } from '@metacraft/ui';
+import { Image, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { Text } from '@metacraft/ui';
+import UpRightArrow from 'components/icons/UpRightArrow';
 import resources from 'utils/resources';
-import { useSnapshot } from 'valtio';
 
 import { SocialPlatform } from './shared';
 
@@ -21,41 +20,23 @@ interface Props {
 }
 
 const Info: FC<Props> = ({ platform, title, description }) => {
-	const { windowSize, isMobile } = useSnapshot<DimensionState>(dimensionState);
+	const { styles } = useStyles(stylesheet);
 
 	const iconUri = getIconByPlatform(platform);
-	const textMaxWidthOnWeb = useMemo(
-		() => (windowSize.width * 400) / 1440,
-		[windowSize.width],
-	);
 
 	return (
-		<View style={[styles.container, isMobile ? styles.containerOnMobile : {}]}>
-			<Image
-				source={iconUri}
-				style={isMobile ? styles.iconOnMobile : styles.icon}
-			/>
+		<View style={styles.container}>
+			<Image source={iconUri} style={styles.icon} />
 
-			<View
-				style={isMobile ? styles.textContainerOnMobile : styles.textContainer}
-			>
+			<View style={styles.textContainer}>
+				<View style={styles.titleContainer}>
+					<Text style={[styles.title]} numberOfLines={2} ellipsizeMode="tail">
+						{title}
+					</Text>
+					<UpRightArrow size={12} />
+				</View>
 				<Text
-					style={[
-						styles.title,
-						{ maxWidth: textMaxWidthOnWeb },
-						isMobile ? styles.titleOnMobile : {},
-					]}
-					numberOfLines={1}
-					ellipsizeMode="tail"
-				>
-					{title}
-				</Text>
-				<Text
-					style={[
-						styles.description,
-						{ maxWidth: textMaxWidthOnWeb },
-						isMobile ? styles.desOnMobile : {},
-					]}
+					style={[styles.description]}
 					numberOfLines={1}
 					ellipsizeMode="tail"
 				>
@@ -68,53 +49,39 @@ const Info: FC<Props> = ({ platform, title, description }) => {
 
 export default Info;
 
-const styles = StyleSheet.create({
-	icon: {
-		width: 24,
-		height: 24,
-	},
-	iconOnMobile: {
-		width: 16,
-		height: 16,
-	},
-	title: {
-		fontFamily: 'Volkhov',
-		fontSize: 18,
-		fontWeight: '600',
-		lineHeight: 28,
-		color: '#ffffff',
-	},
-	description: {
-		color: '#929292',
-		fontSize: 16,
-		fontWeight: '500',
-		lineHeight: 28,
-	},
-	textContainer: {
-		gap: 8,
-	},
-	textContainerOnMobile: {
-		gap: 4,
-	},
-	container: {
-		flexDirection: 'row',
-		gap: 20,
-		alignItems: 'center',
-	},
-	containerOnMobile: {
-		gap: 12,
-	},
-	titleOnMobile: {
-		fontSize: 12,
-		lineHeight: 16,
-		maxWidth: 100,
-	},
-	desOnMobile: {
-		fontSize: 10,
-		lineHeight: 12,
-		maxWidth: 140,
-	},
-	buttonTextOnMobile: {
-		fontSize: 12,
-	},
+const stylesheet = createStyleSheet(() => {
+	return {
+		icon: {
+			width: { xs: 16, md: 24 },
+			height: { xs: 16, md: 24 },
+		},
+		title: {
+			fontFamily: 'Volkhov',
+			fontSize: { xs: 14, lg: 18 },
+			fontWeight: '600',
+			lineHeight: { xs: 16, lg: 28 },
+			color: '#ffffff',
+			maxWidth: { xs: 100, md: 160, lg: 320, xl: 500 },
+		},
+		titleContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 8,
+		},
+		description: {
+			color: '#929292',
+			fontSize: { xs: 12, lg: 16 },
+			fontWeight: '500',
+			lineHeight: { xs: 16, lg: 28 },
+			maxWidth: { xs: 120, md: 200, lg: 400, xl: 600 },
+		},
+		textContainer: {
+			gap: 8,
+		},
+		container: {
+			flexDirection: 'row',
+			gap: 20,
+			alignItems: 'center',
+		},
+	};
 });

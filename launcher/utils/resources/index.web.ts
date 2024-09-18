@@ -292,10 +292,12 @@ export default {
 		activeTab: { uri: '/quest/active-tab.png' },
 		inactiveTab: { uri: '/quest/inactive-tab.png' },
 		refreshButton: { uri: '/quest/refresh-button.png' },
+		smallRefreshButton: { uri: '/quest/small-refresh-button.png' },
 		imageTitle: { uri: '/quest/image-title.png' },
 		pointsBoard: { uri: '/quest/points-board.png' },
 		separateLine: { uri: '/quest/separate-line.png' },
 		coinU: { uri: '/quest/coin-u.png' },
+		checked: { uri: '/quest/checked.png' },
 		discord: { uri: '/quest/discord.png' },
 		twitter: { uri: '/quest/twitter.png' },
 		referral: {

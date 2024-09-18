@@ -29,13 +29,11 @@ export const getDisableQuests = async (): Promise<Quest[]> => {
 
 export const createQuestAction = async (
 	questId: string,
-	claimedPoints: number,
 ): Promise<QuestAction> => {
 	const { data } = await graphQlClient.mutate({
 		mutation: mutations.createQuestAction,
 		variables: {
 			questId,
-			claimedPoints,
 		},
 	});
 
