@@ -95,6 +95,7 @@ type Mutation {
   createQuestAction(claimedPoints: Int!, questId: ID!): QuestAction
   deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
+  makeReferral(referralCode: String!): Boolean
   stopMatchFind: Boolean
   updateQuest(id: ID!, status: String!): Quest
 }
@@ -111,6 +112,8 @@ type Profile {
   linkedId: String
   mineral: Float!
   name: String
+  referralCode: String!
+  referralHistory: ReferralHistory
 }
 
 type Query {
@@ -143,6 +146,20 @@ type QuestAction {
   id: ID!
   questId: ID!
   userId: String!
+}
+
+type ReferralHistory {
+  count: Int!
+  detail: [ReferralHistoryDetail]
+  points: Int!
+}
+
+type ReferralHistoryDetail {
+  claimedPoints: Int!
+  id: ID!
+  referredId: String!
+  referredUser: Profile
+  timestamp: String!
 }
 
 type Subscription {

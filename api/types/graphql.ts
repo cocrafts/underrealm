@@ -186,6 +186,7 @@ export type Profile = {
   mineral: Scalars['Float']['output'];
   name?: Maybe<Scalars['String']['output']>;
   referralCode: Scalars['String']['output'];
+  referralHistory?: Maybe<ReferralHistory>;
 };
 
 export type Query = {
@@ -246,6 +247,22 @@ export type QuestAction = {
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
   userId: Scalars['String']['output'];
+};
+
+export type ReferralHistory = {
+  __typename?: 'ReferralHistory';
+  count: Scalars['Int']['output'];
+  detail?: Maybe<Array<Maybe<ReferralHistoryDetail>>>;
+  points: Scalars['Int']['output'];
+};
+
+export type ReferralHistoryDetail = {
+  __typename?: 'ReferralHistoryDetail';
+  claimedPoints: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  referredId: Scalars['String']['output'];
+  referredUser?: Maybe<Profile>;
+  timestamp: Scalars['String']['output'];
 };
 
 export type Subscription = {
@@ -366,6 +383,8 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Quest: ResolverTypeWrapper<Quest>;
   QuestAction: ResolverTypeWrapper<QuestAction>;
+  ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
+  ReferralHistoryDetail: ResolverTypeWrapper<ReferralHistoryDetail>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -393,6 +412,8 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Quest: Quest;
   QuestAction: QuestAction;
+  ReferralHistory: ReferralHistory;
+  ReferralHistoryDetail: ReferralHistoryDetail;
   String: Scalars['String']['output'];
   Subscription: {};
 }>;
@@ -514,6 +535,7 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   mineral?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  referralHistory?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -551,6 +573,22 @@ export type QuestActionResolvers<ContextType = ApiContext, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistory'] = ResolversParentTypes['ReferralHistory']> = ResolversObject<{
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  detail?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistoryDetail']>>>, ParentType, ContextType>;
+  points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ReferralHistoryDetailResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistoryDetail'] = ResolversParentTypes['ReferralHistoryDetail']> = ResolversObject<{
+  claimedPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  referredId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  referredUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type SubscriptionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   gameInvitation?: SubscriptionResolver<Maybe<ResolversTypes['GameInvitation']>, "gameInvitation", ParentType, ContextType, RequireFields<SubscriptionGameInvitationArgs, 'opponent'>>;
   matchFind?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "matchFind", ParentType, ContextType, RequireFields<SubscriptionMatchFindArgs, 'game'>>;
@@ -574,6 +612,8 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Quest?: QuestResolvers<ContextType>;
   QuestAction?: QuestActionResolvers<ContextType>;
+  ReferralHistory?: ReferralHistoryResolvers<ContextType>;
+  ReferralHistoryDetail?: ReferralHistoryDetailResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
 }>;
 

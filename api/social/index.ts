@@ -7,6 +7,7 @@ import {
 	quest,
 	questActions,
 } from './query/quest';
+import { referralHistory } from './query/referral';
 
 export const SocialQueryResolvers = {
 	quest,
@@ -14,6 +15,7 @@ export const SocialQueryResolvers = {
 	activeQuests,
 	initQuests,
 	disableQuests,
+	referralHistory,
 };
 
 export const SocialMutationResolvers = {

@@ -11,7 +11,18 @@ const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 		throw new Error(err);
 	}
 };
+
+export const referredUser: ReferralHistoryDetailResolvers['referredUser'] =
+	async ({ referredId }) => {
+		try {
+			return await getUserById(referredId);
+		} catch (err) {
+			throw new Error(err);
+		}
+	};
+
 export const UserQueryResolver = {
 	profile,
+	referredUser,
 };
 export const UserMutationResolver = {};

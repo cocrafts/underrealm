@@ -163,6 +163,7 @@ type ReferralHistory {
 type ReferralHistoryDetail {
     id: ID!
     referredId: String!
+    referredUser: Profile
     claimedPoints: Int!
     timestamp: String!
 }
