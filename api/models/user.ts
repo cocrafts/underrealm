@@ -1,4 +1,6 @@
+import { getItem } from 'aws/dynamo';
 import { model, Schema } from 'mongoose';
+import type { Profile } from 'types/graphql';
 import { generateReferralCode } from 'utils/referral';
 
 const userSchema = new Schema({
@@ -39,4 +41,12 @@ export const getOrCreateUserByBindingId = async (bindingId: string) => {
 
 export const getUserByReferralCode = async (referralCode: string) => {
 	return await User.findOne({ referralCode });
+};
+
+export const getUserById = async (userId: string) => {
+	const { Item: profile } = await getItem(`profile#${userId}`);
+	const mongoProfile = await getOrCreateUserByBindingId(userId);
+	Object.assign(profile, mongoProfile);
+
+	return profile as Profile;
 };
