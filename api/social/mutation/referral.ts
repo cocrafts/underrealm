@@ -24,12 +24,12 @@ export const makeReferral: MutationResolvers['makeReferral'] = async (
 	}
 
 	const referralPoints = 80;
-	Referral.create({
+	await Referral.create({
 		referrerId: referrer.id,
 		refereeId: user.id,
 		claimedPoints: referralPoints,
 	});
-	User.findOneAndUpdate(
+	await User.findOneAndUpdate(
 		{ bindingId: referrer.id },
 		{ points: referrer.points + referralPoints },
 	);
