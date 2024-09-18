@@ -1,21 +1,27 @@
-import { getReferralByReferrerId } from 'models/referral';
-import type { ProfileResolvers, ReferralHistoryDetail } from 'types/graphql';
+import { Referral } from 'models/referral';
+import type { QueryResolvers, ReferralHistoryDetail } from 'types/graphql';
 
-export const referralHistory: ProfileResolvers['referralHistory'] = async ({
-	id,
-}) => {
+export const referralHistory: QueryResolvers['referralHistory'] = async (
+	root,
+	_,
+	{ user },
+) => {
 	let count = 0;
 	let points = 0;
-	const referrals = await getReferralByReferrerId(id);
+	const referrals = await Referral.find({ referrerId: user.id });
 	const detail: ReferralHistoryDetail[] = referrals.map((ref) => {
 		count += 1;
 		points += ref.claimedPoints;
 		return {
 			id: ref.id,
-			referredId: ref.referredId,
+			refereeId: ref.refereeId,
 			claimedPoints: ref.claimedPoints,
-			timestamp: ref.timestamp.toDateString(),
+			createdAt: new Date(ref.createdAt).toDateString(),
 		};
 	});
-	return { count, points, detail };
+	return {
+		count,
+		points,
+		detail,
+	};
 };

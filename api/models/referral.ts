@@ -1,48 +1,50 @@
-import { model, Schema } from 'mongoose';
+import { model } from 'mongoose';
+import { ClientError } from 'utils/errors';
 
-import { getUserByReferralCode } from './user';
+import { User } from './user';
+import { createSchema } from './utils';
 
-const referralSchema = new Schema({
+const referralSchema = createSchema({
 	referrerId: String,
-	referredId: String,
+	refereeId: String,
 	claimedPoints: {
 		type: Number,
 		min: 0,
 		default: 80,
 	},
-	timestamp: Date,
 });
 
-referralSchema.index({ referrer: 1, referee: 1 }, { unique: true });
+referralSchema.index({ referrerId: 1, refereeId: 1 }, { unique: true });
 
 export const Referral = model('Referral', referralSchema);
 
 export const createReferralRecord = async (
-	referredId: string,
+	refereeId: string,
 	referralCode: string,
 ) => {
-	try {
-		const referrer = await getUserByReferralCode(referralCode);
-		if (!referrer?.id) {
-			throw new Error('Referral code is invalid');
-		}
-		const referralRecord = new Referral({
-			referrerId: referrer.id,
-			referredId,
-			claimedPoints: 80,
-			timestamp: new Date(Date.now()),
-		});
-		await referralRecord.save();
-		return true;
-	} catch (err) {
-		throw new Error(err);
+	const referrer = await User.findOne({ referralCode });
+	if (!referrer?.id) {
+		throw new ClientError('Referral code is invalid');
 	}
-};
 
-export const getReferralByReferrerId = async (referrerId: string) => {
-	try {
-		return await Referral.find({ referrerId });
-	} catch (err) {
-		throw new Error(err);
+	const existReferral = await Referral.findOne({
+		referrerId: referrer.id,
+		refereeId,
+	});
+	if (existReferral.id) {
+		throw new ClientError(
+			'Can not make new referral cause referral already existed',
+		);
 	}
+
+	Referral.create({
+		referrerId: referrer.id,
+		refereeId,
+		claimedPoints: 80,
+	});
+	User.findOneAndUpdate(
+		{ bindingId: referrer.id },
+		{ points: referrer.points + 80 },
+	);
+	return true;
 };
