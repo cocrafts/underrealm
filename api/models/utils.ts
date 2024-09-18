@@ -1,25 +1,21 @@
-import type { SchemaDefinition, SchemaDefinitionType, Types } from 'mongoose';
+import type { Types } from 'mongoose';
 import { Schema } from 'mongoose';
 
-type SchemaParams = ConstructorParameters<typeof Schema>;
-
-type Definition<RawDocType> = SchemaDefinition<
-	SchemaDefinitionType<RawDocType>,
-	RawDocType
->;
-
-export const createSchema = <RawDocType>(
-	definition: Definition<RawDocType> | RawDocType,
-	options?: SchemaParams[1],
+/**
+ * a wrapper for `new Schema()` with:
+ * - virtual `id` from default `_id objectId` for GraphQL field compatibility
+ * - auto `timestamps` on creating or updating
+ */
+export const createSchema = <Definition extends {}, Options>(
+	definition: Definition,
+	options?: Options,
 ) => {
-	const defaultOptions = {
+	const schema = new Schema(definition, {
 		toJSON: { virtuals: true },
 		toObject: { virtuals: true },
-	};
-
-	const mergedOption = { ...options, ...defaultOptions };
-
-	const schema = new Schema(definition, mergedOption);
+		timestamps: true,
+		...options,
+	});
 
 	schema.virtual('id').get(function () {
 		return (this._id as Types.ObjectId).toHexString();
