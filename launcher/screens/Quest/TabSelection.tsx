@@ -4,17 +4,28 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import resources from 'utils/resources';
 
+import type { TabId } from './internal';
+
 interface Props {
-	onChangeTab?: () => void;
+	onChangeTab?: (value: TabId) => void;
 	title: string;
+	value: TabId;
 	isActive?: boolean;
 }
 
-const TabSelection: FC<Props> = ({ onChangeTab, title, isActive = false }) => {
+const TabSelection: FC<Props> = ({
+	onChangeTab,
+	value,
+	title,
+	isActive = false,
+}) => {
 	const { styles } = useStyles(stylesheet);
 
 	return (
-		<TouchableOpacity style={[styles.container]} onPress={onChangeTab}>
+		<TouchableOpacity
+			style={[styles.container]}
+			onPress={() => onChangeTab(value)}
+		>
 			<Text
 				style={[
 					styles.title,

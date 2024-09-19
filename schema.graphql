@@ -95,6 +95,7 @@ type Mutation {
   acceptGame(invitationId: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
   inviteGame(input: InviteGameInput!): GameInvitation
+  makeReferral(referralCode: String!): Boolean
   stopMatchFind: Boolean
 }
 
@@ -110,6 +111,7 @@ type Profile {
   linkedId: String
   mineral: Float!
   name: String
+  referralCode: String!
 }
 
 type Query {
@@ -126,6 +128,7 @@ type Query {
   quest(id: ID!): Quest
   questActions: [QuestAction]
   quests(status: QuestStatus): [Quest]
+  referralHistory: ReferralHistory
 }
 
 type Quest {
@@ -158,6 +161,26 @@ enum QuestType {
   JOIN_DISCORD
   LIKE_X
   RETWEET_X
+}
+
+type RefereeUser {
+  address: String
+  email: String
+  name: String
+}
+
+type ReferralHistory {
+  count: Int!
+  detail: [ReferralHistoryDetail]
+  points: Int!
+}
+
+type ReferralHistoryDetail {
+  claimedPoints: Int!
+  createdAt: String!
+  id: ID!
+  refereeId: String!
+  refereeUser: RefereeUser
 }
 
 type Subscription {

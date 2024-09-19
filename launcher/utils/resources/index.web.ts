@@ -300,5 +300,9 @@ export default {
 		checked: { uri: '/quest/checked.png' },
 		discord: { uri: '/quest/discord.png' },
 		twitter: { uri: '/quest/twitter.png' },
+		referral: {
+			backgroundMain: { uri: '/referral/main-bg.png' },
+			uCoin: { uri: '/u-coin.png' },
+		},
 	},
 };

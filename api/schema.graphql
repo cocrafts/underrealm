@@ -14,12 +14,17 @@ type Query {
   disableQuests: [Quest]
   quest(id: ID!): Quest
 	questActions: [QuestAction]
+  referralHistory: ReferralHistory
 }
 
 type Mutation {
   inviteGame(input: InviteGameInput!): GameInvitation
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
+  makeReferral(referralCode: String!): Boolean
+  createQuest(title: String!, description: String!, type: String!, url: String, points: Int!): Quest
+  updateQuest(id: ID!, status: String!): Quest
+  deleteQuest(id: ID!): Boolean
 	createQuestAction(questId: ID!): QuestAction
 }
 
@@ -46,6 +51,7 @@ type Profile {
   avatarUrl: String
   mineral: Float!
   isOnline: Boolean
+  referralCode: String!
 }
 
 type CardDuelSetting {
@@ -163,5 +169,25 @@ type QuestAction {
 	questId: ID!
 	userId: String!
   claimedPoints: Int!
-  createdAt: DateTime!
+    createdAt: DateTime!
+}
+
+type ReferralHistory {
+    count: Int!
+    points: Int!
+    detail: [ReferralHistoryDetail]
+}
+
+type RefereeUser {
+    name: String
+    address: String
+    email: String
+}
+
+type ReferralHistoryDetail {
+    id: ID!
+    refereeId: String!
+    refereeUser: RefereeUser
+    claimedPoints: Int!
+    createdAt: String!
 }
