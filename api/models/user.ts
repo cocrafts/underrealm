@@ -1,7 +1,20 @@
 import { model } from 'mongoose';
-import { generateRandomCode } from 'utils/referral';
 
 import { createSchema } from './utils';
+
+export type IUser = {
+	id: string;
+	linkedId: string;
+	address: string;
+	jwt: string;
+	name: string;
+	email: string;
+	githubId: string;
+	githubUrl: string;
+	avatarUrl: string;
+	mineral: number;
+	referralCode: string;
+};
 
 const userSchema = createSchema({
 	/** bindingId is used to bind this user with dynamodb profile (will be deprecated soon) */
@@ -20,18 +33,22 @@ const userSchema = createSchema({
 		index: true,
 		unique: true,
 	},
+	linkedId: String,
+	address: {
+		type: String,
+		index: true,
+	},
+	jwt: String,
+	name: String,
+	email: {
+		type: String,
+		index: true,
+	},
+	githubId: String,
+	githubUrl: String,
+	avatarUrl: String,
+	mineral: Number,
+	isOnline: Boolean,
 });
 
 export const User = model('User', userSchema);
-const REFERRAL_CODE_LENGTH = 7;
-
-export const getOrCreateUserByBindingId = async (bindingId: string) => {
-	const user = await User.findOne({ bindingId });
-	if (user) {
-		return user;
-	}
-
-	const referralCode = generateRandomCode(REFERRAL_CODE_LENGTH);
-	const newUser = await User.create({ bindingId, points: 0, referralCode });
-	return newUser;
-};
