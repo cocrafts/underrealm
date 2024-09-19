@@ -202,7 +202,7 @@ export type Query = {
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
-  referralHistory?: Maybe<ReferralHistory>;
+  referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
 };
 
 
@@ -262,23 +262,18 @@ export type RefereeUser = {
   __typename?: 'RefereeUser';
   address?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
-  count: Scalars['Int']['output'];
-  detail?: Maybe<Array<Maybe<ReferralHistoryDetail>>>;
-  points: Scalars['Int']['output'];
-};
-
-export type ReferralHistoryDetail = {
-  __typename?: 'ReferralHistoryDetail';
   claimedPoints: Scalars['Int']['output'];
-  createdAt: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   refereeId: Scalars['String']['output'];
   refereeUser?: Maybe<RefereeUser>;
+  referrerId: Scalars['String']['output'];
 };
 
 export type Subscription = {
@@ -403,7 +398,6 @@ export type ResolversTypes = ResolversObject<{
   QuestType: QuestType;
   RefereeUser: ResolverTypeWrapper<RefereeUser>;
   ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
-  ReferralHistoryDetail: ResolverTypeWrapper<ReferralHistoryDetail>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -434,7 +428,6 @@ export type ResolversParentTypes = ResolversObject<{
   QuestAction: QuestAction;
   RefereeUser: RefereeUser;
   ReferralHistory: ReferralHistory;
-  ReferralHistoryDetail: ReferralHistoryDetail;
   String: Scalars['String']['output'];
   Subscription: {};
 }>;
@@ -576,7 +569,7 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<QueryQuestArgs, 'id'>>;
   questActions?: Resolver<Maybe<Array<Maybe<ResolversTypes['QuestAction']>>>, ParentType, ContextType>;
-  referralHistory?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
+  referralHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistory']>>>, ParentType, ContextType>;
 }>;
 
 export type QuestResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Quest'] = ResolversParentTypes['Quest']> = ResolversObject<{
@@ -603,23 +596,18 @@ export type QuestActionResolvers<ContextType = ApiContext, ParentType extends Re
 export type RefereeUserResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['RefereeUser'] = ResolversParentTypes['RefereeUser']> = ResolversObject<{
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistory'] = ResolversParentTypes['ReferralHistory']> = ResolversObject<{
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  detail?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistoryDetail']>>>, ParentType, ContextType>;
-  points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ReferralHistoryDetailResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistoryDetail'] = ResolversParentTypes['ReferralHistoryDetail']> = ResolversObject<{
   claimedPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   refereeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   refereeUser?: Resolver<Maybe<ResolversTypes['RefereeUser']>, ParentType, ContextType>;
+  referrerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -649,7 +637,6 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   QuestAction?: QuestActionResolvers<ContextType>;
   RefereeUser?: RefereeUserResolvers<ContextType>;
   ReferralHistory?: ReferralHistoryResolvers<ContextType>;
-  ReferralHistoryDetail?: ReferralHistoryDetailResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
 }>;
 

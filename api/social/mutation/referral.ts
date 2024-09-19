@@ -1,5 +1,6 @@
 import { Referral } from 'models/referral';
 import { User } from 'models/user';
+import mongoose from 'mongoose';
 import type { MutationResolvers } from 'types/graphql';
 import { ClientError } from 'utils/errors';
 
@@ -23,16 +24,27 @@ export const makeReferral: MutationResolvers['makeReferral'] = async (
 		);
 	}
 
+	const session = await mongoose.startSession();
+	session.startTransaction();
+
 	const referralPoints = 80;
-	await Referral.create({
-		referrerId: referrer.id,
-		refereeId: user.id,
-		claimedPoints: referralPoints,
-	});
+	await Referral.create(
+		[
+			{
+				referrerId: referrer.id,
+				refereeId: user.id,
+				claimedPoints: referralPoints,
+			},
+		],
+		{ session },
+	);
 	await User.findOneAndUpdate(
 		{ bindingId: referrer.id },
-		{ points: referrer.points + referralPoints },
+		{ $inc: { points: referralPoints } },
+		{ session },
 	);
+	await session.commitTransaction();
+	session.endSession();
 
 	return true;
 };

@@ -13,7 +13,7 @@ type Query {
   disableQuests: [Quest]
   quest(id: ID!): Quest
 	questActions: [QuestAction]
-  referralHistory: ReferralHistory
+  referralHistory: [ReferralHistory]
 }
 
 type Mutation {
@@ -166,21 +166,17 @@ type QuestAction {
 }
 
 type ReferralHistory {
-    count: Int!
-    points: Int!
-    detail: [ReferralHistoryDetail]
+  id: ID!
+  referrerId: String!
+  refereeId: String!
+  refereeUser: RefereeUser
+  claimedPoints: Int!
+  createdAt: DateTime!
 }
 
 type RefereeUser {
-    name: String
-    address: String
-    email: String
-}
-
-type ReferralHistoryDetail {
-    id: ID!
-    refereeId: String!
-    refereeUser: RefereeUser
-    claimedPoints: Int!
-    createdAt: String!
+  id: ID
+  name: String
+  address: String
+  email: String
 }
