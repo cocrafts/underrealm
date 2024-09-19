@@ -19,6 +19,7 @@ const questSchema = new Schema({
 			ref: 'QuestAction',
 		},
 	],
+	createdAt: Date,
 });
 
 export const Quest = model('Quest', questSchema);
