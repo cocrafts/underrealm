@@ -32,6 +32,6 @@ export const getOrCreateUserByBindingId = async (bindingId: string) => {
 	}
 
 	const referralCode = generateRandomCode(REFERRAL_CODE_LENGTH);
-	const newUser = User.create({ bindingId, points: 0, referralCode });
+	const newUser = await User.create({ bindingId, points: 0, referralCode });
 	return newUser;
 };
