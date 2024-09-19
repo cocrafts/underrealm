@@ -15,28 +15,6 @@ export const quest: QueryResolvers['quest'] = async (
 	return result;
 };
 
-export const activeQuests: QueryResolvers['activeQuests'] = async () => {
-	const activeQuests = await Quest.find({
-		status: 'LIVE',
-	});
-
-	const populatedActiveQuests = await Promise.all(
-		activeQuests.map((activeQuest) =>
-			activeQuest.populate<QuestType>('questActions'),
-		),
-	);
-
-	return populatedActiveQuests;
-};
-
-export const initQuests: QueryResolvers['initQuests'] = async () => {
-	return await Quest.find<QuestType>({ status: 'INIT' });
-};
-
-export const disableQuests: QueryResolvers['disableQuests'] = async () => {
-	return await Quest.find<QuestType>({ status: 'DISABLE' });
-};
-
 export const questActions: QueryResolvers['questActions'] = async (
 	_,
 	// eslint-disable-next-line no-empty-pattern
@@ -45,4 +23,15 @@ export const questActions: QueryResolvers['questActions'] = async (
 ) => {
 	const userId = context.user.id;
 	return await QuestAction.find<QuestActionType>({ userId });
+};
+
+export const quests: QueryResolvers['quests'] = async (_, { status }) => {
+	const query = status ? { status } : { status: 'LIVE' };
+	const questList = await Quest.find(query);
+
+	const populatedActiveQuests = await Promise.all(
+		questList.map((quest) => quest.populate<QuestType>('questActions')),
+	);
+
+	return populatedActiveQuests;
 };

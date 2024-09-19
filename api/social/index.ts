@@ -1,18 +1,10 @@
 import { createQuestAction } from './mutation/quest';
-import {
-	activeQuests,
-	disableQuests,
-	initQuests,
-	quest,
-	questActions,
-} from './query/quest';
+import { quest, questActions, quests } from './query/quest';
 
 export const SocialQueryResolvers = {
 	quest,
 	questActions,
-	activeQuests,
-	initQuests,
-	disableQuests,
+	quests,
 };
 
 export const SocialMutationResolvers = {

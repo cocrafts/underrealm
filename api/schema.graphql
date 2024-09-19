@@ -8,6 +8,7 @@ type Query {
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   cardDuel(id: String!): CardDuel
+  quests(status: QuestStatus): [Quest]
   activeQuests: [Quest]
   initQuests: [Quest]
   disableQuests: [Quest]
@@ -140,12 +141,18 @@ enum QuestType {
 	COMMENT_X
 }
 
+enum QuestStatus {
+  LIVE
+  INIT
+  DISABLE
+}
+
 type Quest {
   id: ID!
   title: String!
 	description: String!
 	type: QuestType!
-	status: String!
+	status: QuestStatus!
 	url: String!
 	points: Int!
   createdAt: DateTime!

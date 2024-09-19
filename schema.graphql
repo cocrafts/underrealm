@@ -125,6 +125,7 @@ type Query {
   profile(address: String): Profile
   quest(id: ID!): Quest
   questActions: [QuestAction]
+  quests(status: QuestStatus): [Quest]
 }
 
 type Quest {
@@ -132,7 +133,7 @@ type Quest {
   description: String!
   id: ID!
   points: Int!
-  status: String!
+  status: QuestStatus!
   title: String!
   type: QuestType!
   url: String!
@@ -144,6 +145,12 @@ type QuestAction {
   id: ID!
   questId: ID!
   userId: String!
+}
+
+enum QuestStatus {
+  DISABLE
+  INIT
+  LIVE
 }
 
 enum QuestType {
