@@ -153,7 +153,7 @@ export type MutationMakeReferralArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
-  address: Scalars['String']['output'];
+  address?: Maybe<Scalars['String']['output']>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   githubId?: Maybe<Scalars['String']['output']>;
@@ -162,7 +162,7 @@ export type Profile = {
   isOnline?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
   linkedId?: Maybe<Scalars['String']['output']>;
-  mineral: Scalars['Float']['output'];
+  mineral?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   referralCode: Scalars['String']['output'];
 };
@@ -237,21 +237,13 @@ export enum QuestType {
     RetweetX = 'RETWEET_X'
   }
 
-export type RefereeUser = {
-  __typename?: 'RefereeUser';
-  address?: Maybe<Scalars['String']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-};
-
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
   claimedPoints: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   refereeId: Scalars['String']['output'];
-  refereeUser?: Maybe<RefereeUser>;
+  refereeUser?: Maybe<Profile>;
   referrerId: Scalars['String']['output'];
 };
 

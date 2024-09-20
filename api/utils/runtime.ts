@@ -1,4 +1,5 @@
 import type { ContextFunction } from '@apollo/server';
+import { getItem } from 'aws/dynamo';
 import { getParameter } from 'aws/parameter';
 import jwt from 'jsonwebtoken';
 
@@ -47,6 +48,8 @@ export const graphqlContext: ContextFunction<unknown[], ApiContext> = async ({
 
 			const cognitoUser = (await verifyAsync(token, header.kid)) as never;
 			user = cognitoToProfile(cognitoUser);
+			const { Item: profile } = await getItem(`profile#${user.id}`);
+			Object.assign(user, profile);
 		} catch (err) {
 			throw new ClientError(`Can not verify token: ${err}`);
 		}

@@ -1,14 +1,15 @@
 import type { JwtPayload } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
+import type { IUser } from 'models/user';
 
 import jwkJSON from '../jwk.json';
 
-export interface UserProfile {
+export type UserProfile = {
 	id?: string;
 	linkedId?: string;
 	provider?: string;
-}
+} & Partial<Omit<IUser, 'bindingId'>>;
 
 export interface ClientProfile {
 	id?: string;

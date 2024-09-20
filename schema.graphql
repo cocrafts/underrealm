@@ -100,7 +100,7 @@ type Mutation {
 }
 
 type Profile {
-  address: String!
+  address: String
   avatarUrl: String
   email: String
   githubId: String
@@ -109,7 +109,7 @@ type Profile {
   isOnline: Boolean
   jwt: String
   linkedId: String
-  mineral: Float!
+  mineral: Float
   name: String
   referralCode: String!
 }
@@ -156,19 +156,12 @@ enum QuestType {
   RETWEET_X
 }
 
-type RefereeUser {
-  address: String
-  email: String
-  id: ID
-  name: String
-}
-
 type ReferralHistory {
   claimedPoints: Int!
   createdAt: DateTime!
   id: ID!
   refereeId: String!
-  refereeUser: RefereeUser
+  refereeUser: Profile
   referrerId: String!
 }
 

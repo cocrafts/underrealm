@@ -41,14 +41,14 @@ input InviteGameInput {
 type Profile {
   id: String!
   linkedId: String
-  address: String!
+  address: String
   jwt: String
   name: String
   email: String
   githubId: String
   githubUrl: String
   avatarUrl: String
-  mineral: Float!
+  mineral: Float
   isOnline: Boolean
   referralCode: String!
 }
@@ -167,16 +167,9 @@ type QuestAction {
 
 type ReferralHistory {
   id: ID!
-  referrerId: String!
-  refereeId: String!
-  refereeUser: RefereeUser
-  claimedPoints: Int!
-  createdAt: DateTime!
-}
-
-type RefereeUser {
-  id: ID
-  name: String
-  address: String
-  email: String
+  referrerId: String
+  refereeId: String
+  refereeUser: Profile
+  claimedPoints: Int
+  createdAt: DateTime
 }

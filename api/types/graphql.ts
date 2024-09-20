@@ -174,7 +174,7 @@ export type MutationUpdateQuestArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
-  address: Scalars['String']['output'];
+  address?: Maybe<Scalars['String']['output']>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   githubId?: Maybe<Scalars['String']['output']>;
@@ -183,7 +183,7 @@ export type Profile = {
   isOnline?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
   linkedId?: Maybe<Scalars['String']['output']>;
-  mineral: Scalars['Float']['output'];
+  mineral?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   referralCode: Scalars['String']['output'];
 };
@@ -258,21 +258,13 @@ export enum QuestType {
   RetweetX = 'RETWEET_X'
 }
 
-export type RefereeUser = {
-  __typename?: 'RefereeUser';
-  address?: Maybe<Scalars['String']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-};
-
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
   claimedPoints: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   refereeId: Scalars['String']['output'];
-  refereeUser?: Maybe<RefereeUser>;
+  refereeUser?: Maybe<Profile>;
   referrerId: Scalars['String']['output'];
 };
 
@@ -396,7 +388,6 @@ export type ResolversTypes = ResolversObject<{
   Quest: ResolverTypeWrapper<Quest>;
   QuestAction: ResolverTypeWrapper<QuestAction>;
   QuestType: QuestType;
-  RefereeUser: ResolverTypeWrapper<RefereeUser>;
   ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -426,7 +417,6 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Quest: Quest;
   QuestAction: QuestAction;
-  RefereeUser: RefereeUser;
   ReferralHistory: ReferralHistory;
   String: Scalars['String']['output'];
   Subscription: {};
@@ -541,7 +531,7 @@ export type MutationResolvers<ContextType = ApiContext, ParentType extends Resol
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
-  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   githubId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -550,7 +540,7 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   isOnline?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   linkedId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  mineral?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  mineral?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -593,20 +583,12 @@ export type QuestActionResolvers<ContextType = ApiContext, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type RefereeUserResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['RefereeUser'] = ResolversParentTypes['RefereeUser']> = ResolversObject<{
-  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistory'] = ResolversParentTypes['ReferralHistory']> = ResolversObject<{
   claimedPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   refereeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  refereeUser?: Resolver<Maybe<ResolversTypes['RefereeUser']>, ParentType, ContextType>;
+  refereeUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
   referrerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -635,7 +617,6 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Quest?: QuestResolvers<ContextType>;
   QuestAction?: QuestActionResolvers<ContextType>;
-  RefereeUser?: RefereeUserResolvers<ContextType>;
   ReferralHistory?: ReferralHistoryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
 }>;

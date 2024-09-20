@@ -4,15 +4,11 @@ import { createSchema } from './utils';
 
 export type IUser = {
 	id: string;
-	linkedId: string;
+	bindingId: string;
 	address: string;
-	jwt: string;
 	name: string;
 	email: string;
-	githubId: string;
-	githubUrl: string;
 	avatarUrl: string;
-	mineral: number;
 	referralCode: string;
 };
 
