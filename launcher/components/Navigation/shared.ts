@@ -56,6 +56,11 @@ const storyNav: NavigationConfig = {
 	route: 'Story',
 };
 
+const questNav: NavigationConfig = {
+	title: 'Quest',
+	route: 'Quest',
+};
+
 // Temporarily disable Mint route
 // export const mintNav: NavigationConfig = {
 // 	title: 'NFT Mint (coming in Jun)',
@@ -67,6 +72,7 @@ export const localNavigations: NavigationConfig[] = [
 	homeNav,
 	howToPlayNav,
 	storyNav,
+	questNav,
 	// mintNav,
 ];
 

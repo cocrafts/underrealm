@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
+import type { GameInvitation } from 'utils/graphql';
 import { useSnapshot } from 'utils/hook';
 import type { LiveState } from 'utils/state/live';
 import { liveState } from 'utils/state/live';
 import { liveActions } from 'utils/state/live';
-import type { GameInvitation } from 'utils/types/graphql';
 
 import GameInvitationItem from './Item';
 

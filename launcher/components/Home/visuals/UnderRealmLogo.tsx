@@ -4,7 +4,7 @@ import { Defs, LinearGradient, Path, Svg } from 'react-native-svg';
 
 interface Props {
 	style?: ViewStyle;
-	size?: number;
+	size?: number | string;
 	color?: string;
 }
 

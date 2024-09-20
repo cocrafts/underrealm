@@ -4,7 +4,7 @@ module.exports = {
 	ignorePatterns: [
 		'dist',
 		'node_modules',
-		'launcher/utils/types/graphql.ts',
+		'launcher/utils/graphql/graphql.ts',
 		'launcher/components/DrawerNavigation',
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',
@@ -22,5 +22,7 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-require-imports': 'off',
 		'@typescript-eslint/no-duplicate-enum-values': 'off',
+		'@typescript-eslint/no-empty-interface': 'off',
+		'@typescript-eslint/no-empty-object-type': 'off',
 	},
 };

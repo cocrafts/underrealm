@@ -88,6 +88,7 @@ export const UnderRealmButton: FC<Props> = ({
 			<View>
 				{children || <Text style={[styles.titleStyle, texStyle]}>{title}</Text>}
 			</View>
+
 			<Hoverable
 				style={{ ...middle, left: 0, right: 0, justifyContent: 'center' }}
 				animatedStyle={useHoveredStyle}

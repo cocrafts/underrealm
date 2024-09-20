@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { AnimateDirections, BindDirections, modalActions } from '@metacraft/ui';
-import type { Profile } from 'utils/types/graphql';
+import type { Profile } from 'utils/graphql';
 
 import Account from './Account';
 import SignedMenu from './Menu';

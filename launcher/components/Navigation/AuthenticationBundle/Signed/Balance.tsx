@@ -4,10 +4,10 @@ import { Text } from '@metacraft/ui';
 import ShardIcon from 'components/icons/DiamondMineral';
 import EyeIcon from 'components/icons/Eye';
 import EyeClosedIcon from 'components/icons/EyeClosed';
+import type { Profile } from 'utils/graphql';
 import { formatNumber, memiToUSD } from 'utils/helper';
 import { useSnapshot } from 'utils/hook';
 import { appActions, appState } from 'utils/state/app';
-import type { Profile } from 'utils/types/graphql';
 
 import { styles } from './internal';
 

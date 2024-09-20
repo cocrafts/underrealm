@@ -36,3 +36,4 @@ game/native
 !.env.example
 
 jwk.json
+*.log

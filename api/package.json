@@ -6,7 +6,8 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "type-check": "tsc --noEmit",
-    "dev": "tsx ./index.server.ts",
+    "test": "jest",
+    "dev": "tsx watch --clear-screen=false ./index.server.ts",
     "build": "rm -rf dist && yarn swc src -d dist"
   },
   "keywords": [],
@@ -22,6 +23,7 @@
     "@aws-sdk/client-ssm": "^3.72.0",
     "@aws-sdk/lib-dynamodb": "^3.45.0",
     "@metacraft/murg-engine": "^0.0.73",
+    "chalk": "^5.3.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphql": "^16.1.0",
@@ -30,7 +32,8 @@
     "jsonwebtoken": "^9.0.2",
     "jwk-to-pem": "^2.0.5",
     "mongoose": "^8.6.1",
-    "nanoid": "^3.3.0"
+    "nanoid": "^3.3.0",
+    "winston": "^3.14.2"
   },
   "devDependencies": {
     "@types/express": "^4",
@@ -47,5 +50,18 @@
     "morgan": "^1.10.0",
     "tsx": "^4.19.0",
     "typescript": "5.3.3"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }
