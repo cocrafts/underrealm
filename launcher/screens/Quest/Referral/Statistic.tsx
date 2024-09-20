@@ -3,10 +3,12 @@ import { Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UserSolidIcon from 'components/icons/UserSolid';
+import { useReferral } from 'utils/hook';
 import resources from 'utils/resources';
 
 export const ReferralStatistic: FC = () => {
 	const { styles } = useStyles(stylesheet);
+	const { count, points } = useReferral();
 
 	return (
 		<View style={styles.container}>
@@ -17,14 +19,14 @@ export const ReferralStatistic: FC = () => {
 						source={resources.quest.referral.uCoin}
 						style={styles.coinImage}
 					/>
-					<Text style={styles.statisticNumber}>800</Text>
+					<Text style={styles.statisticNumber}>{points}</Text>
 				</View>
 			</View>
 			<View style={styles.countContainer}>
 				<Text style={styles.statisticTitle}>Referrals:</Text>
 				<View style={[styles.pointGroup]}>
 					<UserSolidIcon size={28} color="#F2E0C3" />
-					<Text style={styles.statisticNumber}>4</Text>
+					<Text style={styles.statisticNumber}>{count}</Text>
 				</View>
 			</View>
 		</View>

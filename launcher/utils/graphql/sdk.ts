@@ -318,12 +318,12 @@ export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', referralCode: string, id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
@@ -358,6 +358,11 @@ export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null> | null };
+
+export type ReferralHistoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReferralHistoryQuery = { __typename?: 'Query', referralHistory?: Array<{ __typename?: 'ReferralHistory', id: string, referrerId?: string | null, refereeId?: string | null, claimedPoints?: number | null, createdAt?: any | null, refereeUser?: { __typename?: 'Profile', id: string, name?: string | null, address?: string | null, email?: string | null } | null } | null> | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
@@ -586,6 +591,7 @@ export const ProfileDocument = gql`
     query Profile {
   profile {
     ...ProfileFields
+    referralCode
   }
 }
     ${ProfileFieldsFragmentDoc}`;
@@ -890,3 +896,52 @@ export type QuestActionsQueryHookResult = ReturnType<typeof useQuestActionsQuery
 export type QuestActionsLazyQueryHookResult = ReturnType<typeof useQuestActionsLazyQuery>;
 export type QuestActionsSuspenseQueryHookResult = ReturnType<typeof useQuestActionsSuspenseQuery>;
 export type QuestActionsQueryResult = Apollo.QueryResult<QuestActionsQuery, QuestActionsQueryVariables>;
+export const ReferralHistoryDocument = gql`
+    query ReferralHistory {
+  referralHistory {
+    id
+    referrerId
+    refereeId
+    refereeUser {
+      id
+      name
+      address
+      email
+    }
+    claimedPoints
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useReferralHistoryQuery__
+ *
+ * To run a query within a React component, call `useReferralHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReferralHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReferralHistoryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReferralHistoryQuery(baseOptions?: Apollo.QueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
+      }
+export function useReferralHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
+        }
+export function useReferralHistorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
+        }
+export type ReferralHistoryQueryHookResult = ReturnType<typeof useReferralHistoryQuery>;
+export type ReferralHistoryLazyQueryHookResult = ReturnType<typeof useReferralHistoryLazyQuery>;
+export type ReferralHistorySuspenseQueryHookResult = ReturnType<typeof useReferralHistorySuspenseQuery>;
+export type ReferralHistoryQueryResult = Apollo.QueryResult<ReferralHistoryQuery, ReferralHistoryQueryVariables>;

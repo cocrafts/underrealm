@@ -1,12 +1,16 @@
-import { ImageBackground } from 'react-native';
+import { Fragment } from 'react';
+import { ActivityIndicator, ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useReferral } from 'utils/hook';
 import resources from 'utils/resources';
 
+import ReferralGuide from './Guide';
 import { ReferralLink } from './Link';
 import ReferralStatistic from './Statistic';
 
 export const ReferralSection = () => {
 	const { styles } = useStyles(stylesheet);
+	const { loading } = useReferral();
 
 	return (
 		<ImageBackground
@@ -14,8 +18,17 @@ export const ReferralSection = () => {
 			resizeMode="contain"
 			style={styles.container}
 		>
-			<ReferralStatistic />
-			<ReferralLink />
+			{loading ? (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator />
+				</View>
+			) : (
+				<Fragment>
+					<ReferralStatistic />
+					<ReferralLink />
+					<ReferralGuide />
+				</Fragment>
+			)}
 		</ImageBackground>
 	);
 };
@@ -28,5 +41,10 @@ const stylesheet = createStyleSheet({
 		paddingHorizontal: { xs: 13, lg: 64 },
 		paddingVertical: { xs: 24, lg: 64 },
 		marginTop: 40,
+	},
+	loadingContainer: {
+		width: '100%',
+		paddingVertical: 50,
+		alignItems: 'center',
 	},
 });
