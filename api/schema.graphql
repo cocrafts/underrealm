@@ -14,7 +14,7 @@ type Query {
   disableQuests: [Quest]
   quest(id: ID!): Quest
 	questActions: [QuestAction]
-  referralHistory: ReferralHistory
+  referralHistory: [ReferralHistory]
 }
 
 type Mutation {
@@ -42,14 +42,14 @@ input InviteGameInput {
 type Profile {
   id: String!
   linkedId: String
-  address: String!
+  address: String
   jwt: String
   name: String
   email: String
   githubId: String
   githubUrl: String
   avatarUrl: String
-  mineral: Float!
+  mineral: Float
   isOnline: Boolean
   referralCode: String!
 }
@@ -173,21 +173,10 @@ type QuestAction {
 }
 
 type ReferralHistory {
-    count: Int!
-    points: Int!
-    detail: [ReferralHistoryDetail]
-}
-
-type RefereeUser {
-    name: String
-    address: String
-    email: String
-}
-
-type ReferralHistoryDetail {
-    id: ID!
-    refereeId: String!
-    refereeUser: RefereeUser
-    claimedPoints: Int!
-    createdAt: String!
+  id: ID!
+  referrerId: String
+  refereeId: String
+  refereeUser: Profile
+  claimedPoints: Int
+  createdAt: DateTime
 }
