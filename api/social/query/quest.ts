@@ -1,5 +1,4 @@
 import { Quest, QuestAction } from 'models/quest';
-import type { RootFilterQuery } from 'mongoose';
 import type {
 	QueryResolvers,
 	Quest as QuestType,
@@ -10,19 +9,10 @@ export const quest: QueryResolvers['quest'] = async (
 	_,
 	{ id }: { id: string },
 ) => {
-	return await Quest.findById(id);
-};
-
-export const activeQuests: QueryResolvers['activeQuests'] = async () => {
-	return await Quest.find({ status: 'LIVE' } as RootFilterQuery<QuestType>);
-};
-
-export const initQuests: QueryResolvers['initQuests'] = async () => {
-	return await Quest.find({ status: 'INIT' } as RootFilterQuery<QuestType>);
-};
-
-export const disableQuests: QueryResolvers['disableQuests'] = async () => {
-	return await Quest.find({ status: 'DISABLE' } as RootFilterQuery<QuestType>);
+	const result = await Quest.findById(id)
+		.populate<QuestType>('questActions')
+		.exec();
+	return result;
 };
 
 export const questActions: QueryResolvers['questActions'] = async (
@@ -31,8 +21,17 @@ export const questActions: QueryResolvers['questActions'] = async (
 	{},
 	context,
 ) => {
-	const { user } = context;
-	const userId = user.id;
+	const userId = context.user.id;
+	return await QuestAction.find<QuestActionType>({ userId });
+};
 
-	return await QuestAction.find({ userId } as RootFilterQuery<QuestActionType>);
+export const quests: QueryResolvers['quests'] = async (_, { status }) => {
+	const query = status ? { status } : { status: 'LIVE' };
+	const questList = await Quest.find(query);
+
+	const populatedActiveQuests = await Promise.all(
+		questList.map((quest) => quest.populate<QuestType>('questActions')),
+	);
+
+	return populatedActiveQuests;
 };

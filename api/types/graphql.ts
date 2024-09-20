@@ -202,6 +202,7 @@ export type Query = {
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
+  quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
 };
 
@@ -230,13 +231,18 @@ export type QueryQuestArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryQuestsArgs = {
+  status?: InputMaybe<QuestStatus>;
+};
+
 export type Quest = {
   __typename?: 'Quest';
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
-  status: Scalars['String']['output'];
+  status: QuestStatus;
   title: Scalars['String']['output'];
   type: QuestType;
   url: Scalars['String']['output'];
@@ -250,6 +256,12 @@ export type QuestAction = {
   questId: Scalars['ID']['output'];
   userId: Scalars['String']['output'];
 };
+
+export enum QuestStatus {
+  Disable = 'DISABLE',
+  Init = 'INIT',
+  Live = 'LIVE'
+}
 
 export enum QuestType {
   CommentX = 'COMMENT_X',
@@ -387,6 +399,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Quest: ResolverTypeWrapper<Quest>;
   QuestAction: ResolverTypeWrapper<QuestAction>;
+  QuestStatus: QuestStatus;
   QuestType: QuestType;
   ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -559,6 +572,7 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quest?: Resolver<Maybe<ResolversTypes['Quest']>, ParentType, ContextType, RequireFields<QueryQuestArgs, 'id'>>;
   questActions?: Resolver<Maybe<Array<Maybe<ResolversTypes['QuestAction']>>>, ParentType, ContextType>;
+  quests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType, Partial<QueryQuestsArgs>>;
   referralHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistory']>>>, ParentType, ContextType>;
 }>;
 
@@ -567,7 +581,7 @@ export type QuestResolvers<ContextType = ApiContext, ParentType extends Resolver
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['QuestStatus'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['QuestType'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

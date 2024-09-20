@@ -1,20 +1,12 @@
 import { createQuestAction } from './mutation/quest';
 import { makeReferral } from './mutation/referral';
-import {
-	activeQuests,
-	disableQuests,
-	initQuests,
-	quest,
-	questActions,
-} from './query/quest';
+import { quest, questActions, quests } from './query/quest';
 import { referralHistory } from './query/referral';
 
 export const SocialQueryResolvers = {
 	quest,
 	questActions,
-	activeQuests,
-	initQuests,
-	disableQuests,
+	quests,
 	referralHistory,
 };
 
