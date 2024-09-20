@@ -272,12 +272,12 @@ export enum QuestType {
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
-  claimedPoints: Scalars['Int']['output'];
-  createdAt: Scalars['DateTime']['output'];
+  claimedPoints?: Maybe<Scalars['Int']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
-  refereeId: Scalars['String']['output'];
+  refereeId?: Maybe<Scalars['String']['output']>;
   refereeUser?: Maybe<Profile>;
-  referrerId: Scalars['String']['output'];
+  referrerId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Subscription = {
@@ -598,12 +598,12 @@ export type QuestActionResolvers<ContextType = ApiContext, ParentType extends Re
 }>;
 
 export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['ReferralHistory'] = ResolversParentTypes['ReferralHistory']> = ResolversObject<{
-  claimedPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  claimedPoints?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  refereeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  refereeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   refereeUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
-  referrerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  referrerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

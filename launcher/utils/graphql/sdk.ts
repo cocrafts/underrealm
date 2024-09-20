@@ -250,12 +250,12 @@ export enum QuestType {
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
-  claimedPoints: Scalars['Int']['output'];
-  createdAt: Scalars['DateTime']['output'];
+  claimedPoints?: Maybe<Scalars['Int']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
-  refereeId: Scalars['String']['output'];
+  refereeId?: Maybe<Scalars['String']['output']>;
   refereeUser?: Maybe<Profile>;
-  referrerId: Scalars['String']['output'];
+  referrerId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Subscription = {
