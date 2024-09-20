@@ -29,22 +29,16 @@ const userSchema = createSchema({
 		index: true,
 		unique: true,
 	},
-	linkedId: String,
 	address: {
 		type: String,
 		index: true,
 	},
-	jwt: String,
 	name: String,
 	email: {
 		type: String,
 		index: true,
 	},
-	githubId: String,
-	githubUrl: String,
 	avatarUrl: String,
-	mineral: Number,
-	isOnline: Boolean,
 });
 
 export const User = model('User', userSchema);
