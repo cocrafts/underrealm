@@ -22,7 +22,7 @@ export const questActions: QueryResolvers['questActions'] = async (
 	context,
 ) => {
 	const userId = context.user.id;
-	return await QuestAction.find<QuestActionType>({ userId });
+	return await QuestAction.find<QuestActionType>({ user: userId });
 };
 
 export const quests: QueryResolvers['quests'] = async (_, { status }) => {

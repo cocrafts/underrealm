@@ -123,10 +123,13 @@ export enum MetacraftGames {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptGame?: Maybe<Scalars['Boolean']['output']>;
+  createQuest?: Maybe<Quest>;
   createQuestAction?: Maybe<QuestAction>;
+  deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
+  updateQuest?: Maybe<Quest>;
 };
 
 
@@ -135,8 +138,22 @@ export type MutationAcceptGameArgs = {
 };
 
 
+export type MutationCreateQuestArgs = {
+  description: Scalars['String']['input'];
+  points: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+  url?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationCreateQuestActionArgs = {
   questId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteQuestArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -149,6 +166,11 @@ export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateQuestArgs = {
+  id: Scalars['ID']['input'];
+  status: Scalars['String']['input'];
+};
 
 export type Profile = {
   __typename?: 'Profile';
@@ -163,20 +185,19 @@ export type Profile = {
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  points: Scalars['Int']['output'];
+  questActions?: Maybe<Array<Maybe<QuestAction>>>;
   referralCode: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  activeQuests?: Maybe<Array<Maybe<Quest>>>;
   cardDuel?: Maybe<CardDuel>;
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
-  disableQuests?: Maybe<Array<Maybe<Quest>>>;
   gameInvitations?: Maybe<Array<Maybe<GameInvitation>>>;
   gameJwt?: Maybe<Scalars['String']['output']>;
   greeting?: Maybe<Scalars['String']['output']>;
-  initQuests?: Maybe<Array<Maybe<Quest>>>;
   profile?: Maybe<Profile>;
   quest?: Maybe<Quest>;
   questActions?: Maybe<Array<Maybe<QuestAction>>>;
@@ -220,6 +241,7 @@ export type Quest = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
+  questActions?: Maybe<Array<Maybe<QuestAction>>>;
   status: QuestStatus;
   title: Scalars['String']['output'];
   type: QuestType;
@@ -231,8 +253,8 @@ export type QuestAction = {
   claimedPoints: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
-  questId: Scalars['ID']['output'];
-  userId: Scalars['String']['output'];
+  quest: Scalars['ID']['output'];
+  user: Scalars['String']['output'];
 };
 
 export enum QuestStatus {
@@ -242,11 +264,11 @@ export enum QuestStatus {
 }
 
 export enum QuestType {
-    CommentX = 'COMMENT_X',
-    JoinDiscord = 'JOIN_DISCORD',
-    LikeX = 'LIKE_X',
-    RetweetX = 'RETWEET_X'
-  }
+  CommentX = 'COMMENT_X',
+  JoinDiscord = 'JOIN_DISCORD',
+  LikeX = 'LIKE_X',
+  RetweetX = 'RETWEET_X'
+}
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
@@ -306,58 +328,43 @@ export type CreateQuestActionMutationVariables = Exact<{
 }>;
 
 
-export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null };
+export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, user: string, quest: string, claimedPoints: number } | null };
 
 export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null } } | null> | null };
+export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null } } | null> | null };
 
 export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null, points: number, questActions?: Array<{ __typename?: 'QuestAction', user: string, quest: string, id: string, claimedPoints: number } | null> | null };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null, points: number, questActions?: Array<{ __typename?: 'QuestAction', user: string, quest: string, id: string, claimedPoints: number } | null> | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
 }>;
 
 
-export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
-
-export type ActiveQuestsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ActiveQuestsQuery = { __typename?: 'Query', activeQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
-
-export type InitQuestsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type InitQuestsQuery = { __typename?: 'Query', initQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
-
-export type DisableQuestsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DisableQuestsQuery = { __typename?: 'Query', disableQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
+export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, questActions?: Array<{ __typename?: 'QuestAction', user: string, quest: string, id: string, claimedPoints: number } | null> | null } | null> | null };
 
 export type QuestByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null };
+export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, questActions?: Array<{ __typename?: 'QuestAction', user: string, quest: string, id: string, claimedPoints: number } | null> | null } | null };
 
 export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null> | null };
+export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, user: string, quest: string, claimedPoints: number } | null> | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
@@ -367,6 +374,13 @@ export const ProfileFieldsFragmentDoc = gql`
   avatarUrl
   githubUrl
   mineral
+  points
+  questActions {
+    user
+    quest
+    id
+    claimedPoints
+  }
 }
     `;
 export const InviteGameDocument = gql`
@@ -467,8 +481,8 @@ export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!) {
   createQuestAction(questId: $questId) {
     id
-    userId
-    questId
+    user
+    quest
     claimedPoints
   }
 }
@@ -631,6 +645,12 @@ export const QuestsDocument = gql`
     url
     status
     points
+    questActions {
+      user
+      quest
+      id
+      claimedPoints
+    }
   }
 }
     `;
@@ -667,141 +687,6 @@ export type QuestsQueryHookResult = ReturnType<typeof useQuestsQuery>;
 export type QuestsLazyQueryHookResult = ReturnType<typeof useQuestsLazyQuery>;
 export type QuestsSuspenseQueryHookResult = ReturnType<typeof useQuestsSuspenseQuery>;
 export type QuestsQueryResult = Apollo.QueryResult<QuestsQuery, QuestsQueryVariables>;
-export const ActiveQuestsDocument = gql`
-    query ActiveQuests {
-  activeQuests {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useActiveQuestsQuery__
- *
- * To run a query within a React component, call `useActiveQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useActiveQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useActiveQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useActiveQuestsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-      }
-export function useActiveQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-        }
-export function useActiveQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-        }
-export type ActiveQuestsQueryHookResult = ReturnType<typeof useActiveQuestsQuery>;
-export type ActiveQuestsLazyQueryHookResult = ReturnType<typeof useActiveQuestsLazyQuery>;
-export type ActiveQuestsSuspenseQueryHookResult = ReturnType<typeof useActiveQuestsSuspenseQuery>;
-export type ActiveQuestsQueryResult = Apollo.QueryResult<ActiveQuestsQuery, ActiveQuestsQueryVariables>;
-export const InitQuestsDocument = gql`
-    query InitQuests {
-  initQuests {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useInitQuestsQuery__
- *
- * To run a query within a React component, call `useInitQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useInitQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useInitQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useInitQuestsQuery(baseOptions?: Apollo.QueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-      }
-export function useInitQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-        }
-export function useInitQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-        }
-export type InitQuestsQueryHookResult = ReturnType<typeof useInitQuestsQuery>;
-export type InitQuestsLazyQueryHookResult = ReturnType<typeof useInitQuestsLazyQuery>;
-export type InitQuestsSuspenseQueryHookResult = ReturnType<typeof useInitQuestsSuspenseQuery>;
-export type InitQuestsQueryResult = Apollo.QueryResult<InitQuestsQuery, InitQuestsQueryVariables>;
-export const DisableQuestsDocument = gql`
-    query DisableQuests {
-  disableQuests {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useDisableQuestsQuery__
- *
- * To run a query within a React component, call `useDisableQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useDisableQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDisableQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useDisableQuestsQuery(baseOptions?: Apollo.QueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-      }
-export function useDisableQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-        }
-export function useDisableQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-        }
-export type DisableQuestsQueryHookResult = ReturnType<typeof useDisableQuestsQuery>;
-export type DisableQuestsLazyQueryHookResult = ReturnType<typeof useDisableQuestsLazyQuery>;
-export type DisableQuestsSuspenseQueryHookResult = ReturnType<typeof useDisableQuestsSuspenseQuery>;
-export type DisableQuestsQueryResult = Apollo.QueryResult<DisableQuestsQuery, DisableQuestsQueryVariables>;
 export const QuestByIdDocument = gql`
     query QuestById($id: ID!) {
   quest(id: $id) {
@@ -812,6 +697,12 @@ export const QuestByIdDocument = gql`
     url
     status
     points
+    questActions {
+      user
+      quest
+      id
+      claimedPoints
+    }
   }
 }
     `;
@@ -852,8 +743,8 @@ export const QuestActionsDocument = gql`
     query QuestActions {
   questActions {
     id
-    userId
-    questId
+    user
+    quest
     claimedPoints
   }
 }

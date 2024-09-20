@@ -10,48 +10,12 @@ export const quests = gql`
 			url
 			status
 			points
-		}
-	}
-`;
-
-export const activeQuests = gql`
-	query ActiveQuests {
-		activeQuests {
-			id
-			title
-			description
-			type
-			url
-			status
-			points
-		}
-	}
-`;
-
-export const initQuests = gql`
-	query InitQuests {
-		initQuests {
-			id
-			title
-			description
-			type
-			url
-			status
-			points
-		}
-	}
-`;
-
-export const disableQuests = gql`
-	query DisableQuests {
-		disableQuests {
-			id
-			title
-			description
-			type
-			url
-			status
-			points
+			questActions {
+				user
+				quest
+				id
+				claimedPoints
+			}
 		}
 	}
 `;
@@ -66,6 +30,12 @@ export const questById = gql`
 			url
 			status
 			points
+			questActions {
+				user
+				quest
+				id
+				claimedPoints
+			}
 		}
 	}
 `;
@@ -74,8 +44,8 @@ export const questActions = gql`
 	query QuestActions {
 		questActions {
 			id
-			userId
-			questId
+			user
+			quest
 			claimedPoints
 		}
 	}

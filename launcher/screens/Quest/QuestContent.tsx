@@ -45,7 +45,7 @@ const QuestContent: FC = () => {
 			</View>
 
 			{loading ? (
-				<ActivityIndicator />
+				<ActivityIndicator color="#FFF9A0" style={styles.activityIndicator} />
 			) : error ? (
 				<View>
 					<Text>{error.message}</Text>
@@ -119,6 +119,9 @@ const stylesheet = createStyleSheet(() => {
 			borderBottomColor: '#2E2E2E',
 			borderBottomWidth: 1,
 			justifyContent: 'center',
+		},
+		activityIndicator: {
+			marginTop: 20,
 		},
 	};
 });

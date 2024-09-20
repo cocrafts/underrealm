@@ -5,15 +5,19 @@ import type {
 	QueryResolvers,
 	ReferralHistoryResolvers,
 } from 'types/graphql';
+import { logger } from 'utils/logger';
 import { generateRandomCode } from 'utils/referral';
 
 const REFERRAL_CODE_LENGTH = 7;
 
 const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 	const existUser = await User.findOne({ bindingId: user.id });
+	const populatedUser = await existUser.populate<Profile>('questActions');
+
+	logger.info(populatedUser);
 
 	if (existUser) {
-		return mapUserToProfile(existUser);
+		return mapUserToProfile(populatedUser);
 	}
 
 	const newUser = await User.create({
@@ -23,6 +27,8 @@ const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 		email: user.email,
 		avatarUrl: user.avatarUrl,
 		referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
+		points: 0,
+		questActions: [],
 	});
 
 	return mapUserToProfile(newUser);
@@ -48,5 +54,7 @@ const mapUserToProfile = (user: Partial<IUser>): Profile => {
 		email: user.email,
 		avatarUrl: user.avatarUrl,
 		referralCode: user.referralCode,
+		points: user.points,
+		questActions: user.questActions,
 	};
 };

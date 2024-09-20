@@ -21,5 +21,6 @@ export const createQuest = async ({
 		url,
 		points,
 		createdAt: new Date(),
+		questActions: [],
 	});
 };

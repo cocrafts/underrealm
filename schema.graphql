@@ -93,10 +93,13 @@ enum MetacraftGames {
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
+  createQuest(description: String!, points: Int!, title: String!, type: String!, url: String): Quest
   createQuestAction(questId: ID!): QuestAction
+  deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
   makeReferral(referralCode: String!): Boolean
   stopMatchFind: Boolean
+  updateQuest(id: ID!, status: String!): Quest
 }
 
 type Profile {
@@ -111,19 +114,18 @@ type Profile {
   linkedId: String
   mineral: Float
   name: String
+  points: Int!
+  questActions: [QuestAction]
   referralCode: String!
 }
 
 type Query {
-  activeQuests: [Quest]
   cardDuel(id: String!): CardDuel
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
-  disableQuests: [Quest]
   gameInvitations: [GameInvitation]
   gameJwt(duelId: String): String
   greeting: String
-  initQuests: [Quest]
   profile(address: String): Profile
   quest(id: ID!): Quest
   questActions: [QuestAction]
@@ -136,6 +138,7 @@ type Quest {
   description: String!
   id: ID!
   points: Int!
+  questActions: [QuestAction]
   status: QuestStatus!
   title: String!
   type: QuestType!
@@ -146,8 +149,8 @@ type QuestAction {
   claimedPoints: Int!
   createdAt: DateTime!
   id: ID!
-  questId: ID!
-  userId: String!
+  quest: ID!
+  user: String!
 }
 
 enum QuestStatus {

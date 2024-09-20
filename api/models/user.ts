@@ -1,4 +1,4 @@
-import { model } from 'mongoose';
+import { model, Types } from 'mongoose';
 
 import { createSchema } from './utils';
 
@@ -10,6 +10,8 @@ export type IUser = {
 	email: string;
 	avatarUrl: string;
 	referralCode: string;
+	points: number;
+	questActions: string[];
 };
 
 const userSchema = createSchema({
@@ -39,6 +41,12 @@ const userSchema = createSchema({
 		index: true,
 	},
 	avatarUrl: String,
+	questActions: [
+		{
+			type: Types.ObjectId,
+			ref: 'QuestAction',
+		},
+	],
 });
 
 export const User = model('User', userSchema);

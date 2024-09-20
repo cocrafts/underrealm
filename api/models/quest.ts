@@ -26,11 +26,11 @@ const questSchema = createSchema({
 export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
-	questId: { type: Types.ObjectId, ref: 'Quest' },
-	userId: String,
+	quest: { type: Types.ObjectId, ref: 'Quest' },
+	user: { type: 'string', ref: 'User' },
 	claimedPoints: Number,
 });
 
-questActionSchema.index({ questId: 1, userId: 1 }, { unique: true });
+questActionSchema.index({ quest: 1, user: 1 }, { unique: true });
 
 export const QuestAction = model('QuestAction', questActionSchema);

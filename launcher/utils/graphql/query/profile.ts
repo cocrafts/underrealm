@@ -8,6 +8,13 @@ export const profileFields = gql`
 		avatarUrl
 		githubUrl
 		mineral
+		points
+		questActions {
+			user
+			quest
+			id
+			claimedPoints
+		}
 	}
 `;
 
