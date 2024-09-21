@@ -1,8 +1,9 @@
 import type { DefaultOptions, Operation } from '@apollo/client';
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { WebSocketLink } from '@apollo/client/link/ws';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createClient } from 'graphql-ws';
 import { extractJwt } from 'utils/lib/auth';
 
 const defaultOptions: DefaultOptions = {
@@ -34,10 +35,7 @@ const authLink = setContext(async (_, { headers: originalHeaders }) => {
 
 const httpLink = authLink.concat(basicLink);
 
-const socketLink = new WebSocketLink({
-	uri: SOCKET_URI,
-	options: { reconnect: true },
-});
+const socketLink = new GraphQLWsLink(createClient({ url: SOCKET_URI }));
 
 const splitter = ({ query }: Operation) => {
 	const definition = getMainDefinition(query);
