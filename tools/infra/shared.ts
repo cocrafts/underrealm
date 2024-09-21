@@ -34,3 +34,24 @@ export const constructDomainName = (
 export const loadEnvsFromStage = (stage: string): void => {
 	dotenv.config({ path: `.env.${stage}` });
 };
+
+const logGroups = {
+	production: '/underrealm/production',
+	staging: '/underrealm/staging',
+	development: '/underrealm/development',
+};
+
+export const defaultLambdaConfigs = (
+	stage: string,
+): Omit<sst.aws.FunctionArgs, 'handler'> => {
+	const logGroup = logGroups[stage] || `/underrealm/shared`;
+
+	return {
+		architecture: 'arm64',
+		runtime: 'nodejs20.x',
+		logging: {
+			format: 'json',
+			logGroup,
+		},
+	};
+};

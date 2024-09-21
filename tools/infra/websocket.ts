@@ -1,12 +1,9 @@
-import { constructDomainName, zoneId } from './shared';
+import { constructDomainName, defaultLambdaConfigs, zoneId } from './shared';
 
 export const constructWebsocketAPI = () => {
 	const domainName = constructDomainName('websocket', $app.stage);
 
 	const wsAPI = new sst.aws.ApiGatewayWebSocket('websocket', {
-		accessLog: {
-			retention: '1 week',
-		},
 		domain: {
 			name: domainName,
 			dns: sst.aws.dns({ zone: zoneId }),
@@ -15,8 +12,7 @@ export const constructWebsocketAPI = () => {
 
 	const socket = new sst.aws.Function('socket', {
 		handler: 'api/functions/socket',
-		architecture: 'arm64',
-		runtime: 'nodejs20.x',
+		...defaultLambdaConfigs($app.stage),
 	});
 
 	wsAPI.route('$connect', socket.arn as never);
