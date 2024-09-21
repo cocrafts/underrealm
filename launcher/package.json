@@ -37,7 +37,7 @@
     "@underrealm/card": "*",
     "@underrealm/murg": "*",
     "@walless/adapter-solana-base": "^0.0.2",
-    "aws-amplify": "^4.3.35",
+    "aws-amplify": "^6.6.2",
     "bn.js": "^5.2.1",
     "bs58": "^5.0.0",
     "color2k": "^2.0.0",

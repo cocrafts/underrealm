@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import type { HubCallback } from '@aws-amplify/core';
-import { Hub } from '@aws-amplify/core';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { Hub } from 'aws-amplify/utils';
 import type { RootParamList } from 'stacks/Browser/shared';
 import { accountActions } from 'utils/state/account';
 
@@ -18,7 +18,8 @@ export const useAppInit = ({
 	onSignOut,
 }: InitConfig): void => {
 	const onAuth = useCallback<HubCallback>(({ payload: { event, data } }) => {
-		if (event === 'signIn' && data?.username) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		if (event === 'signIn' && (data as any).username) {
 			accountActions.syncProfile();
 			onSignIn?.();
 		} else if (event === 'signOut') {
@@ -28,9 +29,9 @@ export const useAppInit = ({
 
 	useEffect(() => {
 		if (withProfileFetch) accountActions.syncProfile();
-		Hub.listen('auth', onAuth);
+		const stopListen = Hub.listen('auth', onAuth);
 
-		return () => Hub.remove('auth', onAuth);
+		return () => stopListen();
 	}, []);
 };
 
