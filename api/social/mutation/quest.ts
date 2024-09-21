@@ -3,15 +3,6 @@ import { User } from 'models/user';
 
 import type { MutationResolvers } from './../../types/graphql';
 
-export const updateQuest = async (_, { id, status }) => {
-	return await Quest.findByIdAndUpdate(id, { status }, { new: true });
-};
-
-export const deleteQuest = async (_, { id }) => {
-	const result = await Quest.findByIdAndDelete(id);
-	return !!result;
-};
-
 export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	_,
 	{ questId },
