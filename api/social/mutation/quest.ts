@@ -1,6 +1,5 @@
 import { Quest, QuestAction } from 'models/quest';
-
-import type { MutationResolvers } from './../../types/graphql';
+import type { MutationResolvers } from 'utils/types';
 
 export const updateQuest = async (_, { id, status }) => {
 	return await Quest.findByIdAndUpdate(id, { status }, { new: true });
@@ -31,7 +30,7 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 		quest.questActions.push(questAction);
 		await quest.save();
 
-		return questAction;
+		return questAction as never;
 	} catch (err) {
 		throw new Error(err);
 	}

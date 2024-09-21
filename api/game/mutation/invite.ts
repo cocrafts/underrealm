@@ -1,6 +1,6 @@
-import { getItem, putItem } from 'aws/dynamo';
-import { publish, topicGenerator } from 'aws/pubsub';
-import type { GameInvitation, MutationResolvers } from 'types/graphql';
+import { getItem, putItem } from 'utils/aws/dynamo';
+import { publish, topicGenerator } from 'utils/aws/pubsub';
+import type { GameInvitation, MutationResolvers } from 'utils/types';
 import { nanoId } from 'utils/uuid';
 
 import type { GameInvitationRecord } from '../types';

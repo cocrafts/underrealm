@@ -1,4 +1,4 @@
-import type { QueryResolvers } from 'types/graphql';
+import type { QueryResolvers } from 'utils/types';
 
 import { acceptGame } from './mutation/accept';
 import { inviteGame } from './mutation/invite';

@@ -3,7 +3,7 @@ import type {
 	QueryResolvers,
 	Quest as QuestType,
 	QuestAction as QuestActionType,
-} from 'types/graphql';
+} from 'utils/types';
 
 export const quest: QueryResolvers['quest'] = async (
 	_,

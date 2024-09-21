@@ -1,5 +1,5 @@
-import { subscribe, topicGenerator } from 'aws/pubsub';
-import type { SubscriptionResolvers } from 'types/graphql';
+import { subscribe, topicGenerator } from 'utils/aws/pubsub';
+import type { SubscriptionResolvers } from 'utils/types';
 
 const gameInvitation: SubscriptionResolvers['gameInvitation'] = {
 	subscribe: subscribe(topicGenerator.gameInvitation) as never,

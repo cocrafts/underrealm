@@ -1,5 +1,5 @@
-import { getItem, rangeQuery } from 'aws/dynamo';
-import type { QueryResolvers } from 'types/graphql';
+import { getItem, rangeQuery } from 'utils/aws/dynamo';
+import type { QueryResolvers } from 'utils/types';
 
 export const cardDuelHistory: QueryResolvers['cardDuelHistory'] = async (
 	root,

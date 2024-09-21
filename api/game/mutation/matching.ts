@@ -5,10 +5,10 @@ import {
 	putItem,
 	rangeQuery,
 	wrapDeleteRequest,
-} from 'aws/dynamo';
-import { publish, topicGenerator } from 'aws/pubsub';
-import type { MutationResolvers } from 'types/graphql';
-import type { DynamoRecord } from 'types/internal';
+} from 'utils/aws/dynamo';
+import { publish, topicGenerator } from 'utils/aws/pubsub';
+import type { MutationResolvers } from 'utils/types';
+import type { DynamoRecord } from 'utils/types/internal';
 import { microId } from 'utils/uuid';
 
 import { makeDuel } from '../duel';

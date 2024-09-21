@@ -1,8 +1,8 @@
 import { Referral } from 'models/referral';
 import { User } from 'models/user';
 import mongoose from 'mongoose';
-import type { MutationResolvers } from 'types/graphql';
 import { ClientError } from 'utils/errors';
+import type { MutationResolvers } from 'utils/types';
 
 export const makeReferral: MutationResolvers['makeReferral'] = async (
 	root,

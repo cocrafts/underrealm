@@ -1,8 +1,8 @@
-import { getItem, rangeQuery } from 'aws/dynamo';
-import { getParameter } from 'aws/parameter';
 import jwt from 'jsonwebtoken';
-import type { QueryResolvers } from 'types/graphql';
+import { getItem, rangeQuery } from 'utils/aws/dynamo';
+import { getParameter } from 'utils/aws/parameter';
 import { requireConditions } from 'utils/helper';
+import type { QueryResolvers } from 'utils/types';
 
 import type { CardDuelRecord, JwtPayload } from '../types';
 

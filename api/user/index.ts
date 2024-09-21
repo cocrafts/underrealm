@@ -1,11 +1,11 @@
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
+import { generateRandomCode } from 'utils/referral';
 import type {
 	Profile,
 	QueryResolvers,
 	ReferralHistoryResolvers,
-} from 'types/graphql';
-import { generateRandomCode } from 'utils/referral';
+} from 'utils/types';
 
 const REFERRAL_CODE_LENGTH = 7;
 

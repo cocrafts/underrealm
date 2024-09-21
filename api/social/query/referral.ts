@@ -1,5 +1,5 @@
 import { Referral } from 'models/referral';
-import type { QueryResolvers } from 'types/graphql';
+import type { QueryResolvers } from 'utils/types';
 
 export const referralHistory: QueryResolvers['referralHistory'] = async (
 	root,
