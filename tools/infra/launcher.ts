@@ -1,6 +1,10 @@
+import dotenv from 'dotenv';
+
 import { constructDomainName, zoneId } from './shared';
 
 export const constructLauncher = () => {
+	dotenv.config({ path: `launcher/.env.${$app.stage}` });
+
 	const domainName = constructDomainName('launcher', $app.stage);
 
 	const launcher = new sst.aws.StaticSite('launcher', {

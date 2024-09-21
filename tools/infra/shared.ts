@@ -1,5 +1,3 @@
-import * as dotenv from 'dotenv';
-
 export const baseDomainName = 'underrealm.io';
 export const hostedZone = 'underrealm.io';
 export const zoneId = 'Z0837301F5UFZQG04XEQ';
@@ -31,10 +29,6 @@ export const constructDomainName = (
 	return domainName;
 };
 
-export const loadEnvsFromStage = (stage: string): void => {
-	dotenv.config({ path: `.env.${stage}` });
-};
-
 const logGroups = {
 	production: '/underrealm/production',
 	staging: '/underrealm/staging',
@@ -54,4 +48,31 @@ export const defaultLambdaConfigs = (
 			logGroup,
 		},
 	};
+};
+
+export const APIEnvs = () => {
+	return getEnvsObjectByKeys(['STAGE', 'NODE_ENV', 'MONGO_URI', 'REDIS_URI']);
+};
+
+export const getEnvsObjectByKeys = (keys: string[]) => {
+	const envs: Record<string, string> = {};
+
+	for (const key of keys) {
+		if (!process.env[key]) throw Error(`require env variable: ${key}`);
+		envs[key] = process.env[key];
+	}
+
+	return envs;
+};
+
+export const getEnvsObjectByPrefix = (prefix: string) => {
+	const envs: Record<string, string> = {};
+
+	for (const key in process.env) {
+		if (key.startsWith(prefix) && process.env[key]) {
+			envs[key] = process.env[key];
+		}
+	}
+
+	return envs;
 };

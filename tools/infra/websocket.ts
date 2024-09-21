@@ -1,6 +1,15 @@
-import { constructDomainName, defaultLambdaConfigs, zoneId } from './shared';
+import dotenv from 'dotenv';
+
+import {
+	APIEnvs,
+	constructDomainName,
+	defaultLambdaConfigs,
+	zoneId,
+} from './shared';
 
 export const constructWebsocketAPI = () => {
+	dotenv.config({ path: `api/.env.${$app.stage}` });
+
 	const domainName = constructDomainName('websocket', $app.stage);
 
 	const wsAPI = new sst.aws.ApiGatewayWebSocket('websocket', {
@@ -12,6 +21,7 @@ export const constructWebsocketAPI = () => {
 
 	const socket = new sst.aws.Function('socket', {
 		handler: 'api/functions/socket.handler',
+		environment: { ...APIEnvs() },
 		...defaultLambdaConfigs($app.stage),
 	});
 
