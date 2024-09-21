@@ -8,7 +8,7 @@ import '../models';
 
 import { apolloServer } from '../apollo';
 
-export default startServerAndCreateLambdaHandler(
+export const handler = startServerAndCreateLambdaHandler(
 	apolloServer,
 	handlers.createAPIGatewayProxyEventV2RequestHandler(),
 	{ context: graphqlContext },

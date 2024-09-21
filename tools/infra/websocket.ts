@@ -11,7 +11,7 @@ export const constructWebsocketAPI = () => {
 	});
 
 	const socket = new sst.aws.Function('socket', {
-		handler: 'api/functions/socket',
+		handler: 'api/functions/socket.handler',
 		...defaultLambdaConfigs($app.stage),
 	});
 

@@ -11,7 +11,8 @@ export const constructAPI = () => {
 	});
 
 	const graphql = new sst.aws.Function('graphql', {
-		handler: 'api/functions/graphql',
+		handler: 'api/functions/graphql.handler',
+		copyFiles: [{ from: 'api/schema.graphql', to: 'schema.graphql' }],
 		...defaultLambdaConfigs($app.stage),
 	});
 
