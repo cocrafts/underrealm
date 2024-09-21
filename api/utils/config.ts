@@ -5,6 +5,7 @@ interface Configs {
 	PORT: number;
 	IS_LAMBDA: boolean;
 	MONGO_URI: string;
+	REDIS_URI: string;
 }
 
 const defaultConfigs: Configs = {
@@ -14,6 +15,7 @@ const defaultConfigs: Configs = {
 	PORT: 3005,
 	IS_LAMBDA: false,
 	MONGO_URI: 'mongodb://localhost:27017/underrealm',
+	REDIS_URI: 'redis://localhost',
 };
 
 export let configs: Configs = {

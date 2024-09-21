@@ -6,7 +6,7 @@ import { graphqlContext } from 'utils/runtime';
 
 import './models';
 
-import { apolloServer } from './apollo';
+import { apolloServer } from '../apollo';
 
 export default startServerAndCreateLambdaHandler(
 	apolloServer,

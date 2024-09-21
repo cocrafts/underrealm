@@ -11,7 +11,7 @@ const greeting: QueryResolvers['greeting'] = async (root, args, { user }) => {
 	return `Welcome ${userId}!`;
 };
 
-export { GameSubscription } from './subscription';
+export { GameSubscriptionResolvers } from './subscription';
 
 export const GameQueryResolvers = {
 	greeting,

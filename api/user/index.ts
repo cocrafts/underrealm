@@ -1,10 +1,12 @@
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
+import { pubsub, topicGenerator } from 'utils/pubsub';
 import { generateRandomCode } from 'utils/referral';
 import type {
 	Profile,
 	QueryResolvers,
 	ReferralHistoryResolvers,
+	SubscriptionResolvers,
 } from 'utils/types';
 
 const REFERRAL_CODE_LENGTH = 7;
@@ -49,4 +51,12 @@ const mapUserToProfile = (user: Partial<IUser>): Profile => {
 		avatarUrl: user.avatarUrl,
 		referralCode: user.referralCode,
 	};
+};
+
+const counterIncreased: SubscriptionResolvers['counterIncreased'] = {
+	subscribe: () => pubsub.asyncIterator(topicGenerator.counterIncreased()),
+};
+
+export const UserSubscriptionResolvers = {
+	counterIncreased,
 };

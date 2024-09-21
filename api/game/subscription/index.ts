@@ -13,7 +13,7 @@ const matchFound: SubscriptionResolvers['matchFound'] = {
 	subscribe: subscribe(topicGenerator.matchFound) as never,
 };
 
-export const GameSubscription = {
+export const GameSubscriptionResolvers = {
 	gameInvitation,
 	matchFind,
 	matchFound,

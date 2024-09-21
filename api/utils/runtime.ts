@@ -1,17 +1,17 @@
 import type { ContextFunction } from '@apollo/server';
-import { getItem } from 'aws/dynamo';
-import { getParameter } from 'aws/parameter';
 import jwt from 'jsonwebtoken';
+import { getItem } from 'utils/aws/dynamo';
+import { getParameter } from 'utils/aws/parameter';
 
 import { configs } from './config';
 import { ClientError } from './errors';
 import type { ClientProfile, UserProfile } from './internal';
 import { cognitoToProfile, verifyAsync } from './internal';
 
-export interface ApiContext {
+export type ApiContext = {
 	user: UserProfile;
 	client: ClientProfile;
-}
+};
 
 export const graphqlContext: ContextFunction<unknown[], ApiContext> = async ({
 	event,
