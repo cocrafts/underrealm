@@ -4,7 +4,8 @@
 
 .idea
 .vscode
-.yarn
+!.yarn/patches
+.yarn/install-state.gz
 .turbo
 
 dist/
@@ -37,3 +38,5 @@ game/native
 
 jwk.json
 *.log
+
+sst-env.d.ts

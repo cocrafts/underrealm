@@ -123,10 +123,13 @@ export enum MetacraftGames {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptGame?: Maybe<Scalars['Boolean']['output']>;
+  createQuest?: Maybe<Quest>;
   createQuestAction?: Maybe<QuestAction>;
+  deleteQuest?: Maybe<Scalars['Boolean']['output']>;
   inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
   stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
+  updateQuest?: Maybe<Quest>;
 };
 
 
@@ -135,8 +138,22 @@ export type MutationAcceptGameArgs = {
 };
 
 
+export type MutationCreateQuestArgs = {
+  description: Scalars['String']['input'];
+  points: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+  url?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationCreateQuestActionArgs = {
   questId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteQuestArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -149,6 +166,11 @@ export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateQuestArgs = {
+  id: Scalars['ID']['input'];
+  status: Scalars['String']['input'];
+};
 
 export type Profile = {
   __typename?: 'Profile';
@@ -242,11 +264,11 @@ export enum QuestStatus {
 }
 
 export enum QuestType {
-    CommentX = 'COMMENT_X',
-    JoinDiscord = 'JOIN_DISCORD',
-    LikeX = 'LIKE_X',
-    RetweetX = 'RETWEET_X'
-  }
+  CommentX = 'COMMENT_X',
+  JoinDiscord = 'JOIN_DISCORD',
+  LikeX = 'LIKE_X',
+  RetweetX = 'RETWEET_X'
+}
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
@@ -260,6 +282,7 @@ export type ReferralHistory = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  counterIncreased: Scalars['Int']['output'];
   gameInvitation?: Maybe<GameInvitation>;
   matchFind?: Maybe<CardDuel>;
   matchFound?: Maybe<CardDuel>;
@@ -311,19 +334,19 @@ export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAc
 export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null } } | null> | null };
+export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null } } | null> | null };
 
 export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
@@ -358,6 +381,25 @@ export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null> | null };
+
+export type CounterIncreasedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CounterIncreasedSubscription = { __typename?: 'Subscription', counterIncreased: number };
+
+export type GameInvitationSubscriptionVariables = Exact<{
+  opponent: Scalars['String']['input'];
+}>;
+
+
+export type GameInvitationSubscription = { __typename?: 'Subscription', gameInvitation?: { __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', address?: string | null, avatarUrl?: string | null, name?: string | null } } | null };
+
+export type MatchFindSubscriptionVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type MatchFindSubscription = { __typename?: 'Subscription', matchFind?: { __typename?: 'CardDuel', id?: string | null } | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
@@ -890,3 +932,96 @@ export type QuestActionsQueryHookResult = ReturnType<typeof useQuestActionsQuery
 export type QuestActionsLazyQueryHookResult = ReturnType<typeof useQuestActionsLazyQuery>;
 export type QuestActionsSuspenseQueryHookResult = ReturnType<typeof useQuestActionsSuspenseQuery>;
 export type QuestActionsQueryResult = Apollo.QueryResult<QuestActionsQuery, QuestActionsQueryVariables>;
+export const CounterIncreasedDocument = gql`
+    subscription CounterIncreased {
+  counterIncreased
+}
+    `;
+
+/**
+ * __useCounterIncreasedSubscription__
+ *
+ * To run a query within a React component, call `useCounterIncreasedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCounterIncreasedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCounterIncreasedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCounterIncreasedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CounterIncreasedSubscription, CounterIncreasedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<CounterIncreasedSubscription, CounterIncreasedSubscriptionVariables>(CounterIncreasedDocument, options);
+      }
+export type CounterIncreasedSubscriptionHookResult = ReturnType<typeof useCounterIncreasedSubscription>;
+export type CounterIncreasedSubscriptionResult = Apollo.SubscriptionResult<CounterIncreasedSubscription>;
+export const GameInvitationDocument = gql`
+    subscription GameInvitation($opponent: String!) {
+  gameInvitation(opponent: $opponent) {
+    id
+    game
+    owner {
+      address
+      avatarUrl
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGameInvitationSubscription__
+ *
+ * To run a query within a React component, call `useGameInvitationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGameInvitationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGameInvitationSubscription({
+ *   variables: {
+ *      opponent: // value for 'opponent'
+ *   },
+ * });
+ */
+export function useGameInvitationSubscription(baseOptions: Apollo.SubscriptionHookOptions<GameInvitationSubscription, GameInvitationSubscriptionVariables> & ({ variables: GameInvitationSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GameInvitationSubscription, GameInvitationSubscriptionVariables>(GameInvitationDocument, options);
+      }
+export type GameInvitationSubscriptionHookResult = ReturnType<typeof useGameInvitationSubscription>;
+export type GameInvitationSubscriptionResult = Apollo.SubscriptionResult<GameInvitationSubscription>;
+export const MatchFindDocument = gql`
+    subscription MatchFind($userId: String) {
+  matchFind(game: MURG, userId: $userId) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useMatchFindSubscription__
+ *
+ * To run a query within a React component, call `useMatchFindSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMatchFindSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMatchFindSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useMatchFindSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MatchFindSubscription, MatchFindSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MatchFindSubscription, MatchFindSubscriptionVariables>(MatchFindDocument, options);
+      }
+export type MatchFindSubscriptionHookResult = ReturnType<typeof useMatchFindSubscription>;
+export type MatchFindSubscriptionResult = Apollo.SubscriptionResult<MatchFindSubscription>;
