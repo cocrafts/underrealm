@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 interface Configs {
 	REGION: string;
 	SERVICE_NAME: string;

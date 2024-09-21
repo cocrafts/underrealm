@@ -4,7 +4,7 @@ import {
 	PutCommand,
 	UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { chunk } from 'utils/array';
+import { chunk } from 'utils/common';
 
 import type { Attributes, ItemPair, RequestWrapper } from './internal';
 import {

@@ -16,7 +16,7 @@ import {
 	GameSubscriptionResolvers,
 } from './game';
 import { SocialMutationResolvers, SocialQueryResolvers } from './social';
-import { UserQueryResolver, UserSubscriptionResolvers } from './user';
+import { UserQueryResolvers, UserSubscriptionResolvers } from './user';
 
 const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
 
@@ -24,7 +24,7 @@ const resolvers: Resolvers = {
 	Query: {
 		...GameQueryResolvers,
 		...SocialQueryResolvers,
-		...UserQueryResolver,
+		...UserQueryResolvers,
 	},
 	Mutation: {
 		...GameMutationResolvers,

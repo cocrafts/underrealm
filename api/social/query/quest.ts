@@ -21,7 +21,7 @@ export const questActions: QueryResolvers['questActions'] = async (
 	{},
 	context,
 ) => {
-	const userId = context.user.id;
+	const userId = context.user.bindingId;
 	return await QuestAction.find<QuestActionType>({ userId });
 };
 

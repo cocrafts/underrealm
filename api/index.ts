@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import 'utils/loadEnv';
-
 logger.info('Underrealm API is running...');
 
 import { createServer } from 'http';
@@ -13,8 +11,8 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import mongoose from 'mongoose';
 import { ApolloServerPluginDrainWsServer } from 'utils/apollo';
 import { configs } from 'utils/config';
+import { graphqlContext as context } from 'utils/context';
 import { logger } from 'utils/logger';
-import { graphqlContext as context } from 'utils/runtime';
 import { WebSocketServer } from 'ws';
 
 import './models';

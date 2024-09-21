@@ -16,7 +16,7 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	context,
 ) => {
 	try {
-		const userId = context.user.id;
+		const userId = context.user.bindingId;
 		const quest = await Quest.findById(questId);
 		const claimedPoints = quest.points;
 

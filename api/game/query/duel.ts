@@ -8,7 +8,7 @@ export const cardDuelHistory: QueryResolvers['cardDuelHistory'] = async (
 ) => {
 	const { Items: duels } = await rangeQuery(
 		'gsi',
-		`profile#${user.id}`,
+		`profile#${user.bindingId}`,
 		'duelHistory#',
 		{ Limit: limit || 1, ScanIndexForward: false },
 	);

@@ -2,8 +2,8 @@ import {
 	handlers,
 	startServerAndCreateLambdaHandler,
 } from '@as-integrations/aws-lambda';
+import { graphqlContext } from 'utils/context';
 import { logger } from 'utils/logger';
-import { graphqlContext } from 'utils/runtime';
 
 import '../models';
 

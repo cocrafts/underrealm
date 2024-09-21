@@ -6,7 +6,7 @@ export const referralHistory: QueryResolvers['referralHistory'] = async (
 	_,
 	{ user },
 ) => {
-	const referrals = await Referral.find({ referrerId: user.id });
+	const referrals = await Referral.find({ referrerId: user.bindingId });
 
 	return referrals.map((ref) => ({
 		id: ref.id,

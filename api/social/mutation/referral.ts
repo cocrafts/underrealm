@@ -16,7 +16,7 @@ export const makeReferral: MutationResolvers['makeReferral'] = async (
 
 	const existReferral = await Referral.findOne({
 		referrerId: referrer.id,
-		refereeId: user.id,
+		refereeId: user.bindingId,
 	});
 	if (existReferral.id) {
 		throw new ClientError(
@@ -32,7 +32,7 @@ export const makeReferral: MutationResolvers['makeReferral'] = async (
 		[
 			{
 				referrerId: referrer.id,
-				refereeId: user.id,
+				refereeId: user.bindingId,
 				claimedPoints: referralPoints,
 			},
 		],

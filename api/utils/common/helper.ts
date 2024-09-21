@@ -1,5 +1,5 @@
-import { ForbiddenError } from './errors';
-import type { UserProfile } from './internal';
+import type { UserProfile } from '../context';
+import { ForbiddenError } from '../errors';
 
 export const requireAuthentication = (
 	user: UserProfile,
