@@ -11,13 +11,10 @@ import { generateRandomCode } from 'utils/referral';
 const REFERRAL_CODE_LENGTH = 7;
 
 const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
-	const existUser = await User.findOne({ bindingId: user.id });
-	const populatedUser = await existUser.populate<Profile>('questActions');
-
-	logger.info(populatedUser);
+	const existUser = await User.findOne<IUser>({ bindingId: user.id });
 
 	if (existUser) {
-		return mapUserToProfile(populatedUser);
+		return mapUserToProfile(existUser);
 	}
 
 	const newUser = await User.create({
@@ -55,6 +52,5 @@ const mapUserToProfile = (user: Partial<IUser>): Profile => {
 		avatarUrl: user.avatarUrl,
 		referralCode: user.referralCode,
 		points: user.points,
-		questActions: user.questActions,
 	};
 };

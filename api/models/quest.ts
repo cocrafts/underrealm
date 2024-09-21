@@ -15,22 +15,16 @@ const questSchema = createSchema({
 	},
 	url: String,
 	points: Number,
-	questActions: [
-		{
-			type: Types.ObjectId,
-			ref: 'QuestAction',
-		},
-	],
 });
 
 export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
-	quest: { type: Types.ObjectId, ref: 'Quest' },
-	user: { type: 'string', ref: 'User' },
+	questId: { type: Types.ObjectId, ref: 'Quest' },
+	userId: { type: 'string', ref: 'User' },
 	claimedPoints: Number,
 });
 
-questActionSchema.index({ quest: 1, user: 1 }, { unique: true });
+questActionSchema.index({ questId: 1, userId: 1 }, { unique: true });
 
 export const QuestAction = model('QuestAction', questActionSchema);

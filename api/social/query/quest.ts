@@ -1,9 +1,11 @@
 import { Quest, QuestAction } from 'models/quest';
-import type {
-	QueryResolvers,
-	Quest as QuestType,
-	QuestAction as QuestActionType,
+import {
+	type QueryResolvers,
+	type Quest as QuestType,
+	type QuestAction as QuestActionType,
+	QuestStatus,
 } from 'types/graphql';
+import { logger } from 'utils/logger';
 
 export const quest: QueryResolvers['quest'] = async (
 	_,
@@ -22,16 +24,49 @@ export const questActions: QueryResolvers['questActions'] = async (
 	context,
 ) => {
 	const userId = context.user.id;
-	return await QuestAction.find<QuestActionType>({ user: userId });
+	return await QuestAction.find<QuestActionType>({ userId });
 };
 
 export const quests: QueryResolvers['quests'] = async (_, { status }) => {
 	const query = status ? { status } : { status: 'LIVE' };
-	const questList = await Quest.find(query);
+	return await Quest.find(query);
+};
 
-	const populatedActiveQuests = await Promise.all(
-		questList.map((quest) => quest.populate<QuestType>('questActions')),
-	);
+export const questsWithAction: QueryResolvers['questsWithAction'] = async (
+	_,
+	{ status },
+	{ user },
+) => {
+	logger.info('user id', user);
 
-	return populatedActiveQuests;
+	const result = await Quest.aggregate([
+		{
+			$match: {
+				$expr: { $eq: ['$status', status || QuestStatus.Live] },
+			},
+		},
+		{
+			$lookup: {
+				from: 'questactions',
+				let: { questId: '$_id' },
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$and: [
+									{ $eq: ['$$questId', '$questId'] },
+									{ $eq: ['$userId', user.id] },
+								],
+							},
+						},
+					},
+				],
+				as: 'questAction',
+			},
+		},
+	]);
+
+	logger.info('hi', result);
+
+	return result;
 };

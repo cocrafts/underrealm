@@ -9,12 +9,6 @@ export const profileFields = gql`
 		githubUrl
 		mineral
 		points
-		questActions {
-			user
-			quest
-			id
-			claimedPoints
-		}
 	}
 `;
 

@@ -1,5 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { logger } from 'utils/logger';
+
+export const ObjectId = Types.ObjectId;
 
 mongoose.connection.on('connected', () => {
 	logger.info('MongoDB connected');

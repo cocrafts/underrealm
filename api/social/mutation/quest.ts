@@ -14,11 +14,6 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 		const quest = await Quest.findById(questId);
 		const claimedPoints = quest.points;
 
-		const profile = await User.findOneAndUpdate(
-			{ bindingId: userId },
-			{ $inc: { points: claimedPoints } },
-		);
-
 		const questAction = await QuestActionModel.create({
 			quest: questId,
 			user: userId,
@@ -26,11 +21,10 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 			createdAt: new Date(),
 		});
 
-		quest.questActions.push(questAction);
-		profile.questActions.push(questAction);
-
-		await quest.save();
-		await profile.save();
+		await User.updateOne(
+			{ bindingId: userId },
+			{ $inc: { points: claimedPoints } },
+		);
 
 		return questAction;
 	} catch (err) {

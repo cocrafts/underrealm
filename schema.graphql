@@ -93,13 +93,10 @@ enum MetacraftGames {
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
-  createQuest(description: String!, points: Int!, title: String!, type: String!, url: String): Quest
   createQuestAction(questId: ID!): QuestAction
-  deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
   makeReferral(referralCode: String!): Boolean
   stopMatchFind: Boolean
-  updateQuest(id: ID!, status: String!): Quest
 }
 
 type Profile {
@@ -130,6 +127,7 @@ type Query {
   quest(id: ID!): Quest
   questActions: [QuestAction]
   quests(status: QuestStatus): [Quest]
+  questsWithAction(status: QuestStatus): [QuestWithAction]
   referralHistory: [ReferralHistory]
 }
 
@@ -138,7 +136,6 @@ type Quest {
   description: String!
   id: ID!
   points: Int!
-  questActions: [QuestAction]
   status: QuestStatus!
   title: String!
   type: QuestType!
@@ -149,8 +146,8 @@ type QuestAction {
   claimedPoints: Int!
   createdAt: DateTime!
   id: ID!
-  quest: ID!
-  user: String!
+  questId: ID!
+  userId: String!
 }
 
 enum QuestStatus {
@@ -164,6 +161,18 @@ enum QuestType {
   JOIN_DISCORD
   LIKE_X
   RETWEET_X
+}
+
+type QuestWithAction {
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  points: Int!
+  questAction: QuestAction
+  status: QuestStatus!
+  title: String!
+  type: QuestType!
+  url: String!
 }
 
 type ReferralHistory {

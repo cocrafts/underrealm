@@ -10,10 +10,24 @@ export const quests = gql`
 			url
 			status
 			points
-			questActions {
-				user
-				quest
+		}
+	}
+`;
+
+export const questsWithAction = gql`
+	query QuestsWithAction($status: QuestStatus = LIVE) {
+		questsWithAction(status: $status) {
+			id
+			title
+			description
+			type
+			url
+			status
+			points
+			questAction {
 				id
+				userId
+				questId
 				claimedPoints
 			}
 		}
@@ -30,12 +44,6 @@ export const questById = gql`
 			url
 			status
 			points
-			questActions {
-				user
-				quest
-				id
-				claimedPoints
-			}
 		}
 	}
 `;
@@ -44,8 +52,8 @@ export const questActions = gql`
 	query QuestActions {
 		questActions {
 			id
-			user
-			quest
+			userId
+			questId
 			claimedPoints
 		}
 	}

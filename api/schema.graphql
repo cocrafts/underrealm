@@ -11,6 +11,7 @@ type Query {
   quests(status: QuestStatus): [Quest]
   quest(id: ID!): Quest
 	questActions: [QuestAction]
+  questsWithAction(status: QuestStatus): [QuestWithAction]
   referralHistory: [ReferralHistory]
 }
 
@@ -158,13 +159,24 @@ type Quest {
 	url: String!
 	points: Int!
   createdAt: DateTime!
-  questActions: [QuestAction]
+}
+
+type QuestWithAction {
+  id: ID!
+  title: String!
+	description: String!
+	type: QuestType!
+	status: QuestStatus!
+	url: String!
+	points: Int!
+  createdAt: DateTime!
+  questAction: QuestAction
 }
 
 type QuestAction {
   id: ID!
-	quest: ID!
-	user: String!
+	questId: ID!
+	userId: String!
   claimedPoints: Int!
   createdAt: DateTime!
 }
