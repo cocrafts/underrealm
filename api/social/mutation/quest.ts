@@ -15,8 +15,8 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 		const claimedPoints = quest.points;
 
 		const questAction = await QuestActionModel.create({
-			quest: questId,
-			user: userId,
+			questId,
+			userId,
 			claimedPoints,
 			createdAt: new Date(),
 		});

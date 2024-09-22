@@ -28,7 +28,7 @@ export const questActions: QueryResolvers['questActions'] = async (
 };
 
 export const quests: QueryResolvers['quests'] = async (_, { status }) => {
-	const query = status ? { status } : { status: 'LIVE' };
+	const query = status ? { status } : { status: QuestStatus.Live };
 	return await Quest.find(query);
 };
 
@@ -37,31 +37,41 @@ export const questsWithAction: QueryResolvers['questsWithAction'] = async (
 	{ status },
 	{ user },
 ) => {
-	logger.info('user id', user);
-
 	const result = await Quest.aggregate([
 		{
 			$match: {
-				$expr: { $eq: ['$status', status || QuestStatus.Live] },
+				status: status || QuestStatus.Live,
 			},
 		},
 		{
 			$lookup: {
 				from: 'questactions',
-				let: { questId: '$_id' },
+				let: { questId: '$_id' as string },
 				pipeline: [
 					{
 						$match: {
 							$expr: {
 								$and: [
 									{ $eq: ['$$questId', '$questId'] },
-									{ $eq: ['$userId', user.id] },
+									{ $eq: ['$userId', 'Google_110672144832710721216'] },
 								],
 							},
 						},
 					},
+					{ $limit: 1 },
 				],
 				as: 'questAction',
+			},
+		},
+		{
+			$addFields: {
+				questAction: { $arrayElemAt: ['$questAction', 0] },
+			},
+		},
+		{
+			$project: {
+				// questAction: 1,
+				_id: 1,
 			},
 		},
 	]);
