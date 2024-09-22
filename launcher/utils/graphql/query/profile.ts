@@ -16,6 +16,7 @@ export const profile = gql`
 	query Profile {
 		profile {
 			...ProfileFields
+			referralCode
 		}
 	}
 `;
