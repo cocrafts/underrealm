@@ -5,7 +5,6 @@ import type {
 	QueryResolvers,
 	ReferralHistoryResolvers,
 } from 'types/graphql';
-import { logger } from 'utils/logger';
 import { generateRandomCode } from 'utils/referral';
 
 const REFERRAL_CODE_LENGTH = 7;
@@ -25,7 +24,6 @@ const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 		avatarUrl: user.avatarUrl,
 		referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 		points: 0,
-		questActions: [],
 	});
 
 	return mapUserToProfile(newUser);
