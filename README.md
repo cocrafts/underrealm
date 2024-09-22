@@ -137,6 +137,14 @@ Each time having any change, you just need to rebuild to apply change (no need t
 yarn build
 ```
 
+## Deployment
+
+We're using [SST v3](https://sst.dev/), install the CLI globally
+
+```
+curl -fsSL https://sst.dev/install | bash
+```
+
 ## Core engine
 
 ![](assets/demo.png)

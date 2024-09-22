@@ -1,11 +1,5 @@
 {
-  "extends": "@metacraft/tsconfig/application.json",
-  "include": ["**/*.d.ts"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
     "esModuleInterop": true
   }
 }

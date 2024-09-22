@@ -1,9 +1,8 @@
-import { syncProfile, walletSignIn } from './authentication';
+import { syncProfile } from './profile';
 import { setForceConnect, showConnectWallet } from './wallet';
 
 export const accountActions = {
 	syncProfile,
-	walletSignIn,
 	setForceConnect,
 	showConnectWallet,
 };

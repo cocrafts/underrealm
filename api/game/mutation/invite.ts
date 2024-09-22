@@ -1,7 +1,7 @@
-import { getItem, putItem } from 'aws/dynamo';
-import { publish, topicGenerator } from 'aws/pubsub';
-import type { GameInvitation, MutationResolvers } from 'types/graphql';
-import { nanoId } from 'utils/uuid';
+import { getItem, putItem } from 'utils/aws/dynamo';
+import { publish, topicGenerator } from 'utils/aws/pubsub';
+import { nanoId } from 'utils/common';
+import type { GameInvitation, MutationResolvers } from 'utils/types';
 
 import type { GameInvitationRecord } from '../types';
 
@@ -15,7 +15,7 @@ export const inviteGame: MutationResolvers['inviteGame'] = async (
 	const inviteId = nanoId();
 	const invitePrimary = `gameInvitation#${inviteId}`;
 	const inviteRange = `gameInvitation#${new Date().toISOString()}`;
-	const { Item: ownerRec } = await getItem(`profile#${user.id}`);
+	const { Item: ownerRec } = await getItem(`profile#${user.bindingId}`);
 	const { Item: opponentRec } = await getItem(`profile#${opponent}`);
 
 	const inviteRecord: GameInvitationRecord = {
@@ -23,7 +23,7 @@ export const inviteGame: MutationResolvers['inviteGame'] = async (
 		sk: invitePrimary,
 		gsi: `profile#${opponent}`,
 		gsr: inviteRange,
-		gti: `profile#${user.id}`,
+		gti: `profile#${user.bindingId}`,
 		gtr: inviteRange,
 		id: invitePrimary,
 		type: 'GameInvitation',

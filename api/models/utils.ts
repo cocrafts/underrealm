@@ -1,4 +1,4 @@
-import type { Types } from 'mongoose';
+import type { SchemaDefinition } from 'mongoose';
 import { Schema } from 'mongoose';
 
 /**
@@ -6,19 +6,16 @@ import { Schema } from 'mongoose';
  * - virtual `id` from default `_id objectId` for GraphQL field compatibility
  * - auto `timestamps` on creating or updating
  */
-export const createSchema = <Definition extends {}, Options>(
+export const createSchema = <Definition extends SchemaDefinition, Options>(
 	definition: Definition,
 	options?: Options,
 ) => {
 	const schema = new Schema(definition, {
+		id: true,
 		toJSON: { virtuals: true },
 		toObject: { virtuals: true },
 		timestamps: true,
 		...options,
-	});
-
-	schema.virtual('id').get(function () {
-		return (this._id as Types.ObjectId).toHexString();
 	});
 
 	return schema;

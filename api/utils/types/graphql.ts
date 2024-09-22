@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { ApiContext } from '../utils/runtime';
+import { ApiContext } from '../runtime';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -282,6 +282,7 @@ export type ReferralHistory = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  counterIncreased: Scalars['Int']['output'];
   gameInvitation?: Maybe<GameInvitation>;
   matchFind?: Maybe<CardDuel>;
   matchFound?: Maybe<CardDuel>;
@@ -608,6 +609,7 @@ export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extend
 }>;
 
 export type SubscriptionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  counterIncreased?: SubscriptionResolver<ResolversTypes['Int'], "counterIncreased", ParentType, ContextType>;
   gameInvitation?: SubscriptionResolver<Maybe<ResolversTypes['GameInvitation']>, "gameInvitation", ParentType, ContextType, RequireFields<SubscriptionGameInvitationArgs, 'opponent'>>;
   matchFind?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "matchFind", ParentType, ContextType, RequireFields<SubscriptionMatchFindArgs, 'game'>>;
   matchFound?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "matchFound", ParentType, ContextType, RequireFields<SubscriptionMatchFoundArgs, 'game'>>;
