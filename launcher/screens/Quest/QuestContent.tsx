@@ -46,16 +46,18 @@ const QuestContent: FC = () => {
 
 			{loading ? (
 				<ActivityIndicator />
-			) : error ? (
-				<View>
-					<Text>{error.message}</Text>
-				</View>
 			) : tab === TabId.QUEST ? (
-				<View style={styles.quests}>
-					{data.quests.map((quest) => {
-						return <QuestItem key={quest.id} quest={quest} />;
-					})}
-				</View>
+				error ? (
+					<View>
+						<Text>{error.message}</Text>
+					</View>
+				) : (
+					<View style={styles.quests}>
+						{data.quests.map((quest) => {
+							return <QuestItem key={quest.id} quest={quest} />;
+						})}
+					</View>
+				)
 			) : (
 				<ReferralSection />
 			)}

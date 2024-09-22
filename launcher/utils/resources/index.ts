@@ -268,7 +268,10 @@ export default {
 		twitter: require('../../../assets/quest/twitter.png'),
 		referral: {
 			backgroundMain: require('../../../assets/referral/main-bg.png'),
+			backgroundSmall: require('../../../assets/referral/main-bg-xs.png'),
 			uCoin: require('../../../assets/u-coin.png'),
+			chest: require('../../../assets/referral/chest.png'),
+			guideLg: require('../../../assets/referral/guide-lg.png'),
 		},
 	},
 };
