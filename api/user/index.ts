@@ -23,7 +23,9 @@ export const UserQueryResolvers = {
 export const UserMutationResolvers = {};
 
 const counterIncreased: SubscriptionResolvers['counterIncreased'] = {
-	subscribe: () => pubsub.asyncIterator(topicGenerator.counterIncreased()),
+	subscribe: async () => {
+		return await pubsub.subscribe(topicGenerator.counterIncreased());
+	},
 };
 
 export const UserSubscriptionResolvers = {

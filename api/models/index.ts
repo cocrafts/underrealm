@@ -1,4 +1,5 @@
 import mongoose, { Types } from 'mongoose';
+import { configs } from 'utils/config';
 import { logger } from 'utils/logger';
 
 export const ObjectId = Types.ObjectId;
@@ -22,3 +23,9 @@ mongoose.connection.on('disconnecting', () => {
 mongoose.connection.on('close', () => {
 	logger.warn('MongoDB close');
 });
+
+export const mongo = {
+	connect: async () => {
+		await mongoose.connect(configs.MONGO_URI);
+	},
+};

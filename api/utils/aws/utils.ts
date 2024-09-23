@@ -21,3 +21,13 @@ export const userTable = `metacraft-user${resourceSuffix}`;
 export const getInvokeFunctionName = (name: string) => {
 	return `${configs.SERVICE_NAME}-${configs.STAGE}-${name}`;
 };
+
+const domainAliases = {
+	production: ' ',
+	staging: 'staging',
+	development: 'dev',
+};
+
+const stagedDomain = (domainAliases[configs.STAGE] || configs.STAGE).trim();
+const domain = [stagedDomain, 'ws.underrealm.io'].join('.');
+export const wsEndpoint = `https://${domain}`;

@@ -1,27 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { PubSubEngine } from 'graphql-subscriptions';
+import { postToConnection } from 'utils/aws/gateway';
+import { globalContext } from 'utils/context/index.lambda';
+import { logger } from 'utils/logger';
+import { redis } from 'utils/redis';
 
 export * from './utils';
 
-export class LambdaPubsub implements PubSubEngine {
-	public asyncIterator<T>(triggers: string | string[]): AsyncIterable<T> {
-		console.log(triggers);
-		return {} as never;
-	}
+logger.info('Use Lambda Pubsub');
 
-	public async publish(triggerName: string, payload: any): Promise<void> {
-		console.log(triggerName, payload);
-	}
+const registerTopic = async (topic: string, connectionId: string) => {
+	const topicKey = `pubsub:topic#${topic}`;
+	await redis.SADD(topicKey, connectionId);
+	await redis.EXPIRE(topicKey, 60 * 60 * 24);
+	const connectionKey = `pubsub:connection#${connectionId}`;
+	await redis.SADD(connectionKey, topicKey);
+};
 
-	public async subscribe(
-		triggerName: string,
-		onMessage: (...args: any[]) => void,
-	): Promise<number> {
-		console.log(triggerName, onMessage);
-		return 0;
-	}
+export const pubsub = {
+	subscribe: async (topics: string | string[]) => {
+		const connectionId = globalContext.connectionId;
+		if (typeof topics === 'string') {
+			await registerTopic(topics, connectionId);
+		} else {
+			const registerPromises = topics.map(async (topic) => {
+				await registerTopic(topic, globalContext.connectionId);
+			});
 
-	public unsubscribe(subId: number) {
-		console.log(subId);
-	}
-}
+			await Promise.all(registerPromises);
+		}
+	},
+	publish: async (topic: string, payload: any) => {
+		const connectionIds = await redis.SMEMBERS(topic);
+
+		const sendPromises = connectionIds.map(async (cid) => {
+			return await postToConnection(cid, payload);
+		});
+
+		await Promise.all(sendPromises);
+	},
+};
