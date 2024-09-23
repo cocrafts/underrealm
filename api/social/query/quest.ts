@@ -1,4 +1,5 @@
 import { Quest } from 'models/quest';
+import { virtualId } from 'models/utils';
 import { type QueryResolvers, QuestStatus } from 'utils/types';
 
 export const quests: QueryResolvers['questsWithAction'] = async (
@@ -7,11 +8,9 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 	{ user },
 ) => {
 	// TODO: this aggregate should follow resolver chains
-	const quests = await Quest.aggregate([
+	let quests = await Quest.aggregate([
 		{
-			$match: {
-				status: status || QuestStatus.Live,
-			},
+			$match: { status: status || QuestStatus.Live },
 		},
 		{
 			$lookup: {
@@ -33,27 +32,14 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 				as: 'questAction',
 			},
 		},
-		{
-			$addFields: {
-				action: { $arrayElemAt: ['$questAction', 0] },
-			},
-		},
-		{
-			$addFields: {
-				action: { $ifNull: ['$questAction', null] },
-			},
-		},
+		{ $addFields: { action: { $arrayElemAt: ['$questAction', 0] } } },
+		{ $addFields: { action: { $ifNull: ['$questAction', null] } } },
 	]);
 
-	console.log(quests);
-
-	const result = quests.map((quest) => {
-		return {
-			...quest,
-			id: quest._id,
-			action: quest.action ? { ...quest.action, id: quest.action._id } : null,
-		};
+	quests = quests.map((quest) => {
+		const action = quest?.action?.length > 0 ? quest.action[0] : null;
+		return { ...virtualId(quest), action: virtualId(action) };
 	});
 
-	return result;
+	return quests;
 };

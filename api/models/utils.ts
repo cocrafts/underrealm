@@ -1,4 +1,4 @@
-import type { SchemaDefinition } from 'mongoose';
+import type { SchemaDefinition, Types } from 'mongoose';
 import { Schema } from 'mongoose';
 
 /**
@@ -18,5 +18,15 @@ export const createSchema = <Definition extends SchemaDefinition, Options>(
 		...options,
 	});
 
+	schema.virtual('id').get(function () {
+		return (this._id as Types.ObjectId).toHexString();
+	});
+
 	return schema;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const virtualId = (obj: any) => {
+	if (!obj) return null;
+	return { id: obj._id, ...obj };
 };
