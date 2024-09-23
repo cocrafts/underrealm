@@ -124,10 +124,7 @@ type Query {
   gameJwt(duelId: String): String
   greeting: String
   profile(address: String): Profile
-  quest(id: ID!): Quest
-  questActions: [QuestAction]
   quests(status: QuestStatus): [Quest]
-  questsWithAction(status: QuestStatus): [QuestWithAction]
   referralHistory: [ReferralHistory]
 }
 
@@ -136,6 +133,7 @@ type Quest {
   description: String!
   id: ID!
   points: Int!
+  questAction: QuestAction
   status: QuestStatus!
   title: String!
   type: QuestType!
@@ -161,18 +159,6 @@ enum QuestType {
   JOIN_DISCORD
   LIKE_X
   RETWEET_X
-}
-
-type QuestWithAction {
-  createdAt: DateTime!
-  description: String!
-  id: ID!
-  points: Int!
-  questAction: QuestAction
-  status: QuestStatus!
-  title: String!
-  type: QuestType!
-  url: String!
 }
 
 type ReferralHistory {
