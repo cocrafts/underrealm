@@ -40,5 +40,5 @@ app.use('/graphql', expressMiddleware(apollo, { context }));
 
 const port = configs.PORT;
 http.listen({ port }, () => {
-	logger.info(`🚀  Server ready at port ${port}`);
+	logger.info(`🚀 Server ready at port ${port}`);
 });
