@@ -1,6 +1,6 @@
 import { getItem, putItem } from 'utils/aws/dynamo';
-import { publish, topicGenerator } from 'utils/aws/pubsub';
 import { nanoId } from 'utils/common';
+import { pubsub, topicGenerator } from 'utils/pubsub';
 import type { GameInvitation, MutationResolvers } from 'utils/types';
 
 import type { GameInvitationRecord } from '../types';
@@ -38,7 +38,7 @@ export const inviteGame: MutationResolvers['inviteGame'] = async (
 	const inviteData = { gameInvitation: inviteRecord };
 
 	promises.push(putItem(inviteRecord));
-	promises.push(publish(inviteTopic, inviteData));
+	promises.push(pubsub.publish(inviteTopic, inviteData));
 
 	await Promise.all(promises);
 
