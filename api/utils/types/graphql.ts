@@ -158,6 +158,7 @@ export type Profile = {
   jwt?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
+  referred?: Maybe<ReferralHistory>;
 };
 
 export type Query = {
@@ -510,6 +511,7 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -1,5 +1,5 @@
 import { Referral } from 'models/referral';
-import type { QueryResolvers } from 'utils/types';
+import type { ProfileResolvers, QueryResolvers } from 'utils/types';
 
 export const referralHistory: QueryResolvers['referralHistory'] = async (
 	root,
@@ -15,4 +15,12 @@ export const referralHistory: QueryResolvers['referralHistory'] = async (
 		claimedPoints: ref.claimedPoints,
 		createdAt: new Date(ref.createdAt),
 	}));
+};
+
+export const referred: ProfileResolvers['referred'] = async (
+	root,
+	_,
+	{ user },
+) => {
+	return await Referral.findOne({ refereeId: user.id });
 };

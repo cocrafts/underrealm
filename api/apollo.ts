@@ -3,6 +3,8 @@ import { readFileSync } from 'fs';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { referred } from 'social/query/referral';
+import { refereeUser } from 'user';
 import { logger } from 'utils/logger';
 import type { Resolvers } from 'utils/types';
 
@@ -29,6 +31,12 @@ const resolvers: Resolvers = {
 	Subscription: {
 		...UserSubscriptionResolvers,
 		...GameSubscriptionResolvers,
+	},
+	Profile: {
+		referred,
+	},
+	ReferralHistory: {
+		refereeUser,
 	},
 };
 

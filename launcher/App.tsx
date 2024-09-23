@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client/react';
-import { Provider as MetacraftProvider } from '@metacraft/ui';
+import { modalActions, Provider as MetacraftProvider } from '@metacraft/ui';
 import type { WalletError } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 import {
@@ -9,6 +9,7 @@ import {
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
 import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
+import ReferralModal, { REFERRAL_MODAL_ID } from 'components/modals/Referral';
 import BrowserStack from 'stacks/Browser/Container';
 import { graphQlClient } from 'utils/graphql';
 import { clusterUrl } from 'utils/helper';
@@ -42,6 +43,16 @@ export const App: FC = () => {
 			stateActions.clearAll();
 		},
 	});
+
+	useEffect(() => {
+		if (profile.id && !profile.referred?.id) {
+			modalActions.show({
+				id: REFERRAL_MODAL_ID,
+				component: ReferralModal,
+				withoutMask: true,
+			});
+		}
+	}, [profile.id, profile.referred?.id]);
 
 	return (
 		<ApolloProvider client={graphQlClient}>

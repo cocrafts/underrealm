@@ -107,6 +107,7 @@ type Profile {
   jwt: String
   points: Int!
   referralCode: String!
+  referred: ReferralHistory
 }
 
 type Query {

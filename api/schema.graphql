@@ -38,6 +38,7 @@ type Profile {
   address: String
   jwt: String
   email: String
+  referred: ReferralHistory
   referralCode: String!
   points: Int!
 }
