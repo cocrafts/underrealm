@@ -1,3 +1,4 @@
+import { Referral } from 'models/referral';
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
 import type {
@@ -13,7 +14,7 @@ const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 	const existUser = await User.findOne({ bindingId: user.id });
 
 	if (existUser) {
-		return mapUserToProfile(existUser);
+		return await mapUserToProfile(existUser);
 	}
 
 	const newUser = await User.create({
@@ -25,7 +26,7 @@ const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
 		referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 	});
 
-	return mapUserToProfile(newUser);
+	return await mapUserToProfile(newUser);
 };
 
 export const refereeUser: ReferralHistoryResolvers['refereeUser'] = async ({
@@ -40,12 +41,15 @@ export const UserQueryResolver = {
 };
 export const UserMutationResolver = {};
 
-const mapUserToProfile = (user: Partial<IUser>): Profile => {
+const mapUserToProfile = async (user: Partial<IUser>): Promise<Profile> => {
+	const referredHistory = await Referral.findOne({ refereeId: user.bindingId });
+
 	return {
 		id: user.bindingId,
 		address: user.address,
 		name: user.name,
 		email: user.email,
+		isReferred: !!referredHistory,
 		avatarUrl: user.avatarUrl,
 		referralCode: user.referralCode,
 	};

@@ -51,6 +51,7 @@ type Profile {
   avatarUrl: String
   mineral: Float
   isOnline: Boolean
+  isReferred: Boolean
   referralCode: String!
 }
 

@@ -159,6 +159,7 @@ export type Profile = {
   githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   isOnline?: Maybe<Scalars['Boolean']['output']>;
+  isReferred?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral?: Maybe<Scalars['Float']['output']>;
@@ -307,6 +308,13 @@ export type CreateQuestActionMutationVariables = Exact<{
 
 
 export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null };
+
+export type MakeReferralMutationVariables = Exact<{
+  referralCode: Scalars['String']['input'];
+}>;
+
+
+export type MakeReferralMutation = { __typename?: 'Mutation', makeReferral?: boolean | null };
 
 export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -504,6 +512,37 @@ export function useCreateQuestActionMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateQuestActionMutationHookResult = ReturnType<typeof useCreateQuestActionMutation>;
 export type CreateQuestActionMutationResult = Apollo.MutationResult<CreateQuestActionMutation>;
 export type CreateQuestActionMutationOptions = Apollo.BaseMutationOptions<CreateQuestActionMutation, CreateQuestActionMutationVariables>;
+export const MakeReferralDocument = gql`
+    mutation MakeReferral($referralCode: String!) {
+  makeReferral(referralCode: $referralCode)
+}
+    `;
+export type MakeReferralMutationFn = Apollo.MutationFunction<MakeReferralMutation, MakeReferralMutationVariables>;
+
+/**
+ * __useMakeReferralMutation__
+ *
+ * To run a mutation, you first call `useMakeReferralMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeReferralMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [makeReferralMutation, { data, loading, error }] = useMakeReferralMutation({
+ *   variables: {
+ *      referralCode: // value for 'referralCode'
+ *   },
+ * });
+ */
+export function useMakeReferralMutation(baseOptions?: Apollo.MutationHookOptions<MakeReferralMutation, MakeReferralMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MakeReferralMutation, MakeReferralMutationVariables>(MakeReferralDocument, options);
+      }
+export type MakeReferralMutationHookResult = ReturnType<typeof useMakeReferralMutation>;
+export type MakeReferralMutationResult = Apollo.MutationResult<MakeReferralMutation>;
+export type MakeReferralMutationOptions = Apollo.BaseMutationOptions<MakeReferralMutation, MakeReferralMutationVariables>;
 export const GameInvitationsDocument = gql`
     query GameInvitations {
   gameInvitations {
