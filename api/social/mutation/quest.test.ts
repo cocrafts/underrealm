@@ -1,14 +1,19 @@
+import { Quest } from 'models/quest';
+import { User } from 'models/user';
 import { Types } from 'mongoose';
-import type { ApiContext } from 'utils/runtime';
+import {
+	clearDatabase,
+	connectToTestDB,
+	disconnectTestDB,
+} from 'utils/mongoTestingServer';
+import type { Resolver } from 'utils/types';
 
-import { Quest } from '../../models/quest';
-import { User } from '../../models/user';
-import { clearDatabase, connectToTestDB, disconnectTestDB } from '../mongoTest';
-
-import type { CreateQuestActionMutationVariables } from './../../../launcher/utils/graphql/sdk';
 import { createQuestAction } from './quest';
 
 const ObjectId = Types.ObjectId;
+
+let quest;
+let user;
 
 describe('Test createQuestAction resolver for users to claim points', () => {
 	beforeAll(async () => {
@@ -21,31 +26,38 @@ describe('Test createQuestAction resolver for users to claim points', () => {
 	});
 
 	beforeEach(async () => {
-		await Quest.create({
-			_id: '60df37899db1b9adbdcb38e6',
+		quest = await Quest.create({
 			title: 'Test Quest',
 			points: 50,
-			questActions: [],
 		});
 
-		await User.create({
+		user = await User.create({
 			bindingId: 'user123',
 			name: 'Test User',
-			questActions: [],
+			referralCode: 'a1b2c3',
 		});
 	});
 
 	it('should create a quest action that contain the exact information from test quest and test user', async () => {
-		const input: CreateQuestActionMutationVariables = {
-			questId: '60df37899db1b9adbdcb38e6',
+		const input = {
+			questId: quest.id,
 		};
 
-		const mockContext: ApiContext = { user: { id: 'user123' }, client: {} };
+		const mockContext = { user, client: {} };
 
-		const result = await createQuestAction(null, input, mockContext);
+		const resolver = extractResolverFn(createQuestAction);
 
-		expect(result.quest).toEqual(new ObjectId('60df37899db1b9adbdcb38e6'));
-		expect(result.user).toBe('user123');
+		const result = await resolver(null, input, mockContext, {} as never);
+
+		expect(result.questId).toEqual(new ObjectId(quest.id));
+		expect(result.userId).toEqual(new ObjectId(user.id));
 		expect(result.claimedPoints).toBe(50);
 	});
 });
+
+const extractResolverFn = <T1, T2, T3, T4>(
+	resolver: Resolver<T1, T2, T3, T4>,
+) => {
+	if (typeof resolver === 'function') return resolver;
+	return resolver.resolve;
+};
