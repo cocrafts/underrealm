@@ -10,6 +10,7 @@ export const quests = gql`
 			url
 			status
 			points
+			createdAt
 		}
 	}
 `;
@@ -24,6 +25,7 @@ export const questsWithAction = gql`
 			url
 			status
 			points
+			createdAt
 			questAction {
 				id
 				userId
@@ -44,6 +46,7 @@ export const questById = gql`
 			url
 			status
 			points
+			createdAt
 		}
 	}
 `;

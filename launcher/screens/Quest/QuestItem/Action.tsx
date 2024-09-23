@@ -8,22 +8,22 @@ import {
 import { Text } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
+import type { QuestWithAction } from 'utils/graphql';
 import {
-	type Quest,
 	useCreateQuestActionMutation,
-	useProfileQuery,
+	useQuestsWithActionQuery,
 } from 'utils/graphql';
 import resources from 'utils/resources';
 
 type Props = {
-	quest: Quest;
+	quest: QuestWithAction;
 	isTaskOpened: boolean;
 	isDone: boolean;
 };
 
 const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 	const [createQuestAction, loading] = useCreateQuestActionMutation();
-	const { refetch } = useProfileQuery();
+	const { refetch } = useQuestsWithActionQuery();
 	const { styles } = useStyles(stylesheet);
 	const isMobile = UnistylesRuntime.breakpoint === 'xs';
 

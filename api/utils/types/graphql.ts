@@ -236,7 +236,7 @@ export type QuestAction = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
-  userId: Scalars['String']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 export enum QuestStatus {
@@ -588,7 +588,7 @@ export type QuestActionResolvers<ContextType = ApiContext, ParentType extends Re
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   questId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

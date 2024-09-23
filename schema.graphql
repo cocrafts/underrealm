@@ -147,7 +147,7 @@ type QuestAction {
   createdAt: DateTime!
   id: ID!
   questId: ID!
-  userId: String!
+  userId: ID!
 }
 
 enum QuestStatus {

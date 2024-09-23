@@ -236,7 +236,7 @@ export type QuestAction = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
-  userId: Scalars['String']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 export enum QuestStatus {
@@ -348,21 +348,21 @@ export type QuestsQueryVariables = Exact<{
 }>;
 
 
-export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
+export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any } | null> | null };
 
 export type QuestsWithActionQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
 }>;
 
 
-export type QuestsWithActionQuery = { __typename?: 'Query', questsWithAction?: Array<{ __typename?: 'QuestWithAction', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, questAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null } | null> | null };
+export type QuestsWithActionQuery = { __typename?: 'Query', questsWithAction?: Array<{ __typename?: 'QuestWithAction', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any, questAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null } | null> | null };
 
 export type QuestByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null };
+export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any } | null };
 
 export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -667,6 +667,7 @@ export const QuestsDocument = gql`
     url
     status
     points
+    createdAt
   }
 }
     `;
@@ -713,6 +714,7 @@ export const QuestsWithActionDocument = gql`
     url
     status
     points
+    createdAt
     questAction {
       id
       userId
@@ -765,6 +767,7 @@ export const QuestByIdDocument = gql`
     url
     status
     points
+    createdAt
   }
 }
     `;

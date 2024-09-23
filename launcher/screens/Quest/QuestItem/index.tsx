@@ -3,8 +3,7 @@ import { Linking, StyleSheet } from 'react-native';
 import { AnimateDirections, modalActions } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import SignInOptions from 'components/modals/SignInOptions';
-import type { Quest } from 'utils/graphql';
-import { useProfileQuery } from 'utils/graphql';
+import type { QuestWithAction } from 'utils/graphql';
 import { accountState } from 'utils/state/account';
 import { useSnapshot } from 'valtio';
 
@@ -13,20 +12,15 @@ import Info from './Info';
 import { questPlatformMapping } from './shared';
 
 type Props = {
-	quest: Quest;
+	quest: QuestWithAction;
 };
 
 const QuestItem: FC<Props> = ({ quest }) => {
 	const { profile } = useSnapshot(accountState);
 	const [isTaskOpened, setIsTaskOpened] = useState(false);
-	const { data, loading } = useProfileQuery();
 	const isDone = useMemo(() => {
-		if (loading) return false;
-
-		return data?.profile.questActions.some(
-			(questAction) => quest.id === questAction.quest,
-		);
-	}, [data]);
+		return quest.questAction !== null;
+	}, [quest]);
 
 	const handleGoToTask = () => {
 		if (profile.id && profile.id !== '') {

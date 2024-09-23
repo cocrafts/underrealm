@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
-import { useQuestsQuery } from 'utils/graphql';
+import { useQuestsWithActionQuery } from 'utils/graphql';
 import resources from 'utils/resources';
 
 import { TabId } from './internal';
@@ -12,7 +12,7 @@ import ReferralSection from './Referral';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
-	const { data, loading, error } = useQuestsQuery();
+	const { data, loading, error } = useQuestsWithActionQuery();
 	const [tab, setTab] = useState(TabId.QUEST);
 	const { styles } = useStyles(stylesheet);
 
@@ -57,7 +57,7 @@ const QuestContent: FC = () => {
 					</View>
 				) : (
 					<View style={styles.quests}>
-						{data.quests.map((quest) => {
+						{data.questsWithAction.map((quest) => {
 							return <QuestItem key={quest.id} quest={quest} />;
 						})}
 					</View>
