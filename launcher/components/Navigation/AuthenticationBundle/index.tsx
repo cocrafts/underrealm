@@ -21,7 +21,7 @@ export const AuthenticationBundle: FC<Props> = ({ style }) => {
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size={commandSize - 6} />
 				</View>
-			) : profile ? (
+			) : profile.id ? (
 				<Signed profile={profile} />
 			) : (
 				<SignIn />
