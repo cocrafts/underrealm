@@ -4,31 +4,26 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Hub } from 'aws-amplify/utils';
 import type { RootParamList } from 'stacks/Browser/shared';
-import { accountActions } from 'utils/state/account';
+import { graphQlClient } from 'utils/graphql';
+import { profile as profileQuery } from 'utils/graphql/query';
 
 interface InitConfig {
-	withProfileFetch: boolean;
 	onSignIn?: () => void;
 	onSignOut?: () => void;
 }
 
-export const useAppInit = ({
-	withProfileFetch,
-	onSignIn,
-	onSignOut,
-}: InitConfig): void => {
+export const useAppInit = (config?: InitConfig): void => {
 	const onAuth = useCallback<HubCallback>(({ payload: { event, data } }) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		if (event === 'signIn' && (data as any).username) {
-			accountActions.syncProfile();
-			onSignIn?.();
+			config?.onSignIn?.();
 		} else if (event === 'signOut') {
-			onSignOut?.();
+			config?.onSignOut?.();
 		}
 	}, []);
 
 	useEffect(() => {
-		if (withProfileFetch) accountActions.syncProfile();
+		graphQlClient.refetchQueries({ include: [profileQuery] });
 		const stopListen = Hub.listen('auth', onAuth);
 
 		return () => stopListen();

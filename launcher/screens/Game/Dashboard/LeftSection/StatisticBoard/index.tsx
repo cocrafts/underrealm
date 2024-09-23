@@ -5,12 +5,12 @@ import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmBoard from 'components/Board';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
-import { useSnapshot } from 'utils/hook';
-import { accountState } from 'utils/state/account';
+import { useProfileQuery } from 'utils/graphql';
 
 const StatisticBoard: FC = () => {
-	const { profile } = useSnapshot(accountState);
-	const isLoggedIn = profile.id ? true : false;
+	const { data } = useProfileQuery();
+	const profile = data.profile;
+	const isLoggedIn = profile?.id ? true : false;
 
 	const showSignInOptions = () => {
 		modalActions.show({

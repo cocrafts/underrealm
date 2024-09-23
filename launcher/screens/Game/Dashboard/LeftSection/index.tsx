@@ -3,8 +3,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { dimensionState, modalActions, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
+import { useProfileQuery } from 'utils/graphql';
 import { useSnapshot } from 'utils/hook';
-import { accountState } from 'utils/state/account';
 import { liveActions, liveState } from 'utils/state/live';
 import { iStyles } from 'utils/styles';
 
@@ -14,15 +14,16 @@ import UnderRealmInfo from './UnderRealmInfo';
 
 export const LeftSection: FC = () => {
 	const { windowSize } = useSnapshot(dimensionState);
-	const { profile } = useSnapshot(accountState);
+	const { data } = useProfileQuery();
+	const profile = data?.profile;
 	const { findingMatch } = useSnapshot(liveState);
 
 	const onFindMatch = () => {
-		if (profile.id) {
+		if (profile?.id) {
 			if (findingMatch) {
 				liveActions.stopMatchFind();
 			} else {
-				liveActions.matchFind(profile.id);
+				liveActions.matchFind(profile?.id);
 			}
 		} else {
 			modalActions.show({

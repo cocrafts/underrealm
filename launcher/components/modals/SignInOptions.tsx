@@ -7,10 +7,10 @@ import type { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Text from 'components/Text';
+import { useProfileQuery } from 'utils/graphql';
 import { useSnapshot } from 'utils/hook';
 import { googleSignIn, walletSignIn } from 'utils/lib';
-import type { AccountState } from 'utils/state/account';
-import { accountActions, accountState } from 'utils/state/account';
+import { accountActions } from 'utils/state/account';
 
 import { modalStyles } from './shared';
 
@@ -24,7 +24,8 @@ interface ModalContext {
 
 export const SignInOptions: FC<Props> = ({ config }) => {
 	const { web3Only } = (config?.context || {}) as ModalContext;
-	const { profile } = useSnapshot<AccountState>(accountState);
+	const { data } = useProfileQuery();
+	const profile = data.profile;
 	const { colors } = useSnapshot(themeState);
 	const fromSelectRef = useRef(false);
 	const {
@@ -58,11 +59,8 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 
 	const signInWallet = useCallback(async () => {
 		modalActions.hide(config.id as string);
-
-		if (profile.address !== publicKey?.toString()) {
-			accountState.loading = true;
+		if (profile?.address !== publicKey?.toString()) {
 			await walletSignIn(publicKey.toString(), signMessage);
-			accountState.loading = false;
 		}
 	}, [connected, publicKey, signMessage]);
 
@@ -85,7 +83,7 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		if (
 			connected &&
 			fromSelectRef.current &&
-			publicKey?.toString() !== profile.address
+			publicKey?.toString() !== profile?.address
 		) {
 			fromSelectRef.current = false;
 			signInWallet();

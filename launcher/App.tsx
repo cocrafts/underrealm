@@ -1,71 +1,56 @@
 import type { FC } from 'react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback } from 'react';
 import { ApolloProvider } from '@apollo/client/react';
-import { modalActions, Provider as MetacraftProvider } from '@metacraft/ui';
+import { Provider as MetacraftProvider } from '@metacraft/ui';
 import type { WalletError } from '@solana/wallet-adapter-base';
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 import {
 	ConnectionProvider,
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
-import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
-import ReferralModal, { REFERRAL_MODAL_ID } from 'components/modals/Referral';
 import BrowserStack from 'stacks/Browser/Container';
-import { graphQlClient } from 'utils/graphql';
-import { clusterUrl } from 'utils/helper';
-import { useAppInit, useSnapshot } from 'utils/hook';
-import { stateActions } from 'utils/state';
+import { graphQlClient, useProfileQuery } from 'utils/graphql';
+import { useAppInit, useRequireReferral, useSnapshot } from 'utils/hook';
+import { useNetworkEndpoint, useWalletAdapters } from 'utils/hook/web3';
 import { accountState } from 'utils/state/account';
 import { launcherTheme } from 'utils/styles';
 
 import './utils/styles';
 
-export const App: FC = () => {
-	const { network } = useSnapshot(appState);
-	const endpoint = useMemo(() => clusterUrl(network), [network]);
-	const { profile, loading, forceConnect } = useSnapshot(accountState);
+const InternalApp: FC = () => {
+	const { forceConnect } = useSnapshot(accountState);
+	const { data, loading } = useProfileQuery();
+	const profile = data?.profile;
 	const autoConnect = forceConnect || (!loading && !profile.id);
-	const wallets = useMemo(
-		() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-		[network],
-	);
 
-	const useError = () => {
-		return useCallback((error: WalletError) => {
-			console.log(error);
-		}, []);
-	};
+	const wallets = useWalletAdapters();
+	const endpoint = useNetworkEndpoint();
 
-	useAppInit({
-		withProfileFetch: true,
-		onSignOut: () => {
-			stateActions.clearAll();
-		},
-	});
+	const handleWalletError = useCallback((error: WalletError) => {
+		console.log(error);
+	}, []);
 
-	useEffect(() => {
-		if (profile.id && !profile.referred?.id) {
-			modalActions.show({
-				id: REFERRAL_MODAL_ID,
-				component: ReferralModal,
-				withoutMask: true,
-			});
-		}
-	}, [profile.id, profile.referred?.id]);
+	useRequireReferral();
+	useAppInit();
 
 	return (
+		<ConnectionProvider endpoint={endpoint}>
+			<WalletProvider
+				autoConnect={autoConnect}
+				wallets={wallets}
+				onError={handleWalletError}
+			>
+				<MetacraftProvider theme={launcherTheme}>
+					<BrowserStack />
+				</MetacraftProvider>
+			</WalletProvider>
+		</ConnectionProvider>
+	);
+};
+
+export const App = () => {
+	return (
 		<ApolloProvider client={graphQlClient}>
-			<ConnectionProvider endpoint={endpoint}>
-				<WalletProvider
-					autoConnect={autoConnect}
-					wallets={wallets}
-					onError={useError}
-				>
-					<MetacraftProvider theme={launcherTheme}>
-						<BrowserStack />
-					</MetacraftProvider>
-				</WalletProvider>
-			</ConnectionProvider>
+			<InternalApp />
 		</ApolloProvider>
 	);
 };

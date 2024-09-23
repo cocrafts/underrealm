@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
-import { useReferralHistoryQuery } from 'utils/graphql';
+import { useEffect, useMemo } from 'react';
+import { modalActions } from '@metacraft/ui';
+import ReferralModal, { REFERRAL_MODAL_ID } from 'components/modals/Referral';
+import { useProfileQuery, useReferralHistoryQuery } from 'utils/graphql';
 
 export const useReferral = () => {
 	const { data, loading, error } = useReferralHistoryQuery();
@@ -16,4 +18,19 @@ export const useReferral = () => {
 	}, [data?.referralHistory, loading, error]);
 
 	return { data, loading, error, count, points };
+};
+
+export const useRequireReferral = () => {
+	const { data } = useProfileQuery();
+	const profile = data?.profile;
+
+	useEffect(() => {
+		if (profile?.id && !profile?.referred?.id) {
+			modalActions.show({
+				id: REFERRAL_MODAL_ID,
+				component: ReferralModal,
+				withoutMask: true,
+			});
+		}
+	}, [profile]);
 };
