@@ -8,7 +8,6 @@ import mongoose from 'mongoose';
 import { postToConnection } from 'utils/aws/gateway';
 import { configs } from 'utils/config';
 import { globalContext } from 'utils/context/index.lambda';
-import { logger } from 'utils/logger';
 import { redis } from 'utils/redis';
 
 import { schema } from '../apollo';
@@ -24,8 +23,6 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 
 	switch (event.requestContext.routeKey) {
 		case '$connect': {
-			logger.info('connect', event);
-
 			const subprotocols: string[] =
 				event['multiValueHeaders']?.['Sec-WebSocket-Protocol'];
 
@@ -42,7 +39,6 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 			return ok();
 		}
 		case '$disconnect': {
-			logger.info('disconnect', event);
 			return ok();
 		}
 		case '$default': {
@@ -80,7 +76,6 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 	event,
 ) => {
-	logger.info('Handle event from', event.requestContext);
 	const connectionId = event.requestContext.connectionId;
 	globalContext.connectionId = connectionId;
 

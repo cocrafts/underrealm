@@ -6,7 +6,6 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
 import { configs } from 'utils/config';
-import { logger } from 'utils/logger';
 
 import type { ApiContext } from './graphql';
 import { resolveUniversalContext } from './graphql';
@@ -25,7 +24,6 @@ export const graphqlContext: ContextFunction<
 	[LambdaIntegrationContext],
 	ApiContext
 > = async ({ event }) => {
-	logger.info(event.headers);
 	const authHeader = event.headers['authorization'];
 	const isIntrospection = event.body.includes('Introspection');
 
