@@ -11,7 +11,7 @@ export const ReferralLink = () => {
 	const { styles } = useStyles(stylesheet);
 	const { data } = useProfileQuery();
 	const [linkAvailable, setLinkAvailable] = useState(data?.profile);
-	const referralLink = `https://underrealm.io/ref=${data?.profile.referralCode}`;
+	const referralLink = `https://underrealm.io?ref=${data?.profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);

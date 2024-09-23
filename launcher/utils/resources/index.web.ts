@@ -306,6 +306,8 @@ export default {
 			uCoin: { uri: '/u-coin.png' },
 			chest: { uri: '/referral/chest.png' },
 			guideLg: { uri: '/referral/guide-lg.png' },
+			guideTitleBg: { uri: '/referral/guide-title-bg.png' },
+			visualBullet: { uri: '/referral/visual-bullet.svg' },
 		},
 	},
 };

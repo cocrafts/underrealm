@@ -272,6 +272,8 @@ export default {
 			uCoin: require('../../../assets/u-coin.png'),
 			chest: require('../../../assets/referral/chest.png'),
 			guideLg: require('../../../assets/referral/guide-lg.png'),
+			guideTitleBg: require('../../../assets/referral/guide-title-bg.png'),
+			visualBullet: require('../../../assets/referral/visual-bullet.svg'),
 		},
 	},
 };
