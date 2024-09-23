@@ -5,21 +5,23 @@ import {
 	UnistylesRuntime,
 	useStyles,
 } from 'react-native-unistyles';
-import { Text } from '@metacraft/ui';
+import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
-import { graphQlClient, useProfileQuery } from 'utils/graphql';
+import { graphQlClient } from 'utils/graphql';
 import { makeReferral } from 'utils/graphql/mutation';
 import { getReferralCode } from 'utils/referral';
+import { accountActions } from 'utils/state/account';
 
 import { modalStyles } from './shared';
+
+export const REFERRAL_MODAL_ID = 'referral-modal';
 
 export const ReferralModal = () => {
 	const [focus, setFocus] = useState(false);
 	const [referralCode, setReferralCode] = useState('');
 	const [error, setError] = useState('');
 	const { styles } = useStyles(stylesheet);
-	const { refetch: refetchProfile } = useProfileQuery();
 	const onConfirmPress = async () => {
 		const { errors } = await graphQlClient.mutate({
 			mutation: makeReferral,
@@ -32,8 +34,8 @@ export const ReferralModal = () => {
 			setError(errors[0].message);
 			return;
 		}
-
-		refetchProfile();
+		accountActions.syncProfile();
+		modalActions.hide(REFERRAL_MODAL_ID);
 	};
 
 	const maskStyle = {

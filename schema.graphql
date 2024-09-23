@@ -110,12 +110,12 @@ type Profile {
   githubUrl: String
   id: String!
   isOnline: Boolean
-  isReferred: Boolean
   jwt: String
   linkedId: String
   mineral: Float
   name: String
   referralCode: String!
+  referred: ReferralHistory
 }
 
 type Query {

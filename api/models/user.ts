@@ -6,7 +6,7 @@ export type IUser = {
 	id: string;
 	bindingId: string;
 	name?: string;
-	wallet?: string;
+	address?: string;
 	email?: string;
 	avatarUrl?: string;
 	referralCode: string;
@@ -31,7 +31,7 @@ const userSchema = createSchema({
 		unique: true,
 		required: true,
 	},
-	wallet: {
+	address: {
 		type: String,
 		index: true,
 	},

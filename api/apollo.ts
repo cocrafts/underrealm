@@ -6,6 +6,8 @@ import {
 	unwrapResolverError,
 } from '@apollo/server/errors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { referred } from 'social/query/referral';
+import { refereeUser } from 'user';
 import { ClientError } from 'utils/errors';
 import { logger } from 'utils/logger';
 import type { Resolvers } from 'utils/types';
@@ -33,6 +35,12 @@ const resolvers: Resolvers = {
 	Subscription: {
 		...UserSubscriptionResolvers,
 		...GameSubscriptionResolvers,
+	},
+	Profile: {
+		referred,
+	},
+	ReferralHistory: {
+		refereeUser,
 	},
 };
 

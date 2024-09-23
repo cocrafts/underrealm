@@ -181,12 +181,12 @@ export type Profile = {
   githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   isOnline?: Maybe<Scalars['Boolean']['output']>;
-  isReferred?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   referralCode: Scalars['String']['output'];
+  referred?: Maybe<ReferralHistory>;
 };
 
 export type Query = {
@@ -354,7 +354,7 @@ export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, addres
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', referralCode: string, id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', referralCode: string, id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
@@ -673,6 +673,11 @@ export const ProfileDocument = gql`
   profile {
     ...ProfileFields
     referralCode
+    referred {
+      id
+      referrerId
+      createdAt
+    }
   }
 }
     ${ProfileFieldsFragmentDoc}`;

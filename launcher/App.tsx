@@ -9,7 +9,7 @@ import {
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
 import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
-import ReferralModal from 'components/modals/Referral';
+import ReferralModal, { REFERRAL_MODAL_ID } from 'components/modals/Referral';
 import BrowserStack from 'stacks/Browser/Container';
 import { graphQlClient } from 'utils/graphql';
 import { clusterUrl } from 'utils/helper';
@@ -45,14 +45,14 @@ export const App: FC = () => {
 	});
 
 	useEffect(() => {
-		if (!profile.id) {
+		if (profile.id && !profile.referred?.id) {
 			modalActions.show({
-				id: 'referral-modal',
+				id: REFERRAL_MODAL_ID,
 				component: ReferralModal,
 				withoutMask: true,
 			});
 		}
-	}, [profile.id, profile.isReferred]);
+	}, [profile.id, profile.referred?.id]);
 
 	return (
 		<ApolloProvider client={graphQlClient}>

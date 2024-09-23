@@ -181,12 +181,12 @@ export type Profile = {
   githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   isOnline?: Maybe<Scalars['Boolean']['output']>;
-  isReferred?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
   linkedId?: Maybe<Scalars['String']['output']>;
   mineral?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   referralCode: Scalars['String']['output'];
+  referred?: Maybe<ReferralHistory>;
 };
 
 export type Query = {
@@ -553,12 +553,12 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   githubUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isOnline?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  isReferred?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   linkedId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mineral?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

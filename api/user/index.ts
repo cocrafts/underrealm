@@ -1,4 +1,3 @@
-import { Referral } from 'models/referral';
 import { User } from 'models/user';
 import { pubsub, topicGenerator } from 'utils/pubsub';
 import type {
@@ -8,9 +7,6 @@ import type {
 } from 'utils/types';
 
 const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
-	const referredHistory = await Referral.findOne({ refereeId: user.id });
-	Object.assign(user, { isReferred: !!referredHistory });
-
 	return user;
 };
 
