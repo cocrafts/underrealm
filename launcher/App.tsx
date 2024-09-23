@@ -16,10 +16,9 @@ import { clusterUrl } from 'utils/helper';
 import { useAppInit, useSnapshot } from 'utils/hook';
 import { stateActions } from 'utils/state';
 import { accountState } from 'utils/state/account';
-import { appState } from 'utils/state/app';
-import { launcherTheme } from 'utils/theme';
+import { launcherTheme } from 'utils/styles';
 
-import './utils/unistyles';
+import './utils/styles';
 
 export const App: FC = () => {
 	const { network } = useSnapshot(appState);
