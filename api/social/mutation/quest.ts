@@ -19,7 +19,7 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 			createdAt: new Date(),
 		});
 
-		await User.updateOne({ id: userId }, { $inc: { points: claimedPoints } });
+		await User.updateOne({ _id: userId }, { $inc: { points: claimedPoints } });
 
 		return questAction as never;
 	} catch (err) {

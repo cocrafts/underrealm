@@ -9,7 +9,11 @@ import { Text } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
 import type { Quest } from 'utils/graphql';
-import { useCreateQuestActionMutation, useQuestsQuery } from 'utils/graphql';
+import {
+	useCreateQuestActionMutation,
+	useProfileQuery,
+	useQuestsQuery,
+} from 'utils/graphql';
 import resources from 'utils/resources';
 
 type Props = {
@@ -19,8 +23,9 @@ type Props = {
 };
 
 const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
-	const [createQuestAction, loading] = useCreateQuestActionMutation();
 	const { refetch } = useQuestsQuery();
+	const { refetch: profileQuery } = useProfileQuery();
+	const [createQuestAction, loading] = useCreateQuestActionMutation();
 	const { styles } = useStyles(stylesheet);
 	const isMobile = UnistylesRuntime.breakpoint === 'xs';
 
@@ -29,6 +34,7 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 			variables: { questId: quest.id },
 		});
 		await refetch();
+		await profileQuery();
 	};
 
 	return !isDone ? (
