@@ -13,7 +13,6 @@ import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
 	const { data, loading, error } = useQuestsQuery();
-	console.log(data, loading, error);
 	const [tab, setTab] = useState(TabId.QUEST);
 	const { styles } = useStyles(stylesheet);
 
