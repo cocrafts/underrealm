@@ -7,8 +7,7 @@ import type { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Text from 'components/Text';
-import { useProfileQuery } from 'utils/graphql';
-import { useSnapshot } from 'utils/hook';
+import { useProfile, useSnapshot } from 'utils/hook';
 import { googleSignIn, walletSignIn } from 'utils/lib';
 import { accountActions } from 'utils/state/account';
 
@@ -24,8 +23,7 @@ interface ModalContext {
 
 export const SignInOptions: FC<Props> = ({ config }) => {
 	const { web3Only } = (config?.context || {}) as ModalContext;
-	const { data } = useProfileQuery();
-	const profile = data.profile;
+	const { profile } = useProfile();
 	const { colors } = useSnapshot(themeState);
 	const fromSelectRef = useRef(false);
 	const {

@@ -8,8 +8,13 @@ import {
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
 import BrowserStack from 'stacks/Browser/Container';
-import { graphQlClient, useProfileQuery } from 'utils/graphql';
-import { useAppInit, useRequireReferral, useSnapshot } from 'utils/hook';
+import { graphQlClient } from 'utils/graphql';
+import {
+	useAppInit,
+	useProfile,
+	useRequireReferral,
+	useSnapshot,
+} from 'utils/hook';
 import { useNetworkEndpoint, useWalletAdapters } from 'utils/hook/web3';
 import { accountState } from 'utils/state/account';
 import { launcherTheme } from 'utils/styles';
@@ -18,8 +23,7 @@ import './utils/styles';
 
 const InternalApp: FC = () => {
 	const { forceConnect } = useSnapshot(accountState);
-	const { data, loading } = useProfileQuery();
-	const profile = data?.profile;
+	const { profile, loading } = useProfile();
 	const autoConnect = forceConnect || (!loading && !profile.id);
 
 	const wallets = useWalletAdapters();

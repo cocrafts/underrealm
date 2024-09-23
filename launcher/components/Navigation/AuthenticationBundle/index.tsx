@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import type { ViewStyle } from 'react-native';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useProfileQuery } from 'utils/graphql';
+import { useProfile } from 'utils/hook';
 
 import Signed from './Signed';
 import SignIn from './SignIn';
@@ -11,8 +11,7 @@ interface Props {
 }
 
 export const AuthenticationBundle: FC<Props> = ({ style }) => {
-	const { data, loading } = useProfileQuery();
-	const profile = data?.profile;
+	const { profile, loading } = useProfile();
 
 	const containerStyle = [styles.container, style];
 
