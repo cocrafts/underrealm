@@ -20,56 +20,63 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 	callback,
 ) => {
 	await Promise.all(initPromises);
+	const connectionId = event.requestContext.connectionId;
 
-	switch (event.requestContext.routeKey) {
-		case '$connect': {
-			const subprotocols: string[] =
-				event['multiValueHeaders']?.['Sec-WebSocket-Protocol'];
-
-			if (
-				subprotocols &&
-				subprotocols.length > 0 &&
-				subprotocols.indexOf('graphql-transport-ws') !== -1
-			) {
-				return ok({
-					headers: { 'Sec-WebSocket-Protocol': 'graphql-transport-ws' },
-				});
+	try {
+		switch (event.requestContext.routeKey) {
+			case '$connect': {
+				const result = await handleConnect(event, context, callback);
+				if (result) return result;
+				break;
 			}
-
-			return ok();
-		}
-		case '$disconnect': {
-			return ok();
-		}
-		case '$default': {
-			const connectionId = event.requestContext.connectionId;
-
-			try {
+			case '$disconnect': {
+				const result = await handleDisconnect(event, context, callback);
+				if (result) return result;
+				break;
+			}
+			case '$default': {
 				const result = await handleGraphqlSubscription(
 					event,
 					context,
 					callback,
 				);
 				if (result) return result;
-			} catch (error) {
-				await postToConnection(connectionId, {
-					payload: { errors: [(error as Error).message] },
-					type: 'error',
-				});
+				break;
 			}
+			default: {
+				return {
+					statusCode: StatusCodes.BAD_REQUEST,
+					body: JSON.stringify({ message: 'invalid websocket route' }),
+				};
+			}
+		}
+	} catch (error) {
+		await postToConnection(connectionId, {
+			payload: { errors: [(error as Error).message] },
+			type: 'error',
+		});
+	}
+	return ok();
+};
 
-			break;
-		}
-		default: {
-			return {
-				statusCode: StatusCodes.BAD_REQUEST,
-				body: JSON.stringify({
-					message: 'invalid websocket route',
-				}),
-			};
-		}
+const handleConnect: APIGatewayProxyWebsocketHandlerV2 = async (event) => {
+	const subprotocols: string[] =
+		event['multiValueHeaders']?.['Sec-WebSocket-Protocol'];
+
+	if (
+		subprotocols &&
+		subprotocols.length > 0 &&
+		subprotocols.indexOf('graphql-transport-ws') !== -1
+	) {
+		return ok({
+			headers: { 'Sec-WebSocket-Protocol': 'graphql-transport-ws' },
+		});
 	}
 
+	return ok();
+};
+
+const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async () => {
 	return ok();
 };
 
