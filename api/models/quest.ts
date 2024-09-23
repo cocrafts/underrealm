@@ -21,7 +21,7 @@ export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
 	questId: { type: Types.ObjectId, ref: 'Quest' },
-	userId: { type: 'string', ref: 'User' },
+	userId: { type: Types.ObjectId, ref: 'User' },
 	claimedPoints: Number,
 });
 

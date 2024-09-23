@@ -177,7 +177,7 @@ type QuestWithAction {
 type QuestAction {
   id: ID!
   questId: ID!
-  userId: String!
+  userId: ID!
   claimedPoints: Int!
   createdAt: DateTime!
 }

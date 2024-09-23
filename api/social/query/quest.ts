@@ -22,7 +22,7 @@ export const questActions: QueryResolvers['questActions'] = async (
 	{},
 	context,
 ) => {
-	const userId = context.user.bindingId;
+	const userId = context.user.id;
 	return await QuestAction.find<QuestActionType>({ userId });
 };
 
@@ -36,7 +36,7 @@ export const questsWithAction: QueryResolvers['questsWithAction'] = async (
 	{ status },
 	{ user },
 ) => {
-	const result = await Quest.aggregate([
+	const quests = await Quest.aggregate([
 		{
 			$match: {
 				status: status || QuestStatus.Live,
@@ -52,7 +52,7 @@ export const questsWithAction: QueryResolvers['questsWithAction'] = async (
 							$expr: {
 								$and: [
 									{ $eq: ['$$questId', '$questId'] },
-									{ $eq: ['$userId', 'Google_110672144832710721216'] },
+									{ $eq: ['$userId', user._id] },
 								],
 							},
 						},
@@ -68,14 +68,21 @@ export const questsWithAction: QueryResolvers['questsWithAction'] = async (
 			},
 		},
 		{
-			$project: {
-				// questAction: 1,
-				_id: 1,
+			$addFields: {
+				questAction: { $ifNull: ['$questAction', null] }, // Ensure questAction is null if not found
 			},
 		},
 	]);
 
-	logger.info('hi', result);
+	const result = quests.map((quest) => {
+		return {
+			...quest,
+			id: quest._id,
+			questAction: quest.questAction
+				? { ...quest.questAction, id: quest.questAction._id }
+				: null,
+		};
+	});
 
 	return result;
 };
