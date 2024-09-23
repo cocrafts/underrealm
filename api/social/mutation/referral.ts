@@ -14,12 +14,13 @@ export const makeReferral: MutationResolvers['makeReferral'] = async (
 	}
 
 	const referralPoints = 80;
+
 	await Referral.create({
 		referrerId: referrer.id,
 		refereeId: user.id,
 		claimedPoints: referralPoints,
 	}).catch((error) => {
-		if (error.message.indexOf('duplicate key error') !== -1) {
+		if (error.message.includes('duplicate key error')) {
 			throw new ClientError(
 				'Can not make new referral cause referral already existed',
 			);
