@@ -1,4 +1,4 @@
-import type { QueryResolvers } from 'types/graphql';
+import type { QueryResolvers } from 'utils/types';
 
 import { acceptGame } from './mutation/accept';
 import { inviteGame } from './mutation/invite';
@@ -7,11 +7,11 @@ import { cardDuel, cardDuelHistory, cardDuelPlaying } from './query/duel';
 import { gameInvitations, gameJwt } from './query/invitation';
 
 const greeting: QueryResolvers['greeting'] = async (root, args, { user }) => {
-	const userId = user.id || 'Stranger';
+	const userId = user.bindingId || 'Stranger';
 	return `Welcome ${userId}!`;
 };
 
-export { GameSubscription } from './subscription';
+export { GameSubscriptionResolvers } from './subscription';
 
 export const GameQueryResolvers = {
 	greeting,

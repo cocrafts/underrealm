@@ -24,6 +24,7 @@ type Mutation {
 }
 
 type Subscription {
+  counterIncreased: Int!
   gameInvitation(opponent: String!): GameInvitation
   matchFind(game: MetacraftGames!, userId: String): CardDuel
   matchFound(game: MetacraftGames!, userId: String): CardDuel
@@ -139,9 +140,9 @@ enum MetacraftGames {
 
 enum QuestType {
   LIKE_X
-	RETWEET_X
-	JOIN_DISCORD
-	COMMENT_X
+  RETWEET_X
+  JOIN_DISCORD
+  COMMENT_X
 }
 
 enum QuestStatus {
@@ -153,11 +154,11 @@ enum QuestStatus {
 type Quest {
   id: ID!
   title: String!
-	description: String!
-	type: QuestType!
-	status: QuestStatus!
-	url: String!
-	points: Int!
+  description: String!
+  type: QuestType!
+  status: QuestStatus!
+  url: String!
+  points: Int!
   createdAt: DateTime!
 }
 
@@ -175,8 +176,8 @@ type QuestWithAction {
 
 type QuestAction {
   id: ID!
-	questId: ID!
-	userId: String!
+  questId: ID!
+  userId: String!
   claimedPoints: Int!
   createdAt: DateTime!
 }

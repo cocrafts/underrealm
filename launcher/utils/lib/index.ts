@@ -1,43 +1,48 @@
-import { Analytics } from '@aws-amplify/analytics';
-import { Auth } from '@aws-amplify/auth';
+import { Amplify } from 'aws-amplify';
+import { configureAutoTrack } from 'aws-amplify/analytics';
 
-import { platformOptions, redirectOrigin } from './auth';
+import { redirectOrigin } from './auth';
 import config from './awsConfig';
 
 const {
 	region,
 	identityPoolId,
 	userPoolId,
-	userPoolWebClientId,
+	userPoolClientId,
 	cognitoAuthDomain,
 	cognitoAuthScopes,
 	pinpointAppId,
 } = config;
 
 export const configure = (): void => {
-	Auth.configure({
-		region,
-		identityPoolId,
-		userPoolId,
-		userPoolWebClientId,
-		authenticationFlowType: 'CUSTOM_AUTH',
-		oauth: {
-			...platformOptions,
-			domain: cognitoAuthDomain,
-			scope: cognitoAuthScopes,
-			redirectSignIn: `${redirectOrigin}/dashboard`,
-			redirectSignOut: `${redirectOrigin}/authentication`,
-			responseType: 'code',
+	Amplify.configure({
+		Auth: {
+			Cognito: {
+				userPoolId,
+				userPoolClientId,
+				identityPoolId,
+				loginWith: {
+					oauth: {
+						domain: cognitoAuthDomain,
+						scopes: cognitoAuthScopes,
+						redirectSignIn: [`${redirectOrigin}/dashboard`],
+						redirectSignOut: [`${redirectOrigin}/authentication`],
+						responseType: 'code',
+					},
+				},
+			},
+		},
+		Analytics: {
+			Pinpoint: {
+				region,
+				appId: pinpointAppId,
+			},
 		},
 	});
 
-	Analytics.configure({
-		autoSessionRecord: true,
-		AWSPinpoint: {
-			region,
-			appId: pinpointAppId,
-			mandatorySignIn: false,
-		},
+	configureAutoTrack({
+		enable: true,
+		type: 'session',
 	});
 };
 

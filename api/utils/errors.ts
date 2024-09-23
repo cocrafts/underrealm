@@ -7,6 +7,14 @@ export class ForbiddenError extends GraphQLError {
 	}
 }
 
+export class UnauthorizedError extends GraphQLError {
+	constructor(message: string) {
+		super(message, {
+			extensions: { http: { status: StatusCodes.UNAUTHORIZED } },
+		});
+	}
+}
+
 export class ClientError extends GraphQLError {
 	constructor(message: string) {
 		super(message, {

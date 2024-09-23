@@ -93,10 +93,13 @@ enum MetacraftGames {
 
 type Mutation {
   acceptGame(invitationId: String!): Boolean
+  createQuest(description: String!, points: Int!, title: String!, type: String!, url: String): Quest
   createQuestAction(questId: ID!): QuestAction
+  deleteQuest(id: ID!): Boolean
   inviteGame(input: InviteGameInput!): GameInvitation
   makeReferral(referralCode: String!): Boolean
   stopMatchFind: Boolean
+  updateQuest(id: ID!, status: String!): Quest
 }
 
 type Profile {
@@ -185,6 +188,7 @@ type ReferralHistory {
 }
 
 type Subscription {
+  counterIncreased: Int!
   gameInvitation(opponent: String!): GameInvitation
   matchFind(game: MetacraftGames!, userId: String): CardDuel
   matchFound(game: MetacraftGames!, userId: String): CardDuel

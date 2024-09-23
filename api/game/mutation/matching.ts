@@ -5,11 +5,11 @@ import {
 	putItem,
 	rangeQuery,
 	wrapDeleteRequest,
-} from 'aws/dynamo';
-import { publish, topicGenerator } from 'aws/pubsub';
-import type { MutationResolvers } from 'types/graphql';
-import type { DynamoRecord } from 'types/internal';
-import { microId } from 'utils/uuid';
+} from 'utils/aws/dynamo';
+import { publish, topicGenerator } from 'utils/aws/pubsub';
+import { microId } from 'utils/common';
+import type { MutationResolvers } from 'utils/types';
+import type { DynamoRecord } from 'utils/types/internal';
 
 import { makeDuel } from '../duel';
 import type { CardDuelRecord, MatchFindRecord } from '../types';
@@ -19,9 +19,9 @@ export const stopMatchFind: MutationResolvers['stopMatchFind'] = async (
 	args,
 	{ user },
 ) => {
-	if (!user.id) return false;
+	if (!user.bindingId) return false;
 
-	const key = `WSS#matchFind#MURG#profile#${user.id}`;
+	const key = `WSS#matchFind#MURG#profile#${user.bindingId}`;
 	const records = (await rangeQuery('pk', key))?.Items as DynamoRecord[];
 	const subscriptionPairs = records.map(({ pk, sk }) => ({ pk, sk }));
 

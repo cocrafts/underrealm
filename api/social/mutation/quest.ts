@@ -1,7 +1,6 @@
-import { Quest, QuestAction as QuestActionModel } from 'models/quest';
+import { Quest, QuestAction } from 'models/quest';
 import { User } from 'models/user';
-
-import type { MutationResolvers } from './../../types/graphql';
+import type { MutationResolvers } from 'utils/types';
 
 export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	_,
@@ -9,12 +8,11 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 	{ user },
 ) => {
 	try {
-		const userId = user.id;
-
+		const userId = user.bindingId;
 		const quest = await Quest.findById(questId);
 		const claimedPoints = quest.points;
 
-		const questAction = await QuestActionModel.create({
+		const questAction = await QuestAction.create({
 			questId,
 			userId,
 			claimedPoints,
@@ -26,7 +24,7 @@ export const createQuestAction: MutationResolvers['createQuestAction'] = async (
 			{ $inc: { points: claimedPoints } },
 		);
 
-		return questAction;
+		return questAction as never;
 	} catch (err) {
 		throw new Error(err);
 	}

@@ -1,8 +1,8 @@
 import type { PlayerConfig } from '@metacraft/murg-engine';
 import { makeDuel, makeMeta, move } from '@metacraft/murg-engine';
-import { batchWrite, deleteItem, getItem } from 'aws/dynamo';
-import type { MutationResolvers } from 'types/graphql';
-import { nanoId } from 'utils/uuid';
+import { batchWrite, deleteItem, getItem } from 'utils/aws/dynamo';
+import { nanoId } from 'utils/common';
+import type { MutationResolvers } from 'utils/types';
 
 import { generateRandomDeck } from '../duel';
 
