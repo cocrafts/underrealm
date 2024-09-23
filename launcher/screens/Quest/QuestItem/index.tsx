@@ -3,7 +3,7 @@ import { Linking, StyleSheet } from 'react-native';
 import { AnimateDirections, modalActions } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import SignInOptions from 'components/modals/SignInOptions';
-import type { QuestWithAction } from 'utils/graphql';
+import type { Quest } from 'utils/graphql';
 import { accountState } from 'utils/state/account';
 import { useSnapshot } from 'valtio';
 
@@ -12,7 +12,7 @@ import Info from './Info';
 import { questPlatformMapping } from './shared';
 
 type Props = {
-	quest: QuestWithAction;
+	quest: Quest;
 };
 
 const QuestItem: FC<Props> = ({ quest }) => {
