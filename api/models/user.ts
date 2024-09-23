@@ -5,10 +5,10 @@ import { createSchema } from './utils';
 export type IUser = {
 	id: string;
 	bindingId: string;
-	address: string;
-	name: string;
-	email: string;
-	avatarUrl: string;
+	name?: string;
+	wallet?: string;
+	email?: string;
+	avatarUrl?: string;
 	referralCode: string;
 };
 
@@ -18,6 +18,7 @@ const userSchema = createSchema({
 		type: String,
 		index: true,
 		unique: true,
+		required: true,
 	},
 	points: {
 		type: Number,
@@ -28,8 +29,9 @@ const userSchema = createSchema({
 		type: String,
 		index: true,
 		unique: true,
+		required: true,
 	},
-	address: {
+	wallet: {
 		type: String,
 		index: true,
 	},
@@ -41,4 +43,4 @@ const userSchema = createSchema({
 	avatarUrl: String,
 });
 
-export const User = model('User', userSchema);
+export const User = model<IUser>('User', userSchema);

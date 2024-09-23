@@ -3,7 +3,7 @@ import type {
 	QueryResolvers,
 	Quest as QuestType,
 	QuestAction as QuestActionType,
-} from 'types/graphql';
+} from 'utils/types';
 
 export const quest: QueryResolvers['quest'] = async (
 	_,
@@ -21,7 +21,7 @@ export const questActions: QueryResolvers['questActions'] = async (
 	{},
 	context,
 ) => {
-	const userId = context.user.id;
+	const userId = context.user.bindingId;
 	return await QuestAction.find<QuestActionType>({ userId });
 };
 

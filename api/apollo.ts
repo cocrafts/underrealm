@@ -5,17 +5,18 @@ import {
 	ApolloServerErrorCode,
 	unwrapResolverError,
 } from '@apollo/server/errors';
-import type { Resolvers } from 'types/graphql';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ClientError } from 'utils/errors';
 import { logger } from 'utils/logger';
+import type { Resolvers } from 'utils/types';
 
 import {
 	GameMutationResolvers,
 	GameQueryResolvers,
-	GameSubscription,
+	GameSubscriptionResolvers,
 } from './game';
 import { SocialMutationResolvers, SocialQueryResolvers } from './social';
-import { UserQueryResolver } from './user';
+import { UserQueryResolvers, UserSubscriptionResolvers } from './user';
 
 const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
 
@@ -23,20 +24,22 @@ const resolvers: Resolvers = {
 	Query: {
 		...GameQueryResolvers,
 		...SocialQueryResolvers,
-		...UserQueryResolver,
+		...UserQueryResolvers,
 	},
 	Mutation: {
 		...GameMutationResolvers,
 		...SocialMutationResolvers,
 	},
 	Subscription: {
-		...GameSubscription,
+		...UserSubscriptionResolvers,
+		...GameSubscriptionResolvers,
 	},
 };
 
+export const schema = makeExecutableSchema({ typeDefs, resolvers });
+
 export const apolloServer = new ApolloServer({
-	typeDefs,
-	resolvers,
+	schema,
 	formatError: (fError, error) => {
 		const isServerIntentError =
 			fError.extensions.code === ApolloServerErrorCode.INTERNAL_SERVER_ERROR;

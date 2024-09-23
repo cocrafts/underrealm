@@ -6,13 +6,7 @@ export default {
 	pinpointAppId: '0c472af695e64c21ad660e89923f1a4c',
 	identityPoolId: 'ap-northeast-1:7ce85a68-ca62-4eef-8072-ef1131812752',
 	userPoolId: 'ap-northeast-1_6eSHOJnpy',
-	userPoolWebClientId: '4piksftvktk2rrgv8e93gojdok',
+	userPoolClientId: '4piksftvktk2rrgv8e93gojdok',
 	cognitoAuthDomain: 'login.stormgate.io',
-	cognitoAuthScopes: [
-		'aws.cognito.signin.user.admin',
-		'email',
-		'openid',
-		'phone',
-		'profile',
-	],
+	cognitoAuthScopes: ['email', 'openid', 'profile'],
 };

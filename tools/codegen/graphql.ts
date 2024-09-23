@@ -6,16 +6,17 @@ const config: CodegenConfig = {
 	documents: [
 		'launcher/utils/graphql/query/*.ts',
 		'launcher/utils/graphql/mutation/*.ts',
+		'launcher/utils/graphql/subscription/*.ts',
 	],
 	generates: {
 		'./schema.graphql': {
 			plugins: ['schema-ast'],
 		},
-		'./api/types/graphql.ts': {
+		'./api/utils/types/graphql.ts': {
 			plugins: ['typescript', 'typescript-resolvers'],
 			config: {
 				useIndexSignature: true,
-				contextType: '../utils/runtime#ApiContext',
+				contextType: '../runtime#ApiContext',
 			},
 		},
 		'./launcher/utils/graphql/sdk.ts': {

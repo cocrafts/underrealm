@@ -9,8 +9,7 @@
     "skipLibCheck": true,
     "paths": {
       "types/*": ["./types/*"],
-      "resolvers/*": ["./resolvers/*"],
-      "aws/*": ["./aws/*"]
+      "resolvers/*": ["./resolvers/*"]
     }
   },
   "exclude": ["node_modules"]

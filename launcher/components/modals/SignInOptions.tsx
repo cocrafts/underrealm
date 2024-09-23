@@ -8,7 +8,7 @@ import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Text from 'components/Text';
 import { useSnapshot } from 'utils/hook';
-import { googleSignIn } from 'utils/lib';
+import { googleSignIn, walletSignIn } from 'utils/lib';
 import type { AccountState } from 'utils/state/account';
 import { accountActions, accountState } from 'utils/state/account';
 
@@ -37,6 +37,11 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		signMessage,
 	} = useWallet();
 
+	const containerStyle = [
+		modalStyles.container,
+		{ backgroundColor: colors.background, minWidth: 304 },
+	];
+
 	const selectWallet = useCallback(
 		async (adapter: WalletAdapterProps) => {
 			modalActions.hide(config.id as string);
@@ -51,22 +56,19 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		[select],
 	);
 
-	const signInWallet = useCallback(() => {
+	const signInWallet = useCallback(async () => {
 		modalActions.hide(config.id as string);
 
 		if (profile.address !== publicKey?.toString()) {
-			accountActions.walletSignIn({ publicKey, signMessage });
+			accountState.loading = true;
+			await walletSignIn(publicKey.toString(), signMessage);
+			accountState.loading = false;
 		}
 	}, [connected, publicKey, signMessage]);
 
 	const disconnectWallet = useCallback(async () => {
 		await disconnect();
 	}, [disconnect]);
-
-	const containerStyle = [
-		modalStyles.container,
-		{ backgroundColor: colors.background, minWidth: 304 },
-	];
 
 	const signInGoogle = async () => {
 		modalActions.hide(config.id as string);

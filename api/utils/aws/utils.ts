@@ -1,4 +1,4 @@
-import { configs } from '../utils/config';
+import { configs } from '../config';
 
 const isJest = configs.STAGE === 'jest';
 
