@@ -6,8 +6,8 @@ import {
 	rangeQuery,
 	wrapDeleteRequest,
 } from 'utils/aws/dynamo';
-import { publish, topicGenerator } from 'utils/aws/pubsub';
 import { microId } from 'utils/common';
+import { pubsub, topicGenerator } from 'utils/pubsub';
 import type { MutationResolvers } from 'utils/types';
 import type { DynamoRecord } from 'utils/types/internal';
 
@@ -94,7 +94,7 @@ const findMatch = async (
 
 		operations.push(deleteItem([foundMatch.pk, foundMatch.sk]));
 		operations.push(batchWrite(gameRecords));
-		operations.push(publish(matchFoundTopic, { matchFound: cardDuel }));
+		operations.push(pubsub.publish(matchFoundTopic, { matchFound: cardDuel }));
 		await Promise.all(operations);
 
 		return cardDuel;

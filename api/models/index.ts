@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { configs } from 'utils/config';
 import { logger } from 'utils/logger';
 
 mongoose.connection.on('connected', () => {
@@ -20,3 +21,9 @@ mongoose.connection.on('disconnecting', () => {
 mongoose.connection.on('close', () => {
 	logger.warn('MongoDB close');
 });
+
+export const mongo = {
+	connect: async () => {
+		await mongoose.connect(configs.MONGO_URI);
+	},
+};
