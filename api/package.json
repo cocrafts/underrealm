@@ -53,6 +53,7 @@
     "express-ws": "^5.0.2",
     "jest": "^28.1.1",
     "module-alias": "^2.2.2",
+    "mongodb-memory-server": "^10.0.0",
     "morgan": "^1.10.0",
     "tsx": "^4.19.0",
     "typescript": "5.3.3"
@@ -60,7 +61,11 @@
   "jest": {
     "testMatch": [
       "**/*.test.ts"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^models/(.*)$": "<rootDir>/models/$1",
+      "^social/(.*)$": "<rootDir>/social/$1"
+    }
   },
   "babel": {
     "presets": [

@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import {
 	APIEnvs,
 	constructDomainName,
+	defaultEnvs,
 	defaultLambdaConfigs,
 	zoneId,
 } from './shared';
@@ -20,14 +21,21 @@ export const constructWebsocketAPI = () => {
 	});
 
 	const socket = new sst.aws.Function('socket', {
-		handler: 'api/functions/socket.handler',
-		environment: { ...APIEnvs() },
 		...defaultLambdaConfigs($app.stage),
+		handler: 'api/functions/socket.handler',
+		copyFiles: [{ from: 'api/schema.graphql', to: 'schema.graphql' }],
+		environment: { ...defaultEnvs(), ...APIEnvs() },
+		permissions: [
+			{
+				actions: ['execute-api:Invoke', 'execute-api:ManageConnections'],
+				resources: [wsAPI.nodes.api.executionArn.apply((t) => `${t}/**/*`)],
+			},
+		],
 	});
 
 	wsAPI.route('$connect', socket.arn as never);
 	wsAPI.route('$disconnect', socket.arn as never);
-	wsAPI.route('graphql', socket.arn as never);
+	wsAPI.route('$default', socket.arn as never);
 
 	return wsAPI;
 };

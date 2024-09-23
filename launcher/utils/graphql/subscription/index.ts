@@ -12,9 +12,8 @@ export const gameInvitation = gql`
 			id
 			game
 			owner {
+				email
 				address
-				avatarUrl
-				name
 			}
 		}
 	}

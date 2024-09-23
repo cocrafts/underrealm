@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import {
 	APIEnvs,
 	constructDomainName,
+	defaultEnvs,
 	defaultLambdaConfigs,
 	zoneId,
 } from './shared';
@@ -22,7 +23,7 @@ export const constructAPI = () => {
 	const graphql = new sst.aws.Function('graphql', {
 		handler: 'api/functions/graphql.handler',
 		copyFiles: [{ from: 'api/schema.graphql', to: 'schema.graphql' }],
-		environment: { ...APIEnvs() },
+		environment: { ...defaultEnvs(), ...APIEnvs() },
 		...defaultLambdaConfigs($app.stage),
 	});
 

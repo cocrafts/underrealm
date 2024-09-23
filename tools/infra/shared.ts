@@ -47,6 +47,17 @@ export const defaultLambdaConfigs = (
 			format: 'json',
 			logGroup,
 		},
+		nodejs: {
+			esbuild: {
+				resolveExtensions: ['.lambda.ts', '.lambda.js', '.ts', '.js', '.json'],
+			},
+		},
+	};
+};
+
+export const defaultEnvs = () => {
+	return {
+		RUNTIME: 'lambda',
 	};
 };
 

@@ -10,6 +10,7 @@ export type IUser = {
 	email?: string;
 	avatarUrl?: string;
 	referralCode: string;
+	points: number;
 };
 
 const userSchema = createSchema({

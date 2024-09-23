@@ -1,16 +1,22 @@
-import { subscribe, topicGenerator } from 'utils/aws/pubsub';
+import { pubsub, topicGenerator } from 'utils/pubsub';
 import type { SubscriptionResolvers } from 'utils/types';
 
 const gameInvitation: SubscriptionResolvers['gameInvitation'] = {
-	subscribe: subscribe(topicGenerator.gameInvitation) as never,
+	subscribe: async (_, { opponent }) => {
+		return await pubsub.subscribe(topicGenerator.gameInvitation({ opponent }));
+	},
 };
 
 const matchFind: SubscriptionResolvers['matchFind'] = {
-	subscribe: subscribe(topicGenerator.matchFind) as never,
+	subscribe: async (_, { game, userId }) => {
+		return await pubsub.subscribe(topicGenerator.matchFind({ game, userId }));
+	},
 };
 
 const matchFound: SubscriptionResolvers['matchFound'] = {
-	subscribe: subscribe(topicGenerator.matchFound) as never,
+	subscribe: async (_, { game, userId }) => {
+		return await pubsub.subscribe(topicGenerator.matchFound({ game, userId }));
+	},
 };
 
 export const GameSubscriptionResolvers = {

@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState } from '@metacraft/ui';
 import ScrollLayout from 'components/layouts/Scroll';
+import { useCounterIncreasedSubscription } from 'utils/graphql';
 import { useSnapshot } from 'utils/hook';
 import { extractReferralFromUrl } from 'utils/referral';
 
@@ -21,6 +22,16 @@ export const HomeScreen: FC = () => {
 		useSnapshot<DimensionState>(dimensionState);
 	useEffect(() => {
 		extractReferralFromUrl();
+	}, []);
+
+	const { data, restart } = useCounterIncreasedSubscription();
+	if (data) console.log('counter', data);
+
+	useEffect(() => {
+		setTimeout(() => {
+			console.log('restart');
+			restart();
+		}, 5000);
 	}, []);
 
 	return (

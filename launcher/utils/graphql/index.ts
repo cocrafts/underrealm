@@ -8,7 +8,7 @@ import { extractJwt } from 'utils/lib/auth';
 
 const defaultOptions: DefaultOptions = {
 	watchQuery: {
-		fetchPolicy: 'no-cache',
+		fetchPolicy: 'cache-and-network',
 		errorPolicy: 'ignore',
 	},
 	query: {

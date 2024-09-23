@@ -16,7 +16,7 @@ const config: CodegenConfig = {
 			plugins: ['typescript', 'typescript-resolvers'],
 			config: {
 				useIndexSignature: true,
-				contextType: '../runtime#ApiContext',
+				contextType: '../context/graphql#ApiContext',
 			},
 		},
 		'./launcher/utils/graphql/sdk.ts': {

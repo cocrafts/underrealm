@@ -1,14 +1,10 @@
 import { readFileSync } from 'fs';
 
 import { ApolloServer } from '@apollo/server';
-import {
-	ApolloServerErrorCode,
-	unwrapResolverError,
-} from '@apollo/server/errors';
+import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { referred } from 'social/query/referral';
 import { refereeUser } from 'user';
-import { ClientError } from 'utils/errors';
 import { logger } from 'utils/logger';
 import type { Resolvers } from 'utils/types';
 
@@ -51,11 +47,9 @@ export const apolloServer = new ApolloServer({
 	formatError: (fError, error) => {
 		const isServerIntentError =
 			fError.extensions.code === ApolloServerErrorCode.INTERNAL_SERVER_ERROR;
-		const isLabeledClientError =
-			unwrapResolverError(error) instanceof ClientError;
 
-		if (isServerIntentError && !isLabeledClientError) {
-			logger.error(unwrapResolverError(error));
+		if (isServerIntentError) {
+			logger.error(error);
 		}
 
 		return fError;
