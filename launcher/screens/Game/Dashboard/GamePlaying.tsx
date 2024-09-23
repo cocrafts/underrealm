@@ -21,15 +21,10 @@ export const GamePlaying: FC<Props> = ({ config }) => {
 
 	return (
 		<View style={styles.container}>
-			<Avatar
-				style={styles.avatar}
-				size={42}
-				imageUri={duel.enemy?.avatarUrl as string}
-			/>
+			<Avatar style={styles.avatar} size={42} />
 			<View style={styles.innerContainer}>
 				<Text style={styles.message}>
-					You are on a match with {duel.enemy?.name}, would you like to continue
-					it?
+					You are on a match with Someone, would you like to continue it?
 				</Text>
 				<View style={styles.commandContainer}>
 					<Button outline title="Cancel" style={styles.buttonContainer} />

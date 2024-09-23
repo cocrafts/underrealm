@@ -4,10 +4,8 @@ export const profileFields = gql`
 	fragment ProfileFields on Profile {
 		id
 		address
-		name
-		avatarUrl
-		githubUrl
-		mineral
+		points
+		referralCode
 	}
 `;
 
@@ -16,7 +14,6 @@ export const profile = gql`
 	query Profile {
 		profile {
 			...ProfileFields
-			referralCode
 		}
 	}
 `;

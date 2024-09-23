@@ -8,8 +8,6 @@ export const gameInvitations = gql`
 			owner {
 				id
 				address
-				name
-				avatarUrl
 			}
 		}
 	}

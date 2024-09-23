@@ -4,10 +4,12 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import Profile from 'components/icons/Profile';
+import { useProfileQuery } from 'utils/graphql';
 import resources from 'utils/resources';
 
 const HeadingSection: FC = () => {
 	const { styles } = useStyles(stylesheet);
+	const { data } = useProfileQuery();
 
 	return (
 		<View style={styles.container}>
@@ -31,7 +33,7 @@ const HeadingSection: FC = () => {
 				<View style={styles.pointInfoContainer}>
 					<Image source={resources.quest.coinU} style={styles.coinU} />
 					<Text style={styles.text}>Coins:</Text>
-					<Text style={styles.text}>0</Text>
+					<Text style={styles.text}>{data?.profile?.points || 0}</Text>
 				</View>
 			</ImageBackground>
 		</View>

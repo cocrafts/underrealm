@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Image, ImageBackground, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, View } from 'react-native';
 import {
 	createStyleSheet,
 	UnistylesRuntime,
@@ -8,10 +8,11 @@ import {
 import { Text } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
+import type { Quest } from 'utils/graphql';
 import {
-	type Quest,
-	useActiveQuestsQuery,
 	useCreateQuestActionMutation,
+	useProfileQuery,
+	useQuestsQuery,
 } from 'utils/graphql';
 import resources from 'utils/resources';
 
@@ -22,8 +23,9 @@ type Props = {
 };
 
 const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
-	const { refetch } = useActiveQuestsQuery();
-	const [createQuestAction] = useCreateQuestActionMutation();
+	const { refetch: refetchQuests } = useQuestsQuery();
+	const { refetch: refetchProfile } = useProfileQuery();
+	const [createQuestAction, loading] = useCreateQuestActionMutation();
 	const { styles } = useStyles(stylesheet);
 	const isMobile = UnistylesRuntime.breakpoint === 'xs';
 
@@ -31,7 +33,8 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 		await createQuestAction({
 			variables: { questId: quest.id },
 		});
-		await refetch();
+		await refetchQuests();
+		await refetchProfile();
 	};
 
 	return !isDone ? (
@@ -41,25 +44,28 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 				<Text style={styles.pointText}>{quest.points}</Text>
 			</View>
 
-			{isTaskOpened && (
-				<HoverableButton
-					onPress={handlePressVerify}
-					style={styles.refreshButton}
-					hoverStyle={styles.hovered}
-				>
-					<ImageBackground
-						source={
-							isMobile
-								? resources.quest.smallRefreshButton
-								: resources.quest.refreshButton
-						}
-						style={styles.refreshButtonImage}
+			{isTaskOpened &&
+				(loading.loading ? (
+					<ActivityIndicator color="#FFF9A0" />
+				) : (
+					<HoverableButton
+						onPress={handlePressVerify}
+						style={styles.refreshButton}
+						hoverStyle={styles.hovered}
 					>
-						<Refresh size={16} />
-						{!isMobile && <Text style={styles.buttonText}>Verify</Text>}
-					</ImageBackground>
-				</HoverableButton>
-			)}
+						<ImageBackground
+							source={
+								isMobile
+									? resources.quest.smallRefreshButton
+									: resources.quest.refreshButton
+							}
+							style={styles.refreshButtonImage}
+						>
+							<Refresh size={16} />
+							{!isMobile && <Text style={styles.buttonText}>Verify</Text>}
+						</ImageBackground>
+					</HoverableButton>
+				))}
 		</View>
 	) : (
 		<View style={styles.completeContainer}>

@@ -8,7 +8,6 @@ export const referralHistory = gql`
 			refereeId
 			refereeUser {
 				id
-				name
 				address
 				email
 			}
