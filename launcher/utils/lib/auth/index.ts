@@ -16,7 +16,7 @@ export { signOut } from 'aws-amplify/auth';
 export const extractJwt = async (): Promise<string | null> => {
 	try {
 		const { tokens } = await fetchAuthSession();
-		return tokens.idToken.toString();
+		return tokens?.idToken.toString();
 	} catch (error) {
 		console.log(error);
 	}
