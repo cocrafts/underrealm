@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ActivityIndicator, Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
-import type { Quest } from 'utils/graphql';
 import { useQuestsQuery } from 'utils/graphql';
 import resources from 'utils/resources';
 
@@ -60,7 +59,7 @@ const QuestContent: FC = () => {
 				) : (
 					<View style={styles.quests}>
 						{data.quests.map((quest) => {
-							return <QuestItem key={quest.id} quest={quest as Quest} />;
+							return <QuestItem key={quest.id} quest={quest} />;
 						})}
 					</View>
 				)

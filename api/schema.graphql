@@ -17,7 +17,7 @@ type Mutation {
   acceptGame(invitationId: String!): Boolean
   stopMatchFind: Boolean
   makeReferral(referralCode: String!): Boolean
-	createQuestAction(questId: ID!): QuestAction
+  createQuestAction(questId: ID!): QuestAction
 }
 
 type Subscription {
@@ -34,18 +34,11 @@ input InviteGameInput {
 
 type Profile {
   id: String!
-  linkedId: String
+  bindingId: String
   address: String
   jwt: String
-  name: String
   email: String
-  githubId: String
-  githubUrl: String
-  avatarUrl: String
-  mineral: Float
-  isOnline: Boolean
   referralCode: String!
-  questActions: [QuestAction]
   points: Int!
 }
 
@@ -157,7 +150,7 @@ type Quest {
   url: String!
   points: Int!
   createdAt: DateTime!
-  questAction: QuestAction
+  action: QuestAction
 }
 
 type QuestAction {

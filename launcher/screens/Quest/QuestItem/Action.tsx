@@ -23,8 +23,8 @@ type Props = {
 };
 
 const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
-	const { refetch } = useQuestsQuery();
-	const { refetch: profileQuery } = useProfileQuery();
+	const { refetch: refetchQuests } = useQuestsQuery();
+	const { refetch: refetchProfile } = useProfileQuery();
 	const [createQuestAction, loading] = useCreateQuestActionMutation();
 	const { styles } = useStyles(stylesheet);
 	const isMobile = UnistylesRuntime.breakpoint === 'xs';
@@ -33,8 +33,8 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 		await createQuestAction({
 			variables: { questId: quest.id },
 		});
-		await refetch();
-		await profileQuery();
+		await refetchQuests();
+		await refetchProfile();
 	};
 
 	return !isDone ? (

@@ -13,7 +13,7 @@ export interface BuddyProps {
 }
 
 export const BuddyItem: FC<BuddyProps> = ({ item, onPress }) => {
-	const { name, address } = item;
+	const { address } = item;
 	const containerRef = useRef<View>(null);
 
 	const handlePress = () => {
@@ -22,14 +22,10 @@ export const BuddyItem: FC<BuddyProps> = ({ item, onPress }) => {
 
 	return (
 		<TouchableOpacity onPress={handlePress} style={styles.container}>
-			<Avatar
-				onPress={handlePress}
-				size={avatarSize}
-				imageUri={item.avatarUrl as string}
-			/>
+			<Avatar onPress={handlePress} size={avatarSize} />
 			<View style={styles.onlineCircle} />
 			<View ref={containerRef} style={styles.infoContainer}>
-				<Text style={styles.name}>{name || shortenAddress(address || '')}</Text>
+				<Text style={styles.name}>{shortenAddress(address || '')}</Text>
 				<Text style={styles.onlineText}>Online</Text>
 			</View>
 		</TouchableOpacity>

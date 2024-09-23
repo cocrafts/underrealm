@@ -1,12 +1,11 @@
 import { Linking, Platform } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
-import type { CognitoUser } from 'amazon-cognito-identity-js';
 
 export type AuthError = {
 	message: string;
 };
 
-export type ChallengedUser = CognitoUser & {
+export type ChallengedUser = {
 	challengeParam: Record<string, string>;
 };
 

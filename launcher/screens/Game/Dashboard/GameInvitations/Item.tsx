@@ -13,9 +13,11 @@ interface Props {
 export const GameInvitationItem: FC<Props> = ({ item, onAccept }) => {
 	return (
 		<View style={styles.container}>
-			<Avatar size={40} imageUri={item.owner?.avatarUrl as string} />
+			<Avatar size={40} />
 			<View style={styles.infoContainer}>
-				<Text style={styles.heading}>{item.owner?.name} </Text>
+				<Text style={styles.heading}>
+					{item.owner.address || item.owner.email}{' '}
+				</Text>
 				<Text style={styles.description}>invite you play {item.game} Game</Text>
 				<Text style={styles.expire}>expires in 30s</Text>
 			</View>

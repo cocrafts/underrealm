@@ -152,18 +152,11 @@ export type MutationMakeReferralArgs = {
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
-  avatarUrl?: Maybe<Scalars['String']['output']>;
+  bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  githubId?: Maybe<Scalars['String']['output']>;
-  githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  isOnline?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
-  linkedId?: Maybe<Scalars['String']['output']>;
-  mineral?: Maybe<Scalars['Float']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
-  questActions?: Maybe<Array<Maybe<QuestAction>>>;
   referralCode: Scalars['String']['output'];
 };
 
@@ -207,11 +200,11 @@ export type QueryQuestsArgs = {
 
 export type Quest = {
   __typename?: 'Quest';
+  action?: Maybe<QuestAction>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
-  questAction?: Maybe<QuestAction>;
   status: QuestStatus;
   title: Scalars['String']['output'];
   type: QuestType;
@@ -359,7 +352,6 @@ export type ResolversTypes = ResolversObject<{
   CardDuelSetting: ResolverTypeWrapper<CardDuelSetting>;
   CardPlayerConfig: ResolverTypeWrapper<CardPlayerConfig>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GameInvitation: ResolverTypeWrapper<GameInvitation>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -391,7 +383,6 @@ export type ResolversParentTypes = ResolversObject<{
   CardDuelSetting: CardDuelSetting;
   CardPlayerConfig: CardPlayerConfig;
   DateTime: Scalars['DateTime']['output'];
-  Float: Scalars['Float']['output'];
   GameInvitation: GameInvitation;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -513,18 +504,11 @@ export type MutationResolvers<ContextType = ApiContext, ParentType extends Resol
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bindingId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  githubId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  githubUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  isOnline?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  linkedId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  mineral?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  questActions?: Resolver<Maybe<Array<Maybe<ResolversTypes['QuestAction']>>>, ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -542,11 +526,11 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
 }>;
 
 export type QuestResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Quest'] = ResolversParentTypes['Quest']> = ResolversObject<{
+  action?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  questAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['QuestStatus'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['QuestType'], ParentType, ContextType>;

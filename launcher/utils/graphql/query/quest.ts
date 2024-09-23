@@ -11,11 +11,12 @@ export const quests = gql`
 			status
 			points
 			createdAt
-			questAction {
+			action {
 				id
 				userId
 				questId
 				claimedPoints
+				createdAt
 			}
 		}
 	}

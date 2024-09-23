@@ -19,7 +19,7 @@ const QuestItem: FC<Props> = ({ quest }) => {
 	const { profile } = useSnapshot(accountState);
 	const [isTaskOpened, setIsTaskOpened] = useState(false);
 	const isDone = useMemo(() => {
-		return quest.questAction !== null;
+		return quest.action !== null;
 	}, [quest]);
 
 	const handleGoToTask = () => {

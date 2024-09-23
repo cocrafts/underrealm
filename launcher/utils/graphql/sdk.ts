@@ -152,18 +152,11 @@ export type MutationMakeReferralArgs = {
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
-  avatarUrl?: Maybe<Scalars['String']['output']>;
+  bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  githubId?: Maybe<Scalars['String']['output']>;
-  githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  isOnline?: Maybe<Scalars['Boolean']['output']>;
   jwt?: Maybe<Scalars['String']['output']>;
-  linkedId?: Maybe<Scalars['String']['output']>;
-  mineral?: Maybe<Scalars['Float']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
-  questActions?: Maybe<Array<Maybe<QuestAction>>>;
   referralCode: Scalars['String']['output'];
 };
 
@@ -207,11 +200,11 @@ export type QueryQuestsArgs = {
 
 export type Quest = {
   __typename?: 'Quest';
+  action?: Maybe<QuestAction>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   points: Scalars['Int']['output'];
-  questAction?: Maybe<QuestAction>;
   status: QuestStatus;
   title: Scalars['String']['output'];
   type: QuestType;
@@ -304,31 +297,31 @@ export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAc
 export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null } } | null> | null };
+export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address?: string | null } } | null> | null };
 
 export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null, points: number };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, points: number, referralCode: string };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', referralCode: string, id: string, address?: string | null, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral?: number | null, points: number } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, points: number, referralCode: string } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
 }>;
 
 
-export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any, questAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null } | null> | null };
+export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any, action?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number, createdAt: any } | null } | null> | null };
 
 export type ReferralHistoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReferralHistoryQuery = { __typename?: 'Query', referralHistory?: Array<{ __typename?: 'ReferralHistory', id: string, referrerId?: string | null, refereeId?: string | null, claimedPoints?: number | null, createdAt?: any | null, refereeUser?: { __typename?: 'Profile', id: string, name?: string | null, address?: string | null, email?: string | null } | null } | null> | null };
+export type ReferralHistoryQuery = { __typename?: 'Query', referralHistory?: Array<{ __typename?: 'ReferralHistory', id: string, referrerId?: string | null, refereeId?: string | null, claimedPoints?: number | null, createdAt?: any | null, refereeUser?: { __typename?: 'Profile', id: string, address?: string | null, email?: string | null } | null } | null> | null };
 
 export type CounterIncreasedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -340,7 +333,7 @@ export type GameInvitationSubscriptionVariables = Exact<{
 }>;
 
 
-export type GameInvitationSubscription = { __typename?: 'Subscription', gameInvitation?: { __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', address?: string | null, avatarUrl?: string | null, name?: string | null } } | null };
+export type GameInvitationSubscription = { __typename?: 'Subscription', gameInvitation?: { __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', email?: string | null, address?: string | null } } | null };
 
 export type MatchFindSubscriptionVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
@@ -353,11 +346,8 @@ export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
   id
   address
-  name
-  avatarUrl
-  githubUrl
-  mineral
   points
+  referralCode
 }
     `;
 export const InviteGameDocument = gql`
@@ -498,8 +488,6 @@ export const GameInvitationsDocument = gql`
     owner {
       id
       address
-      name
-      avatarUrl
     }
   }
 }
@@ -577,7 +565,6 @@ export const ProfileDocument = gql`
     query Profile {
   profile {
     ...ProfileFields
-    referralCode
   }
 }
     ${ProfileFieldsFragmentDoc}`;
@@ -624,11 +611,12 @@ export const QuestsDocument = gql`
     status
     points
     createdAt
-    questAction {
+    action {
       id
       userId
       questId
       claimedPoints
+      createdAt
     }
   }
 }
@@ -674,7 +662,6 @@ export const ReferralHistoryDocument = gql`
     refereeId
     refereeUser {
       id
-      name
       address
       email
     }
@@ -748,9 +735,8 @@ export const GameInvitationDocument = gql`
     id
     game
     owner {
+      email
       address
-      avatarUrl
-      name
     }
   }
 }

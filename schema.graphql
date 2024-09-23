@@ -101,18 +101,11 @@ type Mutation {
 
 type Profile {
   address: String
-  avatarUrl: String
+  bindingId: String
   email: String
-  githubId: String
-  githubUrl: String
   id: String!
-  isOnline: Boolean
   jwt: String
-  linkedId: String
-  mineral: Float
-  name: String
   points: Int!
-  questActions: [QuestAction]
   referralCode: String!
 }
 
@@ -129,11 +122,11 @@ type Query {
 }
 
 type Quest {
+  action: QuestAction
   createdAt: DateTime!
   description: String!
   id: ID!
   points: Int!
-  questAction: QuestAction
   status: QuestStatus!
   title: String!
   type: QuestType!

@@ -6,6 +6,7 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 	{ status },
 	{ user },
 ) => {
+	// TODO: this aggregate should follow resolver chains
 	const quests = await Quest.aggregate([
 		{
 			$match: {
@@ -15,7 +16,7 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 		{
 			$lookup: {
 				from: 'questactions',
-				let: { questId: '$_id' as string },
+				let: { questId: '$_id' },
 				pipeline: [
 					{
 						$match: {
@@ -34,23 +35,23 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 		},
 		{
 			$addFields: {
-				questAction: { $arrayElemAt: ['$questAction', 0] },
+				action: { $arrayElemAt: ['$questAction', 0] },
 			},
 		},
 		{
 			$addFields: {
-				questAction: { $ifNull: ['$questAction', null] },
+				action: { $ifNull: ['$questAction', null] },
 			},
 		},
 	]);
+
+	console.log(quests);
 
 	const result = quests.map((quest) => {
 		return {
 			...quest,
 			id: quest._id,
-			questAction: quest.questAction
-				? { ...quest.questAction, id: quest.questAction._id }
-				: null,
+			action: quest.action ? { ...quest.action, id: quest.action._id } : null,
 		};
 	});
 
