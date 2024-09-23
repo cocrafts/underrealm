@@ -24,11 +24,25 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 
 	switch (event.requestContext.routeKey) {
 		case '$connect': {
-			logger.info('connect', event.requestContext);
+			logger.info('connect', event);
+
+			const subprotocols: string[] =
+				event['multiValueHeaders']?.['Sec-WebSocket-Protocol'];
+
+			if (
+				subprotocols &&
+				subprotocols.length > 0 &&
+				subprotocols.indexOf('graphql-transport-ws') !== -1
+			) {
+				return ok({
+					headers: { 'Sec-WebSocket-Protocol': 'graphql-transport-ws' },
+				});
+			}
+
 			return ok();
 		}
 		case '$disconnect': {
-			logger.info('disconnect', event.requestContext);
+			logger.info('disconnect', event);
 			return ok();
 		}
 		case '$default': {
