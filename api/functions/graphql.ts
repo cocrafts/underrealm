@@ -2,8 +2,6 @@ import {
 	handlers,
 	startServerAndCreateLambdaHandler,
 } from '@as-integrations/aws-lambda';
-import mongoose from 'mongoose';
-import { configs } from 'utils/config';
 import { graphqlContext } from 'utils/context/index.lambda';
 import { logger } from 'utils/logger';
 import { redis } from 'utils/redis';
@@ -11,10 +9,11 @@ import { redis } from 'utils/redis';
 import '../models';
 
 import { apolloServer } from '../apollo';
+import { mongo } from '../models';
 
 logger.info('API is running');
 
-const initPromises = [redis.connect(), mongoose.connect(configs.MONGO_URI)];
+const initPromises = [redis.connect(), mongo.connect()];
 
 const requestHandler = handlers.createAPIGatewayProxyEventV2RequestHandler();
 

@@ -4,15 +4,14 @@ import type {
 } from 'aws-lambda';
 import { parse, subscribe, validate } from 'graphql';
 import { StatusCodes } from 'http-status-codes';
-import mongoose from 'mongoose';
+import { mongo } from 'models';
 import { postToConnection } from 'utils/aws/gateway';
-import { configs } from 'utils/config';
 import { globalContext } from 'utils/context/index.lambda';
 import { redis } from 'utils/redis';
 
 import { schema } from '../apollo';
 
-const initPromises = [redis.connect(), mongoose.connect(configs.MONGO_URI)];
+const initPromises = [redis.connect(), mongo.connect()];
 
 export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 	event,
