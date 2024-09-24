@@ -34,6 +34,9 @@ export const pubsub = {
 				storeSubscription(subscriptionId, connectionId, topics),
 			]);
 		}
+
+		// mock AsyncIterator to be compliance with resolver (graphql engine)
+		return (async function* () {})();
 	},
 	unsubscribe: async (subscriptionId: string) => {
 		const subscriptionKey = constructSubscriptionKey(subscriptionId);
