@@ -107,7 +107,7 @@ const storeSubscription = async (
 };
 
 const constructTopicKey = (topic: string) => {
-	return `pubsub:topic#${topic}`;
+	return `pubsub:topic:${topic}`;
 };
 
 const constructSubscriptionKey = (subscriptionId: string) => {
