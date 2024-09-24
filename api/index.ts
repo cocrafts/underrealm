@@ -9,6 +9,7 @@ import cors from 'cors';
 import express from 'express';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { ApolloServerPluginDrainWsServer } from 'utils/apollo';
+import { GraphQLLoggingMiddleware } from 'utils/common';
 import { configs } from 'utils/config';
 import { graphqlContext as context } from 'utils/context';
 import { logger } from 'utils/logger';
@@ -36,6 +37,7 @@ await Promise.all([apollo.start(), redis.connect(), mongo.connect()]);
 
 app.use(cors());
 app.use(express.json());
+app.use(GraphQLLoggingMiddleware());
 app.use('/graphql', expressMiddleware(apollo, { context }));
 
 const port = configs.PORT;
