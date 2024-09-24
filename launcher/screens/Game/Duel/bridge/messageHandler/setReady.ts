@@ -1,4 +1,5 @@
-import { accountState } from 'utils/state/account';
+import { graphQlClient } from 'utils/graphql';
+import { profile as profileQuery } from 'utils/graphql/query';
 
 import { MessageType } from '../internal';
 import { send } from '../messenger';
@@ -11,9 +12,10 @@ export default (): void => {
 };
 
 const sendContext = (): void => {
+	const { profile } = graphQlClient.readQuery({ query: profileQuery });
 	if (bridgeState.duel) {
 		const payload = {
-			user: accountState.profile,
+			user: profile,
 			duel: bridgeState.duel,
 		};
 

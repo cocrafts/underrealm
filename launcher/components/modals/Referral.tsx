@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
 import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles,
-} from 'react-native-unistyles';
+	ActivityIndicator,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
-import { graphQlClient } from 'utils/graphql';
-import { makeReferral } from 'utils/graphql/mutation';
+import { useMakeReferralMutation, useProfileQuery } from 'utils/graphql';
 import { getReferralCode } from 'utils/referral';
-import { accountActions } from 'utils/state/account';
 
 import { modalStyles } from './shared';
 
@@ -20,27 +19,14 @@ export const REFERRAL_MODAL_ID = 'referral-modal';
 export const ReferralModal = () => {
 	const [focus, setFocus] = useState(false);
 	const [referralCode, setReferralCode] = useState('');
-	const [error, setError] = useState('');
+	const { refetch: refetchProfile } = useProfileQuery();
+	const [makeReferral, { loading, error }] = useMakeReferralMutation();
 	const { styles } = useStyles(stylesheet);
+
 	const onConfirmPress = async () => {
-		const { errors } = await graphQlClient.mutate({
-			mutation: makeReferral,
-			variables: {
-				referralCode,
-			},
-		});
-
-		if (errors) {
-			setError(errors[0].message);
-			return;
-		}
-		accountActions.syncProfile();
+		await makeReferral({ variables: { referralCode } });
+		refetchProfile();
 		modalActions.hide(REFERRAL_MODAL_ID);
-	};
-
-	const maskStyle = {
-		width: UnistylesRuntime.screen.width,
-		height: UnistylesRuntime.screen.height,
 	};
 
 	useEffect(() => {
@@ -49,7 +35,7 @@ export const ReferralModal = () => {
 	}, []);
 
 	return (
-		<View style={[styles.mask, maskStyle]} pointerEvents="box-only">
+		<View style={styles.mask} pointerEvents="box-only">
 			<View
 				style={[modalStyles.container, styles.container]}
 				pointerEvents="box-none"
@@ -66,25 +52,25 @@ export const ReferralModal = () => {
 						autoCapitalize="characters"
 						onChangeText={(text) => setReferralCode(text)}
 						defaultValue={referralCode}
-						onFocus={() => {
-							setFocus(true);
-						}}
-						onBlur={() => {
-							setFocus(false);
-						}}
+						onFocus={() => setFocus(true)}
+						onBlur={() => setFocus(false)}
 					/>
-					{error && <Text>{error}</Text>}
+					{error && <Text>{error.message[0]}</Text>}
 				</View>
 				<View style={styles.confirmContainer}>
-					<TouchableOpacity
-						style={styles.confirmButton}
-						onPress={onConfirmPress}
-					>
-						<AncientPaper width={100} />
-						<View style={styles.labelContainer}>
-							<Text style={styles.label}>Confirm</Text>
-						</View>
-					</TouchableOpacity>
+					{loading ? (
+						<ActivityIndicator style={styles.loading} />
+					) : (
+						<TouchableOpacity
+							style={styles.confirmButton}
+							onPress={onConfirmPress}
+						>
+							<AncientPaper width={100} />
+							<View style={styles.labelContainer}>
+								<Text style={styles.label}>Confirm</Text>
+							</View>
+						</TouchableOpacity>
+					)}
 				</View>
 			</View>
 		</View>
@@ -93,11 +79,13 @@ export const ReferralModal = () => {
 
 export default ReferralModal;
 
-const stylesheet = createStyleSheet({
+const stylesheet = createStyleSheet((_, runtime) => ({
 	mask: {
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		justifyContent: 'center',
 		alignItems: 'center',
+		width: runtime.screen.width,
+		height: runtime.screen.height,
 	},
 	container: {
 		paddingHorizontal: 36,
@@ -155,4 +143,7 @@ const stylesheet = createStyleSheet({
 		fontWeight: '500',
 		lineHeight: 28,
 	},
-});
+	loading: {
+		alignSelf: 'center',
+	},
+}));

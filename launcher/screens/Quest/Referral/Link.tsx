@@ -1,39 +1,29 @@
-import { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
 import UnderRealmButton from 'components/Marketplace/Button';
-import { useProfileQuery } from 'utils/graphql';
+import { useProfile } from 'utils/hook';
 import resources from 'utils/resources';
 
 export const ReferralLink = () => {
 	const { styles } = useStyles(stylesheet);
-	const { data } = useProfileQuery();
-	const [linkAvailable, setLinkAvailable] = useState(data?.profile);
-	const referralLink = `https://underrealm.io?ref=${data?.profile.referralCode}`;
+	const { profile } = useProfile();
+	const referralLink = `https://underrealm.io?ref=${profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);
 	};
-
-	useEffect(() => {
-		if (data?.profile) {
-			setLinkAvailable(data?.profile);
-		}
-	}, [data?.profile]);
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.label}>Your Referral Link:</Text>
 			<View style={styles.linkBox}>
 				<Text style={styles.link}>
-					{linkAvailable
-						? referralLink
-						: 'Please sign-in to get your referral link'}
+					{profile ? referralLink : 'Please sign-in to get your referral link'}
 				</Text>
 				<View style={styles.buttonGroup}>
-					<TouchableOpacity onPress={onCopy} disabled={!linkAvailable}>
+					<TouchableOpacity onPress={onCopy} disabled={!profile}>
 						<View>
 							<AncientPaper width={100} height={45} />
 							<View style={styles.svgButton}>
@@ -44,8 +34,8 @@ export const ReferralLink = () => {
 					<UnderRealmButton
 						title="Share"
 						style={{ width: 140 }}
-						isSubButton={!linkAvailable}
-						disabled={!linkAvailable}
+						isSubButton={!profile}
+						disabled={!profile}
 					/>
 				</View>
 			</View>

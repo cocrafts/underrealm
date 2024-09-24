@@ -14,25 +14,20 @@ export const liveState = proxy<LiveState>({
 	gamePlaying: undefined,
 });
 
-let lastAddress = accountState.profile?.address;
-
 subscribe(accountState, () => {
-	const nextAddress = accountState.profile?.address;
-
-	if (!!nextAddress && nextAddress !== lastAddress) {
-		// graphQlClient.query({ query: queries.cardDuelPlaying }).then((response) => {
-		// 	const instance = response?.data?.cardDuelPlaying;
-		//
-		// 	if (instance) {
-		// 		modalActions.show({
-		// 			id: 'gamePlayingNotice',
-		// 			component: GamePlayingModal,
-		// 			context: instance,
-		// 			bindingDirection: BindDirections.BottomLeft,
-		// 		});
-		// 	}
-		// });
-
-		lastAddress = nextAddress;
-	}
+	// if (!!nextAddress && nextAddress !== lastAddress) {
+	// 	// graphQlClient.query({ query: queries.cardDuelPlaying }).then((response) => {
+	// 	// 	const instance = response?.data?.cardDuelPlaying;
+	// 	//
+	// 	// 	if (instance) {
+	// 	// 		modalActions.show({
+	// 	// 			id: 'gamePlayingNotice',
+	// 	// 			component: GamePlayingModal,
+	// 	// 			context: instance,
+	// 	// 			bindingDirection: BindDirections.BottomLeft,
+	// 	// 		});
+	// 	// 	}
+	// 	// });
+	// 	lastAddress = nextAddress;
+	// }
 });

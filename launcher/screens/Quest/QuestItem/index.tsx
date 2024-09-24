@@ -4,8 +4,7 @@ import { AnimateDirections, modalActions } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import SignInOptions from 'components/modals/SignInOptions';
 import { type Quest } from 'utils/graphql';
-import { accountState } from 'utils/state/account';
-import { useSnapshot } from 'valtio';
+import { useProfile } from 'utils/hook';
 
 import Action from './Action';
 import Info from './Info';
@@ -16,7 +15,7 @@ type Props = {
 };
 
 const QuestItem: FC<Props> = ({ quest }) => {
-	const { profile } = useSnapshot(accountState);
+	const { profile } = useProfile();
 	const [isTaskOpened, setIsTaskOpened] = useState(false);
 	const isDone = useMemo(() => {
 		return quest.action !== null;
