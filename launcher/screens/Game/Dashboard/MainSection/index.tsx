@@ -1,25 +1,23 @@
-import type { FC } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { type FC, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
-import { useFindMatchSubscription } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import { iStyles } from 'utils/styles';
 
+import FindingMatch from './FindingMatch';
 import LeaderBoard from './LeaderBoard';
 import StatisticBoard from './StatisticBoard';
 import UnderRealmInfo from './UnderRealmInfo';
 
 export const MainSection: FC = () => {
 	const { profile } = useProfile();
-	const { loading, restart: restartFindMatch } = useFindMatchSubscription({
-		variables: { userId: profile.id },
-	});
+	const [startFindMatch, setStartFindMatch] = useState(false);
 
 	const onFindMatch = () => {
 		if (profile.id) {
-			restartFindMatch();
+			setStartFindMatch((value) => !value);
 		} else {
 			modalActions.show({ id: 'signInOptions', component: SignInOptions });
 		}
@@ -36,8 +34,8 @@ export const MainSection: FC = () => {
 					</Text>
 
 					<UnderRealmButton style={styles.button} onPress={onFindMatch}>
-						{loading ? (
-							<ActivityIndicator color="white" />
+						{startFindMatch ? (
+							<FindingMatch />
 						) : (
 							<Text style={styles.buttonText}>Find Match</Text>
 						)}
@@ -77,6 +75,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		width: 220,
+		height: 48,
 	},
 	buttonText: {
 		textAlign: 'center',
