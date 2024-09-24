@@ -2,6 +2,7 @@
 logger.info('Underrealm API is running...');
 
 import { createServer } from 'http';
+import { inspect } from 'util';
 
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
@@ -26,7 +27,18 @@ const app = express();
 const http = createServer(app);
 const ws = new WebSocketServer({ server: http, path: '/subscriptions' });
 
-const wsCleanup = useServer({ schema }, ws);
+const wsCleanup = useServer(
+	{
+		schema,
+		onSubscribe: (ctx, msg) => {
+			logger.info(`Client subscribed: ${inspect(msg)}`);
+		},
+		onComplete: (ctx, msg) => {
+			logger.info(`Client unsubscribed: ${inspect(msg)}`);
+		},
+	},
+	ws,
+);
 
 // Proper shutdown for the HTTP server.
 apollo.addPlugin(ApolloServerPluginDrainHttpServer({ httpServer: http }));
