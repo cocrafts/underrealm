@@ -102,46 +102,15 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
-export type GameInvitation = {
-  __typename?: 'GameInvitation';
-  enemy: Profile;
-  game: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  owner: Profile;
-  timestamp: Scalars['String']['output'];
-};
-
-export type InviteGameInput = {
-  game: MetacraftGames;
-  opponent: Scalars['String']['input'];
-};
-
-export enum MetacraftGames {
-  Murg = 'MURG'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptGame?: Maybe<Scalars['Boolean']['output']>;
   createQuestAction?: Maybe<QuestAction>;
-  inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
-  stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-export type MutationAcceptGameArgs = {
-  invitationId: Scalars['String']['input'];
 };
 
 
 export type MutationCreateQuestActionArgs = {
   questId: Scalars['ID']['input'];
-};
-
-
-export type MutationInviteGameArgs = {
-  input: InviteGameInput;
 };
 
 
@@ -155,7 +124,6 @@ export type Profile = {
   bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  jwt?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
@@ -166,8 +134,6 @@ export type Query = {
   cardDuel?: Maybe<CardDuel>;
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
-  gameInvitations?: Maybe<Array<Maybe<GameInvitation>>>;
-  gameJwt?: Maybe<Scalars['String']['output']>;
   greeting?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
@@ -182,11 +148,6 @@ export type QueryCardDuelArgs = {
 
 export type QueryCardDuelHistoryArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type QueryGameJwtArgs = {
-  duelId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -247,46 +208,13 @@ export type ReferralHistory = {
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
-  gameInvitation?: Maybe<GameInvitation>;
-  matchFind?: Maybe<CardDuel>;
-  matchFound?: Maybe<CardDuel>;
+  findMatch?: Maybe<CardDuel>;
 };
 
 
-export type SubscriptionGameInvitationArgs = {
-  opponent: Scalars['String']['input'];
+export type SubscriptionFindMatchArgs = {
+  userId: Scalars['String']['input'];
 };
-
-
-export type SubscriptionMatchFindArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SubscriptionMatchFoundArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type InviteGameMutationVariables = Exact<{
-  input: InviteGameInput;
-}>;
-
-
-export type InviteGameMutation = { __typename?: 'Mutation', inviteGame?: { __typename?: 'GameInvitation', game: string } | null };
-
-export type AcceptGameMutationVariables = Exact<{
-  invitationId: Scalars['String']['input'];
-}>;
-
-
-export type AcceptGameMutation = { __typename?: 'Mutation', acceptGame?: boolean | null };
-
-export type StopMatchFindMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StopMatchFindMutation = { __typename?: 'Mutation', stopMatchFind?: boolean | null };
 
 export type CreateQuestActionMutationVariables = Exact<{
   questId: Scalars['ID']['input'];
@@ -301,11 +229,6 @@ export type MakeReferralMutationVariables = Exact<{
 
 
 export type MakeReferralMutation = { __typename?: 'Mutation', makeReferral?: boolean | null };
-
-export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address?: string | null } } | null> | null };
 
 export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -336,19 +259,12 @@ export type CounterIncreasedSubscriptionVariables = Exact<{ [key: string]: never
 
 export type CounterIncreasedSubscription = { __typename?: 'Subscription', counterIncreased: number };
 
-export type GameInvitationSubscriptionVariables = Exact<{
-  opponent: Scalars['String']['input'];
+export type FindMatchSubscriptionVariables = Exact<{
+  userId: Scalars['String']['input'];
 }>;
 
 
-export type GameInvitationSubscription = { __typename?: 'Subscription', gameInvitation?: { __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', email?: string | null, address?: string | null } } | null };
-
-export type MatchFindSubscriptionVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type MatchFindSubscription = { __typename?: 'Subscription', matchFind?: { __typename?: 'CardDuel', id?: string | null } | null };
+export type FindMatchSubscription = { __typename?: 'Subscription', findMatch?: { __typename?: 'CardDuel', id?: string | null } | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
@@ -358,100 +274,6 @@ export const ProfileFieldsFragmentDoc = gql`
   referralCode
 }
     `;
-export const InviteGameDocument = gql`
-    mutation InviteGame($input: InviteGameInput!) {
-  inviteGame(input: $input) {
-    game
-  }
-}
-    `;
-export type InviteGameMutationFn = Apollo.MutationFunction<InviteGameMutation, InviteGameMutationVariables>;
-
-/**
- * __useInviteGameMutation__
- *
- * To run a mutation, you first call `useInviteGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInviteGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [inviteGameMutation, { data, loading, error }] = useInviteGameMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useInviteGameMutation(baseOptions?: Apollo.MutationHookOptions<InviteGameMutation, InviteGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InviteGameMutation, InviteGameMutationVariables>(InviteGameDocument, options);
-      }
-export type InviteGameMutationHookResult = ReturnType<typeof useInviteGameMutation>;
-export type InviteGameMutationResult = Apollo.MutationResult<InviteGameMutation>;
-export type InviteGameMutationOptions = Apollo.BaseMutationOptions<InviteGameMutation, InviteGameMutationVariables>;
-export const AcceptGameDocument = gql`
-    mutation AcceptGame($invitationId: String!) {
-  acceptGame(invitationId: $invitationId)
-}
-    `;
-export type AcceptGameMutationFn = Apollo.MutationFunction<AcceptGameMutation, AcceptGameMutationVariables>;
-
-/**
- * __useAcceptGameMutation__
- *
- * To run a mutation, you first call `useAcceptGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAcceptGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [acceptGameMutation, { data, loading, error }] = useAcceptGameMutation({
- *   variables: {
- *      invitationId: // value for 'invitationId'
- *   },
- * });
- */
-export function useAcceptGameMutation(baseOptions?: Apollo.MutationHookOptions<AcceptGameMutation, AcceptGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AcceptGameMutation, AcceptGameMutationVariables>(AcceptGameDocument, options);
-      }
-export type AcceptGameMutationHookResult = ReturnType<typeof useAcceptGameMutation>;
-export type AcceptGameMutationResult = Apollo.MutationResult<AcceptGameMutation>;
-export type AcceptGameMutationOptions = Apollo.BaseMutationOptions<AcceptGameMutation, AcceptGameMutationVariables>;
-export const StopMatchFindDocument = gql`
-    mutation StopMatchFind {
-  stopMatchFind
-}
-    `;
-export type StopMatchFindMutationFn = Apollo.MutationFunction<StopMatchFindMutation, StopMatchFindMutationVariables>;
-
-/**
- * __useStopMatchFindMutation__
- *
- * To run a mutation, you first call `useStopMatchFindMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStopMatchFindMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [stopMatchFindMutation, { data, loading, error }] = useStopMatchFindMutation({
- *   variables: {
- *   },
- * });
- */
-export function useStopMatchFindMutation(baseOptions?: Apollo.MutationHookOptions<StopMatchFindMutation, StopMatchFindMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StopMatchFindMutation, StopMatchFindMutationVariables>(StopMatchFindDocument, options);
-      }
-export type StopMatchFindMutationHookResult = ReturnType<typeof useStopMatchFindMutation>;
-export type StopMatchFindMutationResult = Apollo.MutationResult<StopMatchFindMutation>;
-export type StopMatchFindMutationOptions = Apollo.BaseMutationOptions<StopMatchFindMutation, StopMatchFindMutationVariables>;
 export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!) {
   createQuestAction(questId: $questId) {
@@ -519,50 +341,6 @@ export function useMakeReferralMutation(baseOptions?: Apollo.MutationHookOptions
 export type MakeReferralMutationHookResult = ReturnType<typeof useMakeReferralMutation>;
 export type MakeReferralMutationResult = Apollo.MutationResult<MakeReferralMutation>;
 export type MakeReferralMutationOptions = Apollo.BaseMutationOptions<MakeReferralMutation, MakeReferralMutationVariables>;
-export const GameInvitationsDocument = gql`
-    query GameInvitations {
-  gameInvitations {
-    id
-    game
-    owner {
-      id
-      address
-    }
-  }
-}
-    `;
-
-/**
- * __useGameInvitationsQuery__
- *
- * To run a query within a React component, call `useGameInvitationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGameInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGameInvitationsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGameInvitationsQuery(baseOptions?: Apollo.QueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
-      }
-export function useGameInvitationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
-        }
-export function useGameInvitationsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
-        }
-export type GameInvitationsQueryHookResult = ReturnType<typeof useGameInvitationsQuery>;
-export type GameInvitationsLazyQueryHookResult = ReturnType<typeof useGameInvitationsLazyQuery>;
-export type GameInvitationsSuspenseQueryHookResult = ReturnType<typeof useGameInvitationsSuspenseQuery>;
-export type GameInvitationsQueryResult = Apollo.QueryResult<GameInvitationsQuery, GameInvitationsQueryVariables>;
 export const GreetingDocument = gql`
     query Greeting {
   greeting
@@ -774,68 +552,33 @@ export function useCounterIncreasedSubscription(baseOptions?: Apollo.Subscriptio
       }
 export type CounterIncreasedSubscriptionHookResult = ReturnType<typeof useCounterIncreasedSubscription>;
 export type CounterIncreasedSubscriptionResult = Apollo.SubscriptionResult<CounterIncreasedSubscription>;
-export const GameInvitationDocument = gql`
-    subscription GameInvitation($opponent: String!) {
-  gameInvitation(opponent: $opponent) {
-    id
-    game
-    owner {
-      email
-      address
-    }
-  }
-}
-    `;
-
-/**
- * __useGameInvitationSubscription__
- *
- * To run a query within a React component, call `useGameInvitationSubscription` and pass it any options that fit your needs.
- * When your component renders, `useGameInvitationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGameInvitationSubscription({
- *   variables: {
- *      opponent: // value for 'opponent'
- *   },
- * });
- */
-export function useGameInvitationSubscription(baseOptions: Apollo.SubscriptionHookOptions<GameInvitationSubscription, GameInvitationSubscriptionVariables> & ({ variables: GameInvitationSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<GameInvitationSubscription, GameInvitationSubscriptionVariables>(GameInvitationDocument, options);
-      }
-export type GameInvitationSubscriptionHookResult = ReturnType<typeof useGameInvitationSubscription>;
-export type GameInvitationSubscriptionResult = Apollo.SubscriptionResult<GameInvitationSubscription>;
-export const MatchFindDocument = gql`
-    subscription MatchFind($userId: String) {
-  matchFind(game: MURG, userId: $userId) {
+export const FindMatchDocument = gql`
+    subscription FindMatch($userId: String!) {
+  findMatch(userId: $userId) {
     id
   }
 }
     `;
 
 /**
- * __useMatchFindSubscription__
+ * __useFindMatchSubscription__
  *
- * To run a query within a React component, call `useMatchFindSubscription` and pass it any options that fit your needs.
- * When your component renders, `useMatchFindSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindMatchSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFindMatchSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMatchFindSubscription({
+ * const { data, loading, error } = useFindMatchSubscription({
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useMatchFindSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MatchFindSubscription, MatchFindSubscriptionVariables>) {
+export function useFindMatchSubscription(baseOptions: Apollo.SubscriptionHookOptions<FindMatchSubscription, FindMatchSubscriptionVariables> & ({ variables: FindMatchSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<MatchFindSubscription, MatchFindSubscriptionVariables>(MatchFindDocument, options);
+        return Apollo.useSubscription<FindMatchSubscription, FindMatchSubscriptionVariables>(FindMatchDocument, options);
       }
-export type MatchFindSubscriptionHookResult = ReturnType<typeof useMatchFindSubscription>;
-export type MatchFindSubscriptionResult = Apollo.SubscriptionResult<MatchFindSubscription>;
+export type FindMatchSubscriptionHookResult = ReturnType<typeof useFindMatchSubscription>;
+export type FindMatchSubscriptionResult = Apollo.SubscriptionResult<FindMatchSubscription>;

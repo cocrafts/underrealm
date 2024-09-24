@@ -3,10 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
-import {
-	useMatchFindSubscription,
-	useStopMatchFindMutation,
-} from 'utils/graphql';
+import { useFindMatchSubscription } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import { iStyles } from 'utils/styles';
 
@@ -16,19 +13,13 @@ import UnderRealmInfo from './UnderRealmInfo';
 
 export const MainSection: FC = () => {
 	const { profile } = useProfile();
-	const [stopFindMatch] = useStopMatchFindMutation();
-	const { loading, restart: startFindMatch } = useMatchFindSubscription({
+	const { loading, restart: restartFindMatch } = useFindMatchSubscription({
 		variables: { userId: profile.id },
-		skip: true,
 	});
 
 	const onFindMatch = () => {
 		if (profile.id) {
-			if (loading) {
-				stopFindMatch();
-			} else {
-				startFindMatch();
-			}
+			restartFindMatch();
 		} else {
 			modalActions.show({ id: 'signInOptions', component: SignInOptions });
 		}
@@ -38,7 +29,7 @@ export const MainSection: FC = () => {
 		<View style={[iStyles.contentContainer, styles.container]}>
 			<View>
 				<Text style={styles.heading}>Blind Duel</Text>
-				<View style={[styles.rowContainer, { marginBottom: 40 }]}>
+				<View style={styles.rowContainer}>
 					<Text style={styles.subText}>
 						Are you ready to face the unknown enemy? Do your best and winning
 						might be on your side, Adventurer!
@@ -78,6 +69,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		justifyContent: 'space-between',
+		marginBottom: 40,
 	},
 	subText: {
 		fontSize: 18,
