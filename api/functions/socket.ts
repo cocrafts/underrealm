@@ -2,7 +2,7 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 	APIGatewayProxyWebsocketHandlerV2,
 } from 'aws-lambda';
-import { parse, subscribe, validate } from 'graphql';
+import { GraphQLError, parse, subscribe, validate } from 'graphql';
 import { StatusCodes } from 'http-status-codes';
 import { mongo } from 'models';
 import { postToConnection } from 'utils/aws/gateway';
@@ -52,7 +52,7 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 		}
 	} catch (error) {
 		await postToConnection(connectionId, {
-			payload: { errors: [(error as Error).message] },
+			payload: { errors: [new GraphQLError((error as Error).message)] },
 			type: 'error',
 		});
 	}
@@ -80,6 +80,7 @@ const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async () => {
 	return ok();
 };
 
+// GraphQL WS Protocol Spec: https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md
 const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 	event,
 ) => {
@@ -94,7 +95,7 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 	if (operation.type === 'connection_init') {
 		await postToConnection(connectionId, { type: 'connection_ack' });
 		return ok();
-	} else if (operation.type === 'stop') {
+	} else if (operation.type === 'complete') {
 		await pubsub.unsubscribe(subscriptionId);
 		return ok();
 	} else if (operation.type === 'subscribe') {
@@ -118,10 +119,10 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 				variableValues: variables,
 				contextValue: {},
 			});
-		} catch (err) {
+		} catch (error) {
 			await postToConnection(connectionId, {
-				id: operation.id,
-				payload: err,
+				id: subscriptionId,
+				payload: { errors: [new GraphQLError((error as Error).message)] },
 				type: 'error',
 			});
 		}
