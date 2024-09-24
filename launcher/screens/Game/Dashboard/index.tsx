@@ -1,17 +1,14 @@
 import type { FC } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
-import { dimensionState } from '@metacraft/ui';
+import { ImageBackground, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import InternalNavigation from 'components/Navigation/Internal';
-import { navigationHeight } from 'components/Navigation/shared';
-import { useSnapshot } from 'utils/hook';
+import { navigationHeight as navHeight } from 'components/Navigation/shared';
 import resources from 'utils/resources';
 
 import LeftSection from './LeftSection';
 
 export const LobbyScreen: FC = () => {
-	const { windowSize } = useSnapshot(dimensionState);
-	const height =
-		windowSize.height - (navigationHeight.local + navigationHeight.storm);
+	const { styles } = useStyles(stylesheet);
 
 	return (
 		<ImageBackground
@@ -20,14 +17,9 @@ export const LobbyScreen: FC = () => {
 		>
 			<InternalNavigation isHidingPlayButton />
 			<View style={styles.contentContainer}>
-				<View style={[styles.leftContainer, { height }]}>
+				<View style={styles.leftContainer}>
 					<LeftSection />
 				</View>
-				{/* <View style={[styles.rightContainer, { height }]}>
-					<ScrollView>
-						<View style={{ height: 1500 }} />
-					</ScrollView>
-				</View> */}
 			</View>
 		</ImageBackground>
 	);
@@ -35,7 +27,7 @@ export const LobbyScreen: FC = () => {
 
 export default LobbyScreen;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	container: {
 		flex: 1,
 	},
@@ -46,10 +38,11 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		paddingHorizontal: 15,
 		flex: 1,
+		height: screen.height - (navHeight.local + navHeight.storm),
 	},
 	rightContainer: {
 		paddingVertical: 15,
 		width: 250,
 		backgroundColor: 'transparent',
 	},
-});
+}));

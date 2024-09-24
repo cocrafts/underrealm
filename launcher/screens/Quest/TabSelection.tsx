@@ -45,44 +45,42 @@ const TabSelection: FC<Props> = ({
 
 export default TabSelection;
 
-const stylesheet = createStyleSheet(() => {
-	return {
-		container: {
-			width: { xs: 152, lg: 200 },
-			alignItems: 'center',
-			gap: 12,
-			paddingTop: 20,
+const stylesheet = createStyleSheet({
+	container: {
+		width: { xs: 152, lg: 200 },
+		alignItems: 'center',
+		gap: 12,
+		paddingTop: 20,
+	},
+	title: {
+		fontFamily: 'Volkhov',
+		color: '#ffffff',
+		fontWeight: '500',
+		fontSize: 16,
+	},
+	activeTitle: {
+		textShadowColor: '#FFF9A0',
+		textShadowOffset: {
+			height: 0,
+			width: 0,
 		},
-		title: {
-			fontFamily: 'Volkhov',
-			color: '#ffffff',
-			fontWeight: '500',
-			fontSize: 16,
-		},
-		activeTitle: {
-			textShadowColor: '#FFF9A0',
-			textShadowOffset: {
-				height: 0,
-				width: 0,
-			},
-			textShadowRadius: 6,
-		},
-		inactiveTitle: {
-			opacity: 0.5,
-		},
-		activeIcon: {
-			width: 16,
-			height: 16,
-			marginBottom: -8,
-		},
-		inactiveIcon: {
-			position: 'absolute',
-			bottom: -5,
-			width: 9,
-			height: 9,
-			transform: [{ rotateZ: '45deg' }],
-			backgroundColor: '#ffffff',
-			opacity: 0.3,
-		},
-	};
+		textShadowRadius: 6,
+	},
+	inactiveTitle: {
+		opacity: 0.5,
+	},
+	activeIcon: {
+		width: 16,
+		height: 16,
+		marginBottom: -8,
+	},
+	inactiveIcon: {
+		position: 'absolute',
+		bottom: -5,
+		width: 9,
+		height: 9,
+		transform: [{ rotateZ: '45deg' }],
+		backgroundColor: '#ffffff',
+		opacity: 0.3,
+	},
 });
