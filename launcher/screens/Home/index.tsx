@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState } from '@metacraft/ui';
 import ScrollLayout from 'components/layouts/Scroll';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import { extractReferralFromUrl } from 'utils/referral';
 
 import BattlefieldSetupSection from './sections/BattlefieldSetup';

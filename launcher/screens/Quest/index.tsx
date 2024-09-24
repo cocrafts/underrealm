@@ -25,20 +25,18 @@ const QuestScreen: FC = () => {
 
 export default QuestScreen;
 
-const stylesheet = createStyleSheet(() => {
-	return {
-		container: {
-			backgroundColor: '#190E0E',
-		},
-		frameCharm: {
-			alignSelf: 'center',
-		},
-		imageBackground: {
-			flex: 1,
-			alignItems: 'center',
-			justifyContent: 'center',
-			alignSelf: 'stretch',
-			paddingHorizontal: { xs: 16, sm: 20, md: 40, lg: 80, xl: 120 },
-		},
-	};
+const stylesheet = createStyleSheet({
+	container: {
+		backgroundColor: '#190E0E',
+	},
+	frameCharm: {
+		alignSelf: 'center',
+	},
+	imageBackground: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'stretch',
+		paddingHorizontal: { xs: 16, sm: 20, md: 40, lg: 80, xl: 120 },
+	},
 });

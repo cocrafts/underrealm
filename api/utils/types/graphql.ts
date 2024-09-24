@@ -102,46 +102,15 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
-export type GameInvitation = {
-  __typename?: 'GameInvitation';
-  enemy: Profile;
-  game: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  owner: Profile;
-  timestamp: Scalars['String']['output'];
-};
-
-export type InviteGameInput = {
-  game: MetacraftGames;
-  opponent: Scalars['String']['input'];
-};
-
-export enum MetacraftGames {
-  Murg = 'MURG'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptGame?: Maybe<Scalars['Boolean']['output']>;
   createQuestAction?: Maybe<QuestAction>;
-  inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
-  stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-export type MutationAcceptGameArgs = {
-  invitationId: Scalars['String']['input'];
 };
 
 
 export type MutationCreateQuestActionArgs = {
   questId: Scalars['ID']['input'];
-};
-
-
-export type MutationInviteGameArgs = {
-  input: InviteGameInput;
 };
 
 
@@ -155,7 +124,6 @@ export type Profile = {
   bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  jwt?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
@@ -166,8 +134,6 @@ export type Query = {
   cardDuel?: Maybe<CardDuel>;
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
-  gameInvitations?: Maybe<Array<Maybe<GameInvitation>>>;
-  gameJwt?: Maybe<Scalars['String']['output']>;
   greeting?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
@@ -182,11 +148,6 @@ export type QueryCardDuelArgs = {
 
 export type QueryCardDuelHistoryArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type QueryGameJwtArgs = {
-  duelId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -247,26 +208,12 @@ export type ReferralHistory = {
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
-  gameInvitation?: Maybe<GameInvitation>;
-  matchFind?: Maybe<CardDuel>;
-  matchFound?: Maybe<CardDuel>;
+  findMatch?: Maybe<CardDuel>;
 };
 
 
-export type SubscriptionGameInvitationArgs = {
-  opponent: Scalars['String']['input'];
-};
-
-
-export type SubscriptionMatchFindArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SubscriptionMatchFoundArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
+export type SubscriptionFindMatchArgs = {
+  userId: Scalars['String']['input'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -353,11 +300,8 @@ export type ResolversTypes = ResolversObject<{
   CardDuelSetting: ResolverTypeWrapper<CardDuelSetting>;
   CardPlayerConfig: ResolverTypeWrapper<CardPlayerConfig>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
-  GameInvitation: ResolverTypeWrapper<GameInvitation>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  InviteGameInput: InviteGameInput;
-  MetacraftGames: MetacraftGames;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
@@ -384,10 +328,8 @@ export type ResolversParentTypes = ResolversObject<{
   CardDuelSetting: CardDuelSetting;
   CardPlayerConfig: CardPlayerConfig;
   DateTime: Scalars['DateTime']['output'];
-  GameInvitation: GameInvitation;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
-  InviteGameInput: InviteGameInput;
   Mutation: {};
   Profile: Profile;
   Query: {};
@@ -486,21 +428,9 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
-export type GameInvitationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['GameInvitation'] = ResolversParentTypes['GameInvitation']> = ResolversObject<{
-  enemy?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>;
-  game?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptGame?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptGameArgs, 'invitationId'>>;
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
-  inviteGame?: Resolver<Maybe<ResolversTypes['GameInvitation']>, ParentType, ContextType, RequireFields<MutationInviteGameArgs, 'input'>>;
   makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
-  stopMatchFind?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
@@ -508,7 +438,6 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   bindingId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
@@ -519,8 +448,6 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   cardDuel?: Resolver<Maybe<ResolversTypes['CardDuel']>, ParentType, ContextType, RequireFields<QueryCardDuelArgs, 'id'>>;
   cardDuelHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardDuelHistory']>>>, ParentType, ContextType, Partial<QueryCardDuelHistoryArgs>>;
   cardDuelPlaying?: Resolver<Maybe<ResolversTypes['CardDuelHistory']>, ParentType, ContextType>;
-  gameInvitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['GameInvitation']>>>, ParentType, ContextType>;
-  gameJwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryGameJwtArgs>>;
   greeting?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType, Partial<QueryQuestsArgs>>;
@@ -561,9 +488,7 @@ export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extend
 
 export type SubscriptionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   counterIncreased?: SubscriptionResolver<ResolversTypes['Int'], "counterIncreased", ParentType, ContextType>;
-  gameInvitation?: SubscriptionResolver<Maybe<ResolversTypes['GameInvitation']>, "gameInvitation", ParentType, ContextType, RequireFields<SubscriptionGameInvitationArgs, 'opponent'>>;
-  matchFind?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "matchFind", ParentType, ContextType, RequireFields<SubscriptionMatchFindArgs, 'game'>>;
-  matchFound?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "matchFound", ParentType, ContextType, RequireFields<SubscriptionMatchFoundArgs, 'game'>>;
+  findMatch?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "findMatch", ParentType, ContextType, RequireFields<SubscriptionFindMatchArgs, 'userId'>>;
 }>;
 
 export type Resolvers<ContextType = ApiContext> = ResolversObject<{
@@ -578,7 +503,6 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   CardDuelSetting?: CardDuelSettingResolvers<ContextType>;
   CardPlayerConfig?: CardPlayerConfigResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
-  GameInvitation?: GameInvitationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

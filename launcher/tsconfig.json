@@ -15,6 +15,7 @@
       "components/*": ["./components/*"],
       "stacks/*": ["./stacks/*"],
       "screens/*": ["./screens/*"],
+      "state/*": ["./state/*"],
       "utils/*": ["./utils/*"],
       "icons/*": ["./icons/*"]
     }

@@ -5,7 +5,7 @@ import { dimensionState, Markdown, Text } from '@metacraft/ui';
 import { battlefield } from 'screens/Guide/content';
 import Concept from 'screens/Guide/Dashboard/Concept';
 import { headingSize, sharedStyle } from 'screens/Guide/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 const BattlefieldOverview: FC = () => {
 	const { responsiveLevel } = useSnapshot<DimensionState>(dimensionState);

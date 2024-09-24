@@ -10,7 +10,7 @@ import type { AppState } from '@metacraft/ui';
 import { appState } from '@metacraft/ui';
 import CompactLayout from 'components/layouts/Compact';
 import { idleLayout } from 'utils/helper';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 

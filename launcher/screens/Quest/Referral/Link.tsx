@@ -3,7 +3,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
 import UnderRealmButton from 'components/Marketplace/Button';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralLink = () => {

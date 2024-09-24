@@ -74,29 +74,9 @@ type CardPlayerConfig {
 
 scalar DateTime
 
-type GameInvitation {
-  enemy: Profile!
-  game: String!
-  id: String!
-  owner: Profile!
-  timestamp: String!
-}
-
-input InviteGameInput {
-  game: MetacraftGames!
-  opponent: String!
-}
-
-enum MetacraftGames {
-  MURG
-}
-
 type Mutation {
-  acceptGame(invitationId: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
-  inviteGame(input: InviteGameInput!): GameInvitation
   makeReferral(referralCode: String!): Boolean
-  stopMatchFind: Boolean
 }
 
 type Profile {
@@ -104,7 +84,6 @@ type Profile {
   bindingId: String
   email: String
   id: String!
-  jwt: String
   points: Int!
   referralCode: String!
   referred: ReferralHistory
@@ -114,8 +93,6 @@ type Query {
   cardDuel(id: String!): CardDuel
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
-  gameInvitations: [GameInvitation]
-  gameJwt(duelId: String): String
   greeting: String
   profile(address: String): Profile
   quests(status: QuestStatus): [Quest]
@@ -166,7 +143,5 @@ type ReferralHistory {
 
 type Subscription {
   counterIncreased: Int!
-  gameInvitation(opponent: String!): GameInvitation
-  matchFind(game: MetacraftGames!, userId: String): CardDuel
-  matchFound(game: MetacraftGames!, userId: String): CardDuel
+  findMatch(userId: String!): CardDuel
 }

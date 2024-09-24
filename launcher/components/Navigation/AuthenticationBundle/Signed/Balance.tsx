@@ -4,9 +4,9 @@ import { Text } from '@metacraft/ui';
 import ShardIcon from 'components/icons/DiamondMineral';
 import EyeIcon from 'components/icons/Eye';
 import EyeClosedIcon from 'components/icons/EyeClosed';
+import { appActions, appState } from 'state/app';
 import type { Profile } from 'utils/graphql';
-import { useSnapshot } from 'utils/hook';
-import { appActions, appState } from 'utils/state/app';
+import { useSnapshot } from 'utils/hooks';
 
 import { styles } from './internal';
 

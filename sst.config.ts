@@ -15,8 +15,8 @@ export default $config({
 		};
 	},
 	async run() {
-		const API = constructAPI();
 		const wsAPI = constructWebsocketAPI();
+		const API = constructAPI(wsAPI);
 		const launcher = constructLauncher();
 
 		return {

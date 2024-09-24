@@ -3,8 +3,6 @@ scalar DateTime
 type Query {
   greeting: String
   profile(address: String): Profile
-  gameJwt(duelId: String): String
-  gameInvitations: [GameInvitation]
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   cardDuel(id: String!): CardDuel
@@ -13,30 +11,19 @@ type Query {
 }
 
 type Mutation {
-  inviteGame(input: InviteGameInput!): GameInvitation
-  acceptGame(invitationId: String!): Boolean
-  stopMatchFind: Boolean
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
 }
 
 type Subscription {
   counterIncreased: Int!
-  gameInvitation(opponent: String!): GameInvitation
-  matchFind(game: MetacraftGames!, userId: String): CardDuel
-  matchFound(game: MetacraftGames!, userId: String): CardDuel
-}
-
-input InviteGameInput {
-  game: MetacraftGames!
-  opponent: String!
+  findMatch(userId: String!): CardDuel
 }
 
 type Profile {
   id: String!
   bindingId: String
   address: String
-  jwt: String
   email: String
   referred: ReferralHistory
   referralCode: String!
@@ -109,24 +96,12 @@ type CardDuel {
   history: [CardDuelCommandBundle]
 }
 
-type GameInvitation {
-  id: String!
-  game: String!
-  owner: Profile!
-  enemy: Profile!
-  timestamp: String!
-}
-
 type CardDuelHistory {
   id: String
   duel: CardDuel!
   enemy: Profile
   victory: Boolean
   timestamp: String!
-}
-
-enum MetacraftGames {
-  MURG
 }
 
 enum QuestType {

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Hyperlink, Text } from '@metacraft/ui';
 import { headingSize, sharedStyle } from 'screens/Home/shared';
-import { useInput } from 'utils/hook';
+import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
 
 import { socialLinkList } from './shared';

@@ -71,63 +71,61 @@ const QuestContent: FC = () => {
 
 export default QuestContent;
 
-const stylesheet = createStyleSheet(() => {
-	return {
-		frameCharm: {
-			alignSelf: 'center',
-			width: { xs: 300, lg: 400 },
-			height: { xs: 24, lg: 30 },
-			marginTop: { xs: -16, lg: -20 },
-		},
-		imageBackground: {
-			flex: 1,
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		container: {
-			borderColor: '#9F835F',
-			borderWidth: 1,
-			alignItems: 'stretch',
-			paddingBottom: 80,
-			paddingHorizontal: { xs: 16, md: 20, lg: 40 },
-			marginBottom: 40,
-			marginTop: 80,
-			alignSelf: 'stretch',
-		},
-		title: {
-			fontFamily: 'Volkhov',
-			color: '#ffffff',
-			fontSize: 22,
-		},
-		titleCharm: {
-			position: 'absolute',
-			width: 400,
-			height: 13,
-			bottom: -13,
-		},
-		mapDescription: {
-			marginBottom: 60,
-			paddingHorizontal: 15,
-		},
-		quests: {
-			alignItems: 'stretch',
-			paddingHorizontal: { xs: 12, md: 40 },
-			marginTop: 40,
-			gap: 16,
-		},
-		titleContainer: {
-			paddingVertical: 20,
-			alignItems: 'center',
-			alignSelf: 'center',
-		},
-		tabsContainer: {
-			flexDirection: 'row',
-			borderBottomColor: '#2E2E2E',
-			borderBottomWidth: 1,
-			justifyContent: 'center',
-		},
-		activityIndicator: {
-			marginTop: 20,
-		},
-	};
+const stylesheet = createStyleSheet({
+	frameCharm: {
+		alignSelf: 'center',
+		width: { xs: 300, lg: 400 },
+		height: { xs: 24, lg: 30 },
+		marginTop: { xs: -16, lg: -20 },
+	},
+	imageBackground: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	container: {
+		borderColor: '#9F835F',
+		borderWidth: 1,
+		alignItems: 'stretch',
+		paddingBottom: 80,
+		paddingHorizontal: { xs: 16, md: 20, lg: 40 },
+		marginBottom: 40,
+		marginTop: 80,
+		alignSelf: 'stretch',
+	},
+	title: {
+		fontFamily: 'Volkhov',
+		color: '#ffffff',
+		fontSize: 22,
+	},
+	titleCharm: {
+		position: 'absolute',
+		width: 400,
+		height: 13,
+		bottom: -13,
+	},
+	mapDescription: {
+		marginBottom: 60,
+		paddingHorizontal: 15,
+	},
+	quests: {
+		alignItems: 'stretch',
+		paddingHorizontal: { xs: 12, md: 40 },
+		marginTop: 40,
+		gap: 16,
+	},
+	titleContainer: {
+		paddingVertical: 20,
+		alignItems: 'center',
+		alignSelf: 'center',
+	},
+	tabsContainer: {
+		flexDirection: 'row',
+		borderBottomColor: '#2E2E2E',
+		borderBottomWidth: 1,
+		justifyContent: 'center',
+	},
+	activityIndicator: {
+		marginTop: 20,
+	},
 });

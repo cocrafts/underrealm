@@ -4,7 +4,7 @@ import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import { banner } from 'screens/Story/content';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 import { sharedStyle } from '../shared';
 

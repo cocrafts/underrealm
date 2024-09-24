@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from 'screens/Home';
 import StoryScreen from 'screens/Story';
 import CardLibraryStack from 'stacks/Browser/CardLibrary';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 import CardsStack from './Cards';
 import GameStack from './Game';

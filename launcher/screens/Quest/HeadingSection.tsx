@@ -4,7 +4,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import Profile from 'components/icons/Profile';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 const HeadingSection: FC = () => {
@@ -42,49 +42,47 @@ const HeadingSection: FC = () => {
 
 export default HeadingSection;
 
-const stylesheet = createStyleSheet(() => {
-	return {
-		container: {
-			alignItems: 'center',
-		},
-		logo: {
-			marginTop: { xs: 92, sm: 128, md: 164, lg: 200, xl: 240 },
-			width: { xs: 240, sm: 320, md: 400, lg: 580, xl: 660 },
-		},
-		pointInfoContainer: {
-			flex: 1,
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
-			gap: 8,
-		},
-		imageTitle: {
-			position: 'absolute',
-			zIndex: -1,
-			top: { xs: 30, sm: 42, md: 54, lg: 66, xl: 78 },
-			width: { xs: 275, sm: 425, md: 564, lg: 638, xl: 750 },
-			height: { xs: 161, sm: 242, md: 322, lg: 363, xl: 414 },
-		},
-		imageBoardBackground: {
-			flexDirection: 'row',
-			marginTop: { xs: 20, md: 40, lg: -8 },
-			width: 392,
-			height: 68,
-			alignItems: 'center',
-		},
-		coinU: {
-			width: 24,
-			height: 24,
-		},
-		text: {
-			fontFamily: 'Vollkorn',
-			color: '#F2E0C3',
-			fontSize: { xs: 14, md: 16, xl: 18 },
-			fontWeight: '700',
-		},
-		separateLine: {
-			width: 10,
-			height: 45,
-		},
-	};
+const stylesheet = createStyleSheet({
+	container: {
+		alignItems: 'center',
+	},
+	logo: {
+		marginTop: { xs: 92, sm: 128, md: 164, lg: 200, xl: 240 },
+		width: { xs: 240, sm: 320, md: 400, lg: 580, xl: 660 },
+	},
+	pointInfoContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: 8,
+	},
+	imageTitle: {
+		position: 'absolute',
+		zIndex: -1,
+		top: { xs: 30, sm: 42, md: 54, lg: 66, xl: 78 },
+		width: { xs: 275, sm: 425, md: 564, lg: 638, xl: 750 },
+		height: { xs: 161, sm: 242, md: 322, lg: 363, xl: 414 },
+	},
+	imageBoardBackground: {
+		flexDirection: 'row',
+		marginTop: { xs: 20, md: 40, lg: -8 },
+		width: 392,
+		height: 68,
+		alignItems: 'center',
+	},
+	coinU: {
+		width: 24,
+		height: 24,
+	},
+	text: {
+		fontFamily: 'Vollkorn',
+		color: '#F2E0C3',
+		fontSize: { xs: 14, md: 16, xl: 18 },
+		fontWeight: '700',
+	},
+	separateLine: {
+		width: 10,
+		height: 45,
+	},
 });

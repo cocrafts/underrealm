@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { ActivityIndicator, ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { useReferral } from 'utils/hook';
+import { useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import ReferralGuide from './Guide';

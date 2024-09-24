@@ -9,7 +9,7 @@ import {
 	installLayout,
 	openLayoutPopup,
 } from '@walless/adapter-solana-base';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 import { signOut } from 'utils/lib/auth';
 import { noSelect } from 'utils/styles';
 

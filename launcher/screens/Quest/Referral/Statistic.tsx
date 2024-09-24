@@ -3,7 +3,7 @@ import { Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UserSolidIcon from 'components/icons/UserSolid';
-import { useReferral } from 'utils/hook';
+import { useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralStatistic: FC = () => {
