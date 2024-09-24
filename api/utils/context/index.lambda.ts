@@ -47,6 +47,7 @@ type GlobalContext = {
 	 * connectionId is set by websocket handler for each ws event
 	 */
 	connectionId?: string;
+	subscriptionId?: string;
 };
 
 /**
