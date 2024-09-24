@@ -24,7 +24,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.6.9":
+"@apollo/client@npm:^3.11.8":
   version: 3.11.8
   resolution: "@apollo/client@npm:3.11.8"
   dependencies:
@@ -8829,7 +8829,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@underrealm/launcher@workspace:launcher"
   dependencies:
-    "@apollo/client": "npm:^3.6.9"
+    "@apollo/client": "npm:^3.11.8"
     "@babel/core": "npm:7.24.0"
     "@babel/plugin-proposal-export-default-from": "npm:^7.18.10"
     "@babel/preset-env": "npm:^7.20.0"
