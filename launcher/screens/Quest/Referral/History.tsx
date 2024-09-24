@@ -2,7 +2,7 @@ import { Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import { HeaderLine } from 'components/icons/underRealm/HeaderLine';
-import { useReferral } from 'utils/hook';
+import { useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralHistory = () => {

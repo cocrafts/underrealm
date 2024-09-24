@@ -5,7 +5,7 @@ import InternalNavigation from 'components/Navigation/Internal';
 import { navigationHeight as navHeight } from 'components/Navigation/shared';
 import resources from 'utils/resources';
 
-import LeftSection from './LeftSection';
+import MainSection from './MainSection';
 
 export const LobbyScreen: FC = () => {
 	const { styles } = useStyles(stylesheet);
@@ -18,7 +18,7 @@ export const LobbyScreen: FC = () => {
 			<InternalNavigation isHidingPlayButton />
 			<View style={styles.contentContainer}>
 				<View style={styles.leftContainer}>
-					<LeftSection />
+					<MainSection />
 				</View>
 			</View>
 		</ImageBackground>

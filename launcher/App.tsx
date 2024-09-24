@@ -14,9 +14,9 @@ import {
 	useProfile,
 	useRequireReferral,
 	useSnapshot,
-} from 'utils/hook';
-import { useNetworkEndpoint, useWalletAdapters } from 'utils/hook/web3';
-import { accountState } from 'utils/state/account';
+} from 'utils/hooks';
+import { useNetworkEndpoint, useWalletAdapters } from 'utils/hooks/web3';
+import { accountState } from 'state/account';
 import { launcherTheme } from 'utils/styles';
 
 import './utils/styles';

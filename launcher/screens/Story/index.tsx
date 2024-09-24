@@ -7,7 +7,7 @@ import ScrollLayout from 'components/layouts/Scroll';
 import Banner from 'screens/Story/Banner';
 import Header from 'screens/Story/Header';
 import { sharedStyle } from 'screens/Story/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 

@@ -5,8 +5,8 @@ import ShardIcon from 'components/icons/DiamondMineral';
 import EyeIcon from 'components/icons/Eye';
 import EyeClosedIcon from 'components/icons/EyeClosed';
 import type { Profile } from 'utils/graphql';
-import { useSnapshot } from 'utils/hook';
-import { appActions, appState } from 'utils/state/app';
+import { useSnapshot } from 'utils/hooks';
+import { appActions, appState } from 'state/app';
 
 import { styles } from './internal';
 

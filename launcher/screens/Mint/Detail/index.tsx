@@ -12,7 +12,7 @@ import {
 import { useRoute } from '@react-navigation/native';
 import ScrollLayout from 'components/layouts/Scroll';
 import { packMap } from 'screens/Mint/shared';
-import { useSnapshot, useWalletSugar } from 'utils/hook';
+import { useSnapshot, useWalletSugar } from 'utils/hooks';
 
 import PackDetail from './PackageDetail';
 import PurchaseSuccessModal from './PurchaseSuccessModal';

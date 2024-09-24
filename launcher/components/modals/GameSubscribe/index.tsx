@@ -5,7 +5,7 @@ import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from '@metacraft/ui';
 import UnderRealmModal from 'components/layouts/UnderRealmModal';
 import UnderRealmButton from 'components/Marketplace/Button';
-import { useInput } from 'utils/hook';
+import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
 
 interface Props {

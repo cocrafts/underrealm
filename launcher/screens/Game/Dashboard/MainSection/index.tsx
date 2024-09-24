@@ -1,43 +1,41 @@
 import type { FC } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { dimensionState, modalActions, Text } from '@metacraft/ui';
+import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
-import { useProfile, useSnapshot } from 'utils/hook';
-import { liveActions, liveState } from 'utils/state/live';
+import {
+	useMatchFindSubscription,
+	useStopMatchFindMutation,
+} from 'utils/graphql';
+import { useProfile } from 'utils/hooks';
 import { iStyles } from 'utils/styles';
 
 import LeaderBoard from './LeaderBoard';
 import StatisticBoard from './StatisticBoard';
 import UnderRealmInfo from './UnderRealmInfo';
 
-export const LeftSection: FC = () => {
-	const { windowSize } = useSnapshot(dimensionState);
+export const MainSection: FC = () => {
 	const { profile } = useProfile();
-	const { findingMatch } = useSnapshot(liveState);
+	const [stopFindMatch] = useStopMatchFindMutation();
+	const { loading, restart: startFindMatch } = useMatchFindSubscription({
+		variables: { userId: profile.id },
+		skip: true,
+	});
 
 	const onFindMatch = () => {
-		if (profile?.id) {
-			if (findingMatch) {
-				liveActions.stopMatchFind();
+		if (profile.id) {
+			if (loading) {
+				stopFindMatch();
 			} else {
-				liveActions.matchFind(profile?.id);
+				startFindMatch();
 			}
 		} else {
-			modalActions.show({
-				id: 'signInOptions',
-				component: SignInOptions,
-			});
+			modalActions.show({ id: 'signInOptions', component: SignInOptions });
 		}
 	};
 
 	return (
-		<View
-			style={[
-				iStyles.contentContainer,
-				{ justifyContent: 'space-evenly', flex: 1 },
-			]}
-		>
+		<View style={[iStyles.contentContainer, styles.container]}>
 			<View>
 				<Text style={styles.heading}>Blind Duel</Text>
 				<View style={[styles.rowContainer, { marginBottom: 40 }]}>
@@ -45,8 +43,9 @@ export const LeftSection: FC = () => {
 						Are you ready to face the unknown enemy? Do your best and winning
 						might be on your side, Adventurer!
 					</Text>
+
 					<UnderRealmButton style={styles.button} onPress={onFindMatch}>
-						{findingMatch ? (
+						{loading ? (
 							<ActivityIndicator color="white" />
 						) : (
 							<Text style={styles.buttonText}>Find Match</Text>
@@ -55,7 +54,7 @@ export const LeftSection: FC = () => {
 				</View>
 			</View>
 			<View style={styles.rowContainer}>
-				<LeaderBoard windowSize={windowSize} />
+				<LeaderBoard />
 				<StatisticBoard />
 				<UnderRealmInfo />
 			</View>
@@ -63,10 +62,13 @@ export const LeftSection: FC = () => {
 	);
 };
 
-export default LeftSection;
+export default MainSection;
 
 const styles = StyleSheet.create({
-	container: {},
+	container: {
+		justifyContent: 'space-evenly',
+		flex: 1,
+	},
 	heading: {
 		fontFamily: 'Volkhov',
 		fontSize: 50,

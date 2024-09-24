@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
 import { clusterUrl } from 'utils/helper';
-import { appState } from 'utils/state/app';
+import { appState } from 'state/app';
 import { useSnapshot } from 'valtio';
 
 export const useWalletAdapters = () => {

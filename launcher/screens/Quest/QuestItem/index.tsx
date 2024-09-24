@@ -4,7 +4,7 @@ import { AnimateDirections, modalActions } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import SignInOptions from 'components/modals/SignInOptions';
 import { type Quest } from 'utils/graphql';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 
 import Action from './Action';
 import Info from './Info';

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { dimensionState, themeState } from '@metacraft/ui';
 import { NavigationContainer } from '@react-navigation/native';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 import { linking, navigationRef } from '../shared';
 

@@ -4,7 +4,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import Profile from 'components/icons/Profile';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 const HeadingSection: FC = () => {

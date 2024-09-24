@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import type { ViewStyle } from 'react-native';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 
 import Signed from './Signed';
 import SignIn from './SignIn';
