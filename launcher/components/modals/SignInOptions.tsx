@@ -7,9 +7,9 @@ import type { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Text from 'components/Text';
+import { accountActions } from 'state/account';
 import { useProfile, useSnapshot } from 'utils/hooks';
 import { googleSignIn, walletSignIn } from 'utils/lib';
-import { accountActions } from 'state/account';
 
 import { modalStyles } from './shared';
 

@@ -8,6 +8,7 @@ import {
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
 import BrowserStack from 'stacks/Browser/Container';
+import { accountState } from 'state/account';
 import { graphQlClient } from 'utils/graphql';
 import {
 	useAppInit,
@@ -16,7 +17,6 @@ import {
 	useSnapshot,
 } from 'utils/hooks';
 import { useNetworkEndpoint, useWalletAdapters } from 'utils/hooks/web3';
-import { accountState } from 'state/account';
 import { launcherTheme } from 'utils/styles';
 
 import './utils/styles';
