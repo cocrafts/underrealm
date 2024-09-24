@@ -75,7 +75,7 @@ const pickSkillReadyCards = ({ map, entities }: CardMeta) => {
 		const isTroopCard = card.kind === CardType.Troop;
 		const isSkillValid =
 			card.skill.activation === undefined ||
-			card.skill.attribute ||
+			(card.skill.attribute && !card.skill.charge) ||
 			card.skill.passiveAttribute;
 
 		if (!isTroopCard && isSkillValid) {
