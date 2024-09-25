@@ -17,7 +17,7 @@ const defaultOptions: DefaultOptions = {
 	},
 };
 
-const httpLink = new HttpLink({ uri: STORMGATE_API_ENDPOINT, fetch });
+const httpLink = new HttpLink({ uri: GRAPHQL_API_ENDPOINT, fetch });
 
 const authLink = setContext(async (_, { headers: originalHeaders }) => {
 	const token = await extractJwt();
