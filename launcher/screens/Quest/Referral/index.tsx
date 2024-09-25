@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { ActivityIndicator, ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { useReferral } from 'utils/hook';
+import { useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import ReferralGuide from './Guide';
@@ -17,7 +17,7 @@ export const ReferralSection = () => {
 		<Fragment>
 			{loading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator />
+					<ActivityIndicator color={'white'} />
 				</View>
 			) : (
 				<View style={styles.container}>
@@ -41,11 +41,9 @@ export default ReferralSection;
 
 const stylesheet = createStyleSheet({
 	container: {
-		padding: { lg: 64 },
 		paddingHorizontal: { xs: 13, lg: 64 },
 	},
 	backgroundContainer: {
-		marginTop: 40,
 		paddingVertical: { xs: 24, lg: 64 },
 	},
 	loadingContainer: {

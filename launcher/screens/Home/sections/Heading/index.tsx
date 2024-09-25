@@ -13,7 +13,7 @@ import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import UnderRealmButton from 'components/Marketplace/Button';
 import GameSubscribe from 'components/modals/GameSubscribe';
 import type { RootParamList } from 'stacks/Browser/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 
 type StackProps = NavigationProp<RootParamList>;

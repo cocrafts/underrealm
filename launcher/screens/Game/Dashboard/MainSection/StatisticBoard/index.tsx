@@ -5,7 +5,7 @@ import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmBoard from 'components/Board';
 import UnderRealmButton from 'components/Marketplace/Button';
 import SignInOptions from 'components/modals/SignInOptions';
-import { useProfile } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 
 const StatisticBoard: FC = () => {
 	const { profile } = useProfile();

@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import { sharedStyle } from 'screens/Story/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import Timeline from './Timeline';

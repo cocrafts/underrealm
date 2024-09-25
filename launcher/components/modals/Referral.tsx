@@ -79,13 +79,13 @@ export const ReferralModal = () => {
 
 export default ReferralModal;
 
-const stylesheet = createStyleSheet((_, runtime) => ({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	mask: {
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: runtime.screen.width,
-		height: runtime.screen.height,
+		width: screen.width,
+		height: screen.height,
 	},
 	container: {
 		paddingHorizontal: 36,

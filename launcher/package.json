@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "dev": "metacraft",
+    "dev": "metacraft --envFile .env",
     "build": "metacraft bundle",
     "deploy": "sst deploy launcher",
     "deploy:prod": "sst deploy launcher --stage production",
@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.6.9",
+    "@apollo/client": "^3.11.8",
     "@metacraft/icons": "^0.0.26",
     "@metacraft/ui": "^0.1.1",
     "@metaplex-foundation/js": "0.19.4",

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import type { ScaledSize } from 'react-native';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmBoard from 'components/Board';
 import BottomTitleSeparator from 'components/icons/underRealm/BottomTitleSeparator';
@@ -11,12 +11,9 @@ import type { RenderItem } from './Item';
 import Item from './Item';
 import Option from './Option';
 
-interface Props {
-	windowSize: ScaledSize;
-}
-
-export const LeaderBoard: FC<Props> = ({ windowSize }) => {
+export const LeaderBoard: FC = () => {
 	const [option, setOption] = useState('experience');
+	const { styles } = useStyles(stylesheet);
 
 	const onOptionPress = (id: string) => {
 		setOption(id);
@@ -57,7 +54,7 @@ export const LeaderBoard: FC<Props> = ({ windowSize }) => {
 					</Text>
 				</View>
 				<FlatList
-					style={{ height: windowSize.height * 0.3 }}
+					style={styles.listContainer}
 					data={mockData}
 					getItemLayout={(_, index) => ({
 						length: 48,
@@ -73,7 +70,7 @@ export const LeaderBoard: FC<Props> = ({ windowSize }) => {
 
 export default LeaderBoard;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	container: {
 		paddingHorizontal: 15,
 		alignItems: 'center',
@@ -125,6 +122,9 @@ const styles = StyleSheet.create({
 	secondListHeaderText: {
 		flex: 1,
 	},
-});
+	listContainer: {
+		height: screen.height * 0.3,
+	},
+}));
 
 const mockData: RenderItem[] = [];

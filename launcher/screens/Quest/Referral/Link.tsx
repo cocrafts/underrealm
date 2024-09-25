@@ -2,14 +2,14 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
-import UnderRealmButton from 'components/Marketplace/Button';
-import { useProfile } from 'utils/hook';
+// import UnderRealmButton from 'components/Marketplace/Button';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralLink = () => {
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
-	const referralLink = `https://underrealm.io?ref=${profile.referralCode}`;
+	const referralLink = `${window.location.origin}?ref=${profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);
@@ -31,12 +31,12 @@ export const ReferralLink = () => {
 							</View>
 						</View>
 					</TouchableOpacity>
-					<UnderRealmButton
+					{/* <UnderRealmButton
 						title="Share"
 						style={{ width: 140 }}
 						isSubButton={!profile}
 						disabled={!profile}
-					/>
+					/> */}
 				</View>
 			</View>
 			<View style={styles.description}>
