@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "dev": "metacraft",
+    "dev": "metacraft --envFile .env",
     "build": "metacraft bundle",
     "deploy": "sst deploy launcher",
     "deploy:prod": "sst deploy launcher --stage production",
