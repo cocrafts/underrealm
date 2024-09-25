@@ -17,7 +17,7 @@ export const ReferralSection = () => {
 		<Fragment>
 			{loading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator />
+					<ActivityIndicator color={'white'} />
 				</View>
 			) : (
 				<View style={styles.container}>
@@ -41,11 +41,9 @@ export default ReferralSection;
 
 const stylesheet = createStyleSheet({
 	container: {
-		padding: { lg: 64 },
 		paddingHorizontal: { xs: 13, lg: 64 },
 	},
 	backgroundContainer: {
-		marginTop: 40,
 		paddingVertical: { xs: 24, lg: 64 },
 	},
 	loadingContainer: {

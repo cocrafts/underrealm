@@ -4,12 +4,13 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import Profile from 'components/icons/Profile';
-import { useProfile } from 'utils/hooks';
+import { useProfile, useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
 const HeadingSection: FC = () => {
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
+	const { count } = useReferral();
 
 	return (
 		<View style={styles.container}>
@@ -24,7 +25,7 @@ const HeadingSection: FC = () => {
 				<View style={styles.pointInfoContainer}>
 					<Profile color="#F2E0C3" />
 					<Text style={styles.text}>Referrals:</Text>
-					<Text style={styles.text}>0</Text>
+					<Text style={styles.text}>{count}</Text>
 				</View>
 				<Image
 					style={styles.separateLine}
