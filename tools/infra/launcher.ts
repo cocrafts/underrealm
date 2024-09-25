@@ -10,7 +10,7 @@ export const constructLauncher = () => {
 	const launcher = new sst.aws.StaticSite('launcher', {
 		path: 'launcher',
 		build: {
-			command: 'yarn build',
+			command: `yarn build --envFile .env.${$app.stage}`,
 			output: 'metacraft',
 		},
 		domain: {

@@ -25,7 +25,7 @@ const QuestScreen: FC = () => {
 
 export default QuestScreen;
 
-const stylesheet = createStyleSheet({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	container: {
 		backgroundColor: '#190E0E',
 	},
@@ -34,9 +34,10 @@ const stylesheet = createStyleSheet({
 	},
 	imageBackground: {
 		flex: 1,
+		height: screen.height,
 		alignItems: 'center',
 		justifyContent: 'center',
 		alignSelf: 'stretch',
 		paddingHorizontal: { xs: 16, sm: 20, md: 40, lg: 80, xl: 120 },
 	},
-});
+}));

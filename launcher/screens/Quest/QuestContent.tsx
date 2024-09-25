@@ -4,6 +4,7 @@ import { ActivityIndicator, Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import { useQuestsQuery } from 'utils/graphql';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import { TabId } from './internal';
@@ -12,6 +13,7 @@ import ReferralSection from './Referral';
 import TabSelection from './TabSelection';
 
 const QuestContent: FC = () => {
+	const { profile } = useProfile();
 	const { data, loading, error } = useQuestsQuery();
 	const [tab, setTab] = useState(TabId.QUEST);
 	const { styles } = useStyles(stylesheet);
@@ -46,22 +48,16 @@ const QuestContent: FC = () => {
 
 			{loading ? (
 				<ActivityIndicator color="#FFF9A0" style={styles.activityIndicator} />
-			) : error ? (
-				<View>
-					<Text>{error.message}</Text>
+			) : !profile.id && error ? (
+				<View style={styles.errorContainer}>
+					<Text>Something went wrong!</Text>
 				</View>
 			) : tab === TabId.QUEST ? (
-				error ? (
-					<View>
-						<Text>{error.message}</Text>
-					</View>
-				) : (
-					<View style={styles.quests}>
-						{data.quests.map((quest) => {
-							return <QuestItem key={quest.id} quest={quest} />;
-						})}
-					</View>
-				)
+				<View style={styles.quests}>
+					{data.quests.map((quest) => {
+						return <QuestItem key={quest.id} quest={quest} />;
+					})}
+				</View>
 			) : (
 				<ReferralSection />
 			)}
@@ -84,6 +80,7 @@ const stylesheet = createStyleSheet({
 		justifyContent: 'center',
 	},
 	container: {
+		minHeight: 728,
 		borderColor: '#9F835F',
 		borderWidth: 1,
 		alignItems: 'stretch',
@@ -127,5 +124,8 @@ const stylesheet = createStyleSheet({
 	},
 	activityIndicator: {
 		marginTop: 20,
+	},
+	errorContainer: {
+		marginTop: 24,
 	},
 });

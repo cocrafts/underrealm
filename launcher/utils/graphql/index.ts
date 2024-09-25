@@ -8,16 +8,16 @@ import { extractJwt } from 'utils/lib/auth';
 
 const defaultOptions: DefaultOptions = {
 	watchQuery: {
-		fetchPolicy: 'cache-and-network',
+		fetchPolicy: 'cache-first',
 		errorPolicy: 'ignore',
 	},
 	query: {
-		fetchPolicy: 'no-cache',
+		fetchPolicy: 'cache-first',
 		errorPolicy: 'all',
 	},
 };
 
-const httpLink = new HttpLink({ uri: STORMGATE_API_ENDPOINT, fetch });
+const httpLink = new HttpLink({ uri: GRAPHQL_API_ENDPOINT, fetch });
 
 const authLink = setContext(async (_, { headers: originalHeaders }) => {
 	const token = await extractJwt();

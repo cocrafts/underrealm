@@ -7,6 +7,7 @@ import { useProfile } from './profile';
 
 export const useReferral = () => {
 	const { data, loading, error } = useReferralHistoryQuery();
+
 	const { count, points } = useMemo(() => {
 		const result = { count: 0, points: 0 };
 		if (!loading && !error) {
@@ -17,7 +18,7 @@ export const useReferral = () => {
 			}, result);
 		}
 		return result;
-	}, [data?.referralHistory, loading, error]);
+	}, [data]);
 
 	return { data, loading, error, count, points };
 };
