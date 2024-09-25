@@ -9,8 +9,7 @@ export const FindingMatch = () => {
 		variables: { userId: profile.id },
 	});
 
-	const matchId = data?.findMatch.id;
-	if (matchId) console.log('Match found', matchId);
+	if (data) console.log('Match found', data);
 
 	if (loading) return <ActivityIndicator color="white" />;
 	return <Text style={styles.title}>Match found</Text>;
