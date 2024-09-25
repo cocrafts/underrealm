@@ -275,23 +275,27 @@ export interface CardIdentifier {
 	place: DuelPlace;
 }
 
-export type EffectIds =
-	| 'Reborn'
-	| 'Illusion'
-	| 'Clone'
-	| 'Immune'
-	| 'Shield'
-	| 'Froze'
-	| 'Seal'
-	| 'SelfBuff'
-	| 'SpellBuff'
-	| 'AttributeStack'
-	| 'RepeatAttack'
-	| 'CleaverAttack'
-	| 'IgnoreDefense'
-	| 'ExplodeTimer';
+export enum EffectIds {
+	Reborn = 'Reborn',
+	Illusion = 'Illusion',
+	Clone = 'Clone',
+	Immune = 'Immune',
+	Shield = 'Shield',
+	Froze = 'Froze',
+	Seal = 'Seal',
+	SelfBuff = 'SelfBuff',
+	SpellBuff = 'SpellBuff',
+	AttributeStack = 'AttributeStack',
+	RepeatAttack = 'RepeatAttack',
+	CleaverAttack = 'CleaverAttack',
+	IgnoreDefense = 'IgnoreDefense',
+	ExplodeTimer = 'ExplodeTimer',
+}
 
-export type CleaverType = 'Fixed' | 'Factor';
+export enum CleaverType {
+	Fixed = 'Fixed',
+	Factor = 'Factor',
+}
 
 export interface RebornEffect {
 	count?: number;

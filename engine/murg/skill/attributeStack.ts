@@ -2,7 +2,7 @@ import { createCommand } from '../command';
 import { getCard, getCardState } from '../utils/card';
 import { getFacingIdentifier } from '../utils/ground';
 import { createCommandResult } from '../utils/helper';
-import type { Attribute, SkillRunner } from '../utils/type';
+import { type Attribute, EffectIds, type SkillRunner } from '../utils/type';
 
 type SkillOptions = Omit<Attribute, 'charge'>;
 
@@ -34,7 +34,7 @@ export const attributeStack: SkillRunner = ({ duel, cardId, sourceType }) => {
 			payload: {
 				effectMap: {
 					AttributeStack: {
-						id: 'AttributeStack',
+						id: EffectIds.AttributeStack,
 						attributeStack: {
 							targetId: facingIdentifier.id,
 							attribute: {
