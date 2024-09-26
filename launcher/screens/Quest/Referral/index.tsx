@@ -1,8 +1,7 @@
 import { Fragment } from 'react';
-import { ActivityIndicator, ImageBackground, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useReferral } from 'utils/hooks';
-import resources from 'utils/resources';
 
 import ReferralGuide from './Guide';
 import ReferralHistory from './History';
@@ -21,15 +20,11 @@ export const ReferralSection = () => {
 				</View>
 			) : (
 				<View style={styles.container}>
-					<ImageBackground
-						source={resources.quest.referral.backgroundMain}
-						resizeMode="contain"
-						style={styles.backgroundContainer}
-					>
+					<View style={styles.backgroundContainer}>
 						<ReferralStatistic />
 						<ReferralLink />
 						<ReferralGuide />
-					</ImageBackground>
+					</View>
 					<ReferralHistory />
 				</View>
 			)}
