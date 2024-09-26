@@ -37,6 +37,7 @@ game/native
 !.env.example
 
 jwk.json
+*.pem
 *.log
 
 sst-env.d.ts
