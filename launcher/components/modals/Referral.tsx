@@ -51,7 +51,11 @@ export const ReferralModal = () => {
 						onFocus={() => setFocus(true)}
 						onBlur={() => setFocus(false)}
 					/>
-					{error && <Text>{error.message[0]}</Text>}
+					{error && (
+						<Text style={styles.errorText}>
+							This code is invalid. Please check and try again.
+						</Text>
+					)}
 				</View>
 				<View style={styles.confirmContainer}>
 					{loading ? (
@@ -117,6 +121,14 @@ const stylesheet = createStyleSheet((_, { screen }) => ({
 	},
 	activeInput: {
 		borderColor: '#A8906F',
+	},
+	errorText: {
+		fontWeight: '500',
+		fontSize: 13,
+		lineHeight: 20,
+		textAlign: 'center',
+		color: '#C42B2B',
+		marginTop: 8,
 	},
 	confirmContainer: {
 		paddingBottom: 50,
