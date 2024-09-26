@@ -60,7 +60,8 @@ export const pubsub = {
 		]);
 	},
 	publish: async (topic: string, payload: any) => {
-		const subscriptionKeys = await redis.SMEMBERS(topic);
+		const topicKey = constructTopicKey(topic);
+		const subscriptionKeys = await redis.SMEMBERS(topicKey);
 
 		const publishPromises = subscriptionKeys.map(async (subscriptionKey) => {
 			const subscription = await redis.GET(subscriptionKey);

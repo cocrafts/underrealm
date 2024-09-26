@@ -3,7 +3,7 @@ import { getCardState } from '../utils/card';
 import { getClosestEmpty } from '../utils/ground';
 import { createCommandResult, selectGround } from '../utils/helper';
 import type { SkillRunner } from '../utils/type';
-import { CommandSourceType, DuelPlace } from '../utils/type';
+import { CommandSourceType, DuelPlace, EffectIds } from '../utils/type';
 
 export const createIllusion: SkillRunner = ({ duel, cardId, sourceType }) => {
 	const { commands, registerCommand } = createCommandResult();
@@ -55,7 +55,7 @@ export const createIllusion: SkillRunner = ({ duel, cardId, sourceType }) => {
 				health: 10,
 				effectMap: {
 					Illusion: {
-						id: 'Illusion',
+						id: EffectIds.Illusion,
 					},
 				},
 			},

@@ -1,10 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { constructAPI } from './tools/infra/api';
-import { constructLauncher } from './tools/infra/launcher';
-import { constructWebsocketAPI } from './tools/infra/websocket';
-
 export default $config({
 	app(input) {
 		return {
@@ -15,14 +11,8 @@ export default $config({
 		};
 	},
 	async run() {
-		const wsAPI = constructWebsocketAPI();
-		const API = constructAPI(wsAPI);
-		const launcher = constructLauncher();
-
-		return {
-			web: launcher.url,
-			api: API.url,
-			ws: wsAPI.url,
-		};
+		import('./tools/infra/api');
+		import('./tools/infra/websocket');
+		import('./tools/infra/launcher');
 	},
 });

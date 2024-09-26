@@ -1,14 +1,11 @@
-import type {
-	CardMeta,
-	DuelConfig,
-	PlayerConfig,
-} from '@metacraft/murg-engine';
+import type { CardMeta, DuelConfig, PlayerConfig } from '@underrealm/murg';
 import {
 	CardType,
 	defaultSetting,
 	getInitialState,
 	makeMeta,
-} from '@metacraft/murg-engine';
+	move,
+} from '@underrealm/murg';
 
 export const makeDuel = (
 	version = '00001',
@@ -36,9 +33,14 @@ export const makeDuel = (
 		secondPlayer,
 	};
 
+	const state = getInitialState(config);
+
+	const { duel, commandBundles } = move.distributeInitialCards(state);
+	commandBundles.push(...move.distributeTurnCards(duel).commandBundles);
+
 	return {
 		config,
-		state: getInitialState(config),
+		commandBundles,
 	};
 };
 

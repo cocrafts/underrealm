@@ -58,11 +58,12 @@ export const defaultLambdaConfigs = (
 export const defaultEnvs = () => {
 	return {
 		RUNTIME: 'lambda',
+		...getEnvsObjectByKeys(['STAGE', 'NODE_ENV']),
 	};
 };
 
-export const APIEnvs = () => {
-	return getEnvsObjectByKeys(['STAGE', 'NODE_ENV', 'MONGO_URI', 'REDIS_URI']);
+export const DBEnvs = () => {
+	return getEnvsObjectByKeys(['MONGO_URI', 'REDIS_URI']);
 };
 
 export const getEnvsObjectByKeys = (keys: string[]) => {

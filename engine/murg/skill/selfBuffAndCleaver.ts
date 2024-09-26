@@ -1,10 +1,11 @@
 import { createCommand } from '../command';
 import { getCard, getCardState } from '../utils/card';
 import { createCommandResult } from '../utils/helper';
-import type {
-	Attribute,
-	CleaverAttackEffect,
-	SkillRunner,
+import {
+	type Attribute,
+	type CleaverAttackEffect,
+	EffectIds,
+	type SkillRunner,
 } from '../utils/type';
 
 interface SkillOptions {
@@ -42,12 +43,12 @@ export const selfBuffAndCleaver: SkillRunner = ({
 			payload: {
 				effectMap: {
 					SelfBuff: {
-						id: 'SelfBuff',
+						id: EffectIds.SelfBuff,
 						life: options.life,
 						attribute: options.buff,
 					},
 					CleaverAttack: {
-						id: 'CleaverAttack',
+						id: EffectIds.CleaverAttack,
 						life: options.life,
 						cleaverAttack: options.cleaver,
 					},

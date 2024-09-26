@@ -1,6 +1,17 @@
 import { PubSub } from 'graphql-subscriptions';
 
-const localPubsub = new PubSub();
+class WrappedPubsub extends PubSub {
+	/**
+	 * Delay publish to support publish before subscribe, only for local development
+	 */
+	async publish(triggerName: string, payload): Promise<void> {
+		setTimeout(() => {
+			super.publish(triggerName, payload);
+		}, 100);
+	}
+}
+
+const localPubsub = new WrappedPubsub();
 
 export const pubsub = {
 	subscribe: async (topics: string | string[]) => {

@@ -5395,15 +5395,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metacraft/murg-engine@npm:^0.0.73":
-  version: 0.0.73
-  resolution: "@metacraft/murg-engine@npm:0.0.73"
-  dependencies:
-    mustache: "npm:^4.2.0"
-  checksum: 10c0/a549de7bb59772fdd1f8825c20c36e96b3d0547aee56c5824426da26dc943121989e7a082b704787b613f9572372a9e7d61d9d67fc9111281133ccb13d78e9d5
-  languageName: node
-  linkType: hard
-
 "@metacraft/tsconfig@npm:^0.0.2":
   version: 0.0.2
   resolution: "@metacraft/tsconfig@npm:0.0.2"
@@ -8724,7 +8715,6 @@ __metadata:
     "@aws-sdk/client-ssm": "npm:^3.72.0"
     "@aws-sdk/lib-dynamodb": "npm:^3.45.0"
     "@graphql-tools/schema": "npm:^10.0.6"
-    "@metacraft/murg-engine": "npm:^0.0.73"
     "@types/aws-lambda": "npm:^8.10.145"
     "@types/cors": "npm:^2.8.17"
     "@types/express": "npm:^4"
@@ -8734,6 +8724,7 @@ __metadata:
     "@types/module-alias": "npm:^2.0.4"
     "@types/node": "npm:^17.0.29"
     "@types/ws": "npm:^8"
+    "@underrealm/murg": "npm:*"
     body-parser: "npm:^1.19.0"
     chalk: "npm:^5.3.0"
     cors: "npm:^2.8.5"
