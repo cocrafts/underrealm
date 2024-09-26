@@ -1,5 +1,9 @@
 import { type IUser, User } from 'models/user';
-import { generateRandomCode, REFERRAL_CODE_LENGTH } from 'utils/common';
+import {
+	generateRandomCode,
+	getRandomAvatar,
+	REFERRAL_CODE_LENGTH,
+} from 'utils/common';
 import { ForbiddenError } from 'utils/errors';
 
 import { verifyToken } from './jwt';
@@ -30,6 +34,7 @@ export const resolveUniversalContext = async ({
 				bindingId: cognitoUser.username,
 				address: cognitoUser.wallet,
 				email: cognitoUser.email,
+				avatarUrl: getRandomAvatar(),
 				referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 			});
 		}

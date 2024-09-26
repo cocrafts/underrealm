@@ -25,6 +25,7 @@ type Profile {
   bindingId: String
   address: String
   email: String
+  avatarUrl: String
   referred: ReferralHistory
   referralCode: String!
   points: Int!
