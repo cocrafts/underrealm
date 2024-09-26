@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
 	},
 	commandContainer: {
 		flexDirection: 'row',
-		paddingRight: 15,
 	},
 	buttonContainer: {
 		justifyContent: 'center',
