@@ -2,8 +2,8 @@ import type { DuelCommandBundle } from '@underrealm/murg';
 
 import { system } from '../util/system';
 
-// const wsUri = 'ws://localhost:3006';
-const wsUri = 'wss://94zbw8sdk9.execute-api.ap-northeast-1.amazonaws.com/prod/';
+const wsUri = 'ws://localhost:3006';
+// const wsUri = 'wss://94zbw8sdk9.execute-api.ap-northeast-1.amazonaws.com/prod/';
 
 export const connectionInstance = new WebSocket(wsUri);
 
