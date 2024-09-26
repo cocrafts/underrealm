@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client/react';
 import { Provider as MetacraftProvider } from '@metacraft/ui';
 import type { WalletError } from '@solana/wallet-adapter-base';
@@ -17,6 +17,7 @@ import {
 	useSnapshot,
 } from 'utils/hooks';
 import { useNetworkEndpoint, useWalletAdapters } from 'utils/hooks/web3';
+import { extractReferralFromUrl } from 'utils/referral';
 import { launcherTheme } from 'utils/styles';
 
 import './utils/styles';
@@ -35,6 +36,10 @@ const InternalApp: FC = () => {
 
 	useRequireReferral();
 	useAppInit();
+
+	useEffect(() => {
+		extractReferralFromUrl();
+	}, []);
 
 	return (
 		<ConnectionProvider endpoint={endpoint}>
