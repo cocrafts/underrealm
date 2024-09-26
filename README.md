@@ -31,6 +31,10 @@ npm install -g @metacraft/cli@latest
 cd engine && yarn build
 ```
 
+Note:
+
+- Game build failed: https://forum.cocos.org/t/topic/158104
+
 ### Build game
 
 - Build game to `launcher/assets/murg`, we are currently using `web-mobile` build option
