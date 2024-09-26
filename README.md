@@ -45,6 +45,37 @@ Run launcher
 cd launcher && yarn dev
 ```
 
+### Convention
+
+A component inside a feature/screen will be treated as section/fragment which is stateful with the feature's context, no need to pass all as props, it also can do API query/mutation by itself.
+
+#### Working with GraphQL, Apollo, Codegen
+
+Update schema, generated types from API
+
+```
+# at root
+yarn codegen:graphql
+```
+
+The command will generate code in `launcher/utils/graphql/sdk.ts` which includes graphql types, hooks, utils for working with API.
+
+For new query/mutation, write it inside `launcher/utils/graphql/query` or `launcher/utils/graphql/mutation`. Codegen will ready the files in these directories to generate code.
+
+```graphql
+query profile {}
+```
+
+After codegen, you will have a hook name `useProfileQuery`, usage:
+
+```typescript
+const ProfileScreen = () => {
+    const { data, loading, error } = useProfileQuery();
+
+    return ...
+}
+```
+
 ### Deploy launcher
 
 In `launcher` directory
@@ -75,6 +106,43 @@ _Note: codegen will run by fetching introspection from API endpoint, remember to
 ```
 # at root
 yarn codegen:graphql
+```
+
+### Convention
+
+All mutations must have tests!
+
+Logger & Error handling
+
+- By default, any internal error will be logged out via a middleware, we need to throw wrapped the error with a meaningful message.
+- If catching error without re-throw, prefer using `logger.warn`. In normal case, use `logger.info`
+
+## CLI
+
+Build and link CLI to global scope
+
+```
+cd cli && yarn install && yarn setup
+```
+
+Run the CLI
+
+```
+ur --help
+```
+
+Each time having any change, you just need to rebuild to apply change (no need to link as it's already linked). Or you can re-run `yarn setup` for a fresh build and link.
+
+```
+yarn build
+```
+
+## Deployment
+
+We're using [SST v3](https://sst.dev/), install the CLI globally
+
+```
+curl -fsSL https://sst.dev/install | bash
 ```
 
 ## Core engine

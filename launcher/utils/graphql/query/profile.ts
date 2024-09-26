@@ -4,10 +4,8 @@ export const profileFields = gql`
 	fragment ProfileFields on Profile {
 		id
 		address
-		name
-		avatarUrl
-		githubUrl
-		mineral
+		points
+		referralCode
 	}
 `;
 
@@ -16,15 +14,23 @@ export const profile = gql`
 	query Profile {
 		profile {
 			...ProfileFields
+			referralCode
+			referred {
+				id
+				referrerId
+				createdAt
+			}
 		}
 	}
 `;
 
-export const buddies = gql`
-	${profileFields}
-	query Buddies {
-		buddies {
-			...ProfileFields
-		}
-	}
-`;
+// TODO: Fix error "Unexpected <EOF> while using graphql"
+
+// export const buddies = gql`
+// 	${profileFields}
+// 	# query Buddies {
+// 	# 	buddies {
+// 	# 		...ProfileFields
+// 	# 	}
+// 	# }
+// `;

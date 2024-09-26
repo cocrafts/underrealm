@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import type { AppState } from '@metacraft/ui';
 import { appState } from '@metacraft/ui';
 import ScrollLayout from 'components/layouts/Scroll';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 import BannerSection from './sections/BannerSection';
 import FaqSection from './sections/FaqSection';

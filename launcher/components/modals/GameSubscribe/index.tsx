@@ -2,17 +2,11 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import type { ScaledSize, ViewStyle } from 'react-native';
 import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
-import { useMutation } from '@apollo/client';
-import { modalActions } from '@metacraft/ui';
 import { Text } from '@metacraft/ui';
 import UnderRealmModal from 'components/layouts/UnderRealmModal';
 import UnderRealmButton from 'components/Marketplace/Button';
-import * as mutations from 'utils/graphql/mutation';
-import { useInput } from 'utils/hook';
-import { MetacraftGames } from 'utils/types';
+import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
-
-import Subscribed from './Subscribed';
 
 interface Props {
 	dimensions: ScaledSize;
@@ -21,7 +15,10 @@ interface Props {
 export const GameSubscribe: FC<Props> = ({ dimensions }) => {
 	const [loading, setLoading] = useState(false);
 	const [subscribePressed, setSubscribePressed] = useState(false);
-	const [subscribeGame] = useMutation(mutations.subscribeGame);
+
+	// TODO: Fix error "Unexpected <EOF> while using graphql"
+
+	// const [subscribeGame] = useMutation(mutations.subscribeGame);
 	const emailInput = useInput();
 	const { hasError, errorMess } = validateEmail(emailInput.value);
 	const contentWidth = Math.min(dimensions.width - 16, 480);
@@ -39,25 +36,25 @@ export const GameSubscribe: FC<Props> = ({ dimensions }) => {
 		if (!hasError) {
 			setLoading(true);
 
-			subscribeGame({
-				variables: {
-					input: {
-						email: emailInput.value,
-						game: MetacraftGames.Murg,
-					},
-				},
-				onCompleted: () => {
-					setLoading(false);
-					emailInput.onChangeText('');
+			// subscribeGame({
+			// 	variables: {
+			// 		input: {
+			// 			email: emailInput.value,
+			// 			game: MetacraftGames.Murg,
+			// 		},
+			// 	},
+			// 	onCompleted: () => {
+			// 		setLoading(false);
+			// 		emailInput.onChangeText('');
 
-					modalActions.hide('gameSubscribe');
+			// 		modalActions.hide('gameSubscribe');
 
-					modalActions.show({
-						id: 'subscribed',
-						component: Subscribed,
-					});
-				},
-			});
+			// 		modalActions.show({
+			// 			id: 'subscribed',
+			// 			component: Subscribed,
+			// 		});
+			// 	},
+			// });
 		}
 	};
 

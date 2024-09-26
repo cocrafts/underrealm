@@ -10,7 +10,7 @@ import Animated, {
 import { dimensionState } from '@metacraft/ui';
 import InternalNavigation from 'components/Navigation/Internal';
 import { navigationHeight } from 'components/Navigation/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 
 const FIXED_HEADER_HEIGHT = 68;
 interface Props {
@@ -46,7 +46,7 @@ export const ScrollLayout: FC<Props> = ({
 	const contentContainer = {};
 
 	const containerStyle = {
-		paddingTop: isMobile ? 0 : FIXED_HEADER_HEIGHT,
+		paddingTop: FIXED_HEADER_HEIGHT,
 	};
 
 	const navigationStyle = useAnimatedStyle(() => {

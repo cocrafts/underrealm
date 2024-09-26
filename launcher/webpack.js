@@ -24,8 +24,7 @@ const copyAssets = (configs) => {
 
 const globalVariableNames = [
 	'SOCKET_URI',
-	'STORMGATE_API_ENDPOINT',
-	'STORMGATE_CLIENT_KEY',
+	'GRAPHQL_API_ENDPOINT',
 	'SOLANA_CLUSTER',
 	'AUTH_REDIRECT_ORIGIN',
 ];

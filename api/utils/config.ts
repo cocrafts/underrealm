@@ -1,19 +1,25 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 interface Configs {
+	RUNTIME: 'lambda' | 'local';
 	REGION: string;
 	SERVICE_NAME: string;
 	STAGE: string;
 	PORT: number;
-	IS_LAMBDA: boolean;
 	MONGO_URI: string;
+	REDIS_URI: string;
 }
 
 const defaultConfigs: Configs = {
+	RUNTIME: 'local',
 	STAGE: 'local',
-	REGION: 'ap-northeast-1',
+	REGION: 'ap-south-1',
 	SERVICE_NAME: 'metacraft-api',
 	PORT: 3005,
-	IS_LAMBDA: false,
 	MONGO_URI: 'mongodb://localhost:27017/underrealm',
+	REDIS_URI: 'redis://localhost',
 };
 
 export let configs: Configs = {

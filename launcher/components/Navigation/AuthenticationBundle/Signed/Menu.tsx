@@ -9,10 +9,8 @@ import {
 	installLayout,
 	openLayoutPopup,
 } from '@walless/adapter-solana-base';
-import { useSnapshot } from 'utils/hook';
+import { useProfile } from 'utils/hooks';
 import { signOut } from 'utils/lib/auth';
-import type { AccountState } from 'utils/state/account';
-import { accountState } from 'utils/state/account';
 import { noSelect } from 'utils/styles';
 
 interface Props {
@@ -49,7 +47,8 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	const [isWallessConnected, setIsWallessConnected] = useState(false);
 	const [isLayoutInstalled, setIsLayoutInstalled] = useState(false);
 	const { wallet, connected } = useWallet();
-	const { profile } = useSnapshot<AccountState>(accountState);
+	const { profile } = useProfile();
+
 	const onMyProfilePress = async () => {
 		if (isWallessConnected) {
 			if (isLayoutInstalled) {

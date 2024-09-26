@@ -19,7 +19,7 @@ import Dropdown from 'screens/CardLibrary/Library/Dropdown';
 import FilterButton from 'screens/CardLibrary/Library/FilterButton';
 import FilterTag from 'screens/CardLibrary/Library/FilterTag';
 import SearchBar from 'screens/CardLibrary/Library/SearchBar';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 

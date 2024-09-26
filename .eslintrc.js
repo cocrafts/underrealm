@@ -2,12 +2,13 @@ module.exports = {
 	root: true,
 	extends: ['@metacraft/eslint-config'],
 	ignorePatterns: [
+		'dist',
 		'node_modules',
-		'launcher/utils/types/graphql.ts',
+		'launcher/utils/graphql/sdk.ts',
 		'launcher/components/DrawerNavigation',
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',
-		'api/types/graphql.ts',
+		'api/utils/types/graphql.ts',
 	],
 	env: {
 		node: true,
@@ -21,5 +22,7 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-require-imports': 'off',
 		'@typescript-eslint/no-duplicate-enum-values': 'off',
+		'@typescript-eslint/no-empty-interface': 'off',
+		'@typescript-eslint/no-empty-object-type': 'off',
 	},
 };

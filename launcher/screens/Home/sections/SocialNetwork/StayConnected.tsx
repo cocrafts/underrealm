@@ -1,13 +1,9 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useMutation } from '@apollo/client';
-import { Hyperlink, modalActions, Text } from '@metacraft/ui';
-import Subscribed from 'components/modals/GameSubscribe/Subscribed';
+import { Hyperlink, Text } from '@metacraft/ui';
 import { headingSize, sharedStyle } from 'screens/Home/shared';
-import * as mutations from 'utils/graphql/mutation';
-import { useInput } from 'utils/hook';
-import { MetacraftGames } from 'utils/types';
+import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
 
 import { socialLinkList } from './shared';
@@ -17,7 +13,9 @@ export const StayConnected: FC = () => {
 	const [subscribePressed, setSubscribePressed] = useState(false);
 	const emailInput = useInput();
 	const { hasError, errorMess } = validateEmail(emailInput.value);
-	const [subscribeGame] = useMutation(mutations.subscribeGame);
+	// TODO: Fix error "Unexpected <EOF> while using graphql"
+
+	// const [subscribeGame] = useMutation(mutations.subscribeGame);
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onSubscribe = () => {
@@ -26,25 +24,26 @@ export const StayConnected: FC = () => {
 		if (!hasError) {
 			setLoading(true);
 
-			subscribeGame({
-				variables: {
-					input: {
-						email: emailInput.value,
-						game: MetacraftGames.Murg,
-					},
-				},
-				onCompleted: () => {
-					setLoading(false);
-					emailInput.onChangeText('');
+			// TODO: Fix error "Unexpected <EOF> while using graphql"
+			// subscribeGame({
+			// 	variables: {
+			// 		input: {
+			// 			email: emailInput.value,
+			// 			game: MetacraftGames.Murg,
+			// 		},
+			// 	},
+			// 	onCompleted: () => {
+			// 		setLoading(false);
+			// 		emailInput.onChangeText('');
 
-					modalActions.hide('gameSubscribe');
+			// 		modalActions.hide('gameSubscribe');
 
-					modalActions.show({
-						id: 'subscribed',
-						component: Subscribed,
-					});
-				},
-			});
+			// 		modalActions.show({
+			// 			id: 'subscribed',
+			// 			component: Subscribed,
+			// 		});
+			// 	},
+			// });
 		}
 	};
 

@@ -6,7 +6,8 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "type-check": "tsc --noEmit",
-    "dev": "tsx ./index.server.ts",
+    "test": "jest",
+    "dev": "tsx watch --clear-screen=false ./index.ts",
     "build": "rm -rf dist && yarn swc src -d dist"
   },
   "keywords": [],
@@ -21,31 +22,57 @@
     "@aws-sdk/client-ses": "^3.142.0",
     "@aws-sdk/client-ssm": "^3.72.0",
     "@aws-sdk/lib-dynamodb": "^3.45.0",
-    "@metacraft/murg-engine": "^0.0.73",
+    "@graphql-tools/schema": "^10.0.6",
+    "@underrealm/murg": "*",
+    "chalk": "^5.3.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphql": "^16.1.0",
-    "graphql-subscriptions": "^2.0.0",
+    "graphql-subscriptions": "patch:graphql-subscriptions@npm%3A2.0.0#~/.yarn/patches/graphql-subscriptions-npm-2.0.0-53564d1c84.patch",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "jwk-to-pem": "^2.0.5",
     "mongoose": "^8.6.1",
-    "nanoid": "^3.3.0"
+    "nanoid": "^3.3.0",
+    "redis": "^4.7.0",
+    "winston": "^3.14.2",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4",
     "@types/jest": "^28.1.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/jwk-to-pem": "^2.0.3",
     "@types/module-alias": "^2.0.4",
     "@types/node": "^17.0.29",
+    "@types/ws": "^8",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express-ws": "^5.0.2",
     "jest": "^28.1.1",
     "module-alias": "^2.2.2",
+    "mongodb-memory-server": "^10.0.0",
     "morgan": "^1.10.0",
     "tsx": "^4.19.0",
     "typescript": "5.3.3"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "moduleNameMapper": {
+      "^models/(.*)$": "<rootDir>/models/$1",
+      "^social/(.*)$": "<rootDir>/social/$1"
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }

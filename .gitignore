@@ -4,9 +4,11 @@
 
 .idea
 .vscode
-.yarn
+!.yarn/patches
+.yarn/install-state.gz
 .turbo
 
+dist/
 metacraft/
 wings/
 assets/cg
@@ -35,3 +37,6 @@ game/native
 !.env.example
 
 jwk.json
+*.log
+
+sst-env.d.ts

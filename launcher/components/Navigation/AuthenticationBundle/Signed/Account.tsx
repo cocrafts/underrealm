@@ -1,8 +1,7 @@
 import type { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Text } from '@metacraft/ui';
 import Avatar from 'components/Avatar';
-import type { Profile } from 'utils/types/graphql';
+import type { Profile } from 'utils/graphql';
 
 import { styles } from './internal';
 
@@ -13,19 +12,12 @@ interface Props {
 }
 
 export const Account: FC<Props> = ({ profile, onPress, onAvatarPress }) => {
-	const { address, name, avatarUrl } = profile;
+	const { address } = profile;
 
 	return (
 		<TouchableOpacity onPress={onPress} style={styles.container}>
-			<View style={styles.infoContainer}>
-				<Text style={styles.primaryText}>{name}</Text>
-			</View>
-			<Avatar
-				size={20}
-				imageUri={avatarUrl as string}
-				characters={address}
-				onPress={onAvatarPress}
-			/>
+			<View style={styles.infoContainer}></View>
+			<Avatar size={20} characters={address} onPress={onAvatarPress} />
 		</TouchableOpacity>
 	);
 };

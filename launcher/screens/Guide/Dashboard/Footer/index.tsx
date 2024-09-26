@@ -5,7 +5,7 @@ import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';
 import { navigate } from 'stacks/Browser/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 

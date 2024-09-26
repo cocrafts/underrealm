@@ -1,6 +1,6 @@
 import type { DuelCommandBundle, DuelConfig } from '@underrealm/murg';
 // import type { GameInvitation } from './graphql';
-import type { DynamoRecord } from 'types/internal';
+import type { DynamoRecord } from 'utils/types';
 
 // export type GameInvitationRecord = DynamoRecord & GameInvitation;
 export type GameInvitationRecord = DynamoRecord;

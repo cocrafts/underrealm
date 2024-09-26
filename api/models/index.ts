@@ -1,21 +1,29 @@
 import mongoose from 'mongoose';
+import { configs } from 'utils/config';
+import { logger } from 'utils/logger';
 
 mongoose.connection.on('connected', () => {
-	console.log('MongoDB connected');
+	logger.info('MongoDB connected');
 });
 
 mongoose.connection.on('disconnected', () =>
-	console.log('MongoDB disconnected'),
+	logger.warn('MongoDB disconnected'),
 );
 
 mongoose.connection.on('reconnected', () => {
-	console.log('MongoDB reconnected');
+	logger.info('MongoDB reconnected');
 });
 
 mongoose.connection.on('disconnecting', () => {
-	console.log('MongoDB disconnecting');
+	logger.warn('MongoDB disconnecting');
 });
 
 mongoose.connection.on('close', () => {
-	console.log('MongoDB close');
+	logger.warn('MongoDB close');
 });
+
+export const mongo = {
+	connect: async () => {
+		await mongoose.connect(configs.MONGO_URI);
+	},
+};

@@ -5,7 +5,10 @@ import { createSchema } from './utils';
 const questSchema = createSchema({
 	title: String,
 	description: String,
-	type: String,
+	type: {
+		type: String,
+		enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD', 'COMMENT_X'],
+	},
 	status: {
 		type: String,
 		enum: ['INIT', 'LIVE', 'DISABLE'],
@@ -17,8 +20,9 @@ const questSchema = createSchema({
 export const Quest = model('Quest', questSchema);
 
 const questActionSchema = createSchema({
-	questId: Types.ObjectId,
-	userId: Types.ObjectId,
+	questId: { type: Types.ObjectId, ref: 'Quest' },
+	userId: { type: Types.ObjectId, ref: 'User' },
+	claimedPoints: Number,
 });
 
 questActionSchema.index({ questId: 1, userId: 1 }, { unique: true });

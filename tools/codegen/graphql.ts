@@ -3,13 +3,28 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
 	overwrite: true,
 	schema: 'http://localhost:3005/graphql',
+	documents: [
+		'launcher/utils/graphql/query/*.ts',
+		'launcher/utils/graphql/mutation/*.ts',
+		'launcher/utils/graphql/subscription/*.ts',
+	],
 	generates: {
-		'./api/types/graphql.ts': {
+		'./schema.graphql': {
+			plugins: ['schema-ast'],
+		},
+		'./api/utils/types/graphql.ts': {
 			plugins: ['typescript', 'typescript-resolvers'],
 			config: {
 				useIndexSignature: true,
-				contextType: '../utils/runtime#ApiContext',
+				contextType: '../context/graphql#ApiContext',
 			},
+		},
+		'./launcher/utils/graphql/sdk.ts': {
+			plugins: [
+				'typescript',
+				'typescript-operations',
+				'typescript-react-apollo',
+			],
 		},
 	},
 };

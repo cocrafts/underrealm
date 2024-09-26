@@ -7,10 +7,9 @@ import type { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Text from 'components/Text';
-import { useSnapshot } from 'utils/hook';
-import { googleSignIn } from 'utils/lib';
-import type { AccountState } from 'utils/state/account';
-import { accountActions, accountState } from 'utils/state/account';
+import { accountActions } from 'state/account';
+import { useProfile, useSnapshot } from 'utils/hooks';
+import { googleSignIn, walletSignIn } from 'utils/lib';
 
 import { modalStyles } from './shared';
 
@@ -24,7 +23,7 @@ interface ModalContext {
 
 export const SignInOptions: FC<Props> = ({ config }) => {
 	const { web3Only } = (config?.context || {}) as ModalContext;
-	const { profile } = useSnapshot<AccountState>(accountState);
+	const { profile } = useProfile();
 	const { colors } = useSnapshot(themeState);
 	const fromSelectRef = useRef(false);
 	const {
@@ -36,6 +35,11 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		publicKey,
 		signMessage,
 	} = useWallet();
+
+	const containerStyle = [
+		modalStyles.container,
+		{ backgroundColor: colors.background, minWidth: 304 },
+	];
 
 	const selectWallet = useCallback(
 		async (adapter: WalletAdapterProps) => {
@@ -51,22 +55,16 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		[select],
 	);
 
-	const signInWallet = useCallback(() => {
+	const signInWallet = useCallback(async () => {
 		modalActions.hide(config.id as string);
-
-		if (profile.address !== publicKey?.toString()) {
-			accountActions.walletSignIn({ publicKey, signMessage });
+		if (profile?.address !== publicKey?.toString()) {
+			await walletSignIn(publicKey.toString(), signMessage);
 		}
 	}, [connected, publicKey, signMessage]);
 
 	const disconnectWallet = useCallback(async () => {
 		await disconnect();
 	}, [disconnect]);
-
-	const containerStyle = [
-		modalStyles.container,
-		{ backgroundColor: colors.background, minWidth: 304 },
-	];
 
 	const signInGoogle = async () => {
 		modalActions.hide(config.id as string);
@@ -83,7 +81,7 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		if (
 			connected &&
 			fromSelectRef.current &&
-			publicKey?.toString() !== profile.address
+			publicKey?.toString() !== profile?.address
 		) {
 			fromSelectRef.current = false;
 			signInWallet();
