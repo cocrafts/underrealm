@@ -1,9 +1,10 @@
-import { type FC, useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useMemo, useState } from 'react';
 import { Linking, StyleSheet } from 'react-native';
 import { AnimateDirections, modalActions } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import SignInOptions from 'components/modals/SignInOptions';
-import { type Quest } from 'utils/graphql';
+import type { Quest } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 
 import Action from './Action';

@@ -1,7 +1,8 @@
 import type { ContextFunction } from '@apollo/server';
 import type { ExpressContextFunctionArgument } from '@apollo/server/dist/esm/express4';
 
-import { type ApiContext, resolveUniversalContext } from './graphql';
+import type { ApiContext } from './graphql';
+import { resolveUniversalContext } from './graphql';
 
 export * from './graphql';
 

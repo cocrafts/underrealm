@@ -1,6 +1,7 @@
 import { Quest } from 'models/quest';
 import { virtualId } from 'models/utils';
-import { type QueryResolvers, QuestStatus } from 'utils/types';
+import type { QueryResolvers } from 'utils/types';
+import { QuestStatus } from 'utils/types';
 
 export const quests: QueryResolvers['questsWithAction'] = async (
 	_,

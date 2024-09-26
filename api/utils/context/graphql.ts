@@ -1,4 +1,5 @@
-import { type IUser, User } from 'models/user';
+import type { IUser } from 'models/user';
+import { User } from 'models/user';
 import {
 	generateRandomCode,
 	getRandomAvatar,
