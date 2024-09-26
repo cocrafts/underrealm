@@ -49,13 +49,17 @@ const QuestContent: FC = () => {
 
 			{loading ? (
 				<Loading style={styles.loading} />
-			) : !profile.id && error ? (
+			) : !profile.id ? (
+				<View style={styles.errorContainer}>
+					<Text>Please sign in</Text>
+				</View>
+			) : error ? (
 				<View style={styles.errorContainer}>
 					<Text>Something went wrong!</Text>
 				</View>
 			) : tab === TabId.QUEST ? (
 				<View style={styles.quests}>
-					{data.quests.map((quest) => {
+					{data?.quests.map((quest) => {
 						return <QuestItem key={quest.id} quest={quest} />;
 					})}
 				</View>
@@ -128,5 +132,6 @@ const stylesheet = createStyleSheet({
 	},
 	errorContainer: {
 		marginTop: 24,
+		alignItems: 'center',
 	},
 });
