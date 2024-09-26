@@ -34,10 +34,12 @@ export const ReferralLink = () => {
 			<Text style={styles.label}>Your Referral Link:</Text>
 			<View style={styles.linkBox}>
 				<Text style={styles.link}>
-					{profile ? referralLink : 'Please sign-in to get your referral link'}
+					{profile.referralCode
+						? referralLink
+						: 'Please sign-in to get your referral link'}
 				</Text>
 				<View style={styles.buttonGroup}>
-					<TouchableOpacity onPress={onCopy} disabled={!profile}>
+					<TouchableOpacity onPress={onCopy} disabled={!profile.referralCode}>
 						<View>
 							<AncientPaper width={100} height={45} />
 							<View style={styles.svgButton}>
