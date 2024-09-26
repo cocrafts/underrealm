@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
@@ -7,13 +8,26 @@ import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralLink = () => {
+	const [isCopied, setIsCopied] = useState(false);
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
 	const referralLink = `${window.location.origin}?ref=${profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);
+		setIsCopied(true);
 	};
+
+	useEffect(() => {
+		if (!isCopied) {
+			return;
+		}
+
+		const copiedTimeout = setTimeout(() => setIsCopied(false), 3000);
+		return () => {
+			clearTimeout(copiedTimeout);
+		};
+	}, [isCopied]);
 
 	return (
 		<View style={styles.container}>
@@ -27,7 +41,7 @@ export const ReferralLink = () => {
 						<View>
 							<AncientPaper width={100} height={45} />
 							<View style={styles.svgButton}>
-								<Text>Copy Link</Text>
+								<Text>{isCopied ? 'Copied' : 'Copy Link'}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>
