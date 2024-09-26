@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState } from '@metacraft/ui';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import TimelineItem from './TimelineItem';

@@ -1,15 +1,18 @@
-import type { SSTConfig } from 'sst';
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./.sst/platform/config.d.ts" />
 
-import launcher from './tools/stacks/launcher';
-
-export default {
-	config() {
+export default $config({
+	app(input) {
 		return {
-			name: 'under-realm',
-			region: 'ap-south-1',
+			name: 'underrealm',
+			removal: input?.stage === 'production' ? 'retain' : 'remove',
+			home: 'aws',
+			providers: { aws: { profile: 'metacraft', region: 'ap-south-1' } },
 		};
 	},
-	stacks(app) {
-		app.stack(launcher);
+	async run() {
+		import('./tools/infra/api');
+		import('./tools/infra/websocket');
+		import('./tools/infra/launcher');
 	},
-} satisfies SSTConfig;
+});

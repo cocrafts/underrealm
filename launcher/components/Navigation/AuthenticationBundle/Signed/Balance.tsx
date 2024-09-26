@@ -4,10 +4,9 @@ import { Text } from '@metacraft/ui';
 import ShardIcon from 'components/icons/DiamondMineral';
 import EyeIcon from 'components/icons/Eye';
 import EyeClosedIcon from 'components/icons/EyeClosed';
+import { appActions, appState } from 'state/app';
 import type { Profile } from 'utils/graphql';
-import { formatNumber, memiToUSD } from 'utils/helper';
-import { useSnapshot } from 'utils/hook';
-import { appActions, appState } from 'utils/state/app';
+import { useSnapshot } from 'utils/hooks';
 
 import { styles } from './internal';
 
@@ -15,8 +14,7 @@ interface Props {
 	profile: Profile;
 }
 
-export const Balance: FC<Props> = ({ profile }) => {
-	const { mineral } = profile;
+export const Balance: FC<Props> = () => {
 	const { privacy } = useSnapshot(appState);
 
 	return (
@@ -25,11 +23,11 @@ export const Balance: FC<Props> = ({ profile }) => {
 				<View style={styles.inlineContainer}>
 					<ShardIcon style={styles.inlineIcon} size={14} />
 					<Text style={styles.primaryText}>
-						{privacy ? '....... ' : formatNumber(mineral)}
+						{/* {privacy ? '....... ' : formatNumber(mineral)} */}
 					</Text>
 				</View>
 				<Text style={styles.secondaryText}>
-					{privacy ? 'SECRET' : `${formatNumber(memiToUSD(mineral))} USD`}
+					{/* {privacy ? 'SECRET' : `${formatNumber(memiToUSD(mineral))} USD`} */}
 				</Text>
 			</View>
 			<TouchableOpacity

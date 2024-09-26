@@ -1,43 +1,44 @@
 import type { DefaultOptions, Operation } from '@apollo/client';
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { WebSocketLink } from '@apollo/client/link/ws';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createClient } from 'graphql-ws';
 import { extractJwt } from 'utils/lib/auth';
 
 const defaultOptions: DefaultOptions = {
 	watchQuery: {
-		fetchPolicy: 'no-cache',
+		fetchPolicy: 'cache-first',
 		errorPolicy: 'ignore',
 	},
 	query: {
-		fetchPolicy: 'no-cache',
+		fetchPolicy: 'cache-first',
 		errorPolicy: 'all',
 	},
 };
 
-const basicLink = new HttpLink({ uri: STORMGATE_API_ENDPOINT, fetch });
+const httpLink = new HttpLink({ uri: GRAPHQL_API_ENDPOINT, fetch });
 
 const authLink = setContext(async (_, { headers: originalHeaders }) => {
 	const token = await extractJwt();
 	const headers = {
-		'client-key': STORMGATE_CLIENT_KEY,
 		...originalHeaders,
+		Authorization: token ? `Bearer ${token}` : '',
 	};
-
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
-	}
 
 	return { headers };
 });
 
-const httpLink = authLink.concat(basicLink);
-
-const socketLink = new WebSocketLink({
-	uri: SOCKET_URI,
-	options: { reconnect: true },
-});
+const socketLink = new GraphQLWsLink(
+	createClient({
+		url: SOCKET_URI,
+		on: { connected: () => console.log('GraphQL Subscription connected') },
+		connectionParams: async () => {
+			const token = await extractJwt();
+			return { headers: { Authorization: token ? `Bearer ${token}` : '' } };
+		},
+	}),
+);
 
 const splitter = ({ query }: Operation) => {
 	const definition = getMainDefinition(query);
@@ -50,7 +51,7 @@ const splitter = ({ query }: Operation) => {
 export const memoryCache = new InMemoryCache();
 
 export const graphQlClient = new ApolloClient({
-	link: split(splitter, socketLink, httpLink),
+	link: split(splitter, socketLink, authLink.concat(httpLink)),
 	cache: memoryCache,
 	defaultOptions,
 });

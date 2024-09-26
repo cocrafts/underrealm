@@ -6,7 +6,7 @@ import { dimensionState, Markdown, Text } from '@metacraft/ui';
 import { card } from 'screens/Guide/content';
 import Concept from 'screens/Guide/Dashboard/Concept';
 import { headingSize, sharedStyle } from 'screens/Guide/shared';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 
 const Cards: FC<Record<string, unknown>> = () => {

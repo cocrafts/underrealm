@@ -1,4 +1,4 @@
-import type { Types } from 'mongoose';
+import type { SchemaDefinition, Types } from 'mongoose';
 import { Schema } from 'mongoose';
 
 /**
@@ -6,11 +6,12 @@ import { Schema } from 'mongoose';
  * - virtual `id` from default `_id objectId` for GraphQL field compatibility
  * - auto `timestamps` on creating or updating
  */
-export const createSchema = <Definition extends {}, Options>(
+export const createSchema = <Definition extends SchemaDefinition, Options>(
 	definition: Definition,
 	options?: Options,
 ) => {
 	const schema = new Schema(definition, {
+		id: true,
 		toJSON: { virtuals: true },
 		toObject: { virtuals: true },
 		timestamps: true,
@@ -22,4 +23,10 @@ export const createSchema = <Definition extends {}, Options>(
 	});
 
 	return schema;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const virtualId = (obj: any) => {
+	if (!obj) return null;
+	return { id: obj._id, ...obj };
 };

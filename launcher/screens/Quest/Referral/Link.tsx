@@ -1,33 +1,58 @@
+import { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
-import UnderRealmButton from 'components/Marketplace/Button';
+// import UnderRealmButton from 'components/Marketplace/Button';
+import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 export const ReferralLink = () => {
+	const [isCopied, setIsCopied] = useState(false);
 	const { styles } = useStyles(stylesheet);
-	const referralLink = `https://underrealm.io/ref=${1234567}`;
+	const { profile } = useProfile();
+	const referralLink = `${window.location.origin}?ref=${profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);
+		setIsCopied(true);
 	};
+
+	useEffect(() => {
+		if (!isCopied) {
+			return;
+		}
+
+		const copiedTimeout = setTimeout(() => setIsCopied(false), 3000);
+		return () => {
+			clearTimeout(copiedTimeout);
+		};
+	}, [isCopied]);
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.label}>Your Referral Link:</Text>
 			<View style={styles.linkBox}>
-				<Text style={styles.link}>{referralLink}</Text>
+				<Text style={styles.link}>
+					{profile.referralCode
+						? referralLink
+						: 'Please sign-in to get your referral link'}
+				</Text>
 				<View style={styles.buttonGroup}>
-					<TouchableOpacity onPress={onCopy}>
+					<TouchableOpacity onPress={onCopy} disabled={!profile.referralCode}>
 						<View>
 							<AncientPaper width={100} height={45} />
 							<View style={styles.svgButton}>
-								<Text>Copy Link</Text>
+								<Text>{isCopied ? 'Copied' : 'Copy Link'}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>
-					<UnderRealmButton title="Share" style={{ width: 140 }} />
+					{/* <UnderRealmButton
+						title="Share"
+						style={{ width: 140 }}
+						isSubButton={!profile}
+						disabled={!profile}
+					/> */}
 				</View>
 			</View>
 			<View style={styles.description}>

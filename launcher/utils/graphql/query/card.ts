@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+// import { gql } from '@apollo/client';
 
 // TODO: Fix error "Unexpected <EOF> while using graphql"
 

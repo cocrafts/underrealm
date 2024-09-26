@@ -1,5 +1,5 @@
-import { getItem, rangeQuery } from 'aws/dynamo';
-import type { QueryResolvers } from 'types/graphql';
+import { getItem, rangeQuery } from 'utils/aws/dynamo';
+import type { QueryResolvers } from 'utils/types';
 
 export const cardDuelHistory: QueryResolvers['cardDuelHistory'] = async (
 	root,
@@ -8,7 +8,7 @@ export const cardDuelHistory: QueryResolvers['cardDuelHistory'] = async (
 ) => {
 	const { Items: duels } = await rangeQuery(
 		'gsi',
-		`profile#${user.id}`,
+		`profile#${user.bindingId}`,
 		'duelHistory#',
 		{ Limit: limit || 1, ScanIndexForward: false },
 	);

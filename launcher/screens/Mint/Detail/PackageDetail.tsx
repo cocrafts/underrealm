@@ -1,20 +1,16 @@
 import type { FC } from 'react';
 import { Fragment } from 'react';
 import type { ViewStyle } from 'react-native';
-import {
-	ActivityIndicator,
-	ImageBackground,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Hyperlink, modalActions, Text } from '@metacraft/ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Countdown from 'components/Countdown';
+import Loading from 'components/Loading';
 import Accordion from 'components/Marketplace/Accordion';
 import Card from 'components/Marketplace/Card';
 import SignInOptions from 'components/modals/SignInOptions';
 import type { PackStats, Rarity } from 'screens/Mint/shared';
-import type { SugarEffect } from 'utils/hook';
+import type { SugarEffect } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 
@@ -100,7 +96,7 @@ export const PackDetailSection: FC<Props> = ({
 							Number of Card/Pack: 1 Card
 						</Text>
 						{sugar.isLoading ? (
-							<ActivityIndicator size="large" />
+							<Loading size="large" />
 						) : (
 							<Fragment>
 								<View

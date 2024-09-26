@@ -302,7 +302,12 @@ export default {
 		twitter: { uri: '/quest/twitter.png' },
 		referral: {
 			backgroundMain: { uri: '/referral/main-bg.png' },
+			backgroundSmall: { uri: '/referral/main-bg-xs.png' },
 			uCoin: { uri: '/u-coin.png' },
+			chest: { uri: '/referral/chest.png' },
+			guideLg: { uri: '/referral/guide-lg.png' },
+			guideTitleBg: { uri: '/referral/guide-title-bg.png' },
+			visualBullet: { uri: '/referral/visual-bullet.svg' },
 		},
 	},
 };

@@ -1,4 +1,4 @@
-import { CardType, getCard, selectPlayer } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import type { EventMouse, UIOpacity } from 'cc';
 import { _decorator, Component, Node, Vec2 } from 'cc';
 
@@ -8,6 +8,7 @@ import { raiseHandCard } from './tween';
 
 const { ccclass } = _decorator;
 const NodeEvents = Node.EventType;
+const { CardType, getCard, selectPlayer } = Engine;
 
 interface Props {
 	card?: Node;

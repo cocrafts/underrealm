@@ -1,9 +1,4 @@
-import {
-	getFirstEmptyLeft,
-	getFirstEmptyRight,
-	selectGround,
-	selectHand,
-} from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import type { EventMouse } from 'cc';
 import { _decorator, AudioSource, Component, Node, UIOpacity } from 'cc';
 
@@ -18,6 +13,8 @@ import { UnitManager } from './UnitManager';
 
 const { ccclass } = _decorator;
 const NodeEvents = Node.EventType;
+const { getFirstEmptyLeft, getFirstEmptyRight, selectGround, selectHand } =
+	Engine;
 
 @ccclass('DuelManager')
 export class DuelManager extends Component {

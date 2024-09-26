@@ -74,64 +74,34 @@ type CardPlayerConfig {
 
 scalar DateTime
 
-type GameInvitation {
-  enemy: Profile!
-  game: String!
-  id: String!
-  owner: Profile!
-  timestamp: String!
-}
-
-input InviteGameInput {
-  game: MetacraftGames!
-  opponent: String!
-}
-
-enum MetacraftGames {
-  MURG
-}
-
 type Mutation {
-  acceptGame(invitationId: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
-  inviteGame(input: InviteGameInput!): GameInvitation
   makeReferral(referralCode: String!): Boolean
-  stopMatchFind: Boolean
 }
 
 type Profile {
   address: String
   avatarUrl: String
+  bindingId: String
   email: String
-  githubId: String
-  githubUrl: String
   id: String!
-  isOnline: Boolean
-  jwt: String
-  linkedId: String
-  mineral: Float
-  name: String
+  points: Int!
   referralCode: String!
+  referred: ReferralHistory
 }
 
 type Query {
-  activeQuests: [Quest]
   cardDuel(id: String!): CardDuel
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
-  disableQuests: [Quest]
-  gameInvitations: [GameInvitation]
-  gameJwt(duelId: String): String
   greeting: String
-  initQuests: [Quest]
   profile(address: String): Profile
-  quest(id: ID!): Quest
-  questActions: [QuestAction]
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]
 }
 
 type Quest {
+  action: QuestAction
   createdAt: DateTime!
   description: String!
   id: ID!
@@ -147,7 +117,7 @@ type QuestAction {
   createdAt: DateTime!
   id: ID!
   questId: ID!
-  userId: String!
+  userId: ID!
 }
 
 enum QuestStatus {
@@ -173,7 +143,6 @@ type ReferralHistory {
 }
 
 type Subscription {
-  gameInvitation(opponent: String!): GameInvitation
-  matchFind(game: MetacraftGames!, userId: String): CardDuel
-  matchFound(game: MetacraftGames!, userId: String): CardDuel
+  counterIncreased: Int!
+  findMatch(userId: String!): CardDuel
 }

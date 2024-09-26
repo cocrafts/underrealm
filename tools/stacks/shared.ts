@@ -31,4 +31,3 @@ export const constructDomainName = (
 export const loadEnvsFromStage = (stage: string): void => {
 	dotenv.config({ path: `.env.${stage}` });
 };
-

@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#21150f',
 		height: navigationHeight.local,
+		paddingHorizontal: 15,
 	},
 	contentContainer: {
 		flexDirection: 'row',
@@ -156,7 +157,6 @@ const styles = StyleSheet.create({
 	},
 	commandContainer: {
 		flexDirection: 'row',
-		paddingRight: 15,
 	},
 	buttonContainer: {
 		justifyContent: 'center',

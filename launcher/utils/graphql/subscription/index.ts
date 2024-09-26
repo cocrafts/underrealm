@@ -6,23 +6,9 @@ export const counterIncreased = gql`
 	}
 `;
 
-export const gameInvitation = gql`
-	subscription GameInvitation($opponent: String!) {
-		gameInvitation(opponent: $opponent) {
-			id
-			game
-			owner {
-				address
-				avatarUrl
-				name
-			}
-		}
-	}
-`;
-
-export const matchFind = gql`
-	subscription MatchFind($userId: String) {
-		matchFind(game: MURG, userId: $userId) {
+export const findMatch = gql`
+	subscription FindMatch($userId: String!) {
+		findMatch(userId: $userId) {
 			id
 		}
 	}

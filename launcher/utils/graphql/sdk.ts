@@ -102,36 +102,10 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
-export type GameInvitation = {
-  __typename?: 'GameInvitation';
-  enemy: Profile;
-  game: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  owner: Profile;
-  timestamp: Scalars['String']['output'];
-};
-
-export type InviteGameInput = {
-  game: MetacraftGames;
-  opponent: Scalars['String']['input'];
-};
-
-export enum MetacraftGames {
-  Murg = 'MURG'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptGame?: Maybe<Scalars['Boolean']['output']>;
   createQuestAction?: Maybe<QuestAction>;
-  inviteGame?: Maybe<GameInvitation>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
-  stopMatchFind?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-export type MutationAcceptGameArgs = {
-  invitationId: Scalars['String']['input'];
 };
 
 
@@ -140,46 +114,29 @@ export type MutationCreateQuestActionArgs = {
 };
 
 
-export type MutationInviteGameArgs = {
-  input: InviteGameInput;
-};
-
-
 export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
-
 
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
+  bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  githubId?: Maybe<Scalars['String']['output']>;
-  githubUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  isOnline?: Maybe<Scalars['Boolean']['output']>;
-  jwt?: Maybe<Scalars['String']['output']>;
-  linkedId?: Maybe<Scalars['String']['output']>;
-  mineral?: Maybe<Scalars['Float']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
+  points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
+  referred?: Maybe<ReferralHistory>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  activeQuests?: Maybe<Array<Maybe<Quest>>>;
   cardDuel?: Maybe<CardDuel>;
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
-  disableQuests?: Maybe<Array<Maybe<Quest>>>;
-  gameInvitations?: Maybe<Array<Maybe<GameInvitation>>>;
-  gameJwt?: Maybe<Scalars['String']['output']>;
   greeting?: Maybe<Scalars['String']['output']>;
-  initQuests?: Maybe<Array<Maybe<Quest>>>;
   profile?: Maybe<Profile>;
-  quest?: Maybe<Quest>;
-  questActions?: Maybe<Array<Maybe<QuestAction>>>;
   quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
 };
@@ -195,18 +152,8 @@ export type QueryCardDuelHistoryArgs = {
 };
 
 
-export type QueryGameJwtArgs = {
-  duelId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
 export type QueryProfileArgs = {
   address?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryQuestArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -216,6 +163,7 @@ export type QueryQuestsArgs = {
 
 export type Quest = {
   __typename?: 'Quest';
+  action?: Maybe<QuestAction>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -232,7 +180,7 @@ export type QuestAction = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   questId: Scalars['ID']['output'];
-  userId: Scalars['String']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 export enum QuestStatus {
@@ -242,11 +190,11 @@ export enum QuestStatus {
 }
 
 export enum QuestType {
-    CommentX = 'COMMENT_X',
-    JoinDiscord = 'JOIN_DISCORD',
-    LikeX = 'LIKE_X',
-    RetweetX = 'RETWEET_X'
-  }
+  CommentX = 'COMMENT_X',
+  JoinDiscord = 'JOIN_DISCORD',
+  LikeX = 'LIKE_X',
+  RetweetX = 'RETWEET_X'
+}
 
 export type ReferralHistory = {
   __typename?: 'ReferralHistory';
@@ -260,46 +208,14 @@ export type ReferralHistory = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  gameInvitation?: Maybe<GameInvitation>;
-  matchFind?: Maybe<CardDuel>;
-  matchFound?: Maybe<CardDuel>;
+  counterIncreased: Scalars['Int']['output'];
+  findMatch?: Maybe<CardDuel>;
 };
 
 
-export type SubscriptionGameInvitationArgs = {
-  opponent: Scalars['String']['input'];
+export type SubscriptionFindMatchArgs = {
+  userId: Scalars['String']['input'];
 };
-
-
-export type SubscriptionMatchFindArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SubscriptionMatchFoundArgs = {
-  game: MetacraftGames;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type InviteGameMutationVariables = Exact<{
-  input: InviteGameInput;
-}>;
-
-
-export type InviteGameMutation = { __typename?: 'Mutation', inviteGame?: { __typename?: 'GameInvitation', game: string } | null };
-
-export type AcceptGameMutationVariables = Exact<{
-  invitationId: Scalars['String']['input'];
-}>;
-
-
-export type AcceptGameMutation = { __typename?: 'Mutation', acceptGame?: boolean | null };
-
-export type StopMatchFindMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StopMatchFindMutation = { __typename?: 'Mutation', stopMatchFind?: boolean | null };
 
 export type CreateQuestActionMutationVariables = Exact<{
   questId: Scalars['ID']['input'];
@@ -308,161 +224,59 @@ export type CreateQuestActionMutationVariables = Exact<{
 
 export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null };
 
-export type GameInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type MakeReferralMutationVariables = Exact<{
+  referralCode: Scalars['String']['input'];
+}>;
 
 
-export type GameInvitationsQuery = { __typename?: 'Query', gameInvitations?: Array<{ __typename?: 'GameInvitation', id: string, game: string, owner: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null } } | null> | null };
+export type MakeReferralMutation = { __typename?: 'Mutation', makeReferral?: boolean | null };
 
 export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address: string, name?: string | null, avatarUrl?: string | null, githubUrl?: string | null, mineral: number } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
 }>;
 
 
-export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
+export type QuestsQuery = { __typename?: 'Query', quests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number, createdAt: any, action?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number, createdAt: any } | null } | null> | null };
 
-export type ActiveQuestsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ActiveQuestsQuery = { __typename?: 'Query', activeQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
-
-export type InitQuestsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ReferralHistoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitQuestsQuery = { __typename?: 'Query', initQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
+export type ReferralHistoryQuery = { __typename?: 'Query', referralHistory?: Array<{ __typename?: 'ReferralHistory', id: string, referrerId?: string | null, refereeId?: string | null, claimedPoints?: number | null, createdAt?: any | null, refereeUser?: { __typename?: 'Profile', id: string, address?: string | null, email?: string | null } | null } | null> | null };
 
-export type DisableQuestsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CounterIncreasedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DisableQuestsQuery = { __typename?: 'Query', disableQuests?: Array<{ __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null> | null };
+export type CounterIncreasedSubscription = { __typename?: 'Subscription', counterIncreased: number };
 
-export type QuestByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type FindMatchSubscriptionVariables = Exact<{
+  userId: Scalars['String']['input'];
 }>;
 
 
-export type QuestByIdQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, title: string, description: string, type: QuestType, url: string, status: QuestStatus, points: number } | null };
-
-export type QuestActionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type QuestActionsQuery = { __typename?: 'Query', questActions?: Array<{ __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null> | null };
+export type FindMatchSubscription = { __typename?: 'Subscription', findMatch?: { __typename?: 'CardDuel', id?: string | null } | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
   id
   address
-  name
+  email
+  points
   avatarUrl
-  githubUrl
-  mineral
+  referralCode
 }
     `;
-export const InviteGameDocument = gql`
-    mutation InviteGame($input: InviteGameInput!) {
-  inviteGame(input: $input) {
-    game
-  }
-}
-    `;
-export type InviteGameMutationFn = Apollo.MutationFunction<InviteGameMutation, InviteGameMutationVariables>;
-
-/**
- * __useInviteGameMutation__
- *
- * To run a mutation, you first call `useInviteGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInviteGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [inviteGameMutation, { data, loading, error }] = useInviteGameMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useInviteGameMutation(baseOptions?: Apollo.MutationHookOptions<InviteGameMutation, InviteGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InviteGameMutation, InviteGameMutationVariables>(InviteGameDocument, options);
-      }
-export type InviteGameMutationHookResult = ReturnType<typeof useInviteGameMutation>;
-export type InviteGameMutationResult = Apollo.MutationResult<InviteGameMutation>;
-export type InviteGameMutationOptions = Apollo.BaseMutationOptions<InviteGameMutation, InviteGameMutationVariables>;
-export const AcceptGameDocument = gql`
-    mutation AcceptGame($invitationId: String!) {
-  acceptGame(invitationId: $invitationId)
-}
-    `;
-export type AcceptGameMutationFn = Apollo.MutationFunction<AcceptGameMutation, AcceptGameMutationVariables>;
-
-/**
- * __useAcceptGameMutation__
- *
- * To run a mutation, you first call `useAcceptGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAcceptGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [acceptGameMutation, { data, loading, error }] = useAcceptGameMutation({
- *   variables: {
- *      invitationId: // value for 'invitationId'
- *   },
- * });
- */
-export function useAcceptGameMutation(baseOptions?: Apollo.MutationHookOptions<AcceptGameMutation, AcceptGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AcceptGameMutation, AcceptGameMutationVariables>(AcceptGameDocument, options);
-      }
-export type AcceptGameMutationHookResult = ReturnType<typeof useAcceptGameMutation>;
-export type AcceptGameMutationResult = Apollo.MutationResult<AcceptGameMutation>;
-export type AcceptGameMutationOptions = Apollo.BaseMutationOptions<AcceptGameMutation, AcceptGameMutationVariables>;
-export const StopMatchFindDocument = gql`
-    mutation StopMatchFind {
-  stopMatchFind
-}
-    `;
-export type StopMatchFindMutationFn = Apollo.MutationFunction<StopMatchFindMutation, StopMatchFindMutationVariables>;
-
-/**
- * __useStopMatchFindMutation__
- *
- * To run a mutation, you first call `useStopMatchFindMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStopMatchFindMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [stopMatchFindMutation, { data, loading, error }] = useStopMatchFindMutation({
- *   variables: {
- *   },
- * });
- */
-export function useStopMatchFindMutation(baseOptions?: Apollo.MutationHookOptions<StopMatchFindMutation, StopMatchFindMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StopMatchFindMutation, StopMatchFindMutationVariables>(StopMatchFindDocument, options);
-      }
-export type StopMatchFindMutationHookResult = ReturnType<typeof useStopMatchFindMutation>;
-export type StopMatchFindMutationResult = Apollo.MutationResult<StopMatchFindMutation>;
-export type StopMatchFindMutationOptions = Apollo.BaseMutationOptions<StopMatchFindMutation, StopMatchFindMutationVariables>;
 export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!) {
   createQuestAction(questId: $questId) {
@@ -499,52 +313,37 @@ export function useCreateQuestActionMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateQuestActionMutationHookResult = ReturnType<typeof useCreateQuestActionMutation>;
 export type CreateQuestActionMutationResult = Apollo.MutationResult<CreateQuestActionMutation>;
 export type CreateQuestActionMutationOptions = Apollo.BaseMutationOptions<CreateQuestActionMutation, CreateQuestActionMutationVariables>;
-export const GameInvitationsDocument = gql`
-    query GameInvitations {
-  gameInvitations {
-    id
-    game
-    owner {
-      id
-      address
-      name
-      avatarUrl
-    }
-  }
+export const MakeReferralDocument = gql`
+    mutation MakeReferral($referralCode: String!) {
+  makeReferral(referralCode: $referralCode)
 }
     `;
+export type MakeReferralMutationFn = Apollo.MutationFunction<MakeReferralMutation, MakeReferralMutationVariables>;
 
 /**
- * __useGameInvitationsQuery__
+ * __useMakeReferralMutation__
  *
- * To run a query within a React component, call `useGameInvitationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGameInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useMakeReferralMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeReferralMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGameInvitationsQuery({
+ * const [makeReferralMutation, { data, loading, error }] = useMakeReferralMutation({
  *   variables: {
+ *      referralCode: // value for 'referralCode'
  *   },
  * });
  */
-export function useGameInvitationsQuery(baseOptions?: Apollo.QueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
+export function useMakeReferralMutation(baseOptions?: Apollo.MutationHookOptions<MakeReferralMutation, MakeReferralMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
+        return Apollo.useMutation<MakeReferralMutation, MakeReferralMutationVariables>(MakeReferralDocument, options);
       }
-export function useGameInvitationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
-        }
-export function useGameInvitationsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GameInvitationsQuery, GameInvitationsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GameInvitationsQuery, GameInvitationsQueryVariables>(GameInvitationsDocument, options);
-        }
-export type GameInvitationsQueryHookResult = ReturnType<typeof useGameInvitationsQuery>;
-export type GameInvitationsLazyQueryHookResult = ReturnType<typeof useGameInvitationsLazyQuery>;
-export type GameInvitationsSuspenseQueryHookResult = ReturnType<typeof useGameInvitationsSuspenseQuery>;
-export type GameInvitationsQueryResult = Apollo.QueryResult<GameInvitationsQuery, GameInvitationsQueryVariables>;
+export type MakeReferralMutationHookResult = ReturnType<typeof useMakeReferralMutation>;
+export type MakeReferralMutationResult = Apollo.MutationResult<MakeReferralMutation>;
+export type MakeReferralMutationOptions = Apollo.BaseMutationOptions<MakeReferralMutation, MakeReferralMutationVariables>;
 export const GreetingDocument = gql`
     query Greeting {
   greeting
@@ -586,6 +385,11 @@ export const ProfileDocument = gql`
     query Profile {
   profile {
     ...ProfileFields
+    referred {
+      id
+      referrerId
+      createdAt
+    }
   }
 }
     ${ProfileFieldsFragmentDoc}`;
@@ -631,6 +435,14 @@ export const QuestsDocument = gql`
     url
     status
     points
+    createdAt
+    action {
+      id
+      userId
+      questId
+      claimedPoints
+      createdAt
+    }
   }
 }
     `;
@@ -667,226 +479,108 @@ export type QuestsQueryHookResult = ReturnType<typeof useQuestsQuery>;
 export type QuestsLazyQueryHookResult = ReturnType<typeof useQuestsLazyQuery>;
 export type QuestsSuspenseQueryHookResult = ReturnType<typeof useQuestsSuspenseQuery>;
 export type QuestsQueryResult = Apollo.QueryResult<QuestsQuery, QuestsQueryVariables>;
-export const ActiveQuestsDocument = gql`
-    query ActiveQuests {
-  activeQuests {
+export const ReferralHistoryDocument = gql`
+    query ReferralHistory {
+  referralHistory {
     id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useActiveQuestsQuery__
- *
- * To run a query within a React component, call `useActiveQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useActiveQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useActiveQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useActiveQuestsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-      }
-export function useActiveQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-        }
-export function useActiveQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ActiveQuestsQuery, ActiveQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ActiveQuestsQuery, ActiveQuestsQueryVariables>(ActiveQuestsDocument, options);
-        }
-export type ActiveQuestsQueryHookResult = ReturnType<typeof useActiveQuestsQuery>;
-export type ActiveQuestsLazyQueryHookResult = ReturnType<typeof useActiveQuestsLazyQuery>;
-export type ActiveQuestsSuspenseQueryHookResult = ReturnType<typeof useActiveQuestsSuspenseQuery>;
-export type ActiveQuestsQueryResult = Apollo.QueryResult<ActiveQuestsQuery, ActiveQuestsQueryVariables>;
-export const InitQuestsDocument = gql`
-    query InitQuests {
-  initQuests {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useInitQuestsQuery__
- *
- * To run a query within a React component, call `useInitQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useInitQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useInitQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useInitQuestsQuery(baseOptions?: Apollo.QueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-      }
-export function useInitQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-        }
-export function useInitQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<InitQuestsQuery, InitQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<InitQuestsQuery, InitQuestsQueryVariables>(InitQuestsDocument, options);
-        }
-export type InitQuestsQueryHookResult = ReturnType<typeof useInitQuestsQuery>;
-export type InitQuestsLazyQueryHookResult = ReturnType<typeof useInitQuestsLazyQuery>;
-export type InitQuestsSuspenseQueryHookResult = ReturnType<typeof useInitQuestsSuspenseQuery>;
-export type InitQuestsQueryResult = Apollo.QueryResult<InitQuestsQuery, InitQuestsQueryVariables>;
-export const DisableQuestsDocument = gql`
-    query DisableQuests {
-  disableQuests {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useDisableQuestsQuery__
- *
- * To run a query within a React component, call `useDisableQuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useDisableQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDisableQuestsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useDisableQuestsQuery(baseOptions?: Apollo.QueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-      }
-export function useDisableQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-        }
-export function useDisableQuestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<DisableQuestsQuery, DisableQuestsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DisableQuestsQuery, DisableQuestsQueryVariables>(DisableQuestsDocument, options);
-        }
-export type DisableQuestsQueryHookResult = ReturnType<typeof useDisableQuestsQuery>;
-export type DisableQuestsLazyQueryHookResult = ReturnType<typeof useDisableQuestsLazyQuery>;
-export type DisableQuestsSuspenseQueryHookResult = ReturnType<typeof useDisableQuestsSuspenseQuery>;
-export type DisableQuestsQueryResult = Apollo.QueryResult<DisableQuestsQuery, DisableQuestsQueryVariables>;
-export const QuestByIdDocument = gql`
-    query QuestById($id: ID!) {
-  quest(id: $id) {
-    id
-    title
-    description
-    type
-    url
-    status
-    points
-  }
-}
-    `;
-
-/**
- * __useQuestByIdQuery__
- *
- * To run a query within a React component, call `useQuestByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuestByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQuestByIdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useQuestByIdQuery(baseOptions: Apollo.QueryHookOptions<QuestByIdQuery, QuestByIdQueryVariables> & ({ variables: QuestByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<QuestByIdQuery, QuestByIdQueryVariables>(QuestByIdDocument, options);
-      }
-export function useQuestByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestByIdQuery, QuestByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<QuestByIdQuery, QuestByIdQueryVariables>(QuestByIdDocument, options);
-        }
-export function useQuestByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<QuestByIdQuery, QuestByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<QuestByIdQuery, QuestByIdQueryVariables>(QuestByIdDocument, options);
-        }
-export type QuestByIdQueryHookResult = ReturnType<typeof useQuestByIdQuery>;
-export type QuestByIdLazyQueryHookResult = ReturnType<typeof useQuestByIdLazyQuery>;
-export type QuestByIdSuspenseQueryHookResult = ReturnType<typeof useQuestByIdSuspenseQuery>;
-export type QuestByIdQueryResult = Apollo.QueryResult<QuestByIdQuery, QuestByIdQueryVariables>;
-export const QuestActionsDocument = gql`
-    query QuestActions {
-  questActions {
-    id
-    userId
-    questId
+    referrerId
+    refereeId
+    refereeUser {
+      id
+      address
+      email
+    }
     claimedPoints
+    createdAt
   }
 }
     `;
 
 /**
- * __useQuestActionsQuery__
+ * __useReferralHistoryQuery__
  *
- * To run a query within a React component, call `useQuestActionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuestActionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useReferralHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReferralHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useQuestActionsQuery({
+ * const { data, loading, error } = useReferralHistoryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useQuestActionsQuery(baseOptions?: Apollo.QueryHookOptions<QuestActionsQuery, QuestActionsQueryVariables>) {
+export function useReferralHistoryQuery(baseOptions?: Apollo.QueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<QuestActionsQuery, QuestActionsQueryVariables>(QuestActionsDocument, options);
+        return Apollo.useQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
       }
-export function useQuestActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestActionsQuery, QuestActionsQueryVariables>) {
+export function useReferralHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<QuestActionsQuery, QuestActionsQueryVariables>(QuestActionsDocument, options);
+          return Apollo.useLazyQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
         }
-export function useQuestActionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<QuestActionsQuery, QuestActionsQueryVariables>) {
+export function useReferralHistorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ReferralHistoryQuery, ReferralHistoryQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<QuestActionsQuery, QuestActionsQueryVariables>(QuestActionsDocument, options);
+          return Apollo.useSuspenseQuery<ReferralHistoryQuery, ReferralHistoryQueryVariables>(ReferralHistoryDocument, options);
         }
-export type QuestActionsQueryHookResult = ReturnType<typeof useQuestActionsQuery>;
-export type QuestActionsLazyQueryHookResult = ReturnType<typeof useQuestActionsLazyQuery>;
-export type QuestActionsSuspenseQueryHookResult = ReturnType<typeof useQuestActionsSuspenseQuery>;
-export type QuestActionsQueryResult = Apollo.QueryResult<QuestActionsQuery, QuestActionsQueryVariables>;
+export type ReferralHistoryQueryHookResult = ReturnType<typeof useReferralHistoryQuery>;
+export type ReferralHistoryLazyQueryHookResult = ReturnType<typeof useReferralHistoryLazyQuery>;
+export type ReferralHistorySuspenseQueryHookResult = ReturnType<typeof useReferralHistorySuspenseQuery>;
+export type ReferralHistoryQueryResult = Apollo.QueryResult<ReferralHistoryQuery, ReferralHistoryQueryVariables>;
+export const CounterIncreasedDocument = gql`
+    subscription CounterIncreased {
+  counterIncreased
+}
+    `;
+
+/**
+ * __useCounterIncreasedSubscription__
+ *
+ * To run a query within a React component, call `useCounterIncreasedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCounterIncreasedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCounterIncreasedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCounterIncreasedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CounterIncreasedSubscription, CounterIncreasedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<CounterIncreasedSubscription, CounterIncreasedSubscriptionVariables>(CounterIncreasedDocument, options);
+      }
+export type CounterIncreasedSubscriptionHookResult = ReturnType<typeof useCounterIncreasedSubscription>;
+export type CounterIncreasedSubscriptionResult = Apollo.SubscriptionResult<CounterIncreasedSubscription>;
+export const FindMatchDocument = gql`
+    subscription FindMatch($userId: String!) {
+  findMatch(userId: $userId) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useFindMatchSubscription__
+ *
+ * To run a query within a React component, call `useFindMatchSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFindMatchSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindMatchSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFindMatchSubscription(baseOptions: Apollo.SubscriptionHookOptions<FindMatchSubscription, FindMatchSubscriptionVariables> & ({ variables: FindMatchSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FindMatchSubscription, FindMatchSubscriptionVariables>(FindMatchDocument, options);
+      }
+export type FindMatchSubscriptionHookResult = ReturnType<typeof useFindMatchSubscription>;
+export type FindMatchSubscriptionResult = Apollo.SubscriptionResult<FindMatchSubscription>;

@@ -13,7 +13,7 @@ import ScrollLayout from 'components/layouts/Scroll';
 import { navigationHeight } from 'components/Navigation/shared';
 import Elemental from 'screens/Guide/Dashboard/Elemental';
 import PlayingUnderRealm from 'screens/Guide/Dashboard/PlayingUnderRealm';
-import { useSnapshot } from 'utils/hook';
+import { useSnapshot } from 'utils/hooks';
 import resources from 'utils/resources';
 import { iStyles } from 'utils/styles';
 

@@ -1,37 +1,45 @@
-import { Quest, QuestAction } from 'models/quest';
-import type {
-	QueryResolvers,
-	Quest as QuestType,
-	QuestAction as QuestActionType,
-} from 'types/graphql';
+import { Quest } from 'models/quest';
+import { virtualId } from 'models/utils';
+import { type QueryResolvers, QuestStatus } from 'utils/types';
 
-export const quest: QueryResolvers['quest'] = async (
+export const quests: QueryResolvers['questsWithAction'] = async (
 	_,
-	{ id }: { id: string },
+	{ status },
+	{ user },
 ) => {
-	const result = await Quest.findById(id)
-		.populate<QuestType>('questActions')
-		.exec();
-	return result;
-};
+	// TODO: this aggregate should follow resolver chains
+	let quests = await Quest.aggregate([
+		{
+			$match: { status: status || QuestStatus.Live },
+		},
+		{
+			$lookup: {
+				from: 'questactions',
+				let: { questId: '$_id' },
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$and: [
+									{ $eq: ['$$questId', '$questId'] },
+									{ $eq: ['$userId', user._id] },
+								],
+							},
+						},
+					},
+					{ $limit: 1 },
+				],
+				as: 'questAction',
+			},
+		},
+		{ $addFields: { action: { $arrayElemAt: ['$questAction', 0] } } },
+		{ $addFields: { action: { $ifNull: ['$questAction', null] } } },
+	]);
 
-export const questActions: QueryResolvers['questActions'] = async (
-	_,
-	// eslint-disable-next-line no-empty-pattern
-	{},
-	context,
-) => {
-	const userId = context.user.id;
-	return await QuestAction.find<QuestActionType>({ userId });
-};
+	quests = quests.map((quest) => {
+		const action = quest?.action?.length > 0 ? quest.action[0] : null;
+		return { ...virtualId(quest), action: virtualId(action) };
+	});
 
-export const quests: QueryResolvers['quests'] = async (_, { status }) => {
-	const query = status ? { status } : { status: 'LIVE' };
-	const questList = await Quest.find(query);
-
-	const populatedActiveQuests = await Promise.all(
-		questList.map((quest) => quest.populate<QuestType>('questActions')),
-	);
-
-	return populatedActiveQuests;
+	return quests;
 };

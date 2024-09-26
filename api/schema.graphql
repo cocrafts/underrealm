@@ -3,55 +3,32 @@ scalar DateTime
 type Query {
   greeting: String
   profile(address: String): Profile
-  gameJwt(duelId: String): String
-  gameInvitations: [GameInvitation]
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   cardDuel(id: String!): CardDuel
   quests(status: QuestStatus): [Quest]
-  activeQuests: [Quest]
-  initQuests: [Quest]
-  disableQuests: [Quest]
-  quest(id: ID!): Quest
-	questActions: [QuestAction]
   referralHistory: [ReferralHistory]
 }
 
 type Mutation {
-  inviteGame(input: InviteGameInput!): GameInvitation
-  acceptGame(invitationId: String!): Boolean
-  stopMatchFind: Boolean
   makeReferral(referralCode: String!): Boolean
-  createQuest(title: String!, description: String!, type: String!, url: String, points: Int!): Quest
-  updateQuest(id: ID!, status: String!): Quest
-  deleteQuest(id: ID!): Boolean
-	createQuestAction(questId: ID!): QuestAction
+  createQuestAction(questId: ID!): QuestAction
 }
 
 type Subscription {
-  gameInvitation(opponent: String!): GameInvitation
-  matchFind(game: MetacraftGames!, userId: String): CardDuel
-  matchFound(game: MetacraftGames!, userId: String): CardDuel
-}
-
-input InviteGameInput {
-  game: MetacraftGames!
-  opponent: String!
+  counterIncreased: Int!
+  findMatch(userId: String!): CardDuel
 }
 
 type Profile {
   id: String!
-  linkedId: String
+  bindingId: String
   address: String
-  jwt: String
-  name: String
   email: String
-  githubId: String
-  githubUrl: String
   avatarUrl: String
-  mineral: Float
-  isOnline: Boolean
+  referred: ReferralHistory
   referralCode: String!
+  points: Int!
 }
 
 type CardDuelSetting {
@@ -120,14 +97,6 @@ type CardDuel {
   history: [CardDuelCommandBundle]
 }
 
-type GameInvitation {
-  id: String!
-  game: String!
-  owner: Profile!
-  enemy: Profile!
-  timestamp: String!
-}
-
 type CardDuelHistory {
   id: String
   duel: CardDuel!
@@ -136,15 +105,11 @@ type CardDuelHistory {
   timestamp: String!
 }
 
-enum MetacraftGames {
-  MURG
-}
-
 enum QuestType {
   LIKE_X
-	RETWEET_X
-	JOIN_DISCORD
-	COMMENT_X
+  RETWEET_X
+  JOIN_DISCORD
+  COMMENT_X
 }
 
 enum QuestStatus {
@@ -156,20 +121,21 @@ enum QuestStatus {
 type Quest {
   id: ID!
   title: String!
-	description: String!
-	type: QuestType!
-	status: QuestStatus!
-	url: String!
-	points: Int!
+  description: String!
+  type: QuestType!
+  status: QuestStatus!
+  url: String!
+  points: Int!
   createdAt: DateTime!
+  action: QuestAction
 }
 
 type QuestAction {
   id: ID!
-	questId: ID!
-	userId: String!
+  questId: ID!
+  userId: ID!
   claimedPoints: Int!
-    createdAt: DateTime!
+  createdAt: DateTime!
 }
 
 type ReferralHistory {

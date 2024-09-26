@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { ViewStyle } from 'react-native';
 import DiscordIcon from 'components/icons/Discord';
 import GithubIcon from 'components/icons/GithubSolid';
-import TwitterIcon from 'components/icons/Twitter';
+import XIcon from 'components/icons/X';
 import { navigate } from 'stacks/Browser/shared';
 
 export interface ButtonText {
@@ -41,21 +41,21 @@ export const buttonList: ButtonText[] = [
 
 export const socialLinkList: SocialLink[] = [
 	{
-		href: 'https://discord.gg/sXcz9Em4AR',
+		href: 'https://discord.gg/fhN6vEcg',
 		Component: DiscordIcon,
 		props: {
 			size: 42,
 		},
 	},
 	{
-		href: 'https://twitter.com/PlayUnderRealm',
-		Component: TwitterIcon,
+		href: 'https://x.com/PlayUnderRealm',
+		Component: XIcon,
 		props: {
 			size: 40,
 		},
 	},
 	{
-		href: 'https://github.com/cocrafts',
+		href: 'https://github.com/cocrafts/UnderRealm',
 		Component: GithubIcon,
 		props: {
 			size: 32,

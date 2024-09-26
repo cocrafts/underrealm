@@ -1,11 +1,12 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import type { ScaledSize, ViewStyle } from 'react-native';
-import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { Text } from '@metacraft/ui';
 import UnderRealmModal from 'components/layouts/UnderRealmModal';
+import Loading from 'components/Loading';
 import UnderRealmButton from 'components/Marketplace/Button';
-import { useInput } from 'utils/hook';
+import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
 
 interface Props {
@@ -81,7 +82,7 @@ export const GameSubscribe: FC<Props> = ({ dimensions }) => {
 				onPress={onSubscribe}
 				title="Subscribe"
 			>
-				{loading && <ActivityIndicator color="white" />}
+				{loading && <Loading />}
 			</UnderRealmButton>
 			<Text style={styles.footerDesc}>
 				Only 10,000 free slots available.{'\n'}

@@ -1,14 +1,5 @@
 import type { PlayerState } from '@underrealm/murg';
-import {
-	CardType,
-	DuelPhases,
-	DuelPlace,
-	getCard,
-	selectHand,
-	selectPlayer,
-	selectStateKey,
-	version as engineVersion,
-} from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import type { Animation } from 'cc';
 import { _decorator, Component, Label } from 'cc';
 
@@ -17,6 +8,17 @@ import { switchBackgroundSound } from './util/resources';
 import { system } from './util/system';
 import { sendConnect } from './network';
 import { animateGlowOff, animateGlowOn, simpleMove } from './tween';
+
+const {
+	CardType,
+	DuelPhases,
+	DuelPlace,
+	getCard,
+	selectHand,
+	selectPlayer,
+	selectStateKey,
+	version: engineVersion,
+} = Engine;
 
 const { ccclass } = _decorator;
 interface Props {
