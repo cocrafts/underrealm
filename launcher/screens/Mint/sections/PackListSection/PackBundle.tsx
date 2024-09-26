@@ -1,12 +1,13 @@
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { ViewStyle } from 'react-native';
-import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text } from '@metacraft/ui';
 import type { CandyMachineV2 } from '@metaplex-foundation/js';
 import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
+import Loading from 'components/Loading';
 import Card from 'components/Marketplace/Card';
 import type { PackStats } from 'screens/Mint/shared';
 import resources from 'utils/resources';
@@ -65,7 +66,7 @@ export const PackBundle: FC<Props> = ({ item, onPress }) => {
 			<Card animationFlipDisable onPress={() => onPress?.(item)} />
 			<View style={styles.contentContainer}>
 				{isLoading ? (
-					<ActivityIndicator />
+					<Loading />
 				) : (
 					<View style={styles.packInfo}>
 						<Text style={styles.packTitle} responsiveSizes={[16]}>

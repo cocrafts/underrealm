@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import type { ViewStyle } from 'react-native';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Loading from 'components/Loading';
 import { useProfile } from 'utils/hooks';
 
 import Signed from './Signed';
@@ -19,7 +20,7 @@ export const AuthenticationBundle: FC<Props> = ({ style }) => {
 		<View style={containerStyle}>
 			{loading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size={commandSize - 6} />
+					<Loading size={commandSize - 6} />
 				</View>
 			) : profile.id ? (
 				<Signed profile={profile} />

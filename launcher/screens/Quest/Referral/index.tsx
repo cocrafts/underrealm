@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
-import { ActivityIndicator, ImageBackground, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Loading from 'components/Loading';
 import { useReferral } from 'utils/hooks';
 import resources from 'utils/resources';
 
@@ -17,7 +18,7 @@ export const ReferralSection = () => {
 		<Fragment>
 			{loading ? (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator color={'white'} />
+					<Loading />
 				</View>
 			) : (
 				<View style={styles.container}>

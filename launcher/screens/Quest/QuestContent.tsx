@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, Image, View } from 'react-native';
+import { Image, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
+import Loading from 'components/Loading';
 import { useQuestsQuery } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
@@ -47,7 +48,7 @@ const QuestContent: FC = () => {
 			</View>
 
 			{loading ? (
-				<ActivityIndicator color="#FFF9A0" style={styles.activityIndicator} />
+				<Loading style={styles.loading} />
 			) : !profile.id && error ? (
 				<View style={styles.errorContainer}>
 					<Text>Something went wrong!</Text>
@@ -122,7 +123,7 @@ const stylesheet = createStyleSheet({
 		borderBottomWidth: 1,
 		justifyContent: 'center',
 	},
-	activityIndicator: {
+	loading: {
 		marginTop: 20,
 	},
 	errorContainer: {

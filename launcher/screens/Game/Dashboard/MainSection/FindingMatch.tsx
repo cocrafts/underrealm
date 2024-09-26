@@ -1,5 +1,6 @@
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text } from '@metacraft/ui';
+import Loading from 'components/Loading';
 import { useFindMatchSubscription } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 
@@ -11,7 +12,7 @@ export const FindingMatch = () => {
 
 	if (data) console.log('Match found', data);
 
-	if (loading) return <ActivityIndicator color="white" />;
+	if (loading) return <Loading />;
 	return <Text style={styles.title}>Match found</Text>;
 };
 

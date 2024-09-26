@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { ActivityIndicator, Image, ImageBackground, View } from 'react-native';
+import { Image, ImageBackground, View } from 'react-native';
 import {
 	createStyleSheet,
 	UnistylesRuntime,
@@ -8,6 +8,7 @@ import {
 import { Text } from '@metacraft/ui';
 import HoverableButton from 'components/HoverableButton';
 import Refresh from 'components/icons/Refresh';
+import Loading from 'components/Loading';
 import type { Quest } from 'utils/graphql';
 import {
 	useCreateQuestActionMutation,
@@ -46,7 +47,7 @@ const Action: FC<Props> = ({ quest, isTaskOpened, isDone }) => {
 
 			{isTaskOpened &&
 				(loading.loading ? (
-					<ActivityIndicator color="#FFF9A0" />
+					<Loading />
 				) : (
 					<HoverableButton
 						onPress={handlePressVerify}
