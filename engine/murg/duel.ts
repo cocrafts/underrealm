@@ -13,7 +13,7 @@ import { makeMeta } from './meta';
 
 export const defaultSetting: DuelSetting = {
 	initialCardCount: 5,
-	initialPlayerHealth: 250,
+	initialPlayerHealth: 150,
 	elementalFactor: 0.1,
 	handSize: 9,
 	groundSize: 11,
