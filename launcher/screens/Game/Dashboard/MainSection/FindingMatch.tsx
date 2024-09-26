@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Text } from '@metacraft/ui';
 import Loading from 'components/Loading';
+import { navigate } from 'stacks/Browser/shared';
 import { useFindMatchSubscription } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 
@@ -10,7 +11,12 @@ export const FindingMatch = () => {
 		variables: { userId: profile.id },
 	});
 
-	if (data) console.log('Match found', data);
+	if (data) {
+		navigate('Game', {
+			screen: 'Duel',
+			params: { id: data.findMatch?.id },
+		});
+	}
 
 	if (loading) return <Loading />;
 	return <Text style={styles.title}>Match found</Text>;
