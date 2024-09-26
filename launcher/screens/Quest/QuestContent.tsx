@@ -48,16 +48,18 @@ const QuestContent: FC = () => {
 
 			{loading ? (
 				<ActivityIndicator color="#FFF9A0" style={styles.activityIndicator} />
-			) : !profile.id && error ? (
-				<View style={styles.errorContainer}>
-					<Text>Something went wrong!</Text>
-				</View>
 			) : tab === TabId.QUEST ? (
-				<View style={styles.quests}>
-					{data.quests.map((quest) => {
-						return <QuestItem key={quest.id} quest={quest} />;
-					})}
-				</View>
+				!profile.id && error ? (
+					<View style={styles.errorContainer}>
+						<Text>Something went wrong!</Text>
+					</View>
+				) : (
+					<View style={styles.quests}>
+						{data.quests.map((quest) => {
+							return <QuestItem key={quest.id} quest={quest} />;
+						})}
+					</View>
+				)
 			) : (
 				<ReferralSection />
 			)}
