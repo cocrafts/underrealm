@@ -1,5 +1,5 @@
 import type { CardState } from '@underrealm/murg';
-import { getCard } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import type { Node, SpriteFrame } from 'cc';
 import {
 	_decorator,
@@ -23,6 +23,7 @@ import {
 import { system } from './util/system';
 
 const { ccclass } = _decorator;
+const { getCard } = Engine;
 
 @ccclass('CardManager')
 export class CardManager extends Component {

@@ -1,5 +1,5 @@
 import type { CardState } from '@underrealm/murg';
-import { ActivationType, getCard, getCardState } from '@underrealm/murg';
+import Engine from '@underrealm/murg';
 import type { SpriteFrame } from 'cc';
 import { _decorator, Component, Node, resources, Sprite, UIOpacity } from 'cc';
 
@@ -12,6 +12,7 @@ import { raiseUnitPreview } from './tween';
 
 const { ccclass } = _decorator;
 const NodeEvents = Node.EventType;
+const { ActivationType, getCard, getCardState } = Engine;
 
 @ccclass('UnitManager')
 export class UnitManager extends Component {

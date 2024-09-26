@@ -5,13 +5,9 @@ const commandSize = 32;
 export const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		marginLeft: 6,
-		padding: 4,
 	},
 	infoContainer: {
 		flex: 1,
-		paddingRight: 8,
-		marginTop: -2,
 		justifyContent: 'flex-end',
 	},
 	inlineContainer: {

@@ -49,6 +49,7 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	const { wallet, connected } = useWallet();
 	const { profile } = useProfile();
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onMyProfilePress = async () => {
 		if (isWallessConnected) {
 			if (isLayoutInstalled) {
@@ -91,11 +92,11 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.heading}>Signed Menu</Text>
-			<Hyperlink
+			{/* <Hyperlink
 				style={styles.hyperLink}
 				onPress={onMyProfilePress}
 				title="My Profile"
-			/>
+			/> */}
 			<Hyperlink
 				style={styles.hyperLink}
 				onPress={innerSignOut}

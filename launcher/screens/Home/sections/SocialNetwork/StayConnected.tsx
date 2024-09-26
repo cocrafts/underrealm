@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Hyperlink, Text } from '@metacraft/ui';
+import Loading from 'components/Loading';
 import { headingSize, sharedStyle } from 'screens/Home/shared';
 import { useInput } from 'utils/hooks';
 import { validateEmail } from 'utils/validation';
@@ -49,7 +50,7 @@ export const StayConnected: FC = () => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const buttonContent = loading ? (
-		<ActivityIndicator color="white" />
+		<Loading />
 	) : (
 		<Text style={sharedStyle.buttonText}>Sign up to Newsletter</Text>
 	);

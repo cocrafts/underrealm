@@ -121,6 +121,7 @@ export type MutationMakeReferralArgs = {
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
+  avatarUrl?: Maybe<Scalars['String']['output']>;
   bindingId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
@@ -235,12 +236,12 @@ export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, points: number, referralCode: string };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', referralCode: string, id: string, address?: string | null, points: number, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
@@ -270,7 +271,9 @@ export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
   id
   address
+  email
   points
+  avatarUrl
   referralCode
 }
     `;
@@ -382,7 +385,6 @@ export const ProfileDocument = gql`
     query Profile {
   profile {
     ...ProfileFields
-    referralCode
     referred {
       id
       referrerId

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import Avatar from 'components/Avatar';
 import type { Profile } from 'utils/graphql';
 
@@ -12,12 +12,10 @@ interface Props {
 }
 
 export const Account: FC<Props> = ({ profile, onPress, onAvatarPress }) => {
-	const { address } = profile;
-
 	return (
 		<TouchableOpacity onPress={onPress} style={styles.container}>
-			<View style={styles.infoContainer}></View>
-			<Avatar size={20} characters={address} onPress={onAvatarPress} />
+			<Avatar size={42} onPress={onAvatarPress} imageUri={profile.avatarUrl} />
+			{/* <View style={styles.infoContainer}></View> */}
 		</TouchableOpacity>
 	);
 };

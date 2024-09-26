@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import { Fragment } from 'react';
 import {
-	ActivityIndicator,
 	Image,
 	ImageBackground,
 	StyleSheet,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { Text } from '@metacraft/ui';
 import type { Amount } from '@metaplex-foundation/js';
+import Loading from 'components/Loading';
 import { parseAmount } from 'utils/helper';
 import resources from 'utils/resources';
 
@@ -32,7 +32,7 @@ export const PurchaseButton: FC<Props> = ({
 }) => {
 	const buttonContent = isLoading ? (
 		<View style={{ alignItems: 'center', width: '100%' }}>
-			<ActivityIndicator />
+			<Loading />
 		</View>
 	) : (
 		<Fragment>

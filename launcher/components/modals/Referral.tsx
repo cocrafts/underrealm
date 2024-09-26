@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import {
-	ActivityIndicator,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
 import AncientPaper from 'components/icons/underRealm/AncientPaper';
+import Loading from 'components/Loading';
 import { useMakeReferralMutation, useProfileQuery } from 'utils/graphql';
 import { getReferralCode } from 'utils/referral';
 
@@ -63,7 +59,7 @@ export const ReferralModal = () => {
 				</View>
 				<View style={styles.confirmContainer}>
 					{loading ? (
-						<ActivityIndicator style={styles.loading} />
+						<Loading style={styles.loading} />
 					) : (
 						<TouchableOpacity
 							style={styles.confirmButton}
