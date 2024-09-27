@@ -109,7 +109,7 @@ const EffectSchema = new Schema<Effect>({
 	attribute: AttributeSchema,
 });
 
-const DuelCommandPayload = new Schema<DuelCommandPayload>({
+const DuelCommandPayloadSchema = new Schema<DuelCommandPayload>({
 	effectMap: { type: Map, of: EffectSchema },
 	gameOver: Boolean,
 	turn: Number,
@@ -119,13 +119,17 @@ const DuelCommandPayload = new Schema<DuelCommandPayload>({
 	perTurnHero: Number,
 	perTurnSpell: Number,
 	perTurnTroop: Number,
+	attack: Number,
+	health: Number,
+	defense: Number,
+	charge: Number,
 });
 
 const DuelCommandSchema = new Schema<DuelCommand>({
 	type: { type: String, enum: DuelCommandType },
 	owner: String,
 	target: DuelCommandTargetSchema,
-	payload: new Schema({}),
+	payload: DuelCommandPayloadSchema,
 	amount: Number,
 });
 
