@@ -35,5 +35,6 @@ const socket = new sst.aws.Function('socket', {
 wsAPI.route('$connect', socket.arn as never);
 wsAPI.route('$disconnect', socket.arn as never);
 wsAPI.route('$default', socket.arn as never);
+wsAPI.route('game', socket.arn as never);
 
 export { wsAPI };
