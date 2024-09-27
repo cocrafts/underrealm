@@ -149,8 +149,6 @@ type UpdateArgs = {
 	code?: string;
 };
 
-const statusTypes = ['INIT', 'LIVE', 'DISABLED'];
-
 const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 	command: 'update',
 	describe: 'Update a quest by id or multiple quests by status',
@@ -201,19 +199,8 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 
 		if (args.code) {
 			console.log('Update quest with code\n', args.code);
-
-			const { code, title, description, type, status, url, points } = args;
-			await Quest.findOneAndUpdate(
-				{ code },
-				{
-					title,
-					description,
-					type: questTypes[type],
-					status: statusTypes[status],
-					url,
-					points,
-				},
-			);
+			const { code, ...fields } = args;
+			await Quest.findOneAndUpdate({ code }, fields);
 
 			await disconnectToMongoDB();
 		} else if (args.interactive) {
@@ -256,18 +243,9 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			const { fields } = initialResponse;
 
 			const questions: PromptObject[] = updateQuestions(fields);
-
 			const response = await prompts(questions);
-			const { title, description, type, status, url, points } = response;
 
-			await Quest.findByIdAndUpdate(id, {
-				title,
-				description,
-				type: questTypes[type],
-				status: statusTypes[status],
-				url,
-				points,
-			});
+			await Quest.findByIdAndUpdate(id, response);
 
 			console.log('Update quest successfully');
 			await disconnectToMongoDB();
@@ -366,10 +344,10 @@ function updateQuestions(fields: string[]): PromptObject[] {
 						name: 'type',
 						message: 'Quest type?',
 						choices: [
-							{ title: 'LIKE_X' },
-							{ title: 'RETWEET_X' },
-							{ title: 'COMMENT_X' },
-							{ title: 'JOIN_DISCORD' },
+							{ title: 'LIKE_X', value: QuestType.LIKE_X },
+							{ title: 'RETWEET_X', value: QuestType.RETWEET_X },
+							{ title: 'COMMENT_X', value: QuestType.COMMENT_X },
+							{ title: 'JOIN_DISCORD', value: QuestType.JOIN_DISCORD },
 						],
 					};
 				case 'status':
@@ -378,9 +356,9 @@ function updateQuestions(fields: string[]): PromptObject[] {
 						name: 'status',
 						message: 'Quest status?',
 						choices: [
-							{ title: 'INIT' },
-							{ title: 'LIVE' },
-							{ title: 'DISABLED' },
+							{ title: 'INIT', value: QuestStatus.INIT },
+							{ title: 'LIVE', value: QuestStatus.LIVE },
+							{ title: 'DISABLED', value: QuestStatus.DISABLED },
 						],
 					};
 				case 'url':
@@ -400,4 +378,17 @@ function updateQuestions(fields: string[]): PromptObject[] {
 			}
 		})
 		.filter(Boolean) as PromptObject[];
+}
+
+enum QuestType {
+	LIKE_X = 'LIKE_X',
+	RETWEET_X = 'RETWEET_X',
+	COMMENT_X = 'COMMENT_X',
+	JOIN_DISCORD = 'JOIN_DISCORD',
+}
+
+enum QuestStatus {
+	INIT = 'INIT',
+	LIVE = 'LIVE',
+	DISABLED = 'DISABLED',
 }
