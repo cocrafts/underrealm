@@ -194,7 +194,7 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			// update the config file to sync this new quest
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const questions: PromptObject[] = [
@@ -220,7 +220,7 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			console.log('update the chosen quest', args);
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const chosenQuest: PromptObject[] = [
@@ -356,7 +356,7 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 		if (args.interactive) {
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const questions: PromptObject[] = [

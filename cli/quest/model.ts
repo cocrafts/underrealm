@@ -13,6 +13,11 @@ const questSchema = new Schema({
 	},
 	url: String,
 	points: Number,
+	hash: {
+		type: String,
+		unique: true,
+		length: 4,
+	},
 	questActions: [
 		{
 			type: Types.ObjectId,
@@ -21,5 +26,23 @@ const questSchema = new Schema({
 	],
 	createdAt: Date,
 });
+// Pre-save hook to generate and assign the hash
+questSchema.pre('save', function (next) {
+	if (!this.hash) {
+		this.hash = generateRandomHash();
+	}
+	next();
+});
+
+// Function to generate a random 4-character hash
+export function generateRandomHash(length: number = 4): string {
+	const characters =
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let result = '';
+	for (let i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() * characters.length));
+	}
+	return result;
+}
 
 export const Quest = model('Quest', questSchema);
