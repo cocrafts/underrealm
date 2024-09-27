@@ -7,9 +7,10 @@ import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
 
 import {
 	createQuest,
-	deleteQuest,
-	updateQuest,
-	updateQuestStatus,
+	deleteQuestByCode,
+	deleteQuestById,
+	updateQuestByCode,
+	updateQuestById,
 } from './mutation';
 import { getQuestList } from './query';
 
@@ -129,6 +130,16 @@ const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 			// Read `config.{env}.json` file, loop over quest object,
 			// if the quest has no id, create a new quest in database, then update the config.
 			// And write to JSON file
+			const { title, description, type, url, points } = args;
+			await createQuest({
+				title,
+				description,
+				type,
+				url,
+				points,
+			});
+			console.log('Create quest successfully');
+			await disconnectToMongoDB();
 		}
 	},
 };
@@ -141,6 +152,7 @@ type UpdateArgs = {
 	status?: 'INIT' | 'LIVE' | 'DISABLED';
 	url?: string;
 	points?: number;
+	code?: string;
 };
 
 const questStatus = ['INIT', 'LIVE', 'DISABLED'];
@@ -185,42 +197,33 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			describe: 'The points of the quest',
 			type: 'number',
 		},
+		code: {
+			describe: 'The unique code of the quest',
+			type: 'string',
+		},
 	},
 	handler: async (args) => {
 		await connectToMongoDB();
-		if (args.status) {
+		if (args.code) {
 			console.log('update all quests by status\n', args);
 			// update all quests by status
 			// update the config file to sync this new quest
-			const questList = await getQuestList();
-			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
-				value: quest._id,
-			}));
-			const questions: PromptObject[] = [
-				{
-					type: 'multiselect',
-					name: 'ids',
-					message: 'Choose quests to update',
-					choices: questChoices,
-				},
-			];
-			const response = await prompts(questions);
-			const { ids } = response;
-			if (ids && ids.length > 0) {
-				for (const id of ids) {
-					await updateQuestStatus(id, args.status);
-				}
-				console.log('Update quests successfully');
-			} else {
-				console.log('No quests selected.');
-			}
+			const { title, description, type, status, url, points } = args;
+			await updateQuestByCode({
+				code: args.code,
+				title,
+				description,
+				type,
+				status,
+				url,
+				points,
+			});
 			await disconnectToMongoDB();
 		} else if (args.interactive) {
 			console.log('update the chosen quest', args);
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const chosenQuest: PromptObject[] = [
@@ -311,7 +314,7 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			const response = await prompts(questions);
 			const { title, description, type, status, url, points } = response;
 
-			await updateQuest({
+			await updateQuestById({
 				id,
 				title,
 				description,
@@ -333,6 +336,7 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 
 type DeleteArgs = {
 	id: string;
+	code: string;
 };
 
 const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
@@ -341,6 +345,10 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 	builder: {
 		id: {
 			describe: 'The id of the quest',
+			type: 'string',
+		},
+		code: {
+			describe: 'The unique code of the quest',
 			type: 'string',
 		},
 		interactive: {
@@ -356,7 +364,7 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 		if (args.interactive) {
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: `${quest.title} - Code: ${quest.hash} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const questions: PromptObject[] = [
@@ -370,7 +378,7 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 
 			const { id } = await prompts(questions);
 
-			await deleteQuest(id);
+			await deleteQuestById(id);
 
 			console.log('Delete quest successfully');
 			// delete the quest by id
@@ -378,7 +386,12 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 			await disconnectToMongoDB();
 		} else if (args.id) {
 			console.log('delete quest by id', args.id);
-			await deleteQuest(args.id);
+			await deleteQuestById(args.id);
+			console.log('Delete quest successfully');
+			await disconnectToMongoDB();
+		} else if (args.code) {
+			console.log('delete quest by code', args.code);
+			await deleteQuestByCode(args.code);
 			console.log('Delete quest successfully');
 			await disconnectToMongoDB();
 		} else {

@@ -13,7 +13,7 @@ const questSchema = new Schema({
 	},
 	url: String,
 	points: Number,
-	hash: {
+	code: {
 		type: String,
 		unique: true,
 		length: 4,
@@ -28,8 +28,8 @@ const questSchema = new Schema({
 });
 // Pre-save hook to generate and assign the hash
 questSchema.pre('save', function (next) {
-	if (!this.hash) {
-		this.hash = generateRandomHash();
+	if (!this.code) {
+		this.code = generateRandomHash();
 	}
 	next();
 });

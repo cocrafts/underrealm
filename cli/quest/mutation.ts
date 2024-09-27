@@ -24,7 +24,7 @@ export const createQuest = async ({
 	});
 };
 
-export const updateQuest = async ({
+export const updateQuestById = async ({
 	id,
 	title,
 	description,
@@ -51,12 +51,40 @@ export const updateQuest = async ({
 	});
 };
 
-export const updateQuestStatus = async (id: string, status: string) => {
-	await Quest.findByIdAndUpdate(id, {
-		status,
-	});
+export const updateQuestByCode = async ({
+	code,
+	title,
+	description,
+	type,
+	status,
+	url,
+	points,
+}: {
+	code: string;
+	title: string;
+	description: string;
+	type: string;
+	status: string;
+	url: string;
+	points: number;
+}) => {
+	await Quest.findOneAndUpdate(
+		{ code },
+		{
+			title,
+			description,
+			type,
+			status,
+			url,
+			points,
+		},
+	);
 };
 
-export const deleteQuest = async (id: string) => {
+export const deleteQuestById = async (id: string) => {
 	await Quest.findByIdAndDelete(id);
+};
+
+export const deleteQuestByCode = async (code: string) => {
+	await Quest.findOneAndDelete({ code });
 };
