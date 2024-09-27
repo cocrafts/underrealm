@@ -1,31 +1,36 @@
 import { model, Schema, Types } from 'mongoose';
 
-const questSchema = new Schema({
-	title: String,
-	description: String,
-	type: {
-		type: String,
-		enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD', 'COMMENT_X'],
-	},
-	status: {
-		type: String,
-		enum: ['INIT', 'LIVE', 'DISABLE'],
-	},
-	url: String,
-	points: Number,
-	code: {
-		type: String,
-		unique: true,
-		length: 4,
-	},
-	questActions: [
-		{
-			type: Types.ObjectId,
-			ref: 'QuestAction',
+const questSchema = new Schema(
+	{
+		title: String,
+		description: String,
+		type: {
+			type: String,
+			enum: ['LIKE_X', 'RETWEET_X', 'JOIN_DISCORD', 'COMMENT_X'],
 		},
-	],
-	createdAt: Date,
-});
+		status: {
+			type: String,
+			enum: ['INIT', 'LIVE', 'DISABLE'],
+			default: 'INIT',
+		},
+		url: String,
+		points: Number,
+		code: {
+			type: String,
+			unique: true,
+			length: 4,
+		},
+		questActions: [
+			{
+				type: Types.ObjectId,
+				ref: 'QuestAction',
+			},
+		],
+	},
+	{
+		timestamps: true,
+	},
+);
 // Pre-save hook to generate and assign the hash
 questSchema.pre('save', function (next) {
 	if (!this.code) {

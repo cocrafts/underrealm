@@ -6,7 +6,6 @@ import yargs from 'yargs';
 import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
 
 import { Quest } from './model';
-import { createQuest } from './mutation';
 
 export const questCommand: StrictCommandModule<object, unknown> = {
 	command: 'quest',
@@ -23,16 +22,27 @@ export const questCommand: StrictCommandModule<object, unknown> = {
 	},
 };
 
+enum QuestTypes {
+	LIKE_X = 'LIKE_X',
+	RETWEET_X = 'RETWEET_X',
+	COMMENT_X = 'COMMENT_X',
+	JOIN_DISCORD = 'JOIN_DISCORD',
+}
+
+enum QuestStatuses {
+	INIT = 'INIT',
+	LIVE = 'LIVE',
+	DISABLED = 'DISABLED',
+}
+
 type CreateArgs = {
 	interactive: boolean;
 	title: string;
 	description: string;
-	type: 'LIKE_X' | 'RETWEET_X' | 'COMMENT_X' | 'JOIN_DISCORD';
+	type: QuestTypes;
 	url: string;
 	points: number;
 };
-
-const questTypes = ['LIKE_X', 'RETWEET_X', 'COMMENT_X', 'JOIN_DISCORD'];
 
 const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 	command: 'create',
@@ -55,7 +65,7 @@ const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 		type: {
 			describe: 'The type of the quest',
 			type: 'string',
-			choices: questTypes,
+			choices: Object.values(QuestTypes),
 		},
 		url: {
 			describe: 'The link to the quest',
@@ -70,71 +80,25 @@ const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 		await connectToMongoDB();
 
 		if (args.interactive) {
-			const questions: PromptObject[] = [
-				{
-					type: 'text',
-					name: 'title',
-					message: 'Quest Title?',
-				},
-				{
-					type: 'text',
-					name: 'description',
-					message: 'Quest Description?',
-				},
-				{
-					type: 'select',
-					name: 'type',
-					message: 'Quest type?',
-					choices: [
-						{ title: 'LIKE_X' },
-						{ title: 'RETWEET_X' },
-						{ title: 'COMMENT_X' },
-						{ title: 'JOIN_DISCORD' },
-					],
-				},
-				{
-					type: 'text',
-					name: 'url',
-					message: 'Quest URL?',
-				},
-				{
-					type: 'number',
-					name: 'points',
-					message: 'Quest points?',
-				},
-			];
+			const questions: PromptObject[] = questFieldQuestions([
+				'title',
+				'description',
+				'type',
+				'url',
+				'points',
+			]);
+			const quest = await prompts(questions);
 
-			const response = await prompts(questions);
-			const { title, description, url, points, type } = response;
-
-			await createQuest({
-				title,
-				description,
-				url,
-				points,
-				type: questTypes[type],
-			});
-
-			console.log('Create quest successfully');
-			// create a new quest to database
-			// update the config file to sync this new quest
-			await disconnectToMongoDB();
+			const createdQuest = await Quest.create(quest);
+			console.log(JSON.stringify(createdQuest, null, '\t'));
 		} else {
-			console.log('create quests from JSON file');
-			// Read `config.{env}.json` file, loop over quest object,
-			// if the quest has no id, create a new quest in database, then update the config.
-			// And write to JSON file
-			const { title, description, type, url, points } = args;
-			await createQuest({
-				title,
-				description,
-				type,
-				url,
-				points,
-			});
-			console.log('Create quest successfully');
-			await disconnectToMongoDB();
+			console.log('create quests by flags');
+			const createdQuest = await Quest.create(args);
+			console.log(JSON.stringify(createdQuest, null, '\t'));
 		}
+
+		console.log('Create quest successfully');
+		await disconnectToMongoDB();
 	},
 };
 
@@ -142,8 +106,8 @@ type UpdateArgs = {
 	id?: string;
 	title?: string;
 	description?: string;
-	type?: 'LIKE_X' | 'RETWEET_X' | 'COMMENT_X' | 'JOIN_DISCORD';
-	status?: 'INIT' | 'LIVE' | 'DISABLED';
+	type?: QuestTypes;
+	status?: QuestStatuses;
 	url?: string;
 	points?: number;
 	code?: string;
@@ -174,12 +138,12 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 		type: {
 			describe: 'The type of the quest',
 			type: 'string',
-			choices: questTypes,
+			choices: Object.values(QuestTypes),
 		},
 		status: {
 			describe: 'The status of the quest',
 			type: 'string',
-			choices: ['INIT', 'LIVE', 'DISABLED'],
+			choices: Object.values(QuestStatuses),
 		},
 		url: {
 			describe: 'The link to the quest',
@@ -200,9 +164,10 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 		if (args.code) {
 			console.log('Update quest with code\n', args.code);
 			const { code, ...fields } = args;
-			await Quest.findOneAndUpdate({ code }, fields);
-
-			await disconnectToMongoDB();
+			const updatedQuest = await Quest.findOneAndUpdate({ code }, fields, {
+				new: true,
+			});
+			console.log(JSON.stringify(updatedQuest, null, '\t'));
 		} else if (args.interactive) {
 			console.log('Update the chosen quest', args);
 
@@ -220,10 +185,9 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 					choices: questChoices,
 				},
 			];
-
 			const { id } = await prompts(chosenQuest);
 
-			const initialQuestions: PromptObject[] = [
+			const fieldQuestions: PromptObject[] = [
 				{
 					type: 'multiselect',
 					name: 'fields',
@@ -238,18 +202,19 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 					],
 				},
 			];
+			const { fields: fieldNames } = await prompts(fieldQuestions);
 
-			const initialResponse = await prompts(initialQuestions);
-			const { fields } = initialResponse;
+			const questions: PromptObject[] = questFieldQuestions(fieldNames);
+			const fields = await prompts(questions);
 
-			const questions: PromptObject[] = updateQuestions(fields);
-			const response = await prompts(questions);
-
-			await Quest.findByIdAndUpdate(id, response);
-
-			console.log('Update quest successfully');
-			await disconnectToMongoDB();
+			const updatedQuest = await Quest.findByIdAndUpdate(id, fields, {
+				new: true,
+			});
+			console.log(JSON.stringify(updatedQuest, null, '\t'));
 		}
+
+		console.log('Update quest successfully');
+		await disconnectToMongoDB();
 	},
 };
 
@@ -297,34 +262,28 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 
 			const { id } = await prompts(questions);
 
-			await Quest.findByIdAndDelete(id);
-
-			console.log('Delete quest successfully');
-
-			await disconnectToMongoDB();
+			const deletedQuest = await Quest.findByIdAndDelete(id);
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
 		} else if (args.id) {
 			console.log('Delete quest by id', args.id);
-
-			await Quest.findByIdAndDelete(args.id);
-
-			console.log('Delete quest successfully');
-
-			await disconnectToMongoDB();
+			const deletedQuest = await Quest.findByIdAndDelete(args.id);
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
 		} else if (args.code) {
 			console.log('Delete quest by code', args.code);
-
-			await Quest.findOneAndDelete({ code: args.code });
-
-			console.log('Delete quest successfully');
-
-			await disconnectToMongoDB();
+			const deletedQuest = await Quest.findOneAndDelete({ code: args.code });
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
 		}
+
+		console.log('Delete quest successfully');
+		await disconnectToMongoDB();
 	},
 };
 
-function updateQuestions(fields: string[]): PromptObject[] {
+type FieldKey = 'title' | 'description' | 'type' | 'status' | 'url' | 'points';
+
+function questFieldQuestions(fields: FieldKey[]): PromptObject[] {
 	return fields
-		.map((field: string) => {
+		.map((field) => {
 			switch (field) {
 				case 'title':
 					return {
@@ -344,10 +303,10 @@ function updateQuestions(fields: string[]): PromptObject[] {
 						name: 'type',
 						message: 'Quest type?',
 						choices: [
-							{ title: 'LIKE_X', value: QuestType.LIKE_X },
-							{ title: 'RETWEET_X', value: QuestType.RETWEET_X },
-							{ title: 'COMMENT_X', value: QuestType.COMMENT_X },
-							{ title: 'JOIN_DISCORD', value: QuestType.JOIN_DISCORD },
+							{ title: 'LIKE_X', value: QuestTypes.LIKE_X },
+							{ title: 'RETWEET_X', value: QuestTypes.RETWEET_X },
+							{ title: 'COMMENT_X', value: QuestTypes.COMMENT_X },
+							{ title: 'JOIN_DISCORD', value: QuestTypes.JOIN_DISCORD },
 						],
 					};
 				case 'status':
@@ -356,9 +315,9 @@ function updateQuestions(fields: string[]): PromptObject[] {
 						name: 'status',
 						message: 'Quest status?',
 						choices: [
-							{ title: 'INIT', value: QuestStatus.INIT },
-							{ title: 'LIVE', value: QuestStatus.LIVE },
-							{ title: 'DISABLED', value: QuestStatus.DISABLED },
+							{ title: 'INIT', value: QuestStatuses.INIT },
+							{ title: 'LIVE', value: QuestStatuses.LIVE },
+							{ title: 'DISABLED', value: QuestStatuses.DISABLED },
 						],
 					};
 				case 'url':
@@ -378,17 +337,4 @@ function updateQuestions(fields: string[]): PromptObject[] {
 			}
 		})
 		.filter(Boolean) as PromptObject[];
-}
-
-enum QuestType {
-	LIKE_X = 'LIKE_X',
-	RETWEET_X = 'RETWEET_X',
-	COMMENT_X = 'COMMENT_X',
-	JOIN_DISCORD = 'JOIN_DISCORD',
-}
-
-enum QuestStatus {
-	INIT = 'INIT',
-	LIVE = 'LIVE',
-	DISABLED = 'DISABLED',
 }
