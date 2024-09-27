@@ -32,6 +32,7 @@ import { model, Schema } from 'mongoose';
 import { createSchema } from './utils';
 
 type IGameMatch = {
+	winner?: string;
 	config: DuelConfig;
 	commandBundles: DuelCommandBundle[];
 };

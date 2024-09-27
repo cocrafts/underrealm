@@ -3,6 +3,7 @@ import { postToConnection } from 'utils/aws/gateway';
 import { globalContext } from 'utils/context/index.lambda';
 import { logger } from 'utils/logger';
 import { redis } from 'utils/redis';
+import { v4 as uuidv4 } from 'uuid';
 
 export * from './utils';
 
@@ -16,7 +17,12 @@ const DAY_IN_SECONDS = 60 * 60 * 24;
  */
 export const pubsub = {
 	subscribe: async (topics: string | string[]) => {
-		const { connectionId, subscriptionId } = globalContext;
+		const connectionId = globalContext.connectionId;
+		if (!connectionId) throw Error('require connection id to use this pubsub');
+		/**
+		 * Auto create subscription id to support general pubsub which does not follow graphql pubsub
+		 */
+		const subscriptionId = globalContext.subscriptionId || uuidv4();
 
 		if (typeof topics === 'string') {
 			const topic = topics;

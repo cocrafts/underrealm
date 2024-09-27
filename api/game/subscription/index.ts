@@ -52,7 +52,10 @@ export const publishFindMatch = async (
 	matchId: string,
 ) => {
 	const secret = configs.GAME_JWT_PRIVATE_KEY;
-	const token = jwt.sign({ userId, matchId }, secret, { expiresIn: '12h' });
+	const token = jwt.sign({ userId, matchId }, secret, {
+		expiresIn: '12h',
+		algorithm: 'RS256',
+	});
 
 	await pubsub.publish(topic, { findMatch: { id: matchId, jwt: token } });
 };

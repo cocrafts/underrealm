@@ -2,6 +2,7 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 	APIGatewayProxyWebsocketHandlerV2,
 } from 'aws-lambda';
+import { handleGameEvent } from 'game/playing';
 import { GraphQLError, parse, subscribe, validate } from 'graphql';
 import { StatusCodes } from 'http-status-codes';
 import { mongo } from 'models';
@@ -21,6 +22,8 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 ) => {
 	await Promise.all(initPromises);
 	const connectionId = event.requestContext.connectionId;
+	const payload = JSON.parse(event.body);
+	globalContext.connectionId = connectionId;
 
 	try {
 		switch (event.requestContext.routeKey) {
@@ -43,6 +46,10 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 				if (result) return result;
 				break;
 			}
+			case 'game': {
+				await handleGameEvent(payload);
+				break;
+			}
 			default: {
 				return {
 					statusCode: StatusCodes.BAD_REQUEST,
@@ -56,6 +63,7 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 			type: 'error',
 		});
 	}
+
 	return ok();
 };
 
@@ -89,7 +97,6 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 	const operation = JSON.parse(event.body);
 	const connectionId = event.requestContext.connectionId;
 	const subscriptionId = operation.id;
-	globalContext.connectionId = connectionId;
 	globalContext.subscriptionId = subscriptionId;
 
 	if (operation.type === 'connection_init') {
