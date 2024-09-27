@@ -1,4 +1,4 @@
-import { Label, Sprite, tween, UIOpacity, Vec3 } from 'cc';
+import { Label, RichText, Sprite, tween, UIOpacity, Vec3 } from 'cc';
 
 import { playBackgroundSound, playEffectSound } from '../util/resources';
 import { system } from '../util/system';
@@ -44,6 +44,9 @@ export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
 		node.getChildByPath('message').getComponent(Label).string = isVictory
 			? 'Victory!'
 			: 'Defeat!';
+
+		node.getChildByPath('ribbon/coin/label').getComponent(RichText).string =
+			isVictory ? '50' : '10';
 
 		system.globalNodes.playerHand.parent =
 			system.globalNodes.board.getChildByPath('Surface');
