@@ -1,4 +1,6 @@
+import jwt from 'jsonwebtoken';
 import { GameMatch, MatchFinding } from 'models/game';
+import { configs } from 'utils/config';
 import { logger } from 'utils/logger';
 import { pubsub, topicGenerator } from 'utils/pubsub';
 import type { SubscriptionResolvers } from 'utils/types';
@@ -24,8 +26,8 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 			const gameMatch = await GameMatch.create(duel);
 
 			await Promise.all([
-				pubsub.publish(topic, { findMatch: { id: gameMatch.id } }),
-				pubsub.publish(opponentTopic, { findMatch: { id: gameMatch.id } }),
+				publishFindMatch(topic, userId, gameMatch.id),
+				publishFindMatch(opponentTopic, opponentId, gameMatch.id),
 			]);
 
 			logger.info(`published findMatch with match id: ${gameMatch.id}`, {
@@ -42,4 +44,15 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 
 export const GameSubscriptionResolvers = {
 	findMatch,
+};
+
+export const publishFindMatch = async (
+	topic: string,
+	userId: string,
+	matchId: string,
+) => {
+	const secret = configs.GAME_JWT_PRIVATE_KEY;
+	const token = jwt.sign({ userId, matchId }, secret, { expiresIn: '12h' });
+
+	await pubsub.publish(topic, { findMatch: { id: matchId, jwt: token } });
 };

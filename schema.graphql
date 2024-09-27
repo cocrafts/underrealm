@@ -74,6 +74,11 @@ type CardPlayerConfig {
 
 scalar DateTime
 
+type MatchFound {
+  id: String!
+  jwt: String!
+}
+
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
@@ -144,5 +149,5 @@ type ReferralHistory {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): CardDuel
+  findMatch(userId: String!): MatchFound
 }
