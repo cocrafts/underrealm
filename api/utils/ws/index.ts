@@ -11,7 +11,8 @@ export const createWebsocketServer = (server: Server, path: string) => {
 	wss.on('connection', (ws) => {
 		ws.on('message', async (message) => {
 			const data = JSON.parse(message.toString());
-			logger.debug('Websocket on message:', data);
+			if (data.type) logger.debug('Websocket on message:', { type: data.type });
+
 			if (data.routeKey === 'game') await handleGameEvent(data);
 		});
 	});
