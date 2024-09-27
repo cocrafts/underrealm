@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { modalActions, Text } from '@metacraft/ui';
@@ -14,7 +14,7 @@ export const REFERRAL_MODAL_ID = 'referral-modal';
 
 export const ReferralModal = () => {
 	const [focus, setFocus] = useState(false);
-	const [referralCode, setReferralCode] = useState('');
+	const [referralCode, setReferralCode] = useState(getReferralCode());
 	const { refetch: refetchProfile } = useProfileQuery();
 	const [makeReferral, { loading, error }] = useMakeReferralMutation();
 	const { styles } = useStyles(stylesheet);
@@ -24,11 +24,6 @@ export const ReferralModal = () => {
 		refetchProfile();
 		modalActions.hide(REFERRAL_MODAL_ID);
 	};
-
-	useEffect(() => {
-		const refFromStorage = getReferralCode();
-		if (refFromStorage !== 'null') setReferralCode(refFromStorage);
-	}, []);
 
 	return (
 		<View style={styles.mask} pointerEvents="box-only">

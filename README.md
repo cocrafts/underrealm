@@ -24,16 +24,27 @@ npm install -g @metacraft/cli@latest
 - Install Cocos Creator version `3.8.3` or newer
 - Install deps for Game by `yarn install` under `game` folder
 - Open `game` folder with Cocos creator
-- Configure network endpoint under `./game/assets/scripts/network/util.ts` (line 6), either use remove endpoint or local endpoint at [Card Engine](https://github.com/cocrafts/engines)
 - Game depends on `@underrealm/murg` core engine implemented in `engine/murg` need to be pre-build to Javascript
 
 ```
-cd engine && yarn build
+cd engine/murg && yarn build
 ```
 
 Note:
 
 - Game build failed: https://forum.cocos.org/t/topic/158104
+
+### Run game locally
+
+Open `game` with Cocos Creator
+
+Run engine websocket server and get client
+
+```
+cd engine && yarn server
+```
+
+Then open web link of client A or client B and enjoy the game
 
 ### Build game
 
