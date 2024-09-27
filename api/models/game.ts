@@ -140,7 +140,7 @@ const DuelCommandBundleSchema = new Schema<DuelCommandBundle>({
 const GameMatchSchema = createSchema({
 	config: new Schema({
 		version: String,
-		firstMove: String,
+		firstMover: String,
 		firstPlayer: PlayerConfigSchema,
 		secondPlayer: PlayerConfigSchema,
 		setting: new Schema<DuelSetting>({
