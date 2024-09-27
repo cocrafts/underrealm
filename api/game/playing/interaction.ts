@@ -1,5 +1,3 @@
-import { pubsub, topicGenerator } from 'utils/pubsub';
-
 import type { CommandHandler } from './types';
 
 type IncomingHandler = CommandHandler<{
@@ -8,9 +6,8 @@ type IncomingHandler = CommandHandler<{
 }>;
 
 export const onIncomingHover: IncomingHandler = async (
-	{ userId, matchId, command },
+	{ send },
 	{ index, isMouseIn },
 ): Promise<void> => {
-	const topic = topicGenerator.match({ matchId });
-	await pubsub.publish(topic, { userId, command, index, isMouseIn });
+	await send({ index, isMouseIn });
 };
