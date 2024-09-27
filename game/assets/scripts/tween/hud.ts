@@ -33,7 +33,10 @@ export const showTurnRibbon = async (message: string): Promise<void> => {
 	});
 };
 
-export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
+export const showEndGameRibbon = async (
+	isVictory: boolean,
+	claimedPoints: number,
+): Promise<void> => {
 	return new Promise((resolve) => {
 		const node = system.globalNodes.duelRibbon;
 		const sound = isVictory ? 'victory' : 'defeat';
@@ -46,7 +49,9 @@ export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
 			: 'Defeat!';
 
 		node.getChildByPath('ribbon/coin/label').getComponent(RichText).string =
-			isVictory ? '50' : '10';
+			claimedPoints !== 0
+				? claimedPoints.toString()
+				: 'You already claimed max points today';
 
 		system.globalNodes.playerHand.parent =
 			system.globalNodes.board.getChildByPath('Surface');
