@@ -2,10 +2,10 @@ import type { DuelCommandBundle } from '@underrealm/murg';
 
 import { system } from '../util/system';
 
-const wsUri = 'ws://localhost:3006';
-// const wsUri = 'wss://94zbw8sdk9.execute-api.ap-northeast-1.amazonaws.com/prod/';
+const wsUri = localStorage?.getItem('GAME_WS_URI') || 'ws://localhost:3005/ws';
+console.log('Game Websocket URI', wsUri);
 
-export const connectionInstance = new WebSocket(wsUri);
+export const ws = new WebSocket(wsUri);
 
 export interface MergeHistoryResult {
 	conflict: boolean;
@@ -21,7 +21,5 @@ export const mergeRemoteHistory = (
 
 	system.history = system.history.slice(0, level).concat(bundles);
 
-	return {
-		conflict: false,
-	};
+	return { conflict: false };
 };

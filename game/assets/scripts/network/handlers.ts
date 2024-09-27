@@ -5,33 +5,30 @@ import { replay } from '../replay';
 import { raiseHandCard, showEndGameRibbon } from '../tween';
 import { extractPlayerIds } from '../util/helper';
 import { system } from '../util/system';
-import type { CardDuel, JwtPayload } from '../util/types';
+import type { GameMatch } from '../util/types';
 
 import { mergeRemoteHistory } from './util';
 
 const { selectHand, getInitialState, mergeFragmentToState } = Engine;
 
 interface ConnectPayload {
-	jwt: string;
-	context: JwtPayload;
-	duel: CardDuel;
+	match: GameMatch;
 }
 
 export const connect = (
-	{ jwt, context, duel }: ConnectPayload,
+	{ match }: ConnectPayload,
 	isMyCommand: boolean,
 ): void => {
 	if (system.winner || !isMyCommand) return;
 
-	const { config, history } = duel;
+	const { config, commandBundles } = match;
 	const state = getInitialState(config);
 
 	mergeFragmentToState(system.duel, state);
-	system.serverState = { jwt, context, config, history: [] };
-	system.playerIds = extractPlayerIds(config, context.userId);
+	system.playerIds = extractPlayerIds(config, system.userId);
 	system.globalNodes.board?.emit('stateReady');
 
-	mergeRemoteHistory(history, 0);
+	mergeRemoteHistory(commandBundles, 0);
 	setTimeout(() => replay(), 200);
 };
 

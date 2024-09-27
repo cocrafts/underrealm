@@ -1,31 +1,37 @@
 import { system } from '../util/system';
-import { DuelCommands } from '../util/types';
+import { GameEventType } from '../util/types';
 
 import * as handlers from './handlers';
-import { connectionInstance } from './util';
+import { ws } from './util';
 
-connectionInstance.onmessage = (item) => {
-	const { isMyCommand, command, payload } = JSON.parse(item.data);
+ws.onmessage = (item) => {
+	const { userId, type, payload } = JSON.parse(item.data);
+	const isMyCommand = system.userId === userId;
 
-	if (command === DuelCommands.ConnectMatch) {
+	if (type === GameEventType.ConnectMatch) {
 		handlers.connect(payload, isMyCommand);
-	} else if (command === DuelCommands.SendBundle) {
+	} else if (type === GameEventType.SendBundle) {
 		handlers.incomingBundles(payload);
-	} else if (command === DuelCommands.CardHover) {
+	} else if (type === GameEventType.CardHover) {
 		if (!isMyCommand) {
 			handlers.cardHover(payload);
 		}
-	} else if (command === DuelCommands.GameOver) {
+	} else if (type === GameEventType.GameOver) {
 		handlers.gameOver(payload);
 	}
 };
 
-connectionInstance.onerror = (error) => {
+ws.onerror = (error) => {
 	console.log(error);
 };
 
-connectionInstance.onopen = () => {
+ws.onopen = () => {
+	console.log('Websocket opened');
 	system.isSocketReady = true;
+};
+
+ws.onclose = () => {
+	console.log('Websocket closed');
 };
 
 export const waitForSocket = (maxRetry = 150): Promise<boolean> => {
