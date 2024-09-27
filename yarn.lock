@@ -8379,6 +8379,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^10":
+  version: 10.0.0
+  resolution: "@types/uuid@npm:10.0.0"
+  checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
+  languageName: node
+  linkType: hard
+
 "@types/uuid@npm:^8.3.4":
   version: 8.3.4
   resolution: "@types/uuid@npm:8.3.4"
@@ -8607,6 +8614,7 @@ __metadata:
     "@types/jwk-to-pem": "npm:^2.0.3"
     "@types/module-alias": "npm:^2.0.4"
     "@types/node": "npm:^17.0.29"
+    "@types/uuid": "npm:^10"
     "@types/ws": "npm:^8"
     "@underrealm/murg": "npm:*"
     body-parser: "npm:^1.19.0"
@@ -8617,6 +8625,7 @@ __metadata:
     express-ws: "npm:^5.0.2"
     graphql: "npm:^16.1.0"
     graphql-subscriptions: "patch:graphql-subscriptions@npm%3A2.0.0#~/.yarn/patches/graphql-subscriptions-npm-2.0.0-53564d1c84.patch"
+    graphql-ws: "patch:graphql-ws@npm%3A5.16.0#~/.yarn/patches/graphql-ws-npm-5.16.0-98146e34fe.patch"
     http-status-codes: "npm:^2.3.0"
     jest: "npm:^28.1.1"
     jsonwebtoken: "npm:^9.0.2"
@@ -8629,6 +8638,7 @@ __metadata:
     redis: "npm:^4.7.0"
     tsx: "npm:^4.19.0"
     typescript: "npm:5.4.5"
+    uuid: "npm:^10.0.0"
     winston: "npm:^3.14.2"
     ws: "npm:^8.18.0"
   languageName: unknown
@@ -13824,12 +13834,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^5.14.0, graphql-ws@npm:^5.16.0":
+"graphql-ws@npm:5.16.0, graphql-ws@npm:^5.14.0, graphql-ws@npm:^5.16.0":
   version: 5.16.0
   resolution: "graphql-ws@npm:5.16.0"
   peerDependencies:
     graphql: ">=0.11 <=16"
   checksum: 10c0/5e538c3460ca997a1634bd0f64236d8d7aa6ac75c58aba549b49953faf0dd2497f4fa43eedb0bc82cfff50426c7ce47682a670d2571fd7f3af5dcf00911c9e1b
+  languageName: node
+  linkType: hard
+
+"graphql-ws@patch:graphql-ws@npm%3A5.16.0#~/.yarn/patches/graphql-ws-npm-5.16.0-98146e34fe.patch":
+  version: 5.16.0
+  resolution: "graphql-ws@patch:graphql-ws@npm%3A5.16.0#~/.yarn/patches/graphql-ws-npm-5.16.0-98146e34fe.patch::version=5.16.0&hash=881db4"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: 10c0/a2a8932d2c281956b1f2750f991ab7726270611f5a33e3eb844c3663e1eca0508cd427e764c51d33fef53879fcda4f6d649c04211af4837e966dd097f10f3f71
   languageName: node
   linkType: hard
 
@@ -21514,6 +21533,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/e62301a1c6102da5ce9a147b492a4b5cfa14d2e8fdf4a6ebfda7929cb72d186f84173815ec18fa4160a03bf9724b16ece3737b3ac6701815bc965f8fa4279298
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
   languageName: node
   linkType: hard
 
