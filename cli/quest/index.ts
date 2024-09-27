@@ -194,30 +194,44 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			// update the config file to sync this new quest
 			const questList = await getQuestList();
 			const questChoices = questList.map((quest) => ({
-				title: String(quest.title),
+				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
 			const questions: PromptObject[] = [
 				{
-					type: 'select',
-					name: 'id',
-					message: 'Which quest do you want to update?',
+					type: 'multiselect',
+					name: 'ids',
+					message: 'Choose quests to update',
 					choices: questChoices,
 				},
 			];
 			const response = await prompts(questions);
-			const { id } = response;
-			await updateQuestStatus(id, args.status);
-			console.log('Update quest successfully');
+			const { ids } = response;
+			if (ids && ids.length > 0) {
+				for (const id of ids) {
+					await updateQuestStatus(id, args.status);
+				}
+				console.log('Update quests successfully');
+			} else {
+				console.log('No quests selected.');
+			}
 			await disconnectToMongoDB();
 		} else if (args.interactive) {
-			const idQuestion: PromptObject = {
-				type: 'text',
-				name: 'id',
-				message: 'Quest ID?',
-			};
-
-			const { id } = await prompts(idQuestion);
+			console.log('update the chosen quest', args);
+			const questList = await getQuestList();
+			const questChoices = questList.map((quest) => ({
+				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				value: quest._id,
+			}));
+			const chosenQuest: PromptObject[] = [
+				{
+					type: 'select',
+					name: 'id',
+					message: 'Choose quest to update',
+					choices: questChoices,
+				},
+			];
+			const { id } = await prompts(chosenQuest);
 
 			const initialQuestions: PromptObject[] = [
 				{
