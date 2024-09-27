@@ -149,6 +149,8 @@ type UpdateArgs = {
 	code?: string;
 };
 
+const statusTypes = ['INIT', 'LIVE', 'DISABLED'];
+
 const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 	command: 'update',
 	describe: 'Update a quest by id or multiple quests by status',
@@ -206,8 +208,8 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 				{
 					title,
 					description,
-					type,
-					status,
+					type: questTypes[type],
+					status: statusTypes[status],
 					url,
 					points,
 				},
@@ -261,8 +263,8 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			await Quest.findByIdAndUpdate(id, {
 				title,
 				description,
-				type,
-				status,
+				type: questTypes[type],
+				status: statusTypes[status],
 				url,
 				points,
 			});
