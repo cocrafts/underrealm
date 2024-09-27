@@ -19,7 +19,6 @@ export const handleGameEvent = async ({
 	type,
 	payload,
 }: GameEvent) => {
-	console.log('handle event', token, type, payload);
 	try {
 		const publicKey = configs.GAME_JWT_PUBLIC_KEY;
 		const { userId, matchId } = jwt.verify(token, publicKey, {
