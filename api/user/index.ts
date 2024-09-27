@@ -1,4 +1,5 @@
 import { User } from 'models/user';
+import { requireAuth } from 'utils/context';
 import { pubsub, topicGenerator } from 'utils/pubsub';
 import type {
 	QueryResolvers,
@@ -6,9 +7,11 @@ import type {
 	SubscriptionResolvers,
 } from 'utils/types';
 
-const profile: QueryResolvers['profile'] = async (root, _, { user }) => {
-	return user;
-};
+const profile: QueryResolvers['profile'] = requireAuth(
+	async (root, _, { user }) => {
+		return user;
+	},
+);
 
 export const refereeUser: ReferralHistoryResolvers['refereeUser'] = async ({
 	refereeId,
