@@ -354,13 +354,21 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 		await connectToMongoDB();
 
 		if (args.interactive) {
-			const idQuestion: PromptObject = {
-				type: 'text',
-				name: 'id',
-				message: 'Quest ID?',
-			};
+			const questList = await getQuestList();
+			const questChoices = questList.map((quest) => ({
+				title: `${quest.title} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				value: quest._id,
+			}));
+			const questions: PromptObject[] = [
+				{
+					type: 'select',
+					name: 'id',
+					message: 'Which quest do you want to delete?',
+					choices: questChoices,
+				},
+			];
 
-			const { id } = await prompts(idQuestion);
+			const { id } = await prompts(questions);
 
 			await deleteQuest(id);
 
@@ -368,11 +376,13 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 			// delete the quest by id
 			// update the config file to sync this new quest
 			await disconnectToMongoDB();
-		} else {
+		} else if (args.id) {
 			console.log('delete quest by id', args.id);
 			await deleteQuest(args.id);
 			console.log('Delete quest successfully');
 			await disconnectToMongoDB();
+		} else {
+			console.log('delete all quests from JSON file');
 		}
 	},
 };
