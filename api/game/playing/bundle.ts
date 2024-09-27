@@ -32,7 +32,7 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 	if (winner) await send({ winner }, EventType.GameOver);
 
 	await GameMatch.updateOne(
-		{ id: matchId },
+		{ _id: matchId },
 		{ $push: { commandBundles: { $each: autoBundles } }, $set: { winner } },
 	);
 };
