@@ -644,7 +644,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 130.30954703792204,
+      "width": 130.31988525390625,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -683,7 +683,7 @@
     "_string": "Ivar, The Myst",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 27.97222222222222,
+    "_actualFontSize": 20,
     "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1349,7 +1349,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55.7161977970612,
+      "width": 55.71998596191406,
       "height": 58.4
     },
     "_anchorPoint": {
@@ -1388,7 +1388,7 @@
     "_string": "40",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.94444444444444,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1532,7 +1532,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 32.39806001543881,
+      "width": 32.399993896484375,
       "height": 58.4
     },
     "_anchorPoint": {
@@ -1571,7 +1571,7 @@
     "_string": "0",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.94444444444444,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1715,7 +1715,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55.7161977970612,
+      "width": 55.71998596191406,
       "height": 58.4
     },
     "_anchorPoint": {
@@ -1754,7 +1754,7 @@
     "_string": "40",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.94444444444444,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1881,7 +1881,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 81
