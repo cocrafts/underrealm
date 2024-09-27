@@ -11,7 +11,7 @@ import { verifyToken } from './jwt';
 export type UserProfile = IUser;
 
 export type ApiContext = {
-	user: UserProfile;
+	user?: UserProfile;
 };
 
 type ContextOptions = {
@@ -21,13 +21,13 @@ type ContextOptions = {
 
 export const resolveUniversalContext = async ({
 	authHeader,
-	isIntrospection,
 }: ContextOptions) => {
+	let user: IUser;
 	if (authHeader) {
 		const token = authHeader.replace('Bearer ', '');
 		const cognitoUser = await verifyToken(token);
 
-		let user: IUser = await User.findOne({ bindingId: cognitoUser.username });
+		user = await User.findOne({ bindingId: cognitoUser.username });
 
 		if (!user) {
 			user = await User.create({
@@ -38,9 +38,6 @@ export const resolveUniversalContext = async ({
 				referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 			});
 		}
-
-		return { user };
-	} else if (!isIntrospection) {
-		throw new ForbiddenError('Require Authorization token');
 	}
+	return { user };
 };
