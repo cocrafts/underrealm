@@ -5,14 +5,8 @@ import yargs from 'yargs';
 
 import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
 
-import {
-	createQuest,
-	deleteQuestByCode,
-	deleteQuestById,
-	updateQuestByCode,
-	updateQuestById,
-} from './mutation';
-import { getQuestList } from './query';
+import { Quest } from './model';
+import { createQuest } from './mutation';
 
 export const questCommand: StrictCommandModule<object, unknown> = {
 	command: 'quest',
@@ -155,8 +149,6 @@ type UpdateArgs = {
 	code?: string;
 };
 
-const questStatus = ['INIT', 'LIVE', 'DISABLED'];
-
 const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 	command: 'update',
 	describe: 'Update a quest by id or multiple quests by status',
@@ -204,28 +196,33 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 	},
 	handler: async (args) => {
 		await connectToMongoDB();
+
 		if (args.code) {
-			console.log('update all quests by status\n', args);
-			// update all quests by status
-			// update the config file to sync this new quest
-			const { title, description, type, status, url, points } = args;
-			await updateQuestByCode({
-				code: args.code,
-				title,
-				description,
-				type,
-				status,
-				url,
-				points,
-			});
+			console.log('Update quest with code\n', args.code);
+
+			const { code, title, description, type, status, url, points } = args;
+			await Quest.findOneAndUpdate(
+				{ code },
+				{
+					title,
+					description,
+					type,
+					status,
+					url,
+					points,
+				},
+			);
+
 			await disconnectToMongoDB();
 		} else if (args.interactive) {
-			console.log('update the chosen quest', args);
-			const questList = await getQuestList();
+			console.log('Update the chosen quest', args);
+
+			const questList = await Quest.find();
 			const questChoices = questList.map((quest) => ({
 				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
 			}));
+
 			const chosenQuest: PromptObject[] = [
 				{
 					type: 'select',
@@ -234,6 +231,7 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 					choices: questChoices,
 				},
 			];
+
 			const { id } = await prompts(chosenQuest);
 
 			const initialQuestions: PromptObject[] = [
@@ -255,81 +253,22 @@ const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
 			const initialResponse = await prompts(initialQuestions);
 			const { fields } = initialResponse;
 
-			const questions: PromptObject[] = fields
-				.map((field: string) => {
-					switch (field) {
-						case 'title':
-							return {
-								type: 'text',
-								name: 'title',
-								message: 'Quest Title?',
-							};
-						case 'description':
-							return {
-								type: 'text',
-								name: 'description',
-								message: 'Quest Description?',
-							};
-						case 'type':
-							return {
-								type: 'select',
-								name: 'type',
-								message: 'Quest type?',
-								choices: [
-									{ title: 'LIKE_X' },
-									{ title: 'RETWEET_X' },
-									{ title: 'COMMENT_X' },
-									{ title: 'JOIN_DISCORD' },
-								],
-							};
-						case 'status':
-							return {
-								type: 'select',
-								name: 'status',
-								message: 'Quest status?',
-								choices: [
-									{ title: 'INIT' },
-									{ title: 'LIVE' },
-									{ title: 'DISABLED' },
-								],
-							};
-						case 'url':
-							return {
-								type: 'text',
-								name: 'url',
-								message: 'Quest URL?',
-							};
-						case 'points':
-							return {
-								type: 'number',
-								name: 'points',
-								message: 'Quest points?',
-							};
-						default:
-							return null;
-					}
-				})
-				.filter(Boolean);
+			const questions: PromptObject[] = updateQuestions(fields);
 
 			const response = await prompts(questions);
 			const { title, description, type, status, url, points } = response;
 
-			await updateQuestById({
-				id,
+			await Quest.findByIdAndUpdate(id, {
 				title,
 				description,
-				type: type !== undefined ? questTypes[type] : undefined,
-				status: status !== undefined ? questStatus[status] : undefined,
+				type,
+				status,
 				url,
 				points,
 			});
 
 			console.log('Update quest successfully');
-			// update the quest by id
-			// update the config file to sync this new quest
 			await disconnectToMongoDB();
-		} else {
-			console.log('update all available quests from JSON file', args);
 		}
 	},
 };
@@ -362,7 +301,7 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 		await connectToMongoDB();
 
 		if (args.interactive) {
-			const questList = await getQuestList();
+			const questList = await Quest.find();
 			const questChoices = questList.map((quest) => ({
 				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
 				value: quest._id,
@@ -378,24 +317,85 @@ const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
 
 			const { id } = await prompts(questions);
 
-			await deleteQuestById(id);
+			await Quest.findByIdAndDelete(id);
 
 			console.log('Delete quest successfully');
-			// delete the quest by id
-			// update the config file to sync this new quest
+
 			await disconnectToMongoDB();
 		} else if (args.id) {
-			console.log('delete quest by id', args.id);
-			await deleteQuestById(args.id);
+			console.log('Delete quest by id', args.id);
+
+			await Quest.findByIdAndDelete(args.id);
+
 			console.log('Delete quest successfully');
+
 			await disconnectToMongoDB();
 		} else if (args.code) {
-			console.log('delete quest by code', args.code);
-			await deleteQuestByCode(args.code);
+			console.log('Delete quest by code', args.code);
+
+			await Quest.findOneAndDelete({ code: args.code });
+
 			console.log('Delete quest successfully');
+
 			await disconnectToMongoDB();
-		} else {
-			console.log('delete all quests from JSON file');
 		}
 	},
 };
+
+function updateQuestions(fields: string[]): PromptObject[] {
+	return fields
+		.map((field: string) => {
+			switch (field) {
+				case 'title':
+					return {
+						type: 'text',
+						name: 'title',
+						message: 'Quest Title?',
+					};
+				case 'description':
+					return {
+						type: 'text',
+						name: 'description',
+						message: 'Quest Description?',
+					};
+				case 'type':
+					return {
+						type: 'select',
+						name: 'type',
+						message: 'Quest type?',
+						choices: [
+							{ title: 'LIKE_X' },
+							{ title: 'RETWEET_X' },
+							{ title: 'COMMENT_X' },
+							{ title: 'JOIN_DISCORD' },
+						],
+					};
+				case 'status':
+					return {
+						type: 'select',
+						name: 'status',
+						message: 'Quest status?',
+						choices: [
+							{ title: 'INIT' },
+							{ title: 'LIVE' },
+							{ title: 'DISABLED' },
+						],
+					};
+				case 'url':
+					return {
+						type: 'text',
+						name: 'url',
+						message: 'Quest URL?',
+					};
+				case 'points':
+					return {
+						type: 'number',
+						name: 'points',
+						message: 'Quest points?',
+					};
+				default:
+					return null;
+			}
+		})
+		.filter(Boolean) as PromptObject[];
+}

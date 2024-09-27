@@ -29,20 +29,19 @@ const questSchema = new Schema({
 // Pre-save hook to generate and assign the hash
 questSchema.pre('save', function (next) {
 	if (!this.code) {
-		this.code = generateRandomHash();
+		this.code = generateRandomCode(4, '1234567890');
 	}
 	next();
 });
 
 // Function to generate a random 4-character hash
-export function generateRandomHash(length: number = 4): string {
-	const characters =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let result = '';
+export function generateRandomCode(length: number, charSet: string) {
+	let code = '';
 	for (let i = 0; i < length; i++) {
-		result += characters.charAt(Math.floor(Math.random() * characters.length));
+		const randomChar = charSet[Math.floor(Math.random() * charSet.length)];
+		code += randomChar;
 	}
-	return result;
+	return code;
 }
 
 export const Quest = model('Quest', questSchema);
