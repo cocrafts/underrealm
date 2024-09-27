@@ -173,7 +173,7 @@ export class DuelManager extends Component {
 		const glowNode = system.globalNodes.cardPreview.getChildByPath('Card/glow');
 		const cardNode = system.globalNodes.cardPreview.getChildByPath('Card');
 
-		glowNode.active = isActive;
+		glowNode.active = !isActive;
 		cardNode.getComponent(CardManager).setCardId(cardId.substring(0, 9));
 		system.globalNodes.cardPreview.setPosition(node.position.x, -180);
 		playEffectSound('hand-slide', 0.2);
