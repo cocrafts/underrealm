@@ -22,7 +22,6 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 ) => {
 	await Promise.all(initPromises);
 	const connectionId = event.requestContext.connectionId;
-	const payload = JSON.parse(event.body);
 	globalContext.connectionId = connectionId;
 
 	try {
@@ -47,6 +46,8 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 				break;
 			}
 			case 'game': {
+				if (!event.body) throw Error('Require event body for game routeKey');
+				const payload = JSON.parse(event.body);
 				await handleGameEvent(payload);
 				break;
 			}
