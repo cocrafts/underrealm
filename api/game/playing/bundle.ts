@@ -12,6 +12,7 @@ import {
 	runCommand,
 } from '@underrealm/murg';
 import { GameDuel } from 'models/game';
+import { safeAddGamePoints } from 'models/points';
 
 import type { CommandHandler } from './types';
 import { EventType } from './types';
@@ -26,18 +27,32 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 
 	const level = history.length;
 	const duelState = getInitialState(config);
-
 	runBundles(duelState, history);
 	const autoBundles = fillAndRunBundles(duelState, incomingBundles);
-	const winner = getWinner(duelState);
-
 	await send({ level, bundles: autoBundles });
-	if (winner) await send({ winner }, EventType.GameOver);
 
-	await GameDuel.updateOne(
+	const promises = [];
+	const winner = getWinner(duelState);
+	if (winner) {
+		const loser =
+			duel.config.firstPlayer.id === winner
+				? duel.config.secondPlayer.id
+				: duel.config.firstPlayer.id;
+		const sendGameOver = async (claimedPoints: number) => {
+			await send({ winner, claimedPoints }, EventType.GameOver);
+		};
+
+		promises.push(safeAddGamePoints(winner, duel.id, true).then(sendGameOver));
+		promises.push(safeAddGamePoints(loser, duel.id, false).then(sendGameOver));
+	}
+
+	const updateGamePromise = GameDuel.updateOne(
 		{ _id: duelId },
 		{ $push: { history: { $each: autoBundles } }, $set: { winner } },
 	);
+	promises.push(updateGamePromise);
+
+	await Promise.all(promises);
 };
 
 export const runBundles = (duel: DuelState, bundles: DuelCommandBundle[]) => {
