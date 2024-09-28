@@ -25,16 +25,12 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
 			const { config, history } = makeDuel('00001', userId, opponentId);
 			const duel = await GameDuel.create({ config, history });
+			logger.info('created new game duel', duel.id);
 
 			await Promise.all([
 				publishFindMatch(topic, userId, duel.id),
 				publishFindMatch(opponentTopic, opponentId, duel.id),
 			]);
-
-			logger.info(`published findMatch with match id: ${duel.id}`, {
-				userId,
-				opponentId,
-			});
 		} else {
 			await MatchFinding.create({ userId: userId, pubsubTopic: topic });
 		}
@@ -52,11 +48,16 @@ export const publishFindMatch = async (
 	userId: string,
 	duelId: string,
 ) => {
-	const secret = configs.GAME_JWT_PRIVATE_KEY;
-	const token = jwt.sign({ userId, duelId }, secret, {
-		expiresIn: '12h',
-		algorithm: 'RS256',
-	});
+	try {
+		const secret = configs.GAME_JWT_PRIVATE_KEY;
+		const token = jwt.sign({ userId, duelId }, secret, {
+			expiresIn: '12h',
+			algorithm: 'RS256',
+		});
 
-	await pubsub.publish(topic, { findMatch: { id: duelId, jwt: token } });
+		await pubsub.publish(topic, { findMatch: { id: duelId, jwt: token } });
+		logger.info(`published findMatch with match id: ${duelId}`, { userId });
+	} catch (error) {
+		logger.error('failed to sign jwt and publish match', error);
+	}
 };

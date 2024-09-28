@@ -5,6 +5,7 @@ import {
 	DBEnvs,
 	defaultEnvs,
 	defaultLambdaConfigs,
+	JWTEnvs,
 	zoneId,
 } from './shared';
 
@@ -23,7 +24,7 @@ const socket = new sst.aws.Function('socket', {
 	...defaultLambdaConfigs($app.stage),
 	handler: 'api/functions/socket.handler',
 	copyFiles: [{ from: 'api/schema.graphql', to: 'schema.graphql' }],
-	environment: { ...defaultEnvs(), ...DBEnvs() },
+	environment: { ...defaultEnvs(), ...DBEnvs(), ...JWTEnvs('all') },
 	permissions: [
 		{
 			actions: ['execute-api:Invoke', 'execute-api:ManageConnections'],
