@@ -10,7 +10,7 @@ export const useReferral = () => {
 
 	const { count, points } = useMemo(() => {
 		const result = { count: 0, points: 0 };
-		if (!loading && !error) {
+		if (!loading && data.referralHistory) {
 			data.referralHistory.reduce((result, ref) => {
 				result.count += 1;
 				result.points += ref.claimedPoints;

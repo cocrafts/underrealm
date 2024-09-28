@@ -11,6 +11,5 @@ export const graphqlContext: ContextFunction<
 	ApiContext
 > = async ({ req }) => {
 	const authHeader: string = req?.headers['authorization'];
-	const isIntrospection = req?.body.query.includes('Introspection');
-	return resolveUniversalContext({ authHeader, isIntrospection });
+	return resolveUniversalContext({ authHeader });
 };

@@ -5,7 +5,7 @@ import yargs from 'yargs';
 
 import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
 
-import { createQuest } from './mutation';
+import { Quest } from './model';
 
 export const questCommand: StrictCommandModule<object, unknown> = {
 	command: 'quest',
@@ -22,16 +22,27 @@ export const questCommand: StrictCommandModule<object, unknown> = {
 	},
 };
 
+enum QuestTypes {
+	LIKE_X = 'LIKE_X',
+	RETWEET_X = 'RETWEET_X',
+	COMMENT_X = 'COMMENT_X',
+	JOIN_DISCORD = 'JOIN_DISCORD',
+}
+
+enum QuestStatuses {
+	INIT = 'INIT',
+	LIVE = 'LIVE',
+	DISABLED = 'DISABLED',
+}
+
 type CreateArgs = {
 	interactive: boolean;
 	title: string;
 	description: string;
-	type: 'LIKE_X' | 'RETWEET_X' | 'COMMENT_X' | 'JOIN_DISCORD';
+	type: QuestTypes;
 	url: string;
 	points: number;
 };
-
-const questTypes = ['LIKE_X', 'RETWEET_X', 'COMMENT_X', 'JOIN_DISCORD'];
 
 const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 	command: 'create',
@@ -54,7 +65,7 @@ const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 		type: {
 			describe: 'The type of the quest',
 			type: 'string',
-			choices: questTypes,
+			choices: Object.values(QuestTypes),
 		},
 		url: {
 			describe: 'The link to the quest',
@@ -69,91 +80,261 @@ const createQuestCommand: StrictCommandModule<object, CreateArgs> = {
 		await connectToMongoDB();
 
 		if (args.interactive) {
-			const questions: PromptObject[] = [
-				{
-					type: 'text',
-					name: 'title',
-					message: 'Quest Title?',
-				},
-				{
-					type: 'text',
-					name: 'description',
-					message: 'Quest Description?',
-				},
-				{
-					type: 'select',
-					name: 'type',
-					message: 'Quest type?',
-					choices: [
-						{ title: 'LIKE_X' },
-						{ title: 'RETWEET_X' },
-						{ title: 'COMMENT_X' },
-						{ title: 'JOIN_DISCORD' },
-					],
-				},
-				{
-					type: 'text',
-					name: 'url',
-					message: 'Quest URL?',
-				},
-				{
-					type: 'number',
-					name: 'points',
-					message: 'Quest points?',
-				},
-			];
+			const questions: PromptObject[] = questFieldQuestions([
+				'title',
+				'description',
+				'type',
+				'url',
+				'points',
+			]);
+			const quest = await prompts(questions);
 
-			const response = await prompts(questions);
-			const { title, description, url, points, type } = response;
-
-			await createQuest({
-				title,
-				description,
-				url,
-				points,
-				type: questTypes[type],
-			});
-
-			console.log('Create quest successfully');
-			// create a new quest to database
-			// update the config file to sync this new quest
-			await disconnectToMongoDB();
+			const createdQuest = await Quest.create(quest);
+			console.log(JSON.stringify(createdQuest, null, '\t'));
 		} else {
-			console.log('create quests from JSON file');
-			// Read `config.{env}.json` file, loop over quest object,
-			// if the quest has no id, create a new quest in database, then update the config.
-			// And write to JSON file
+			console.log('create quests by flags');
+			const createdQuest = await Quest.create(args);
+			console.log(JSON.stringify(createdQuest, null, '\t'));
 		}
+
+		console.log('Create quest successfully');
+		await disconnectToMongoDB();
 	},
 };
 
 type UpdateArgs = {
 	id?: string;
-	type?: 'LIKE_X' | 'RETWEET_X' | 'COMMENT_X' | 'JOIN_DISCORD';
-	status?: 'INIT' | 'LIVE' | 'DISABLED';
+	title?: string;
+	description?: string;
+	type?: QuestTypes;
+	status?: QuestStatuses;
 	url?: string;
+	points?: number;
+	code?: string;
 };
 
 const updateQuestCommand: StrictCommandModule<object, UpdateArgs> = {
-	command: 'update <id|status>',
+	command: 'update',
 	describe: 'Update a quest by id or multiple quests by status',
-	handler: (args) => {
-		if (args.id) {
-			console.log('update quest by id', args);
-		} else {
-			console.log('update all available quests from JSON file', args);
+	builder: {
+		interactive: {
+			alias: 'i',
+			type: 'boolean',
+			describe: 'interactively update a quest instead JSON config file',
+			default: false,
+		},
+		id: {
+			describe: 'The id of the quest',
+			type: 'string',
+		},
+		title: {
+			describe: 'The title of the quest',
+			type: 'string',
+		},
+		description: {
+			describe: 'The description of the quest',
+			type: 'string',
+		},
+		type: {
+			describe: 'The type of the quest',
+			type: 'string',
+			choices: Object.values(QuestTypes),
+		},
+		status: {
+			describe: 'The status of the quest',
+			type: 'string',
+			choices: Object.values(QuestStatuses),
+		},
+		url: {
+			describe: 'The link to the quest',
+			type: 'string',
+		},
+		points: {
+			describe: 'The points of the quest',
+			type: 'number',
+		},
+		code: {
+			describe: 'The unique code of the quest',
+			type: 'string',
+		},
+	},
+	handler: async (args) => {
+		await connectToMongoDB();
+
+		if (args.code) {
+			console.log('Update quest with code\n', args.code);
+			const { code, ...fields } = args;
+			const updatedQuest = await Quest.findOneAndUpdate({ code }, fields, {
+				new: true,
+			});
+			console.log(JSON.stringify(updatedQuest, null, '\t'));
+		} else if (args.interactive) {
+			console.log('Update the chosen quest', args);
+
+			const questList = await Quest.find();
+			const questChoices = questList.map((quest) => ({
+				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				value: quest._id,
+			}));
+
+			const chosenQuest: PromptObject[] = [
+				{
+					type: 'select',
+					name: 'id',
+					message: 'Choose quest to update',
+					choices: questChoices,
+				},
+			];
+			const { id } = await prompts(chosenQuest);
+
+			const fieldQuestions: PromptObject[] = [
+				{
+					type: 'multiselect',
+					name: 'fields',
+					message: 'Which fields do you want to update?',
+					choices: [
+						{ title: 'Title', value: 'title' },
+						{ title: 'Description', value: 'description' },
+						{ title: 'Type', value: 'type' },
+						{ title: 'Status', value: 'status' },
+						{ title: 'URL', value: 'url' },
+						{ title: 'Points', value: 'points' },
+					],
+				},
+			];
+			const { fields: fieldNames } = await prompts(fieldQuestions);
+
+			const questions: PromptObject[] = questFieldQuestions(fieldNames);
+			const fields = await prompts(questions);
+
+			const updatedQuest = await Quest.findByIdAndUpdate(id, fields, {
+				new: true,
+			});
+			console.log(JSON.stringify(updatedQuest, null, '\t'));
 		}
+
+		console.log('Update quest successfully');
+		await disconnectToMongoDB();
 	},
 };
 
 type DeleteArgs = {
 	id: string;
+	code: string;
 };
 
 const deleteQuestCommand: StrictCommandModule<object, DeleteArgs> = {
-	command: 'delete <id>',
+	command: 'delete',
 	describe: 'Delete a quest by id',
-	handler: (args) => {
-		console.log('delete quest by id', args.id);
+	builder: {
+		id: {
+			describe: 'The id of the quest',
+			type: 'string',
+		},
+		code: {
+			describe: 'The unique code of the quest',
+			type: 'string',
+		},
+		interactive: {
+			alias: 'i',
+			type: 'boolean',
+			describe: 'interactively delete a quest instead JSON config file',
+			default: false,
+		},
+	},
+	handler: async (args) => {
+		await connectToMongoDB();
+
+		if (args.interactive) {
+			const questList = await Quest.find();
+			const questChoices = questList.map((quest) => ({
+				title: `${quest.title} - Code: ${quest.code} - Description: ${quest.description} - Type: ${quest.type} - Status: ${quest.status} - Points: ${quest.points}`,
+				value: quest._id,
+			}));
+			const questions: PromptObject[] = [
+				{
+					type: 'select',
+					name: 'id',
+					message: 'Which quest do you want to delete?',
+					choices: questChoices,
+				},
+			];
+
+			const { id } = await prompts(questions);
+
+			const deletedQuest = await Quest.findByIdAndDelete(id);
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
+		} else if (args.id) {
+			console.log('Delete quest by id', args.id);
+			const deletedQuest = await Quest.findByIdAndDelete(args.id);
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
+		} else if (args.code) {
+			console.log('Delete quest by code', args.code);
+			const deletedQuest = await Quest.findOneAndDelete({ code: args.code });
+			console.log(JSON.stringify(deletedQuest, null, '\t'));
+		}
+
+		console.log('Delete quest successfully');
+		await disconnectToMongoDB();
 	},
 };
+
+type FieldKey = 'title' | 'description' | 'type' | 'status' | 'url' | 'points';
+
+function questFieldQuestions(fields: FieldKey[]): PromptObject[] {
+	return fields
+		.map((field) => {
+			switch (field) {
+				case 'title':
+					return {
+						type: 'text',
+						name: 'title',
+						message: 'Quest Title?',
+					};
+				case 'description':
+					return {
+						type: 'text',
+						name: 'description',
+						message: 'Quest Description?',
+					};
+				case 'type':
+					return {
+						type: 'select',
+						name: 'type',
+						message: 'Quest type?',
+						choices: [
+							{ title: 'LIKE_X', value: QuestTypes.LIKE_X },
+							{ title: 'RETWEET_X', value: QuestTypes.RETWEET_X },
+							{ title: 'COMMENT_X', value: QuestTypes.COMMENT_X },
+							{ title: 'JOIN_DISCORD', value: QuestTypes.JOIN_DISCORD },
+						],
+					};
+				case 'status':
+					return {
+						type: 'select',
+						name: 'status',
+						message: 'Quest status?',
+						choices: [
+							{ title: 'INIT', value: QuestStatuses.INIT },
+							{ title: 'LIVE', value: QuestStatuses.LIVE },
+							{ title: 'DISABLED', value: QuestStatuses.DISABLED },
+						],
+					};
+				case 'url':
+					return {
+						type: 'text',
+						name: 'url',
+						message: 'Quest URL?',
+					};
+				case 'points':
+					return {
+						type: 'number',
+						name: 'points',
+						message: 'Quest points?',
+					};
+				default:
+					return null;
+			}
+		})
+		.filter(Boolean) as PromptObject[];
+}

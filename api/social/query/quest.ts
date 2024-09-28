@@ -1,13 +1,22 @@
 import { Quest } from 'models/quest';
+import type { IUser } from 'models/user';
 import { virtualId } from 'models/utils';
 import type { QueryResolvers } from 'utils/types';
 import { QuestStatus } from 'utils/types';
 
-export const quests: QueryResolvers['questsWithAction'] = async (
+export const quests: QueryResolvers['quests'] = async (
 	_,
 	{ status },
 	{ user },
 ) => {
+	if (!user) {
+		return await Quest.find({ status: status || QuestStatus.Live });
+	} else {
+		return await getQuestsWithAction(status, user);
+	}
+};
+
+const getQuestsWithAction = async (status: QuestStatus, user: IUser) => {
 	// TODO: this aggregate should follow resolver chains
 	let quests = await Quest.aggregate([
 		{
@@ -23,7 +32,7 @@ export const quests: QueryResolvers['questsWithAction'] = async (
 							$expr: {
 								$and: [
 									{ $eq: ['$$questId', '$questId'] },
-									{ $eq: ['$userId', user._id] },
+									{ $eq: ['$userId', user.id] },
 								],
 							},
 						},
