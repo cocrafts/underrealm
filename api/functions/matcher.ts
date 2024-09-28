@@ -61,13 +61,8 @@ const initializeGameMatch = async (
 	const firstPlayerId = firstFindingKey.split('#')[1];
 	const secondPlayerId = secondFindingKey.split('#')[1];
 
-	const { config, commandBundles } = makeDuel(
-		'00001',
-		firstPlayerId,
-		secondPlayerId,
-	);
-
-	const gameMatch = await GameMatch.create({ config, history: commandBundles });
+	const { config, history } = makeDuel('00001', firstPlayerId, secondPlayerId);
+	const gameMatch = await GameMatch.create({ config, history });
 
 	await Promise.all([
 		pubsub.publish(firstTopic, { findMatch: { id: gameMatch.id } }),

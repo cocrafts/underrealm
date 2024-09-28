@@ -22,8 +22,8 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 
 		if (opponent) {
 			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
-			const duel = makeDuel('00001', userId, opponentId);
-			const gameMatch = await GameMatch.create(duel);
+			const { config, history } = makeDuel('00001', userId, opponentId);
+			const gameMatch = await GameMatch.create({ config, history });
 
 			await Promise.all([
 				publishFindMatch(topic, userId, gameMatch.id),
