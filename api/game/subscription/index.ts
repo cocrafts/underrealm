@@ -16,9 +16,10 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 		 */
 		const subscribed = await pubsub.subscribe(topic);
 
-		const opponent = await MatchFinding.findOneAndDelete({
-			userId: { $ne: userId },
-		});
+		const opponent = await MatchFinding.findOneAndDelete(
+			{ userId: { $ne: userId } },
+			{ sort: { created_at: 1 } },
+		);
 
 		if (opponent) {
 			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
