@@ -20,7 +20,10 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 	{ matchId, send },
 	incomingBundles,
 ) => {
-	const { config, commandBundles } = await GameMatch.findById(matchId);
+	const gameMatch = await GameMatch.findById(matchId);
+	// important: must convert db object to JSON to be correctly handled by engine
+	const { config, commandBundles } = gameMatch.toJSON();
+
 	const level = commandBundles.length;
 	const duel = getInitialState(config);
 
