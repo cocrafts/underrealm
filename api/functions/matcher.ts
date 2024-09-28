@@ -67,7 +67,7 @@ const initializeGameMatch = async (
 		secondPlayerId,
 	);
 
-	const gameMatch = await GameMatch.create({ config, commandBundles });
+	const gameMatch = await GameMatch.create({ config, history: commandBundles });
 
 	await Promise.all([
 		pubsub.publish(firstTopic, { findMatch: { id: gameMatch.id } }),

@@ -36,5 +36,5 @@ export interface PlayerIds {
 export interface GameMatch {
 	id: string;
 	config: DuelConfig;
-	commandBundles: DuelCommandBundle[];
+	history: DuelCommandBundle[];
 }

@@ -34,7 +34,7 @@ import { createSchema } from './utils';
 type IGameMatch = {
 	winner?: string;
 	config: DuelConfig;
-	commandBundles: DuelCommandBundle[];
+	history: DuelCommandBundle[];
 };
 
 const PlayerConfigSchema = new Schema<PlayerConfig>(
@@ -209,7 +209,7 @@ const GameMatchSchema = createSchema({
 			{ id: false },
 		),
 	}),
-	commandBundles: [DuelCommandBundleSchema],
+	history: [DuelCommandBundleSchema],
 });
 
 export const GameMatch = model<IGameMatch>('GameMatch', GameMatchSchema);

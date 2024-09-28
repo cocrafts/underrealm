@@ -21,14 +21,14 @@ export const connect = (
 ): void => {
 	if (system.winner || !isMyCommand) return;
 
-	const { config, commandBundles } = match;
+	const { config, history } = match;
 	const state = getInitialState(config);
 
 	mergeFragmentToState(system.duel, state);
 	system.playerIds = extractPlayerIds(config, system.userId);
 	system.globalNodes.board?.emit('stateReady');
 
-	mergeRemoteHistory(commandBundles, 0);
+	mergeRemoteHistory(history, 0);
 	setTimeout(() => replay(), 200);
 };
 

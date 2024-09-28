@@ -22,12 +22,12 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 ) => {
 	const gameMatch = await GameMatch.findById(matchId);
 	// important: must convert db object to JSON to be correctly handled by engine
-	const { config, commandBundles } = gameMatch.toJSON();
+	const { config, history } = gameMatch.toJSON();
 
-	const level = commandBundles.length;
+	const level = history.length;
 	const duel = getInitialState(config);
 
-	runBundles(duel, commandBundles);
+	runBundles(duel, history);
 	const autoBundles = fillAndRunBundles(duel, incomingBundles);
 	const winner = getWinner(duel);
 
@@ -36,7 +36,7 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 
 	await GameMatch.updateOne(
 		{ _id: matchId },
-		{ $push: { commandBundles: { $each: autoBundles } }, $set: { winner } },
+		{ $push: { history: { $each: autoBundles } }, $set: { winner } },
 	);
 };
 
