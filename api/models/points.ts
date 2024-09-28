@@ -15,7 +15,7 @@ const PointsHistorySchema = createSchema({
 	userId: { type: Types.ObjectId, ref: 'User', required: true },
 	bindingId: { type: Types.ObjectId, required: true },
 	source: { type: String, enum: ['GAME', 'QUEST'], required: true },
-	points: { Type: Number, required: true },
+	points: { type: Number, required: true },
 });
 
 PointsHistorySchema.index({ userId: 1, bindingId: 1 }, { unique: true });
