@@ -34,8 +34,6 @@ export const sendConnect = (): void => {
 		system.matchId = matchId;
 	}
 
-	console.log('System here', system);
-
 	send(GameEventType.ConnectMatch);
 };
 

@@ -1,5 +1,5 @@
 import { interpolate } from '../../utils/card';
-import type { Attribute, Card, CleaverAttackEffect } from '../../utils/type';
+import type { Card } from '../../utils/type';
 import {
 	ActivationType,
 	CardType,
@@ -197,12 +197,12 @@ const cardList: Card[] = [
 					health: 0,
 					defense: 0,
 					attack: 20,
-				} as Attribute,
+				},
 				cleaver: {
 					type: 'Fixed',
 					damage: 20,
 					radius: 1,
-				} as CleaverAttackEffect,
+				},
 			},
 		},
 	},
