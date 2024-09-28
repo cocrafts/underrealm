@@ -11,31 +11,31 @@ import {
 	move,
 	runCommand,
 } from '@underrealm/murg';
-import { GameMatch } from 'models/game';
+import { GameDuel } from 'models/game';
 
 import type { CommandHandler } from './types';
 import { EventType } from './types';
 
 export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
-	{ matchId, send },
+	{ duelId, send },
 	incomingBundles,
 ) => {
-	const gameMatch = await GameMatch.findById(matchId);
+	const duel = await GameDuel.findById(duelId);
 	// important: must convert db object to JSON to be correctly handled by engine
-	const { config, history } = gameMatch.toJSON();
+	const { config, history } = duel.toJSON();
 
 	const level = history.length;
-	const duel = getInitialState(config);
+	const duelState = getInitialState(config);
 
-	runBundles(duel, history);
-	const autoBundles = fillAndRunBundles(duel, incomingBundles);
-	const winner = getWinner(duel);
+	runBundles(duelState, history);
+	const autoBundles = fillAndRunBundles(duelState, incomingBundles);
+	const winner = getWinner(duelState);
 
 	await send({ level, bundles: autoBundles });
 	if (winner) await send({ winner }, EventType.GameOver);
 
-	await GameMatch.updateOne(
-		{ _id: matchId },
+	await GameDuel.updateOne(
+		{ _id: duelId },
 		{ $push: { history: { $each: autoBundles } }, $set: { winner } },
 	);
 };

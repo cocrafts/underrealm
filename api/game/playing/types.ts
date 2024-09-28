@@ -13,7 +13,7 @@ export enum EventType {
 
 export interface JwtPayload {
 	userId: string;
-	matchId: string;
+	duelId: string;
 }
 
 export type ResponseSender = (
@@ -23,7 +23,7 @@ export type ResponseSender = (
 
 export interface CommandContext {
 	userId: string;
-	matchId: string;
+	duelId: string;
 	command: EventType;
 	send: ResponseSender;
 }

@@ -21,17 +21,17 @@ export const handleGameEvent = async ({
 }: GameEvent) => {
 	try {
 		const publicKey = configs.GAME_JWT_PUBLIC_KEY;
-		const { userId, matchId } = jwt.verify(token, publicKey, {
+		const { userId, duelId } = jwt.verify(token, publicKey, {
 			algorithms: ['RS256'],
 		}) as JwtPayload;
 
 		const send: ResponseSender = async (payload, targetType) => {
-			const topic = topicGenerator.match({ matchId });
+			const topic = topicGenerator.duel({ duelId });
 			targetType = targetType || type;
 			await pubsub.publish(topic, { type: targetType, userId, payload });
 		};
 
-		const context: CommandContext = { matchId, userId, command: type, send };
+		const context: CommandContext = { duelId, userId, command: type, send };
 
 		if (type === EventType.ConnectMatch) {
 			await onIncomingConnect(context, payload);

@@ -11,7 +11,7 @@ import type {
 	JwtPayload,
 	ResponseSender,
 } from './util/type';
-import { DuelCommands } from './util/type';
+import { EventType } from './util/type';
 import {
 	onIncomingBundle,
 	onIncomingConnect,
@@ -24,11 +24,11 @@ const socket = injectSocket(app);
 const duelClients: Record<string, Array<{ player: string; ws: unknown }>> = {};
 const jwtSecret = 'shh!!';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 socket.app.ws('/', (ws) => {
 	ws.on('message', async (rawData) => {
 		try {
 			const data: CommandPayload = JSON.parse(rawData.toString());
+			console.log('on event', data);
 			const { userId, duelId } = verify(data.jwt, jwtSecret) as JwtPayload;
 
 			const players = duelClients[duelId] || [];
@@ -40,8 +40,8 @@ socket.app.ws('/', (ws) => {
 
 				clients.forEach((client) => {
 					const response: CommandResponse = {
-						command: command || data.command,
-						isMyCommand: client === ws,
+						type: command || data.type,
+						userId,
 						timestamp: new Date().getTime(),
 						payload,
 					};
@@ -49,26 +49,22 @@ socket.app.ws('/', (ws) => {
 				});
 			};
 
-			const context: Context = { duelId, userId, command: data.command, send };
+			const context: Context = {
+				duelId,
+				userId,
+				type: data.type,
+				send,
+			};
 
 			if (playerIndex === -1) {
 				players.push({ player: userId, ws });
 				duelClients[duelId] = players;
 			}
-			if (data.command === DuelCommands.ConnectMatch) {
+			if (data.type === EventType.ConnectMatch) {
 				await onIncomingConnect(context, data.payload);
-			} else if (data.command === DuelCommands.SendBundle) {
+			} else if (data.type === EventType.SendBundle) {
 				await onIncomingBundle(context, data.payload);
-				// const botContext: Context = {
-				// 	duelId,
-				// 	userId: 'B',
-				// 	command: DuelCommands.SendBundle,
-				// 	send,
-				// };
-				// const botBundle = injectBotMove(duelId, data.payload);
-				// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-				// await onIncomingBundle(botContext, botBundle as any);
-			} else if (data.command === DuelCommands.CardHover) {
+			} else if (data.type === EventType.CardHover) {
 				await onInComingHover(context, data.payload);
 			}
 		} catch (err) {
@@ -86,7 +82,10 @@ const duelId = nanoId();
 const signAndPrintSignature = (userId: string) => {
 	const signature = sign({ userId, duelId } as JwtPayload, jwtSecret);
 
-	console.log(`Player ${userId}: `, `http://localhost:7456/?jwt=${signature}`);
+	console.log(
+		`Player ${userId}: `,
+		`http://localhost:7456/?ws=ws://localhost:3006&jwt=${signature}`,
+	);
 };
 
 console.log('Duel:', duelId);

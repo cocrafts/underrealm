@@ -5,23 +5,23 @@ import { replay } from '../replay';
 import { raiseHandCard, showEndGameRibbon } from '../tween';
 import { extractPlayerIds } from '../util/helper';
 import { system } from '../util/system';
-import type { GameMatch } from '../util/types';
+import type { GameDuel } from '../util/types';
 
 import { mergeRemoteHistory } from './util';
 
 const { selectHand, getInitialState, mergeFragmentToState } = Engine;
 
 interface ConnectPayload {
-	match: GameMatch;
+	duel: GameDuel;
 }
 
 export const connect = (
-	{ match }: ConnectPayload,
+	{ duel }: ConnectPayload,
 	isMyCommand: boolean,
 ): void => {
 	if (system.winner || !isMyCommand) return;
 
-	const { config, history } = match;
+	const { config, history } = duel;
 	const state = getInitialState(config);
 
 	mergeFragmentToState(system.duel, state);

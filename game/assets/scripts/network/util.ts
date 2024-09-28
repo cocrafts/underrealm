@@ -2,7 +2,11 @@ import type { DuelCommandBundle } from '@underrealm/murg';
 
 import { system } from '../util/system';
 
-const wsUri = localStorage?.getItem('GAME_WS_URI') || 'ws://localhost:3005/ws';
+const searchParams = new URLSearchParams(location.search);
+const wsParam = searchParams.get('ws');
+const wsUri =
+	wsParam || localStorage?.getItem('GAME_WS_URI') || 'ws://localhost:3005/ws';
+
 console.log('Game Websocket URI', wsUri);
 
 export const ws = new WebSocket(wsUri);

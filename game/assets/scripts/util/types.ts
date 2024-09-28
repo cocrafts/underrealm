@@ -33,7 +33,7 @@ export interface PlayerIds {
 	enemy: string;
 }
 
-export interface GameMatch {
+export interface GameDuel {
 	id: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];

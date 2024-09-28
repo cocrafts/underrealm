@@ -31,7 +31,7 @@ import { model, Schema } from 'mongoose';
 
 import { createSchema } from './utils';
 
-type IGameMatch = {
+type IGameDuel = {
 	winner?: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];
@@ -186,7 +186,7 @@ const DuelCommandBundleSchema = new Schema<DuelCommandBundle>(
 	{ id: false },
 );
 
-const GameMatchSchema = createSchema({
+const GameDuelSchema = createSchema({
 	config: new Schema({
 		version: String,
 		firstMover: String,
@@ -212,7 +212,7 @@ const GameMatchSchema = createSchema({
 	history: [DuelCommandBundleSchema],
 });
 
-export const GameMatch = model<IGameMatch>('GameMatch', GameMatchSchema);
+export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
 
 type IMatchFinding = {
 	userId: string;
