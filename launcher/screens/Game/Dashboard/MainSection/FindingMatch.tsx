@@ -14,12 +14,14 @@ export const FindingMatch = () => {
 
 	useEffect(() => {
 		if (data) {
-			console.log('Match found', data.findMatch.id);
+			console.log('Match found', data?.findMatch?.id);
 			localStorage.setItem('GAME_JWT', data.findMatch.jwt);
 			localStorage.setItem('GAME_WS_URI', SOCKET_URI);
 			navigate('Game', { screen: 'Duel', params: { id: data.findMatch.id } });
 		}
 	}, [data]);
+
+	console.log('Match finding...');
 
 	if (loading) return <Loading />;
 	return <Text style={styles.title}>Match found</Text>;
