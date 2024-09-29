@@ -1,8 +1,9 @@
 import type { FC } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import packageJSON from 'package.json';
 
 const initialLayout: LayoutRectangle = {
 	x: 0,
@@ -12,7 +13,7 @@ const initialLayout: LayoutRectangle = {
 	height: 0,
 };
 
-const iFrameSrc = '/murg/index.html';
+const iFrameSrc = `/murg/index.html?v=${packageJSON.version}`;
 
 export const GameDuel: FC = () => {
 	const route = useRoute();
@@ -27,8 +28,12 @@ export const GameDuel: FC = () => {
 
 	const onContainerLayout = ({ nativeEvent }: LayoutChangeEvent) => {
 		setLayout(nativeEvent.layout);
-		console.log('Game Id:', params.id);
 	};
+
+	useEffect(() => {
+		console.log('Game Id:', params.id);
+		console.log('Iframe source:', iFrameSrc);
+	}, []);
 
 	return (
 		<View style={styles.container} onLayout={onContainerLayout}>

@@ -4,6 +4,8 @@ import { GameEventType } from '../util/types';
 import * as handlers from './handlers';
 import { ws } from './util';
 
+console.log('Game network started');
+
 ws.onmessage = (item) => {
 	const { userId, type, payload } = JSON.parse(item.data);
 	const isMyCommand = system.userId === userId;
