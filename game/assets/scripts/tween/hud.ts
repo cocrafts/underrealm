@@ -62,7 +62,7 @@ export const showEndGameRibbon = async (
 		tween(node)
 			.set({
 				scale: new Vec3(0, 0, 1),
-				position: new Vec3(0, -54, 0),
+				position: new Vec3(0, -34, 0),
 			})
 			.call(() => {
 				playBackgroundSound(sound, 0.5, false);
