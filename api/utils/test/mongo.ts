@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 let mongoServer: MongoMemoryServer;
 
 export const connectToTestDB = async () => {
-	mongoServer = await MongoMemoryServer.create();
+	if (!mongoServer) mongoServer = await MongoMemoryServer.create();
 	const uri = mongoServer.getUri();
 
 	await mongoose.connect(uri, {});
