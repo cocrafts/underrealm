@@ -25,6 +25,9 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 	globalContext.connectionId = connectionId;
 
 	try {
+		/**
+		 * routeKey is inferred by `action` field of event `body`
+		 */
 		switch (event.requestContext.routeKey) {
 			case '$connect': {
 				const result = await handleConnect(event, context, callback);
@@ -46,7 +49,7 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 				break;
 			}
 			case 'game': {
-				if (!event.body) throw Error('Require event body for game routeKey');
+				if (!event.body) throw Error('Require event body for game action');
 				const payload = JSON.parse(event.body);
 				await handleGameEvent(payload);
 				break;

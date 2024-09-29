@@ -11,10 +11,9 @@ import { ws } from './util';
 
 const { getCardState, selectHand, move, DuelPlace } = Engine;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const send = (type: GameEventType, payload?: any): void => {
+export const send = (type: GameEventType, payload?: unknown): void => {
 	const data: CommandPayload = {
-		routeKey: 'game',
+		action: 'game',
 		jwt: system.jwt,
 		type,
 		payload,

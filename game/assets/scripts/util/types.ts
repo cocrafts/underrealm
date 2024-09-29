@@ -13,13 +13,12 @@ export interface JwtPayload {
 }
 
 export interface CommandPayload {
-	routeKey: 'game';
+	action: 'game';
 	jwt: string;
 	type: GameEventType;
 	context?: JwtPayload;
 	send?: (payload: Record<string, never>) => Promise<void>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	payload?: any;
+	payload?: unknown;
 }
 
 export interface CommandResponse {

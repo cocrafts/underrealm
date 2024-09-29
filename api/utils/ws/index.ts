@@ -12,8 +12,10 @@ export const createWebsocketServer = (server: Server, path: string) => {
 		ws.on('message', async (message) => {
 			const data = JSON.parse(message.toString());
 			if (data.type) logger.debug('Websocket on message:', { type: data.type });
-
-			if (data.routeKey === 'game') await handleGameEvent(data);
+			/**
+			 * action -> routeKey follows AWS Websocket Gateway spec
+			 */
+			if (data.action === 'game') await handleGameEvent(data);
 		});
 	});
 
