@@ -11,10 +11,13 @@ import MarketplaceStack from 'stacks/Browser/Marketplace';
 import MintStack from 'stacks/Browser/Mint';
 import type { RootParamList } from 'stacks/Browser/shared';
 import { stackScreenOptions } from 'stacks/Browser/shared';
+import { usePendingRedirect } from 'utils/hooks/redirect';
 
 const Stack = createStackNavigator<RootParamList>();
 
 export const BrowserStack: FC = () => {
+	usePendingRedirect();
+
 	return (
 		<Stack.Navigator screenOptions={stackScreenOptions}>
 			<Stack.Screen name="Home" component={HomeScreen} />
