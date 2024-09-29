@@ -31,7 +31,8 @@ import { model, Schema } from 'mongoose';
 
 import { createSchema } from './utils';
 
-type IGameDuel = {
+export type IGameDuel = {
+	id: string;
 	winner?: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];

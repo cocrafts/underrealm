@@ -11,10 +11,11 @@ import {
 	move,
 	runCommand,
 } from '@underrealm/murg';
+import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import { safeAddGamePoints } from 'models/points';
 
-import type { CommandHandler } from './types';
+import type { CommandHandler, ResponseSender } from './types';
 import { EventType } from './types';
 
 export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
@@ -31,28 +32,31 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 	const autoBundles = fillAndRunBundles(duelState, incomingBundles);
 	await send({ level, bundles: autoBundles });
 
-	const promises = [];
 	const winner = getWinner(duelState);
-	if (winner) {
-		const loser =
-			duel.config.firstPlayer.id === winner
-				? duel.config.secondPlayer.id
-				: duel.config.firstPlayer.id;
-		const sendGameOver = async (claimedPoints: number) => {
-			await send({ winner, claimedPoints }, EventType.GameOver);
-		};
+	if (winner) sendGameOver(duel, winner, send);
 
-		promises.push(safeAddGamePoints(winner, duel.id, true).then(sendGameOver));
-		promises.push(safeAddGamePoints(loser, duel.id, false).then(sendGameOver));
-	}
-
-	const updateGamePromise = GameDuel.updateOne(
+	await GameDuel.updateOne(
 		{ _id: duelId },
 		{ $push: { history: { $each: autoBundles } }, $set: { winner } },
 	);
-	promises.push(updateGamePromise);
+};
 
-	await Promise.all(promises);
+const sendGameOver = async (
+	duel: IGameDuel,
+	winner: string,
+	send: ResponseSender,
+) => {
+	const loser =
+		duel.config.firstPlayer.id === winner
+			? duel.config.secondPlayer.id
+			: duel.config.firstPlayer.id;
+
+	const [winnerPoints, loserPoints] = await Promise.all([
+		safeAddGamePoints(winner, duel.id, true),
+		safeAddGamePoints(loser, duel.id, false),
+	]);
+
+	await send({ winner, winnerPoints, loserPoints }, EventType.GameOver);
 };
 
 export const runBundles = (duel: DuelState, bundles: DuelCommandBundle[]) => {

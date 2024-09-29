@@ -46,15 +46,21 @@ export const incomingBundles = ({ level, bundles }: IncomingBundles): void => {
 
 interface GameOver {
 	winner: string;
-	claimedPoints?: number;
+	winnerPoints: number;
+	loserPoints: number;
 }
 
-export const gameOver = ({ winner, claimedPoints = 0 }: GameOver): void => {
+export const gameOver = ({
+	winner,
+	winnerPoints,
+	loserPoints,
+}: GameOver): void => {
 	if (system.winner) return;
+	system.winner = winner;
 
 	const isVictory = system.playerIds.me === winner;
+	const claimedPoints = isVictory ? winnerPoints : loserPoints;
 
-	system.winner = winner;
 	showEndGameRibbon(isVictory, claimedPoints);
 };
 
