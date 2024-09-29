@@ -1,6 +1,7 @@
 import { Quest } from 'models/quest';
 import type { IUser } from 'models/user';
 import { virtualId } from 'models/utils';
+import { Types } from 'mongoose';
 import type { QueryResolvers } from 'utils/types';
 import { QuestStatus } from 'utils/types';
 
@@ -9,6 +10,7 @@ export const quests: QueryResolvers['quests'] = async (
 	{ status },
 	{ user },
 ) => {
+	console.log('query quest', user);
 	if (!user) {
 		return await Quest.find({ status: status || QuestStatus.Live });
 	} else {
@@ -18,6 +20,7 @@ export const quests: QueryResolvers['quests'] = async (
 
 const getQuestsWithAction = async (status: QuestStatus, user: IUser) => {
 	// TODO: this aggregate should follow resolver chains
+	const userId = Types.ObjectId.createFromHexString(user.id);
 	let quests = await Quest.aggregate([
 		{
 			$match: { status: status || QuestStatus.Live },
@@ -32,7 +35,7 @@ const getQuestsWithAction = async (status: QuestStatus, user: IUser) => {
 							$expr: {
 								$and: [
 									{ $eq: ['$$questId', '$questId'] },
-									{ $eq: ['$userId', user.id] },
+									{ $eq: ['$userId', userId] },
 								],
 							},
 						},
