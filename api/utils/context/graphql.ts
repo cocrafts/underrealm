@@ -1,10 +1,5 @@
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
-import {
-	generateRandomCode,
-	getRandomAvatar,
-	REFERRAL_CODE_LENGTH,
-} from 'utils/common';
 import { ForbiddenError } from 'utils/errors';
 import type { ResolverFn } from 'utils/types';
 
@@ -36,8 +31,6 @@ export const resolveUniversalContext = async ({
 				bindingId: cognitoUser.username,
 				address: cognitoUser.wallet,
 				email: cognitoUser.email,
-				avatarUrl: getRandomAvatar(),
-				referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 			});
 		}
 	}
