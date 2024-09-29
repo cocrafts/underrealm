@@ -7,13 +7,18 @@ import { verifyToken } from './jwt';
 
 export type UserProfile = IUser;
 
-export type ApiContext = {
+export type WebsocketContext = {
+	connectionId?: string;
+};
+
+export type UserContext = {
 	user?: UserProfile;
 };
 
+export type ApiContext = WebsocketContext & UserContext;
+
 type ContextOptions = {
 	authHeader?: string;
-	isIntrospection?: boolean;
 };
 
 export const resolveUniversalContext = async ({
@@ -38,7 +43,12 @@ export const resolveUniversalContext = async ({
 };
 
 export const requireAuth = <TResult, TParent, TArgs>(
-	resolver: ResolverFn<TResult, TParent, Required<ApiContext>, TArgs>,
+	resolver: ResolverFn<
+		TResult,
+		TParent,
+		Required<UserContext> & WebsocketContext,
+		TArgs
+	>,
 ): ResolverFn<TResult, TParent, ApiContext, TArgs> => {
 	return (root, parent, context, args) => {
 		if (!context.user) {

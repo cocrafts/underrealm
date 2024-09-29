@@ -8,7 +8,7 @@ import type { SubscriptionResolvers } from 'utils/types';
 import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
-	subscribe: async (_, { userId }) => {
+	subscribe: async (_, { userId }, { connectionId }) => {
 		const topic = topicGenerator.findMatch({ userId });
 
 		/**
@@ -32,7 +32,11 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 				publishFindMatch(opponentTopic, opponentId, duel.id),
 			]);
 		} else {
-			await MatchFinding.create({ userId: userId, pubsubTopic: topic });
+			await MatchFinding.create({
+				userId: userId,
+				pubsubTopic: topic,
+				connectionId,
+			});
 		}
 
 		return subscribed;

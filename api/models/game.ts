@@ -218,9 +218,10 @@ export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
 type IMatchFinding = {
 	userId: string;
 	pubsubTopic: string;
+	connectionId: string;
 };
 
-const matchFindingSchema = createSchema({
+const MatchFindingSchema = createSchema({
 	userId: {
 		type: String,
 		required: true,
@@ -231,9 +232,13 @@ const matchFindingSchema = createSchema({
 		required: true,
 		unique: true,
 	},
+	connectionId: {
+		type: String,
+		unique: true,
+	},
 });
 
 export const MatchFinding = model<IMatchFinding>(
 	'MatchFinding',
-	matchFindingSchema,
+	MatchFindingSchema,
 );

@@ -6,6 +6,7 @@ import { handleGameEvent } from 'game/playing';
 import { GraphQLError, parse, subscribe, validate } from 'graphql';
 import { StatusCodes } from 'http-status-codes';
 import { mongo } from 'models';
+import { MatchFinding } from 'models/game';
 import { postToConnection } from 'utils/aws/gateway';
 import { globalContext } from 'utils/context/index.lambda';
 import { pubsub } from 'utils/pubsub/index.lambda';
@@ -88,7 +89,10 @@ const handleConnect: APIGatewayProxyWebsocketHandlerV2 = async (event) => {
 	return ok();
 };
 
-const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async () => {
+const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async (event) => {
+	const connectionId = event.requestContext.connectionId;
+	await MatchFinding.deleteOne({ connectionId });
+
 	return ok();
 };
 
@@ -128,7 +132,9 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 				rootValue: {},
 				operationName: operationName,
 				variableValues: variables,
-				contextValue: {},
+				contextValue: {
+					connectionId: event.requestContext.connectionId,
+				},
 			});
 		} catch (error) {
 			await postToConnection(connectionId, {
