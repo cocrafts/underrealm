@@ -65,16 +65,18 @@
     "testMatch": [
       "**/*.test.ts"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
     "moduleNameMapper": {
       "^models/(.*)$": "<rootDir>/models/$1",
-      "^social/(.*)$": "<rootDir>/social/$1"
+      "^social/(.*)$": "<rootDir>/social/$1",
+      "^utils/(.*)$": "<rootDir>/utils/$1"
     }
   },
   "babel": {
     "presets": [
-      [
-        "@babel/preset-env"
-      ],
+      "@babel/preset-env",
       "@babel/preset-typescript"
     ]
   }
