@@ -1,4 +1,5 @@
 import { model, Types } from 'mongoose';
+import { getStartOfToday } from 'utils/common/date';
 import { logger } from 'utils/logger';
 
 import { User } from './user';
@@ -25,26 +26,17 @@ export const PointsHistory = model<IPointsHistory>(
 	PointsHistorySchema,
 );
 
-const WINNER_POINTS = 50;
-const LOSER_POINTS = 10;
-const MAX_GAME_POINTS_PER_DAY = 200;
+export const WINNER_POINTS = 50;
+export const LOSER_POINTS = 10;
+export const MAX_GAME_POINTS_PER_DAY = 200;
 
 export const safeAddGamePoints = async (
 	userId: string,
 	duelId: string,
 	isWinner: boolean,
 ): Promise<number> => {
+	const totalPointsToday = await getTotalGamePointsToday(userId);
 	try {
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-
-		const result = await PointsHistory.aggregate([
-			{ $match: { userId, source: 'GAME', createdAt: { $gte: today } } },
-			{ $group: { _id: null, totalPoints: { $sum: '$points' } } },
-		]);
-
-		const totalPointsToday = result.length > 0 ? result[0].totalPoints : 0;
-
 		if (totalPointsToday < MAX_GAME_POINTS_PER_DAY) {
 			const expectedPoints = isWinner ? WINNER_POINTS : LOSER_POINTS;
 
@@ -69,4 +61,22 @@ export const safeAddGamePoints = async (
 	}
 
 	return 0;
+};
+
+export const getTotalGamePointsToday = async (userId: string) => {
+	const today = getStartOfToday();
+	const result = await PointsHistory.aggregate([
+		{
+			$match: {
+				userId: Types.ObjectId.createFromHexString(userId),
+				source: 'GAME',
+				createdAt: { $gte: today },
+			},
+		},
+		{ $group: { _id: null, totalPoints: { $sum: '$points' } } },
+	]);
+
+	const totalPointsToday = result.length > 0 ? result[0].totalPoints : 0;
+
+	return totalPointsToday;
 };
