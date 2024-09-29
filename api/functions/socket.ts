@@ -24,6 +24,7 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 	await Promise.all(initPromises);
 	const connectionId = event.requestContext.connectionId;
 	globalContext.connectionId = connectionId;
+	globalContext.subscriptionId = ''; // must reset per request
 
 	try {
 		/**
