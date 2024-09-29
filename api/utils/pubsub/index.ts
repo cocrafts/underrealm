@@ -1,9 +1,13 @@
 import { PubSub } from 'graphql-subscriptions';
 import { broadcastMessage } from 'utils/ws';
 
+import { graphqlEventTypes } from './utils';
+
 class GeneralPubsub extends PubSub {
 	async publish(triggerName: string, payload): Promise<void> {
-		if (payload.type && !graphqlEventTypes.includes(payload.type)) {
+		const isNonGraphql =
+			payload.type && !graphqlEventTypes.includes(payload.type);
+		if (isNonGraphql) {
 			/**
 			 * Handle general subscription, not graphql subscription
 			 */
@@ -30,14 +34,5 @@ export const pubsub = {
 		return _pubsub.publish(topic, payload);
 	},
 };
-
-const graphqlEventTypes = [
-	'connection_init',
-	'connection_terminate',
-	'subscribe',
-	'next',
-	'complete',
-	'connection_terminate',
-];
 
 export * from './utils';

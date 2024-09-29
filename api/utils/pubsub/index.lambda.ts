@@ -5,6 +5,8 @@ import { logger } from 'utils/logger';
 import { redis } from 'utils/redis';
 import { v4 as uuidv4 } from 'uuid';
 
+import { graphqlEventTypes } from './utils';
+
 export * from './utils';
 
 logger.info('Use Lambda Pubsub');
@@ -77,11 +79,17 @@ export const pubsub = {
 			const connectionId = subscription.split('.')[0];
 			const subscriptionId = subscriptionKey.split('#')[1];
 
-			return await postToConnection(connectionId, {
-				id: subscriptionId,
-				type: 'next',
-				data: payload,
-			});
+			const isNonGraphql =
+				payload.type && !graphqlEventTypes.includes(payload.type);
+			if (isNonGraphql) {
+				return await postToConnection(connectionId, payload);
+			} else {
+				return await postToConnection(connectionId, {
+					id: subscriptionId,
+					type: 'next',
+					payload: { data: payload },
+				});
+			}
 		});
 
 		await Promise.all(publishPromises);
