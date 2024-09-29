@@ -39,11 +39,9 @@ export const safeAddGamePoints = async (
 	try {
 		if (totalPointsToday < MAX_GAME_POINTS_PER_DAY) {
 			const expectedPoints = isWinner ? WINNER_POINTS : LOSER_POINTS;
+			const remainingPoints = MAX_GAME_POINTS_PER_DAY - totalPointsToday;
 
-			const points = Math.min(
-				expectedPoints,
-				MAX_GAME_POINTS_PER_DAY - expectedPoints,
-			);
+			const points = Math.min(expectedPoints, remainingPoints);
 
 			await PointsHistory.create({
 				userId,
