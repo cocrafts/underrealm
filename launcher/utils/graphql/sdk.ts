@@ -135,7 +135,6 @@ export type MutationMakeReferralArgs = {
 
 export type OpenLotteryResult = {
   __typename?: 'OpenLotteryResult';
-  id: Scalars['ID']['output'];
   items: Array<InventoryItem>;
   userId: Scalars['ID']['output'];
 };

@@ -135,7 +135,6 @@ export type MutationMakeReferralArgs = {
 
 export type OpenLotteryResult = {
   __typename?: 'OpenLotteryResult';
-  id: Scalars['ID']['output'];
   items: Array<InventoryItem>;
   userId: Scalars['ID']['output'];
 };
@@ -490,7 +489,6 @@ export type MutationResolvers<ContextType = ApiContext, ParentType extends Resol
 }>;
 
 export type OpenLotteryResultResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['OpenLotteryResult'] = ResolversParentTypes['OpenLotteryResult']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['InventoryItem']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

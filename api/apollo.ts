@@ -4,7 +4,7 @@ import { ApolloServer } from '@apollo/server';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { InventoryQueryResolvers } from 'inventory';
-import { LotteryMutationResolvers } from 'lottery';
+import { ItemMutationResolvers } from 'item';
 import { referred } from 'social/query/referral';
 import { refereeUser } from 'user';
 import { logger } from 'utils/logger';
@@ -30,7 +30,7 @@ const resolvers: Resolvers = {
 	Mutation: {
 		...GameMutationResolvers,
 		...SocialMutationResolvers,
-		...LotteryMutationResolvers,
+		...ItemMutationResolvers,
 	},
 	Subscription: {
 		...UserSubscriptionResolvers,

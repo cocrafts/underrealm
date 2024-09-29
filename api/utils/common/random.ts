@@ -22,3 +22,7 @@ export const AVATARS = [
 export const getRandomAvatar = () => {
 	return AVATARS[Math.floor(Math.random() * AVATARS.length)];
 };
+
+export const randInt = (left: number, right: number): number => {
+	return Math.floor(Math.random() * (right - left) + left);
+};

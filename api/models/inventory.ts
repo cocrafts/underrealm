@@ -3,7 +3,7 @@ import { model, Types } from 'mongoose';
 import { createSchema } from './utils';
 
 export type IInventoryItem = {
-	itemId: string;
+	itemId: Types.ObjectId;
 	amount: number;
 };
 
@@ -14,7 +14,7 @@ const inventoryItem = createSchema({
 
 export type IInventory = {
 	id: string;
-	userId: string;
+	userId: Types.ObjectId;
 	items: IInventoryItem[];
 };
 

@@ -93,7 +93,6 @@ type Mutation {
 }
 
 type OpenLotteryResult {
-  id: ID!
   items: [InventoryItem!]!
   userId: ID!
 }

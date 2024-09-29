@@ -151,7 +151,6 @@ type ReferralHistory {
 }
 
 type OpenLotteryResult {
-  id: ID!
   userId: ID!
   items: [InventoryItem!]!
 }

@@ -1,11 +1,7 @@
 import { model, Schema } from 'mongoose';
+import { type ItemType } from 'utils/common';
 
 import { createSchema } from './utils';
-
-export enum ItemType {
-	LOTTERY = 'LOTTERY',
-	CHEST = 'CHEST',
-}
 
 export type IItem = {
 	id: string;
