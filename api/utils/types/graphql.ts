@@ -102,10 +102,25 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type Inventory = {
+  __typename?: 'Inventory';
+  id: Scalars['String']['output'];
+  items: Array<InventoryItem>;
+  userId: Scalars['String']['output'];
+};
+
+export type InventoryItem = {
+  __typename?: 'InventoryItem';
+  amount: Scalars['Int']['output'];
+  itemId: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
+  openLottery?: Maybe<OpenLotteryResult>;
+  purchaseLottery?: Maybe<PointTransaction>;
 };
 
 
@@ -116,6 +131,22 @@ export type MutationCreateQuestActionArgs = {
 
 export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
+};
+
+export type OpenLotteryResult = {
+  __typename?: 'OpenLotteryResult';
+  id: Scalars['ID']['output'];
+  items: Array<InventoryItem>;
+  userId: Scalars['ID']['output'];
+};
+
+export type PointTransaction = {
+  __typename?: 'PointTransaction';
+  amount?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['String']['output'];
+  purchaseAt?: Maybe<Scalars['DateTime']['output']>;
+  type: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
 };
 
 export type Profile = {
@@ -136,6 +167,7 @@ export type Query = {
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
   greeting?: Maybe<Scalars['String']['output']>;
+  inventory?: Maybe<Inventory>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
@@ -303,7 +335,11 @@ export type ResolversTypes = ResolversObject<{
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Inventory: ResolverTypeWrapper<Inventory>;
+  InventoryItem: ResolverTypeWrapper<InventoryItem>;
   Mutation: ResolverTypeWrapper<{}>;
+  OpenLotteryResult: ResolverTypeWrapper<OpenLotteryResult>;
+  PointTransaction: ResolverTypeWrapper<PointTransaction>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
   Quest: ResolverTypeWrapper<Quest>;
@@ -331,7 +367,11 @@ export type ResolversParentTypes = ResolversObject<{
   DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Inventory: Inventory;
+  InventoryItem: InventoryItem;
   Mutation: {};
+  OpenLotteryResult: OpenLotteryResult;
+  PointTransaction: PointTransaction;
   Profile: Profile;
   Query: {};
   Quest: Quest;
@@ -429,9 +469,40 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type InventoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Inventory'] = ResolversParentTypes['Inventory']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['InventoryItem']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InventoryItemResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['InventoryItem'] = ResolversParentTypes['InventoryItem']> = ResolversObject<{
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
   makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
+  openLottery?: Resolver<Maybe<ResolversTypes['OpenLotteryResult']>, ParentType, ContextType>;
+  purchaseLottery?: Resolver<Maybe<ResolversTypes['PointTransaction']>, ParentType, ContextType>;
+}>;
+
+export type OpenLotteryResultResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['OpenLotteryResult'] = ResolversParentTypes['OpenLotteryResult']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['InventoryItem']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PointTransactionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['PointTransaction'] = ResolversParentTypes['PointTransaction']> = ResolversObject<{
+  amount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  purchaseAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
@@ -451,6 +522,7 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   cardDuelHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardDuelHistory']>>>, ParentType, ContextType, Partial<QueryCardDuelHistoryArgs>>;
   cardDuelPlaying?: Resolver<Maybe<ResolversTypes['CardDuelHistory']>, ParentType, ContextType>;
   greeting?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  inventory?: Resolver<Maybe<ResolversTypes['Inventory']>, ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType, Partial<QueryQuestsArgs>>;
   referralHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistory']>>>, ParentType, ContextType>;
@@ -505,7 +577,11 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   CardDuelSetting?: CardDuelSettingResolvers<ContextType>;
   CardPlayerConfig?: CardPlayerConfigResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  Inventory?: InventoryResolvers<ContextType>;
+  InventoryItem?: InventoryItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  OpenLotteryResult?: OpenLotteryResultResolvers<ContextType>;
+  PointTransaction?: PointTransactionResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Quest?: QuestResolvers<ContextType>;

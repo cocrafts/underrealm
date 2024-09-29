@@ -8,11 +8,14 @@ type Query {
   cardDuel(id: String!): CardDuel
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]
+  inventory: Inventory
 }
 
 type Mutation {
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
+  purchaseLottery: PointTransaction
+  openLottery: OpenLotteryResult
 }
 
 type Subscription {
@@ -145,4 +148,30 @@ type ReferralHistory {
   refereeUser: Profile
   claimedPoints: Int
   createdAt: DateTime
+}
+
+type OpenLotteryResult {
+  id: ID!
+  userId: ID!
+  items: [InventoryItem!]!
+}
+
+type InventoryItem {
+  itemId: String!
+  amount: Int!
+}
+
+type Inventory {
+  id: String!
+  userId: String!
+  items: [InventoryItem!]!
+}
+
+
+type  PointTransaction {
+  id: String!
+  type: String!
+  userId: String!
+  amount: Int
+  purchaseAt: DateTime
 }

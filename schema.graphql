@@ -74,9 +74,36 @@ type CardPlayerConfig {
 
 scalar DateTime
 
+type Inventory {
+  id: String!
+  items: [InventoryItem!]!
+  userId: String!
+}
+
+type InventoryItem {
+  amount: Int!
+  itemId: String!
+}
+
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
+  openLottery: OpenLotteryResult
+  purchaseLottery: PointTransaction
+}
+
+type OpenLotteryResult {
+  id: ID!
+  items: [InventoryItem!]!
+  userId: ID!
+}
+
+type PointTransaction {
+  amount: Int
+  id: String!
+  purchaseAt: DateTime
+  type: String!
+  userId: String!
 }
 
 type Profile {
@@ -95,6 +122,7 @@ type Query {
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   greeting: String
+  inventory: Inventory
   profile(address: String): Profile
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]
