@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { Version } from 'components/Version';
 import packageJSON from 'package.json';
 
 const initialLayout: LayoutRectangle = {
@@ -40,6 +41,7 @@ export const GameDuel: FC = () => {
 			{layout.width > 0 && (
 				<iframe ref={iFrameRef} style={frameStyle} src={iFrameSrc}></iframe>
 			)}
+			<Version />
 		</View>
 	);
 };
