@@ -11,6 +11,7 @@ import {
 } from '@walless/adapter-solana-base';
 import { useProfile } from 'utils/hooks';
 import { signOut } from 'utils/lib/auth';
+import { setPendingRedirect } from 'utils/lib/auth/redirect';
 import { noSelect } from 'utils/styles';
 
 interface Props {
@@ -65,6 +66,7 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	};
 
 	const innerSignOut = async () => {
+		setPendingRedirect();
 		await signOut();
 		modalActions.hide(config.id as string);
 	};

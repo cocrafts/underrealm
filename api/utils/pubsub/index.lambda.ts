@@ -3,6 +3,9 @@ import { postToConnection } from 'utils/aws/gateway';
 import { globalContext } from 'utils/context/index.lambda';
 import { logger } from 'utils/logger';
 import { redis } from 'utils/redis';
+import { v4 as uuidv4 } from 'uuid';
+
+import { graphqlEventTypes } from './utils';
 
 export * from './utils';
 
@@ -16,7 +19,12 @@ const DAY_IN_SECONDS = 60 * 60 * 24;
  */
 export const pubsub = {
 	subscribe: async (topics: string | string[]) => {
-		const { connectionId, subscriptionId } = globalContext;
+		const connectionId = globalContext.connectionId;
+		if (!connectionId) throw Error('require connection id to use this pubsub');
+		/**
+		 * Auto create subscription id to support general pubsub which does not follow graphql pubsub
+		 */
+		const subscriptionId = globalContext.subscriptionId || uuidv4();
 
 		if (typeof topics === 'string') {
 			const topic = topics;
@@ -71,11 +79,17 @@ export const pubsub = {
 			const connectionId = subscription.split('.')[0];
 			const subscriptionId = subscriptionKey.split('#')[1];
 
-			return await postToConnection(connectionId, {
-				id: subscriptionId,
-				type: 'next',
-				data: payload,
-			});
+			const isNonGraphql =
+				payload.type && !graphqlEventTypes.includes(payload.type);
+			if (isNonGraphql) {
+				return await postToConnection(connectionId, payload);
+			} else {
+				return await postToConnection(connectionId, {
+					id: subscriptionId,
+					type: 'next',
+					payload: { data: payload },
+				});
+			}
 		});
 
 		await Promise.all(publishPromises);

@@ -17,6 +17,8 @@ type LambdaIntegrationContext = LambdaContextFunctionArgument<
 	>
 >;
 
+export * from './graphql';
+
 /**
  * Context wrapper for Lambda runtime
  */
@@ -25,11 +27,9 @@ export const graphqlContext: ContextFunction<
 	ApiContext
 > = async ({ event }) => {
 	const authHeader = event.headers['authorization'];
-	const isIntrospection = event.body.includes('Introspection');
 
 	const context = await resolveUniversalContext({
 		authHeader,
-		isIntrospection,
 	});
 
 	return context;

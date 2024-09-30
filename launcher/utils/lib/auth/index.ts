@@ -10,6 +10,7 @@ import bs58 from 'bs58';
 
 import type { AuthError, ChallengedUser } from './internal';
 import { simpleId } from './internal';
+import { setPendingRedirect } from './redirect';
 
 export { signOut } from 'aws-amplify/auth';
 
@@ -26,9 +27,8 @@ export const extractJwt = async (): Promise<string | null> => {
 
 export const googleSignIn = async (): Promise<void> => {
 	await signOut();
-	return signInWithRedirect({
-		provider: 'Google',
-	});
+	setPendingRedirect();
+	return signInWithRedirect({ provider: 'Google' });
 };
 
 const loginMessage = (nonce: string) =>
@@ -39,6 +39,7 @@ export const walletSignIn = async (
 	signMessage?: (message: Uint8Array) => Promise<Uint8Array>,
 ): Promise<ChallengedUser> => {
 	await signOut();
+	setPendingRedirect();
 	try {
 		const { nextStep } = await signIn({
 			username: address,

@@ -113,6 +113,10 @@ export type InventoryItem = {
   __typename?: 'InventoryItem';
   amount: Scalars['Int']['output'];
   itemId: Scalars['String']['output'];
+export type MatchFound = {
+  __typename?: 'MatchFound';
+  id: Scalars['String']['output'];
+  jwt: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -240,7 +244,7 @@ export type ReferralHistory = {
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
-  findMatch?: Maybe<CardDuel>;
+  findMatch?: Maybe<MatchFound>;
 };
 
 
@@ -296,7 +300,7 @@ export type FindMatchSubscriptionVariables = Exact<{
 }>;
 
 
-export type FindMatchSubscription = { __typename?: 'Subscription', findMatch?: { __typename?: 'CardDuel', id?: string | null } | null };
+export type FindMatchSubscription = { __typename?: 'Subscription', findMatch?: { __typename?: 'MatchFound', id: string, jwt: string } | null };
 
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
@@ -588,6 +592,7 @@ export const FindMatchDocument = gql`
     subscription FindMatch($userId: String!) {
   findMatch(userId: $userId) {
     id
+    jwt
   }
 }
     `;
@@ -613,4 +618,3 @@ export function useFindMatchSubscription(baseOptions: Apollo.SubscriptionHookOpt
         return Apollo.useSubscription<FindMatchSubscription, FindMatchSubscriptionVariables>(FindMatchDocument, options);
       }
 export type FindMatchSubscriptionHookResult = ReturnType<typeof useFindMatchSubscription>;
-export type FindMatchSubscriptionResult = Apollo.SubscriptionResult<FindMatchSubscription>;

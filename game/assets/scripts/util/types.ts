@@ -1,6 +1,6 @@
 import type { DuelCommandBundle, DuelConfig } from '@underrealm/murg';
 
-export enum DuelCommands {
+export enum GameEventType {
 	ConnectMatch = 'ConnectMatch',
 	SendBundle = 'SendBundle',
 	CardHover = 'CardHover',
@@ -9,30 +9,22 @@ export enum DuelCommands {
 
 export interface JwtPayload {
 	userId: string;
-	duelId: string;
+	matchId: string;
 }
 
 export interface CommandPayload {
+	action: 'game';
 	jwt: string;
-	client: string;
-	command: DuelCommands;
+	type: GameEventType;
 	context?: JwtPayload;
 	send?: (payload: Record<string, never>) => Promise<void>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	payload?: any;
+	payload?: unknown;
 }
 
 export interface CommandResponse {
-	isMyCommand?: boolean;
-	command: DuelCommands;
+	userId: string;
+	type: GameEventType;
 	payload: never;
-}
-
-export interface ServerState {
-	jwt?: string;
-	context?: JwtPayload;
-	config?: DuelConfig;
-	history?: DuelCommandBundle[];
 }
 
 export interface PlayerIds {
@@ -40,7 +32,7 @@ export interface PlayerIds {
 	enemy: string;
 }
 
-export interface CardDuel {
+export interface GameDuel {
 	id: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];

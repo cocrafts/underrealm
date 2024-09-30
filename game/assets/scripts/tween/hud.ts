@@ -1,4 +1,4 @@
-import { Label, Sprite, tween, UIOpacity, Vec3 } from 'cc';
+import { Label, RichText, Sprite, tween, UIOpacity, Vec3 } from 'cc';
 
 import { playBackgroundSound, playEffectSound } from '../util/resources';
 import { system } from '../util/system';
@@ -33,7 +33,10 @@ export const showTurnRibbon = async (message: string): Promise<void> => {
 	});
 };
 
-export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
+export const showEndGameRibbon = async (
+	isVictory: boolean,
+	claimedPoints: number,
+): Promise<void> => {
 	return new Promise((resolve) => {
 		const node = system.globalNodes.duelRibbon;
 		const sound = isVictory ? 'victory' : 'defeat';
@@ -45,6 +48,11 @@ export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
 			? 'Victory!'
 			: 'Defeat!';
 
+		node.getChildByPath('ribbon/coin/label').getComponent(RichText).string =
+			claimedPoints !== 0
+				? claimedPoints.toString()
+				: 'You already claimed max points today';
+
 		system.globalNodes.playerHand.parent =
 			system.globalNodes.board.getChildByPath('Surface');
 		tween(system.globalNodes.fog.getComponent(UIOpacity))
@@ -54,7 +62,7 @@ export const showEndGameRibbon = async (isVictory: boolean): Promise<void> => {
 		tween(node)
 			.set({
 				scale: new Vec3(0, 0, 1),
-				position: new Vec3(0, -54, 0),
+				position: new Vec3(0, -34, 0),
 			})
 			.call(() => {
 				playBackgroundSound(sound, 0.5, false);

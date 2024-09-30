@@ -20,7 +20,7 @@ type Mutation {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): CardDuel
+  findMatch(userId: String!): MatchFound
 }
 
 type Profile {
@@ -32,6 +32,11 @@ type Profile {
   referred: ReferralHistory
   referralCode: String!
   points: Int!
+}
+
+type MatchFound {
+  id: String!
+  jwt: String!
 }
 
 type CardDuelSetting {

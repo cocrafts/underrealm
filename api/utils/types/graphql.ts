@@ -113,6 +113,10 @@ export type InventoryItem = {
   __typename?: 'InventoryItem';
   amount: Scalars['Int']['output'];
   itemId: Scalars['String']['output'];
+export type MatchFound = {
+  __typename?: 'MatchFound';
+  id: Scalars['String']['output'];
+  jwt: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -240,7 +244,7 @@ export type ReferralHistory = {
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
-  findMatch?: Maybe<CardDuel>;
+  findMatch?: Maybe<MatchFound>;
 };
 
 
@@ -336,6 +340,7 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Inventory: ResolverTypeWrapper<Inventory>;
   InventoryItem: ResolverTypeWrapper<InventoryItem>;
+  MatchFound: ResolverTypeWrapper<MatchFound>;
   Mutation: ResolverTypeWrapper<{}>;
   OpenLotteryResult: ResolverTypeWrapper<OpenLotteryResult>;
   PointTransaction: ResolverTypeWrapper<PointTransaction>;
@@ -368,6 +373,7 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int']['output'];
   Inventory: Inventory;
   InventoryItem: InventoryItem;
+  MatchFound: MatchFound;
   Mutation: {};
   OpenLotteryResult: OpenLotteryResult;
   PointTransaction: PointTransaction;
@@ -478,6 +484,9 @@ export type InventoryResolvers<ContextType = ApiContext, ParentType extends Reso
 export type InventoryItemResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['InventoryItem'] = ResolversParentTypes['InventoryItem']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['MatchFound'] = ResolversParentTypes['MatchFound']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  jwt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -560,7 +569,7 @@ export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extend
 
 export type SubscriptionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   counterIncreased?: SubscriptionResolver<ResolversTypes['Int'], "counterIncreased", ParentType, ContextType>;
-  findMatch?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "findMatch", ParentType, ContextType, RequireFields<SubscriptionFindMatchArgs, 'userId'>>;
+  findMatch?: SubscriptionResolver<Maybe<ResolversTypes['MatchFound']>, "findMatch", ParentType, ContextType, RequireFields<SubscriptionFindMatchArgs, 'userId'>>;
 }>;
 
 export type Resolvers<ContextType = ApiContext> = ResolversObject<{
@@ -577,6 +586,7 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   Inventory?: InventoryResolvers<ContextType>;
   InventoryItem?: InventoryItemResolvers<ContextType>;
+  MatchFound?: MatchFoundResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   OpenLotteryResult?: OpenLotteryResultResolvers<ContextType>;
   PointTransaction?: PointTransactionResolvers<ContextType>;

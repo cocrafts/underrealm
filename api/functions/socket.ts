@@ -2,9 +2,11 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 	APIGatewayProxyWebsocketHandlerV2,
 } from 'aws-lambda';
+import { handleGameEvent } from 'game/playing';
 import { GraphQLError, parse, subscribe, validate } from 'graphql';
 import { StatusCodes } from 'http-status-codes';
 import { mongo } from 'models';
+import { MatchFinding } from 'models/game';
 import { postToConnection } from 'utils/aws/gateway';
 import { globalContext } from 'utils/context/index.lambda';
 import { pubsub } from 'utils/pubsub/index.lambda';
@@ -21,8 +23,13 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 ) => {
 	await Promise.all(initPromises);
 	const connectionId = event.requestContext.connectionId;
+	globalContext.connectionId = connectionId;
+	globalContext.subscriptionId = ''; // must reset per request
 
 	try {
+		/**
+		 * routeKey is inferred by `action` field of event `body`
+		 */
 		switch (event.requestContext.routeKey) {
 			case '$connect': {
 				const result = await handleConnect(event, context, callback);
@@ -43,6 +50,12 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 				if (result) return result;
 				break;
 			}
+			case 'game': {
+				if (!event.body) throw Error('Require event body for game action');
+				const payload = JSON.parse(event.body);
+				await handleGameEvent(payload);
+				break;
+			}
 			default: {
 				return {
 					statusCode: StatusCodes.BAD_REQUEST,
@@ -56,6 +69,7 @@ export const handler: APIGatewayProxyWebsocketHandlerV2 = async (
 			type: 'error',
 		});
 	}
+
 	return ok();
 };
 
@@ -76,7 +90,10 @@ const handleConnect: APIGatewayProxyWebsocketHandlerV2 = async (event) => {
 	return ok();
 };
 
-const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async () => {
+const handleDisconnect: APIGatewayProxyWebsocketHandlerV2 = async (event) => {
+	const connectionId = event.requestContext.connectionId;
+	await MatchFinding.deleteOne({ connectionId });
+
 	return ok();
 };
 
@@ -89,7 +106,6 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 	const operation = JSON.parse(event.body);
 	const connectionId = event.requestContext.connectionId;
 	const subscriptionId = operation.id;
-	globalContext.connectionId = connectionId;
 	globalContext.subscriptionId = subscriptionId;
 
 	if (operation.type === 'connection_init') {
@@ -117,7 +133,9 @@ const handleGraphqlSubscription: APIGatewayProxyWebsocketHandlerV2 = async (
 				rootValue: {},
 				operationName: operationName,
 				variableValues: variables,
-				contextValue: {},
+				contextValue: {
+					connectionId: event.requestContext.connectionId,
+				},
 			});
 		} catch (error) {
 			await postToConnection(connectionId, {

@@ -5,20 +5,18 @@ import { replay } from '../replay';
 import { raiseHandCard, showEndGameRibbon } from '../tween';
 import { extractPlayerIds } from '../util/helper';
 import { system } from '../util/system';
-import type { CardDuel, JwtPayload } from '../util/types';
+import type { GameDuel } from '../util/types';
 
 import { mergeRemoteHistory } from './util';
 
 const { selectHand, getInitialState, mergeFragmentToState } = Engine;
 
 interface ConnectPayload {
-	jwt: string;
-	context: JwtPayload;
-	duel: CardDuel;
+	duel: GameDuel;
 }
 
 export const connect = (
-	{ jwt, context, duel }: ConnectPayload,
+	{ duel }: ConnectPayload,
 	isMyCommand: boolean,
 ): void => {
 	if (system.winner || !isMyCommand) return;
@@ -27,8 +25,7 @@ export const connect = (
 	const state = getInitialState(config);
 
 	mergeFragmentToState(system.duel, state);
-	system.serverState = { jwt, context, config, history: [] };
-	system.playerIds = extractPlayerIds(config, context.userId);
+	system.playerIds = extractPlayerIds(config, system.userId);
 	system.globalNodes.board?.emit('stateReady');
 
 	mergeRemoteHistory(history, 0);
@@ -49,15 +46,22 @@ export const incomingBundles = ({ level, bundles }: IncomingBundles): void => {
 
 interface GameOver {
 	winner: string;
+	winnerPoints: number;
+	loserPoints: number;
 }
 
-export const gameOver = ({ winner }: GameOver): void => {
+export const gameOver = ({
+	winner,
+	winnerPoints,
+	loserPoints,
+}: GameOver): void => {
 	if (system.winner) return;
+	system.winner = winner;
 
 	const isVictory = system.playerIds.me === winner;
+	const claimedPoints = isVictory ? winnerPoints : loserPoints;
 
-	system.winner = winner;
-	showEndGameRibbon(isVictory);
+	showEndGameRibbon(isVictory, claimedPoints);
 };
 
 interface CardHover {

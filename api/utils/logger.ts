@@ -15,9 +15,11 @@ export const logger = createLogger({
 });
 
 function localLogFormat() {
-	return format.printf(({ level, message, timestamp }) => {
+	return format.printf(({ level, message, timestamp, ...meta }) => {
 		const date = new Date(timestamp);
-		const msg = `${date.toLocaleTimeString()} [${level}]: ${message}`;
+		const metaPart =
+			Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : '';
+		const msg = `${date.toLocaleTimeString()} [${level}]: ${message}${metaPart}`;
 		if (level === 'error') {
 			return chalk.red(msg);
 		} else if (level === 'warn') {

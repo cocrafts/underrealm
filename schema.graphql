@@ -83,6 +83,9 @@ type Inventory {
 type InventoryItem {
   amount: Int!
   itemId: String!
+type MatchFound {
+  id: String!
+  jwt: String!
 }
 
 type Mutation {
@@ -171,5 +174,4 @@ type ReferralHistory {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): CardDuel
-}
+  findMatch(userId: String!): MatchFound
