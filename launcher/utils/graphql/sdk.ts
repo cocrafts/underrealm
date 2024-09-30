@@ -196,7 +196,9 @@ export enum QuestStatus {
 }
 
 export enum QuestType {
+  ChatDiscord = 'CHAT_DISCORD',
   CommentX = 'COMMENT_X',
+  FollowX = 'FOLLOW_X',
   JoinDiscord = 'JOIN_DISCORD',
   LikeX = 'LIKE_X',
   RetweetX = 'RETWEET_X'
