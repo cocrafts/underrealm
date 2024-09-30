@@ -50,8 +50,8 @@ export const showEndGameRibbon = async (
 
 		node.getChildByPath('ribbon/coin/label').getComponent(RichText).string =
 			claimedPoints !== 0
-				? claimedPoints.toString()
-				: 'You already claimed max points today';
+				? `<color='#ffffff'>${claimedPoints}</color>`
+				: `<color='#F2E0C3'>You already claimed max points today</color>`;
 
 		system.globalNodes.playerHand.parent =
 			system.globalNodes.board.getChildByPath('Surface');
