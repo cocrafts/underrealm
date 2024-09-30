@@ -5,21 +5,28 @@ import { logger } from 'utils/logger';
 import { User } from './user';
 import { createSchema } from './utils';
 
+export enum PointLogType {
+	GAME = 'GAME',
+	QUEST = 'QUEST',
+	BUY_ITEM = 'BUY_LOTTERY',
+}
+
 export type IPointsHistory = {
 	id: string;
 	userId: string;
 	bindingId: string;
-	source: 'GAME' | 'QUEST';
+	source: PointLogType;
+	points: number;
 };
 
 const PointsHistorySchema = createSchema({
 	userId: { type: Types.ObjectId, ref: 'User', required: true },
 	bindingId: { type: Types.ObjectId, required: true },
-	source: { type: String, enum: ['GAME', 'QUEST'], required: true },
+	source: { type: String, enum: Object.values(PointLogType), required: true },
 	points: { type: Number, required: true },
 });
 
-PointsHistorySchema.index({ userId: 1, bindingId: 1 }, { unique: true });
+// PointsHistorySchema.index({ userId: 1, bindingId: 1 }, { unique: true });
 
 export const PointsHistory = model<IPointsHistory>(
 	'PointsHistory',

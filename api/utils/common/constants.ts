@@ -1,6 +1,6 @@
-export const REFERRAL_CODE_LENGTH = 7;
-
 import type { IItem } from 'models/item';
+
+export const REFERRAL_CODE_LENGTH = 7;
 
 export enum ItemType {
 	LOTTERY = 'LOTTERY',

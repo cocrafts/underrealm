@@ -14,7 +14,7 @@ type Query {
 type Mutation {
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
-  purchaseLottery: PointTransaction
+  purchaseLottery: PointHistory
   openLottery: OpenLotteryResult
 }
 
@@ -172,10 +172,10 @@ type Inventory {
 }
 
 
-type  PointTransaction {
+type  PointHistory {
   id: String!
-  type: String!
+  source: String!
   userId: String!
-  amount: Int
-  purchaseAt: DateTime
+  bindingId: String!
+  points: Int
 }
