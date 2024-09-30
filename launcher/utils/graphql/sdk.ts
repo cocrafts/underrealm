@@ -113,6 +113,8 @@ export type InventoryItem = {
   __typename?: 'InventoryItem';
   amount: Scalars['Int']['output'];
   itemId: Scalars['String']['output'];
+};
+
 export type MatchFound = {
   __typename?: 'MatchFound';
   id: Scalars['String']['output'];
@@ -124,7 +126,7 @@ export type Mutation = {
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
   openLottery?: Maybe<OpenLotteryResult>;
-  purchaseLottery?: Maybe<PointTransaction>;
+  purchaseLottery?: Maybe<PointHistory>;
 };
 
 
@@ -143,12 +145,12 @@ export type OpenLotteryResult = {
   userId: Scalars['ID']['output'];
 };
 
-export type PointTransaction = {
-  __typename?: 'PointTransaction';
-  amount?: Maybe<Scalars['Int']['output']>;
+export type PointHistory = {
+  __typename?: 'PointHistory';
+  bindingId: Scalars['String']['output'];
   id: Scalars['String']['output'];
-  purchaseAt?: Maybe<Scalars['DateTime']['output']>;
-  type: Scalars['String']['output'];
+  points?: Maybe<Scalars['Int']['output']>;
+  source: Scalars['String']['output'];
   userId: Scalars['String']['output'];
 };
 
@@ -618,3 +620,4 @@ export function useFindMatchSubscription(baseOptions: Apollo.SubscriptionHookOpt
         return Apollo.useSubscription<FindMatchSubscription, FindMatchSubscriptionVariables>(FindMatchDocument, options);
       }
 export type FindMatchSubscriptionHookResult = ReturnType<typeof useFindMatchSubscription>;
+export type FindMatchSubscriptionResult = Apollo.SubscriptionResult<FindMatchSubscription>;

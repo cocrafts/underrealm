@@ -8658,6 +8658,7 @@ __metadata:
   dependencies:
     "@types/prompts": "npm:^2"
     "@underrealm/api": "npm:*"
+    csv-parse: "npm:^5.5.6"
     dotenv: "npm:^16.4.5"
     prompts: "npm:^2.4.2"
     rimraf: "npm:^6.0.1"

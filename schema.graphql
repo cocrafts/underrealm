@@ -83,6 +83,8 @@ type Inventory {
 type InventoryItem {
   amount: Int!
   itemId: String!
+}
+
 type MatchFound {
   id: String!
   jwt: String!
@@ -92,7 +94,7 @@ type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
   openLottery: OpenLotteryResult
-  purchaseLottery: PointTransaction
+  purchaseLottery: PointHistory
 }
 
 type OpenLotteryResult {
@@ -100,11 +102,11 @@ type OpenLotteryResult {
   userId: ID!
 }
 
-type PointTransaction {
-  amount: Int
+type PointHistory {
+  bindingId: String!
   id: String!
-  purchaseAt: DateTime
-  type: String!
+  points: Int
+  source: String!
   userId: String!
 }
 
@@ -175,3 +177,4 @@ type ReferralHistory {
 type Subscription {
   counterIncreased: Int!
   findMatch(userId: String!): MatchFound
+}
