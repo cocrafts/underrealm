@@ -5,7 +5,7 @@
 		"lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
 		"type-check": "tsc --noEmit",
 		"client": "node ./src/client.js",
-		"server": "node ./src/server.js"
+		"server": "nodemon ./src/server.js"
 	},
 	"devDependencies": {
 		"@swc-node/register": "^1.5.1",
@@ -27,8 +27,9 @@
 		"jsonwebtoken": "^9.0.0",
 		"lodash": "^4.17.21",
 		"module-alias": "^2.2.2",
+		"nodemon": "^3.1.7",
 		"react": "18.2.0",
-		"typescript": "5.3.3"
+		"typescript": "5.4.5"
 	},
 	"dependencies": {
 		"@types/express-ws": "^3.0.5",

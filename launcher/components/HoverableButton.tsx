@@ -1,4 +1,5 @@
-import { type FC, type RefAttributes, useState } from 'react';
+import type { FC, RefAttributes } from 'react';
+import { useState } from 'react';
 import type { PressableProps, StyleProp, View, ViewStyle } from 'react-native';
 import { Pressable } from 'react-native';
 

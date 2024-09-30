@@ -7,10 +7,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "paths": {
-      "types/*": ["./types/*"],
-      "resolvers/*": ["./resolvers/*"]
-    }
+    "paths": {}
   },
   "exclude": ["node_modules"]
 }

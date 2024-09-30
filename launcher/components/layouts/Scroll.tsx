@@ -10,6 +10,7 @@ import Animated, {
 import { dimensionState } from '@metacraft/ui';
 import InternalNavigation from 'components/Navigation/Internal';
 import { navigationHeight } from 'components/Navigation/shared';
+import Version from 'components/Version';
 import { useSnapshot } from 'utils/hooks';
 
 const FIXED_HEADER_HEIGHT = 68;
@@ -74,6 +75,7 @@ export const ScrollLayout: FC<Props> = ({
 			>
 				{children}
 			</Animated.ScrollView>
+			<Version />
 		</View>
 	);
 };

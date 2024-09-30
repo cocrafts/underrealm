@@ -31,142 +31,197 @@ import { model, Schema } from 'mongoose';
 
 import { createSchema } from './utils';
 
-type IGameMatch = {
+export type IGameDuel = {
+	id: string;
+	winner?: string;
 	config: DuelConfig;
-	commandBundles: DuelCommandBundle[];
+	history: DuelCommandBundle[];
 };
 
-const PlayerConfigSchema = new Schema<PlayerConfig>({
-	id: String,
-	deck: [String],
-});
+const PlayerConfigSchema = new Schema<PlayerConfig>(
+	{
+		id: String,
+		deck: [String],
+	},
+	{ id: false },
+);
 
-const CommandSourceSchema = new Schema<CommandSource>({
-	id: String,
-	index: Number,
-	owner: String,
-	place: { type: String, enum: DuelPlace },
-	type: { type: String, enum: CommandSourceType },
-});
+const CommandSourceSchema = new Schema<CommandSource>(
+	{
+		id: String,
+		index: Number,
+		owner: String,
+		place: { type: String, enum: DuelPlace },
+		type: { type: String, enum: CommandSourceType },
+	},
+	{ id: false },
+);
 
-const BoardTargetSchema = new Schema<BoardTarget>({
-	id: String,
-	index: Number,
-	owner: String,
-	place: { type: String, enum: DuelPlace },
-});
+const BoardTargetSchema = new Schema<BoardTarget>(
+	{
+		id: String,
+		index: Number,
+		owner: String,
+		place: { type: String, enum: DuelPlace },
+	},
+	{ id: false },
+);
 
-const TargetOptions = new Schema<TargetOptions>({
-	attack: Number,
-	health: Number,
-	defense: Number,
-	charge: Number,
-});
+const TargetOptions = new Schema<TargetOptions>(
+	{
+		attack: Number,
+		health: Number,
+		defense: Number,
+		charge: Number,
+	},
+	{ id: false },
+);
 
-const DuelCommandTargetSchema = new Schema<DuelCommandTarget>({
-	source: CommandSourceSchema,
-	from: BoardTargetSchema,
-	to: BoardTargetSchema,
-	options: TargetOptions,
-});
+const DuelCommandTargetSchema = new Schema<DuelCommandTarget>(
+	{
+		source: CommandSourceSchema,
+		from: BoardTargetSchema,
+		to: BoardTargetSchema,
+		options: TargetOptions,
+	},
+	{ id: false },
+);
 
-const AttributeSchema = new Schema<Attribute>({
-	attack: Number,
-	health: Number,
-	defense: Number,
-	charge: Number,
-});
+const AttributeSchema = new Schema<Attribute>(
+	{
+		attack: Number,
+		health: Number,
+		defense: Number,
+		charge: Number,
+	},
+	{ id: false },
+);
 
-const EffectSchema = new Schema<Effect>({
-	id: { type: String, enum: EffectIds },
-	life: Number,
-	reborn: new Schema<RebornEffect>({ count: Number }),
-	attributeStack: new Schema<AttributeStackEffect>({
-		targetId: { type: String, enum: EffectIds, required: true },
-		attribute: {
-			type: AttributeSchema,
-			required: true,
-		},
-	}),
-	cleaverAttack: new Schema<CleaverAttackEffect>({
-		type: { type: String, enum: CleaverType, required: true },
-		radius: { type: Number, required: true },
-		damage: Number,
-		damageFactor: Number,
-	}),
-	repeatAttack: new Schema<RepeatAttackEffect>({
-		count: { type: Number, required: true },
-	}),
-	ignoreDefense: new Schema<IgnoreDefenseEffect>({
-		defense: { type: Number, required: true },
-		defenseFactor: Number,
-	}),
-	explodeTimer: new Schema<ExplodeTimerEffect>({
-		radius: { type: Number, required: true },
-		damage: { type: Number, required: true },
-	}),
-	attribute: AttributeSchema,
-});
+const EffectSchema = new Schema<Effect>(
+	{
+		id: { type: String, enum: EffectIds },
+		life: Number,
+		reborn: new Schema<RebornEffect>({ count: Number }, { id: false }),
+		attributeStack: new Schema<AttributeStackEffect>(
+			{
+				targetId: { type: String, enum: EffectIds, required: true },
+				attribute: {
+					type: AttributeSchema,
+					required: true,
+				},
+			},
+			{ id: false },
+		),
+		cleaverAttack: new Schema<CleaverAttackEffect>(
+			{
+				type: { type: String, enum: CleaverType, required: true },
+				radius: { type: Number, required: true },
+				damage: Number,
+				damageFactor: Number,
+			},
+			{ id: false },
+		),
+		repeatAttack: new Schema<RepeatAttackEffect>(
+			{
+				count: { type: Number, required: true },
+			},
+			{ id: false },
+		),
+		ignoreDefense: new Schema<IgnoreDefenseEffect>(
+			{
+				defense: { type: Number, required: true },
+				defenseFactor: Number,
+			},
+			{ id: false },
+		),
+		explodeTimer: new Schema<ExplodeTimerEffect>(
+			{
+				radius: { type: Number, required: true },
+				damage: { type: Number, required: true },
+			},
+			{ id: false },
+		),
+		attribute: AttributeSchema,
+	},
+	{ id: false },
+);
 
-const DuelCommandPayload = new Schema<DuelCommandPayload>({
-	effectMap: { type: Map, of: EffectSchema },
-	gameOver: Boolean,
-	turn: Number,
-	phase: { type: String, enum: DuelPhases },
-	phaseOf: String,
-	perTurnDraw: Number,
-	perTurnHero: Number,
-	perTurnSpell: Number,
-	perTurnTroop: Number,
-});
+const DuelCommandPayloadSchema = new Schema<DuelCommandPayload>(
+	{
+		effectMap: { type: Map, of: EffectSchema },
+		gameOver: Boolean,
+		turn: Number,
+		phase: { type: String, enum: DuelPhases },
+		phaseOf: String,
+		perTurnDraw: Number,
+		perTurnHero: Number,
+		perTurnSpell: Number,
+		perTurnTroop: Number,
+		attack: Number,
+		health: Number,
+		defense: Number,
+		charge: Number,
+	},
+	{ id: false },
+);
 
-const DuelCommandSchema = new Schema<DuelCommand>({
-	type: { type: String, enum: DuelCommandType },
-	owner: String,
-	target: DuelCommandTargetSchema,
-	payload: new Schema({}),
-	amount: Number,
-});
+const DuelCommandSchema = new Schema<DuelCommand>(
+	{
+		type: { type: String, enum: DuelCommandType },
+		owner: String,
+		target: DuelCommandTargetSchema,
+		payload: DuelCommandPayloadSchema,
+		amount: Number,
+	},
+	{ id: false },
+);
 
-const DuelCommandBundleSchema = new Schema<DuelCommandBundle>({
-	turn: { type: Number, required: true },
-	group: { type: String, enum: BundleGroup },
-	phaseOf: String,
-	phase: { type: String, enum: DuelPhases },
-	commands: [DuelCommandSchema],
-});
+const DuelCommandBundleSchema = new Schema<DuelCommandBundle>(
+	{
+		turn: { type: Number, required: true },
+		group: { type: String, enum: BundleGroup },
+		phaseOf: String,
+		phase: { type: String, enum: DuelPhases },
+		commands: [DuelCommandSchema],
+	},
+	{ id: false },
+);
 
-const GameMatchSchema = createSchema({
+const GameDuelSchema = createSchema({
 	config: new Schema({
 		version: String,
-		firstMove: String,
+		firstMover: String,
 		firstPlayer: PlayerConfigSchema,
 		secondPlayer: PlayerConfigSchema,
-		setting: new Schema<DuelSetting>({
-			initialCardCount: Number,
-			initialPlayerHealth: Number,
-			elementalFactor: Number,
-			handSize: Number,
-			groundSize: Number,
-			maxAttachment: Number,
-			spellIncreaseCycle: Number,
-			perTurnDraw: Number,
-			perTurnHero: Number,
-			perTurnSpell: Number,
-			perTurnTroop: Number,
-		}),
+		setting: new Schema<DuelSetting>(
+			{
+				initialCardCount: Number,
+				initialPlayerHealth: Number,
+				elementalFactor: Number,
+				handSize: Number,
+				groundSize: Number,
+				maxAttachment: Number,
+				spellIncreaseCycle: Number,
+				perTurnDraw: Number,
+				perTurnHero: Number,
+				perTurnSpell: Number,
+				perTurnTroop: Number,
+			},
+			{ id: false },
+		),
 	}),
-	commandBundles: [DuelCommandBundleSchema],
+	history: [DuelCommandBundleSchema],
 });
 
-export const GameMatch = model<IGameMatch>('GameMatch', GameMatchSchema);
+export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
 
 type IMatchFinding = {
 	userId: string;
 	pubsubTopic: string;
+	connectionId: string;
 };
 
-const matchFindingSchema = createSchema({
+const MatchFindingSchema = createSchema({
 	userId: {
 		type: String,
 		required: true,
@@ -177,9 +232,13 @@ const matchFindingSchema = createSchema({
 		required: true,
 		unique: true,
 	},
+	connectionId: {
+		type: String,
+		unique: true,
+	},
 });
 
 export const MatchFinding = model<IMatchFinding>(
 	'MatchFinding',
-	matchFindingSchema,
+	MatchFindingSchema,
 );

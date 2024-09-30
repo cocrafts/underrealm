@@ -1,4 +1,5 @@
-import { type FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmButton from 'components/Marketplace/Button';

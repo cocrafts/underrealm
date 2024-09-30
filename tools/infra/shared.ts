@@ -66,6 +66,16 @@ export const DBEnvs = () => {
 	return getEnvsObjectByKeys(['MONGO_URI', 'REDIS_URI']);
 };
 
+export const JWTEnvs = (type: 'all' | 'private' | 'public' = 'public') => {
+	if (type === 'all') {
+		return getEnvsObjectByKeys(['GAME_JWT_PUBLIC_KEY', 'GAME_JWT_PRIVATE_KEY']);
+	} else if (type === 'public') {
+		return getEnvsObjectByKeys(['GAME_JWT_PUBLIC_KEY']);
+	} else if (type === 'private') {
+		return getEnvsObjectByKeys(['GAME_JWT_PRIVATE_KEY']);
+	}
+};
+
 export const getEnvsObjectByKeys = (keys: string[]) => {
 	const envs: Record<string, string> = {};
 

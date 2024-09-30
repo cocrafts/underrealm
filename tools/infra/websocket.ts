@@ -5,6 +5,7 @@ import {
 	DBEnvs,
 	defaultEnvs,
 	defaultLambdaConfigs,
+	JWTEnvs,
 	zoneId,
 } from './shared';
 
@@ -23,7 +24,7 @@ const socket = new sst.aws.Function('socket', {
 	...defaultLambdaConfigs($app.stage),
 	handler: 'api/functions/socket.handler',
 	copyFiles: [{ from: 'api/schema.graphql', to: 'schema.graphql' }],
-	environment: { ...defaultEnvs(), ...DBEnvs() },
+	environment: { ...defaultEnvs(), ...DBEnvs(), ...JWTEnvs('all') },
 	permissions: [
 		{
 			actions: ['execute-api:Invoke', 'execute-api:ManageConnections'],
@@ -35,5 +36,6 @@ const socket = new sst.aws.Function('socket', {
 wsAPI.route('$connect', socket.arn as never);
 wsAPI.route('$disconnect', socket.arn as never);
 wsAPI.route('$default', socket.arn as never);
+wsAPI.route('game', socket.arn as never);
 
 export { wsAPI };

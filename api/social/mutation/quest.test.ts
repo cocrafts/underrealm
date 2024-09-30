@@ -1,11 +1,7 @@
 import { Quest } from 'models/quest';
 import { User } from 'models/user';
 import { Types } from 'mongoose';
-import {
-	clearDatabase,
-	connectToTestDB,
-	disconnectTestDB,
-} from 'utils/mongoTestingServer';
+import { clearDatabase, connectToTestDB, disconnectTestDB } from 'utils/test';
 import type { Resolver } from 'utils/types';
 
 import { createQuestAction } from './quest';
