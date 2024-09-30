@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { Pressable, TextInput, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { modalActions, Text } from '@metacraft/ui';
 import UnderRealmLogo from 'components/Home/visuals/UnderRealmLogo';
@@ -23,6 +23,10 @@ export const ReferralModal = () => {
 		await makeReferral({ variables: { referralCode } });
 		refetchProfile();
 		modalActions.hide(REFERRAL_MODAL_ID);
+	};
+
+	const onPressDiscord = () => {
+		window.open('https://discord.com/invite/V8sTPscjnf', '_blank');
 	};
 
 	return (
@@ -67,6 +71,14 @@ export const ReferralModal = () => {
 						</TouchableOpacity>
 					)}
 				</View>
+
+				<Text style={styles.direction}>
+					To get referral code, please join our{' '}
+					<Pressable onPress={onPressDiscord}>
+						<Text style={styles.discordLink}>Discord</Text>
+					</Pressable>{' '}
+					for support.
+				</Text>
 			</View>
 		</View>
 	);
@@ -148,5 +160,16 @@ const stylesheet = createStyleSheet((_, { screen }) => ({
 	},
 	loading: {
 		alignSelf: 'center',
+	},
+	direction: {
+		fontSize: 13,
+		fontWeight: '400',
+		textAlign: 'center',
+		color: '#b8b8b8',
+	},
+	discordLink: {
+		color: 'rgb(168, 103, 0)',
+		fontWeight: '500',
+		opacity: 1,
 	},
 }));
