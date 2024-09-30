@@ -108,10 +108,19 @@ export type MatchFound = {
   jwt: Scalars['String']['output'];
 };
 
+export type MutateProfileProps = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>;
+  discordId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  telegramId?: InputMaybe<Scalars['String']['input']>;
+  twitterId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
+  updateProfile?: Maybe<Profile>;
 };
 
 
@@ -124,16 +133,24 @@ export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateProfileArgs = {
+  props?: InputMaybe<MutateProfileProps>;
+};
+
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   bindingId?: Maybe<Scalars['String']['output']>;
+  discordId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
+  telegramId?: Maybe<Scalars['String']['output']>;
+  twitterId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {

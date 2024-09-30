@@ -114,7 +114,7 @@ type CardDuelHistory {
   timestamp: String!
 }
 
-type MutateProfileProps {
+input MutateProfileProps {
   name: String
   avatarUrl: String
   discordId: String

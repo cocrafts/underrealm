@@ -108,10 +108,19 @@ export type MatchFound = {
   jwt: Scalars['String']['output'];
 };
 
+export type MutateProfileProps = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>;
+  discordId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  telegramId?: InputMaybe<Scalars['String']['input']>;
+  twitterId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
+  updateProfile?: Maybe<Profile>;
 };
 
 
@@ -124,16 +133,24 @@ export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateProfileArgs = {
+  props?: InputMaybe<MutateProfileProps>;
+};
+
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['String']['output']>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   bindingId?: Maybe<Scalars['String']['output']>;
+  discordId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
+  telegramId?: Maybe<Scalars['String']['output']>;
+  twitterId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -310,6 +327,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   MatchFound: ResolverTypeWrapper<MatchFound>;
+  MutateProfileProps: MutateProfileProps;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
@@ -339,6 +357,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   MatchFound: MatchFound;
+  MutateProfileProps: MutateProfileProps;
   Mutation: {};
   Profile: Profile;
   Query: {};
@@ -446,17 +465,21 @@ export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends Res
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
   makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
+  updateProfile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<MutationUpdateProfileArgs>>;
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   bindingId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  discordId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
+  telegramId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  twitterId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
