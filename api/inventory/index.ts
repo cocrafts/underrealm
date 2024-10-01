@@ -25,12 +25,12 @@ const inventory: QueryResolvers['inventory'] = async (root, _, { user }) => {
 			itemId: itemDetail.id,
 		};
 	});
-	const result = {
+
+	return {
 		id: userInventory.id,
 		userId: user.id,
 		items: itemsDetails,
-	} as never;
-	return result;
+	};
 };
 
 export const InventoryQueryResolvers = { inventory };

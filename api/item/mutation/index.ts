@@ -81,30 +81,6 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 		virtualId(systemLotteryInfo).id,
 		1,
 	);
-	// let increaseResponse = await Inventory.updateOne(
-	// 	{ userId: user.id, 'items.itemId': systemLotteryInfo.id },
-	// 	{ $inc: { 'items.$.amount': 1 } },
-	// );
-	//
-	// if (increaseResponse.modifiedCount == 0) {
-	//    // user don't have inventory item, push the item to
-	// 	increaseResponse = await Inventory.updateOne(
-	// 		{ userId: user.id },
-	// 		{
-	// 			$push: {
-	// 				items: {
-	// 					itemId: virtualId(systemLotteryInfo).id,
-	// 					amount: 1,
-	// 				},
-	// 			},
-	// 		},
-	//      {upsert: true},
-	// 	);
-	// 	if (increaseResponse.modifiedCount == 0) {
-	// 		throw new SystemError('failec to update user inventory');
-	// 	}
-	// }
-	//
 	const result = {
 		source: pointHistory.source,
 		id: pointHistory.id,
