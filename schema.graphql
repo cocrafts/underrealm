@@ -74,6 +74,11 @@ type CardPlayerConfig {
 
 scalar DateTime
 
+type MatchFound {
+  id: String!
+  jwt: String!
+}
+
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
@@ -127,7 +132,9 @@ enum QuestStatus {
 }
 
 enum QuestType {
+  CHAT_DISCORD
   COMMENT_X
+  FOLLOW_X
   JOIN_DISCORD
   LIKE_X
   RETWEET_X
@@ -144,5 +151,5 @@ type ReferralHistory {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): CardDuel
+  findMatch(userId: String!): MatchFound
 }

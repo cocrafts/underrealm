@@ -17,6 +17,8 @@ type LambdaIntegrationContext = LambdaContextFunctionArgument<
 	>
 >;
 
+export * from './graphql';
+
 /**
  * Context wrapper for Lambda runtime
  */

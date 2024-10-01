@@ -1,12 +1,12 @@
 import { createCommand } from '../command';
 import { getCard, getCardState } from '../utils/card';
 import { createCommandResult } from '../utils/helper';
-import {
-	type Attribute,
-	type CleaverAttackEffect,
-	EffectIds,
-	type SkillRunner,
+import type {
+	Attribute,
+	CleaverAttackEffect,
+	SkillRunner,
 } from '../utils/type';
+import { EffectIds } from '../utils/type';
 
 interface SkillOptions {
 	life: number;

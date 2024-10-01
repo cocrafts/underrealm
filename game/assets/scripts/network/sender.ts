@@ -4,36 +4,40 @@ import lodash from 'lodash';
 
 import { replay } from '../replay';
 import { system } from '../util/system';
-import type { CommandPayload } from '../util/types';
-import { DuelCommands } from '../util/types';
+import type { CommandPayload, JwtPayload } from '../util/types';
+import { GameEventType } from '../util/types';
 
-import { connectionInstance } from './util';
+import { ws } from './util';
 
 const { getCardState, selectHand, move, DuelPlace } = Engine;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const sendCommand = (command: DuelCommands, payload?: any): void => {
+export const send = (type: GameEventType, payload?: unknown): void => {
 	const data: CommandPayload = {
+		action: 'game',
 		jwt: system.jwt,
-		client: 'cardGame',
-		command,
+		type,
+		payload,
 	};
-
-	if (data) data.payload = payload;
-	connectionInstance.send(JSON.stringify(data));
+	ws.send(JSON.stringify(data));
 };
 
 export const sendConnect = (): void => {
 	const searchParams = new URLSearchParams(location.search);
-	const searchJwt = searchParams.get('jwt') as string;
-	const localStorageJwt = localStorage?.getItem('murgJwt');
+	const searchJwt = searchParams.get('jwt');
+	const localStorageJwt = localStorage?.getItem('GAME_JWT');
 
 	system.jwt = searchJwt || localStorageJwt;
-	sendCommand(DuelCommands.ConnectMatch);
+	if (system.jwt) {
+		const { userId, matchId } = decodeJwt(system.jwt);
+		system.userId = userId;
+		system.matchId = matchId;
+	}
+
+	send(GameEventType.ConnectMatch);
 };
 
 export const sendBundles = (bundles: DuelCommandBundle[]): void => {
-	sendCommand(DuelCommands.SendBundle, bundles);
+	send(GameEventType.SendBundle, bundles);
 
 	/* optimistic simulate command success, will be overrides by server response */
 	bundles.forEach((bundle) => {
@@ -73,7 +77,14 @@ export const internalSendCardHover = (
 	const hand = selectHand(system.duel, state.owner);
 	const index = hand.indexOf(cardId);
 
-	sendCommand(DuelCommands.CardHover, { index, isMouseIn });
+	send(GameEventType.CardHover, { index, isMouseIn });
 };
 
 export const sendCardHover = lodash.throttle(internalSendCardHover, 200);
+
+function decodeJwt(token: string): JwtPayload {
+	const base64UrlPayload = token.split('.')[1];
+	const base64 = base64UrlPayload.replace(/-/g, '+').replace(/_/g, '/');
+	const jsonPayload = decodeURIComponent(window.atob(base64));
+	return JSON.parse(jsonPayload);
+}

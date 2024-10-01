@@ -1,5 +1,5 @@
 import { makeDuel } from 'game/duel';
-import { GameMatch } from 'models/game';
+import { GameDuel } from 'models/game';
 import { logger } from 'utils/logger';
 import { pubsub } from 'utils/pubsub';
 import { redis } from 'utils/redis';
@@ -61,16 +61,11 @@ const initializeGameMatch = async (
 	const firstPlayerId = firstFindingKey.split('#')[1];
 	const secondPlayerId = secondFindingKey.split('#')[1];
 
-	const { config, commandBundles } = makeDuel(
-		'00001',
-		firstPlayerId,
-		secondPlayerId,
-	);
-
-	const gameMatch = await GameMatch.create({ config, commandBundles });
+	const { config, history } = makeDuel('00001', firstPlayerId, secondPlayerId);
+	const duel = await GameDuel.create({ config, history });
 
 	await Promise.all([
-		pubsub.publish(firstTopic, { findMatch: { id: gameMatch.id } }),
-		pubsub.publish(secondTopic, { findMatch: { id: gameMatch.id } }),
+		pubsub.publish(firstTopic, { findMatch: { id: duel.id } }),
+		pubsub.publish(secondTopic, { findMatch: { id: duel.id } }),
 	]);
 };

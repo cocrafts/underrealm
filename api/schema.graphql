@@ -17,7 +17,7 @@ type Mutation {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): CardDuel
+  findMatch(userId: String!): MatchFound
 }
 
 type Profile {
@@ -29,6 +29,11 @@ type Profile {
   referred: ReferralHistory
   referralCode: String!
   points: Int!
+}
+
+type MatchFound {
+  id: String!
+  jwt: String!
 }
 
 type CardDuelSetting {
@@ -108,8 +113,10 @@ type CardDuelHistory {
 enum QuestType {
   LIKE_X
   RETWEET_X
-  JOIN_DISCORD
   COMMENT_X
+  FOLLOW_X
+  JOIN_DISCORD
+  CHAT_DISCORD
 }
 
 enum QuestStatus {

@@ -102,6 +102,12 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type MatchFound = {
+  __typename?: 'MatchFound';
+  id: Scalars['String']['output'];
+  jwt: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
@@ -190,7 +196,9 @@ export enum QuestStatus {
 }
 
 export enum QuestType {
+  ChatDiscord = 'CHAT_DISCORD',
   CommentX = 'COMMENT_X',
+  FollowX = 'FOLLOW_X',
   JoinDiscord = 'JOIN_DISCORD',
   LikeX = 'LIKE_X',
   RetweetX = 'RETWEET_X'
@@ -209,7 +217,7 @@ export type ReferralHistory = {
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
-  findMatch?: Maybe<CardDuel>;
+  findMatch?: Maybe<MatchFound>;
 };
 
 
@@ -303,6 +311,7 @@ export type ResolversTypes = ResolversObject<{
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  MatchFound: ResolverTypeWrapper<MatchFound>;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
@@ -331,6 +340,7 @@ export type ResolversParentTypes = ResolversObject<{
   DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  MatchFound: MatchFound;
   Mutation: {};
   Profile: Profile;
   Query: {};
@@ -429,6 +439,12 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['MatchFound'] = ResolversParentTypes['MatchFound']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  jwt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
   makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
@@ -490,7 +506,7 @@ export type ReferralHistoryResolvers<ContextType = ApiContext, ParentType extend
 
 export type SubscriptionResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   counterIncreased?: SubscriptionResolver<ResolversTypes['Int'], "counterIncreased", ParentType, ContextType>;
-  findMatch?: SubscriptionResolver<Maybe<ResolversTypes['CardDuel']>, "findMatch", ParentType, ContextType, RequireFields<SubscriptionFindMatchArgs, 'userId'>>;
+  findMatch?: SubscriptionResolver<Maybe<ResolversTypes['MatchFound']>, "findMatch", ParentType, ContextType, RequireFields<SubscriptionFindMatchArgs, 'userId'>>;
 }>;
 
 export type Resolvers<ContextType = ApiContext> = ResolversObject<{
@@ -505,6 +521,7 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   CardDuelSetting?: CardDuelSettingResolvers<ContextType>;
   CardPlayerConfig?: CardPlayerConfigResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  MatchFound?: MatchFoundResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

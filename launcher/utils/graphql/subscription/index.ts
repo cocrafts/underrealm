@@ -10,6 +10,7 @@ export const findMatch = gql`
 	subscription FindMatch($userId: String!) {
 		findMatch(userId: $userId) {
 			id
+			jwt
 		}
 	}
 `;
