@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -113,6 +114,8 @@ export type InventoryItem = {
   __typename?: 'InventoryItem';
   amount: Scalars['Int']['output'];
   itemId: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  type: Scalars['String']['output'];
 };
 
 export type MatchFound = {

@@ -83,7 +83,11 @@ type Inventory {
 type InventoryItem {
   amount: Int!
   itemId: String!
+  metadata: JSON
+  type: String!
 }
+
+scalar JSON
 
 type MatchFound {
   id: String!

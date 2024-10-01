@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -113,6 +114,8 @@ export type InventoryItem = {
   __typename?: 'InventoryItem';
   amount: Scalars['Int']['output'];
   itemId: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  type: Scalars['String']['output'];
 };
 
 export type MatchFound = {
@@ -342,6 +345,7 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Inventory: ResolverTypeWrapper<Inventory>;
   InventoryItem: ResolverTypeWrapper<InventoryItem>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   MatchFound: ResolverTypeWrapper<MatchFound>;
   Mutation: ResolverTypeWrapper<{}>;
   OpenLotteryResult: ResolverTypeWrapper<OpenLotteryResult>;
@@ -375,6 +379,7 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int']['output'];
   Inventory: Inventory;
   InventoryItem: InventoryItem;
+  JSON: Scalars['JSON']['output'];
   MatchFound: MatchFound;
   Mutation: {};
   OpenLotteryResult: OpenLotteryResult;
@@ -486,8 +491,14 @@ export type InventoryResolvers<ContextType = ApiContext, ParentType extends Reso
 export type InventoryItemResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['InventoryItem'] = ResolversParentTypes['InventoryItem']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
 
 export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['MatchFound'] = ResolversParentTypes['MatchFound']> = ResolversObject<{
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -591,6 +602,7 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   Inventory?: InventoryResolvers<ContextType>;
   InventoryItem?: InventoryItemResolvers<ContextType>;
+  JSON?: GraphQLScalarType;
   MatchFound?: MatchFoundResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   OpenLotteryResult?: OpenLotteryResultResolvers<ContextType>;

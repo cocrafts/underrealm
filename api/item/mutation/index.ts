@@ -20,7 +20,7 @@ import { GetSert } from 'utils/mongo';
 import type { MutationResolvers } from 'utils/types';
 
 export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
-	root,
+	error,
 	_,
 	{ user },
 ) => {
@@ -31,7 +31,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 
 	let lotteryPrice: number;
 	if (systemLotteryInfo.metadata.price == undefined) {
-		console.log('lottery price is missing, use default price');
+		logger.info('lottery price is missing, use default price');
 		lotteryPrice = LOTTERY_DEFAULT_PRICE;
 	} else {
 		lotteryPrice = Number(systemLotteryInfo.metadata.price);
@@ -74,7 +74,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	try {
 		decreaseSystemLotteryAmount(systemLotteryInfo);
 	} catch (err) {
-		console.log('failed to decrase system lottery amount', err);
+		logger.error('failed to decrase system lottery amount', err);
 		throw new SystemError('failed to decrase system lottery amount');
 	}
 
@@ -144,7 +144,7 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 		throw new ClientError('user has no ticket');
 	}
 
-  // check if user have lottery ticket
+	// check if user have lottery ticket
 	const userLottery = userInventory.items
 		.filter(
 			(val) =>
@@ -179,7 +179,7 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 		throw new SystemError('system have no available rewards');
 	}
 
-  // calc reward for user
+	// calc reward for user
 	const retried = 10;
 	const reward = calcUserReward(filtered_reward_rates, retried);
 	if (reward == undefined) {
@@ -198,14 +198,14 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	}
 
 	try {
-    // update reward into user inventory
+		// update reward into user inventory
 		await addUserInventoryItem(userObjectId, rewardInfo._id, 1);
 	} catch (err) {
 		logger.info(`failed to add item to user inventory: ${err}`);
 		throw new SystemError(err);
 	}
 	try {
-    // subtract lottery amount in user inventory
+		// subtract lottery amount in user inventory
 		await consumeUserInventoryItem(userObjectId, userLottery.itemId, 1);
 	} catch (err) {
 		logger.info(`failed to consume lottery ticket from user inventory: ${err}`);
@@ -213,7 +213,14 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	}
 
 	return {
-		items: [{ itemId: rewardInfo.id, amount: 1 }],
+		items: [
+			{
+				itemId: rewardInfo.id,
+				amount: 1,
+				type: rewardInfo.type,
+				__typename: 'ChestItem',
+			},
+		],
 		userId: user.id,
 	};
 };
@@ -292,7 +299,7 @@ const consumeUserInventoryItem = async (
 	}
 	const decreaseResponse = await Inventory.updateOne(
 		{ userId: userId, 'items.itemId': itemId },
-		{ $inc: { 'items.$.amount': amount } },
+		{ $inc: { 'items.$.amount': -amount } },
 	);
 	if (decreaseResponse.modifiedCount == 0) {
 		throw new Error('failed to update inventory item');

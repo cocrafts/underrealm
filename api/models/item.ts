@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import type { ItemType } from 'utils/common';
 import { DEFAULT_SYSTEM_ITEMS } from 'utils/common';
+import { logger } from 'utils/logger';
 
 import { createSchema } from './utils';
 
@@ -24,17 +25,18 @@ export const boostrapSystemItems = async () => {
 	const systemItemsInfo = await Item.find({
 		type: { $in: systemItemsTypes },
 	});
-	console.log('systemitemsinfo ===>', systemItemsInfo);
 
 	Object.entries(DEFAULT_SYSTEM_ITEMS).forEach(async ([type, item]) => {
 		if (systemItemsInfo.findIndex((val) => val.type == type) == -1) {
+			logger.info(`system item ${type} not found, adding...`);
 			const result = await Item.create({ ...item });
 			if (result == undefined) {
 				throw result.errors;
 			}
 		}
 	});
-	console.log('completed update systemitems');
+
+	logger.info('bootstrap system items completed');
 };
 
 export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
