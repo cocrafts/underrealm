@@ -1,6 +1,5 @@
-import { Inventory } from 'models/inventory';
-import type { IItem } from 'models/item';
-import { consumeSystemItems, Item } from 'models/item';
+import type { IItem } from 'models/asset';
+import { consumeSystemItems, Inventory, Item } from 'models/asset';
 import { PointLogType, PointsHistory } from 'models/points';
 import { User } from 'models/user';
 import { virtualId } from 'models/utils';

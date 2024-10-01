@@ -1,9 +1,13 @@
-import { Inventory } from 'models/inventory';
+import { Inventory } from 'models/asset';
 import { virtualId } from 'models/utils';
 import type { Document } from 'mongoose';
 import type { QueryResolvers } from 'utils/types';
 
-const inventory: QueryResolvers['inventory'] = async (root, _, { user }) => {
+export const inventory: QueryResolvers['inventory'] = async (
+	root,
+	_,
+	{ user },
+) => {
 	const userWithObjectId = virtualId(user);
 	let userInventory = await Inventory.findOne({
 		userId: userWithObjectId.id,
@@ -32,5 +36,3 @@ const inventory: QueryResolvers['inventory'] = async (root, _, { user }) => {
 		items: itemsDetails,
 	};
 };
-
-export const InventoryQueryResolvers = { inventory };

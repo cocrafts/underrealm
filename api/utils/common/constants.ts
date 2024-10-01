@@ -1,4 +1,4 @@
-import type { IItem } from 'models/item';
+import type { IItem } from 'models/asset';
 
 export const REFERRAL_CODE_LENGTH = 7;
 

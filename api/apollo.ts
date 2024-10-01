@@ -3,8 +3,7 @@ import { readFileSync } from 'fs';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { InventoryQueryResolvers } from 'inventory';
-import { ItemMutationResolvers } from 'item';
+import { AssetMutationResolvers, AssetQueryResolvers } from 'asset';
 import { referred } from 'social/query/referral';
 import { refereeUser } from 'user';
 import { logger } from 'utils/logger';
@@ -25,12 +24,12 @@ const resolvers: Resolvers = {
 		...GameQueryResolvers,
 		...SocialQueryResolvers,
 		...UserQueryResolvers,
-		...InventoryQueryResolvers,
+		...AssetQueryResolvers,
 	},
 	Mutation: {
 		...GameMutationResolvers,
 		...SocialMutationResolvers,
-		...ItemMutationResolvers,
+		...AssetMutationResolvers,
 	},
 	Subscription: {
 		...UserSubscriptionResolvers,

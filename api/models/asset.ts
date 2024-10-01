@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 import type { ItemType } from 'utils/common';
 import { DEFAULT_SYSTEM_ITEMS } from 'utils/common';
 import { logger } from 'utils/logger';
@@ -18,9 +18,30 @@ export const itemSchema = createSchema({
 	metadata: Schema.Types.Mixed,
 });
 
-export const Item = model<IItem>('Item', itemSchema);
+itemSchema.index({ type: 1 }, { unique: true });
 
-export const boostrapSystemItems = async () => {
+export type IInventoryItem = {
+	itemId: Types.ObjectId;
+	amount: number;
+};
+
+const inventoryItem = createSchema({
+	itemId: { type: Types.ObjectId, ref: 'Item' },
+	amount: Number,
+});
+
+export type IInventory = {
+	id: string;
+	userId: Types.ObjectId;
+	items: IInventoryItem[];
+};
+
+const inventorySchema = createSchema({
+	userId: { type: Types.ObjectId, ref: 'User' },
+	items: [inventoryItem],
+});
+
+export const boostrapSystemAssets = async () => {
 	const systemItemsTypes = Object.keys(DEFAULT_SYSTEM_ITEMS);
 	const systemItemsInfo = await Item.find({
 		type: { $in: systemItemsTypes },
@@ -53,3 +74,6 @@ export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
 	}
 	// TODO: since we don't limit system amount now, treat negative reaminAmount as infinite, so skip update item's remainAmount if remainAmount is already negative
 };
+
+export const Inventory = model<IInventory>('Inventory', inventorySchema);
+export const Item = model<IItem>('Item', itemSchema);

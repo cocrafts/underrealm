@@ -9,7 +9,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import cors from 'cors';
 import express from 'express';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { boostrapSystemItems } from 'models/item';
+import { boostrapSystemAssets } from 'models/asset';
 import { ApolloServerPluginDrainWsServer } from 'utils/apollo';
 import { GraphQLLoggingMiddleware } from 'utils/common';
 import { configs } from 'utils/config';
@@ -50,7 +50,7 @@ await Promise.all([
 	apollo.start(),
 	redis.connect(),
 	mongo.connect(),
-	boostrapSystemItems(),
+	boostrapSystemAssets(),
 ]);
 
 app.use(cors());
