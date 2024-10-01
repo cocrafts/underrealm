@@ -25,6 +25,7 @@ export const inventoryCommand: StrictCommandModule<object, unknown> = {
 
 interface ConfigurationFileRow {
 	address: string;
+	addressType: string;
 	itemType: string;
 	amount: number;
 }
@@ -50,7 +51,7 @@ const updateUserInventoryCommand: StrictCommandModule<
 			console.log('configuration field should not be empty');
 			return;
 		}
-		const headers = ['address', 'itemType', 'amount'];
+		const headers = ['address', 'addressType', 'itemType', 'amount'];
 		const csvFilePath = path.resolve(args.configurationFile);
 
 		let fileContent: string;
@@ -83,10 +84,13 @@ const updateUserInventoryCommand: StrictCommandModule<
 						}
 
 						let user: IUser;
-						if (row.address.includes('@')) {
+						if (row.addressType == 'email') {
 							user = await User.findOne({ email: row.address });
-						} else {
+						} else if (row.addressType == 'wallet') {
 							user = await User.findOne({ address: row.address });
+						} else {
+							console.error('invalid addressType, should be  email or wallet');
+							break;
 						}
 						if (user == undefined) {
 							console.error(`invalid user, user not existed ${row.address}`);
@@ -105,13 +109,15 @@ const updateUserInventoryCommand: StrictCommandModule<
 							{ $inc: { 'items.$.amount': row.amount } },
 						);
 						if (updateResponse.modifiedCount == 0) {
+							// user's don't have item, push a new one
 							const response = await Inventory.updateOne(
 								{ userId: user.id },
 								{
 									$push: { items: { itemId: itemInfo.id, amount: row.amount } },
 								},
+								{ upsert: true },
 							);
-							if (response.modifiedCount == 0) {
+							if (response.modifiedCount == 0 && response.upsertedCount) {
 								console.error('failed to update inventory item');
 								break;
 							}

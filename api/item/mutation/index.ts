@@ -79,42 +79,35 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	}
 
 	// finnaly, update ticket number in inventory
-	await GetSert<IInventory>(
-		Inventory,
-		{ userId: virtualId(user).id },
-		{
-			userId: virtualId(user).id,
-			items: [
-				{
-					itemId: virtualId(systemLotteryInfo).id,
-					amount: 0,
-				},
-			],
-		},
+	await addUserInventoryItem(
+		virtualId(user).id,
+		virtualId(systemLotteryInfo).id,
+		1,
 	);
-
-	let increaseResponse = await Inventory.updateOne(
-		{ userId: user.id, 'items.itemId': systemLotteryInfo.id },
-		{ $inc: { 'items.$.amount': 1 } },
-	);
-
-	if (increaseResponse.modifiedCount == 0) {
-		increaseResponse = await Inventory.updateOne(
-			{ userId: user.id },
-			{
-				$push: {
-					items: {
-						itemId: virtualId(systemLotteryInfo).id,
-						amount: 1,
-					},
-				},
-			},
-		);
-		if (increaseResponse.modifiedCount == 0) {
-			throw new SystemError('failec to update user inventory');
-		}
-	}
-
+	// let increaseResponse = await Inventory.updateOne(
+	// 	{ userId: user.id, 'items.itemId': systemLotteryInfo.id },
+	// 	{ $inc: { 'items.$.amount': 1 } },
+	// );
+	//
+	// if (increaseResponse.modifiedCount == 0) {
+	//    // user don't have inventory item, push the item to
+	// 	increaseResponse = await Inventory.updateOne(
+	// 		{ userId: user.id },
+	// 		{
+	// 			$push: {
+	// 				items: {
+	// 					itemId: virtualId(systemLotteryInfo).id,
+	// 					amount: 1,
+	// 				},
+	// 			},
+	// 		},
+	//      {upsert: true},
+	// 	);
+	// 	if (increaseResponse.modifiedCount == 0) {
+	// 		throw new SystemError('failec to update user inventory');
+	// 	}
+	// }
+	//
 	const result = {
 		source: pointHistory.source,
 		id: pointHistory.id,
@@ -282,8 +275,9 @@ const addUserInventoryItem = async (
 		const response = await Inventory.updateOne(
 			{ userId: userId },
 			{ $push: { items: { itemId: itemId, amount: amount } } },
+			{ upsert: true },
 		);
-		if (response.modifiedCount == 0) {
+		if (response.modifiedCount == 0 && response.upsertedCount == 0) {
 			throw new Error('failed to update inventory item');
 		}
 	}

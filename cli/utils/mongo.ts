@@ -8,6 +8,9 @@ export const connectToMongoDB = async () => {
 		await mongoose.connect(MONGO_URI);
 		console.log('Connect to MongoDB successfully');
 	} catch (err) {
+		console.error(
+			'failed to connect MongoDB, make sure environemt variable MONGO_URI is set',
+		);
 		throw Error(err);
 	}
 };

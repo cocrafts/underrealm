@@ -8,4 +8,8 @@ HOW TO:
   ```
   - path_to_csv: path to the csv config file
   - csv file requirements:
-    -  include 3 fields: `address`, `itemType`, `amount`
+    -  include 4 fields: `address`, `addressType`, `itemType`, `amount`
+      - address: email address or wallet address of user
+      - addressType: should be `email` or `wallet`
+      - itemType: item type
+      - amount: positive amount of item
