@@ -159,21 +159,6 @@ type OpenLotteryResult {
   userId: ID!
   items: [InventoryItem!]!
 }
-#
-# type LotteryItem {
-#   itemId: String!
-#   amount: Int!
-#   type: String!
-#   price: Int!
-# }
-#
-# type ChestItem {
-#   itemId: String!
-#   amount: Int!
-#   type: String!
-# }
-#
-# union InventoryItem = LotteryItem | ChestItem
 
 type InventoryItem  {
   itemId: String!
