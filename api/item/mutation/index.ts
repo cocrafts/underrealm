@@ -179,15 +179,14 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	}
 
 	return {
+		userId: user.id,
 		items: [
 			{
 				itemId: rewardInfo.id,
 				amount: 1,
 				type: rewardInfo.type,
-				__typename: 'ChestItem',
 			},
 		],
-		userId: user.id,
 	};
 };
 
