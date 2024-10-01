@@ -10,6 +10,7 @@ import type { IUser } from './../user/model';
 import { User } from './../user/model';
 import type { StrictCommandModule } from './../utils/types';
 import { Inventory, Item, ItemType } from './model';
+
 export const inventoryCommand: StrictCommandModule<object, unknown> = {
 	command: 'inventory',
 	describe: 'Working with inventory system',
