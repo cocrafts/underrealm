@@ -1,8 +1,6 @@
-import type { IInventory } from 'models/inventory';
 import { Inventory } from 'models/inventory';
 import type { IItem } from 'models/item';
 import { consumeSystemItems, Item } from 'models/item';
-// import { PointTransactionLog, TransactionType } from 'models/pointTransaction';
 import { PointLogType, PointsHistory } from 'models/points';
 import { User } from 'models/user';
 import { virtualId } from 'models/utils';
@@ -16,7 +14,6 @@ import {
 } from 'utils/common';
 import { ClientError, SystemError } from 'utils/errors';
 import { logger } from 'utils/logger';
-import { GetSert } from 'utils/mongo';
 import type { MutationResolvers } from 'utils/types';
 
 export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
