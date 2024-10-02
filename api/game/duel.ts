@@ -40,7 +40,7 @@ export const makeDuel = (
 
 	return {
 		config,
-		commandBundles,
+		history: commandBundles,
 	};
 };
 

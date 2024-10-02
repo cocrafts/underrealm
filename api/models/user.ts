@@ -1,4 +1,9 @@
 import { model } from 'mongoose';
+import {
+	generateRandomCode,
+	getRandomAvatar,
+	REFERRAL_CODE_LENGTH,
+} from 'utils/common';
 
 import { createSchema } from './utils';
 
@@ -13,7 +18,7 @@ export type IUser = {
 	points: number;
 };
 
-const userSchema = createSchema({
+const UserSchema = createSchema({
 	/** bindingId is used to bind this user with dynamodb profile (will be deprecated soon) */
 	bindingId: {
 		type: String,
@@ -30,7 +35,6 @@ const userSchema = createSchema({
 		type: String,
 		index: true,
 		unique: true,
-		required: true,
 	},
 	address: {
 		type: String,
@@ -44,4 +48,15 @@ const userSchema = createSchema({
 	avatarUrl: String,
 });
 
-export const User = model<IUser>('User', userSchema);
+UserSchema.pre('save', function (next) {
+	if (!this.avatarUrl) {
+		this.avatarUrl = getRandomAvatar();
+	}
+	if (!this.referralCode) {
+		this.referralCode = generateRandomCode(REFERRAL_CODE_LENGTH);
+	}
+
+	next();
+});
+
+export const User = model<IUser>('User', UserSchema);

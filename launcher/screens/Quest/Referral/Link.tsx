@@ -11,7 +11,8 @@ export const ReferralLink = () => {
 	const [isCopied, setIsCopied] = useState(false);
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
-	const referralLink = `${window.location.origin}?ref=${profile.referralCode}`;
+	const referralTitle = `${window.location.hostname}/quest?ref=${profile.referralCode}`;
+	const referralLink = `${window.location.origin}/quest?ref=${profile.referralCode}`;
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(referralLink);
@@ -35,7 +36,7 @@ export const ReferralLink = () => {
 			<View style={styles.linkBox}>
 				<Text style={styles.link}>
 					{profile.referralCode
-						? referralLink
+						? referralTitle
 						: 'Please sign-in to get your referral link'}
 				</Text>
 				<View style={styles.buttonGroup}>

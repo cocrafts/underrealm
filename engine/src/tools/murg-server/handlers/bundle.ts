@@ -13,7 +13,7 @@ import {
 } from '@underrealm/murg';
 
 import type { CommandHandler } from '../util/type';
-import { DuelCommands } from '../util/type';
+import { EventType } from '../util/type';
 
 import { fetchDuel } from './internal';
 
@@ -33,7 +33,7 @@ export const onIncomingBundle: CommandHandler<DuelCommandBundle[]> = async (
 	await send({ level, bundles: autoBundles });
 	if (winner) {
 		duelRecord.winner = winner;
-		await send({ winner }, DuelCommands.GameOver);
+		await send({ winner }, EventType.GameOver);
 	}
 
 	try {

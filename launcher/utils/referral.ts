@@ -8,7 +8,9 @@ export const extractReferralFromUrl = () => {
 };
 
 export const getReferralCode = () => {
-	return window.localStorage.getItem(localStorageKey);
+	const referralCode = window.localStorage.getItem(localStorageKey);
+	if (referralCode === 'null') return;
+	return referralCode;
 };
 
 export const removeReferralCode = () => {

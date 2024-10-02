@@ -1,9 +1,5 @@
-import { type IUser, User } from 'models/user';
-import {
-	generateRandomCode,
-	getRandomAvatar,
-	REFERRAL_CODE_LENGTH,
-} from 'utils/common';
+import type { IUser } from 'models/user';
+import { User } from 'models/user';
 import { ForbiddenError } from 'utils/errors';
 import type { ResolverFn } from 'utils/types';
 
@@ -11,13 +7,18 @@ import { verifyToken } from './jwt';
 
 export type UserProfile = IUser;
 
-export type ApiContext = {
+export type WebsocketContext = {
+	connectionId?: string;
+};
+
+export type UserContext = {
 	user?: UserProfile;
 };
 
+export type ApiContext = WebsocketContext & UserContext;
+
 type ContextOptions = {
 	authHeader?: string;
-	isIntrospection?: boolean;
 };
 
 export const resolveUniversalContext = async ({
@@ -35,8 +36,6 @@ export const resolveUniversalContext = async ({
 				bindingId: cognitoUser.username,
 				address: cognitoUser.wallet,
 				email: cognitoUser.email,
-				avatarUrl: getRandomAvatar(),
-				referralCode: generateRandomCode(REFERRAL_CODE_LENGTH),
 			});
 		}
 	}
@@ -44,7 +43,12 @@ export const resolveUniversalContext = async ({
 };
 
 export const requireAuth = <TResult, TParent, TArgs>(
-	resolver: ResolverFn<TResult, TParent, Required<ApiContext>, TArgs>,
+	resolver: ResolverFn<
+		TResult,
+		TParent,
+		Required<UserContext> & WebsocketContext,
+		TArgs
+	>,
 ): ResolverFn<TResult, TParent, ApiContext, TArgs> => {
 	return (root, parent, context, args) => {
 		if (!context.user) {

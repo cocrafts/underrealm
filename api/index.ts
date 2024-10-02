@@ -14,7 +14,7 @@ import { GraphQLLoggingMiddleware } from 'utils/common';
 import { configs } from 'utils/config';
 import { graphqlContext as context } from 'utils/context';
 import { logger } from 'utils/logger';
-import { WebSocketServer } from 'ws';
+import { createWebsocketServer } from 'utils/ws';
 
 import './models';
 import './utils/redis';
@@ -25,11 +25,12 @@ import { mongo } from './models';
 
 const app = express();
 const http = createServer(app);
-const ws = new WebSocketServer({ server: http, path: '/subscriptions' });
+const wss = createWebsocketServer(http, '/ws');
 
 const wsCleanup = useServer(
 	{
 		schema,
+		context,
 		onSubscribe: (ctx, msg) => {
 			logger.info(`Client subscribed: ${inspect(msg)}`);
 		},
@@ -37,7 +38,7 @@ const wsCleanup = useServer(
 			logger.info(`Client unsubscribed: ${inspect(msg)}`);
 		},
 	},
-	ws,
+	wss,
 );
 
 // Proper shutdown for the HTTP server.

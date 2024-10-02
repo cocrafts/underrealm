@@ -3,6 +3,7 @@ import { ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import InternalNavigation from 'components/Navigation/Internal';
 import { navigationHeight as navHeight } from 'components/Navigation/shared';
+import Version from 'components/Version';
 import resources from 'utils/resources';
 
 import MainSection from './MainSection';
@@ -21,6 +22,7 @@ export const LobbyScreen: FC = () => {
 					<MainSection />
 				</View>
 			</View>
+			<Version />
 		</ImageBackground>
 	);
 };

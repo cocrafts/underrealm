@@ -2,7 +2,8 @@ import { createCommand } from '../command';
 import { getCard, getCardState } from '../utils/card';
 import { getFacingIdentifier } from '../utils/ground';
 import { createCommandResult } from '../utils/helper';
-import { type Attribute, EffectIds, type SkillRunner } from '../utils/type';
+import type { Attribute, SkillRunner } from '../utils/type';
+import { EffectIds } from '../utils/type';
 
 type SkillOptions = Omit<Attribute, 'charge'>;
 

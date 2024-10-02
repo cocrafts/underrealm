@@ -1,0 +1,28 @@
+diff --git a/lib/server.js b/lib/server.js
+index 02e7100dae2e995d032ae45ddef327fc6701bb59..a0e791195820de80f9ddd1fc8874a74f1e96e446 100644
+--- a/lib/server.js
++++ b/lib/server.js
+@@ -37,7 +37,8 @@ function makeServer(options) {
+                 extra,
+             };
+             if (socket.protocol !== common_1.GRAPHQL_TRANSPORT_WS_PROTOCOL) {
+-                socket.close(common_1.CloseCode.SubprotocolNotAcceptable, 'Subprotocol not acceptable');
++                // ignore close, this subprotocol will be handled by another handler
++                // socket.close(common_1.CloseCode.SubprotocolNotAcceptable, 'Subprotocol not acceptable');
+                 return async (code, reason) => {
+                     /* nothing was set up, just notify the closure */
+                     await (onClose === null || onClose === void 0 ? void 0 : onClose(ctx, code, reason));
+diff --git a/lib/server.mjs b/lib/server.mjs
+index 26d98977f23aa1edc9cd8eba2d380ac03af12207..80237cfff756609f29bd4612efea91044337f92c 100644
+--- a/lib/server.mjs
++++ b/lib/server.mjs
+@@ -34,7 +34,8 @@ export function makeServer(options) {
+                 extra,
+             };
+             if (socket.protocol !== GRAPHQL_TRANSPORT_WS_PROTOCOL) {
+-                socket.close(CloseCode.SubprotocolNotAcceptable, 'Subprotocol not acceptable');
++                // ignore close, this subprotocol will be handled by another handler
++                // socket.close(CloseCode.SubprotocolNotAcceptable, 'Subprotocol not acceptable');
+                 return async (code, reason) => {
+                     /* nothing was set up, just notify the closure */
+                     await (onClose === null || onClose === void 0 ? void 0 : onClose(ctx, code, reason));

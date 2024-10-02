@@ -8,7 +8,7 @@ import Engine from '@underrealm/murg';
 import type { AudioSource, Node } from 'cc';
 import lodash from 'lodash';
 
-import type { JwtPayload, PlayerIds, ServerState } from '../util/types';
+import type { JwtPayload, PlayerIds } from '../util/types';
 
 const { defaultSetting, DuelPhases, nanoId } = Engine;
 
@@ -93,11 +93,12 @@ export const makeDuelProxy = (duel: DuelProxy): DuelProxy => {
 };
 
 export interface System {
-	jwt?: string;
+	userId: string;
+	matchId: string;
+	jwt: string;
 	isSocketReady: boolean;
 	winner?: string;
 	playerIds: PlayerIds;
-	serverState?: ServerState;
 	duel?: DuelProxy;
 	predict?: DuelState;
 	context?: JwtPayload;
@@ -174,6 +175,9 @@ const defaultDuel = {
 };
 
 export const system: System = {
+	userId: '',
+	matchId: '',
+	jwt: '',
 	playerIds: {
 		me: '',
 		enemy: '',
@@ -181,7 +185,6 @@ export const system: System = {
 	duel: makeDuelProxy(defaultDuel),
 	predict: defaultDuel,
 	isSocketReady: false,
-	serverState: {},
 	isCommandAble: false,
 	cardRefs: {},
 	globalNodes: {},

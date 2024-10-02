@@ -26,6 +26,8 @@ enum QuestTypes {
 	LIKE_X = 'LIKE_X',
 	RETWEET_X = 'RETWEET_X',
 	COMMENT_X = 'COMMENT_X',
+	FOLLOW_X = 'FOLLOW_X',
+	CHAT_DISCORD = 'CHAT_DISCORD',
 	JOIN_DISCORD = 'JOIN_DISCORD',
 }
 
@@ -302,23 +304,20 @@ function questFieldQuestions(fields: FieldKey[]): PromptObject[] {
 						type: 'select',
 						name: 'type',
 						message: 'Quest type?',
-						choices: [
-							{ title: 'LIKE_X', value: QuestTypes.LIKE_X },
-							{ title: 'RETWEET_X', value: QuestTypes.RETWEET_X },
-							{ title: 'COMMENT_X', value: QuestTypes.COMMENT_X },
-							{ title: 'JOIN_DISCORD', value: QuestTypes.JOIN_DISCORD },
-						],
+						choices: Object.values(QuestTypes).map((q) => ({
+							title: q,
+							value: q,
+						})),
 					};
 				case 'status':
 					return {
 						type: 'select',
 						name: 'status',
 						message: 'Quest status?',
-						choices: [
-							{ title: 'INIT', value: QuestStatuses.INIT },
-							{ title: 'LIVE', value: QuestStatuses.LIVE },
-							{ title: 'DISABLED', value: QuestStatuses.DISABLED },
-						],
+						choices: Object.values(QuestStatuses).map((q) => ({
+							title: q,
+							value: q,
+						})),
 					};
 				case 'url':
 					return {
