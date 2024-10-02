@@ -6,7 +6,6 @@ import { virtualId } from 'models/utils';
 import type { Types } from 'mongoose';
 import {
 	ItemType,
-	LOTTERY_DEFAULT_PRICE,
 	LOTTERY_REWARD_CHANCE,
 	LOTTERY_REWARD_RATE,
 	randInt,
@@ -27,8 +26,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 
 	let lotteryPrice: number;
 	if (systemLotteryInfo.metadata.price == undefined) {
-		logger.info('lottery price is missing, use default price');
-		lotteryPrice = LOTTERY_DEFAULT_PRICE;
+		throw new SysteError('lottery price is missing');
 	} else {
 		lotteryPrice = Number(systemLotteryInfo.metadata.price);
 	}

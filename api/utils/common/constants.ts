@@ -58,17 +58,13 @@ export const LOTTERY_REWARD_RATE = Object.entries(LOTTERY_REWARD_CHANCE).reduce(
 	[] as { type: ItemType; rate: number }[],
 );
 
-// This price is just a fallback value incase we could not retrieve it from the database
-// this value should be stored in metadata field of lottery item
-export const LOTTERY_DEFAULT_PRICE = 250;
-
 // these are predefine system item, these items will be automatically added if they are not already present
 export const DEFAULT_SYSTEM_ITEMS: Record<string, Partial<IItem>> = {
 	[ItemType.LOTTERY]: {
 		type: ItemType.LOTTERY,
 		remainAmount: -1,
 		metadata: {
-			price: LOTTERY_DEFAULT_PRICE,
+			price: 250,
 		},
 	},
 	[ItemType.CHEST_WOODEN]: { type: ItemType.CHEST_WOODEN, remainAmount: -1 },
