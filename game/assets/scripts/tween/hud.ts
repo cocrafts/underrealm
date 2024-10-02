@@ -48,10 +48,18 @@ export const showEndGameRibbon = async (
 			? 'Victory!'
 			: 'Defeat!';
 
-		node.getChildByPath('ribbon/coin/label').getComponent(RichText).string =
-			claimedPoints !== 0
-				? `<color='#ffffff'>${claimedPoints}</color>`
-				: `<color='#F2E0C3'>You already claimed max points today</color>`;
+		const coinNode = node
+			.getChildByPath('ribbon/coin/label')
+			.getComponent(RichText);
+
+		coinNode.string = claimedPoints?.toString();
+
+		if (!claimedPoints || claimedPoints === 0) {
+			coinNode.fontSize = 24;
+			coinNode.string = `<color=#F2E0C3>You have taken all the gold today.\n Return once the sun rises again.</color>`;
+		}
+
+		console.log(coinNode.string);
 
 		system.globalNodes.playerHand.parent =
 			system.globalNodes.board.getChildByPath('Surface');
