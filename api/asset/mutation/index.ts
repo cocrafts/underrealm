@@ -131,7 +131,6 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	const filteredRewardRates = filteredRewardsSystemInfo.map((item) => {
 		return localRewardRates.find((val) => val.type == item.type);
 	});
-  console.log(filteredRewardRates)
 
 	// calc reward for user
 	const retried = 10;
