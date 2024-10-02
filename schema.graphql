@@ -82,7 +82,6 @@ type MatchFound {
 input MutateProfileProps {
   avatarUrl: String
   discordId: String
-  name: String
   telegramId: String
   twitterId: String
 }
@@ -90,7 +89,7 @@ input MutateProfileProps {
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
-  updateProfile(props: MutateProfileProps): Profile
+  updateProfile(profileProps: MutateProfileProps): Profile
 }
 
 type Profile {

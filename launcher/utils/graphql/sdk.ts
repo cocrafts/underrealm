@@ -111,7 +111,6 @@ export type MatchFound = {
 export type MutateProfileProps = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   discordId?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
   telegramId?: InputMaybe<Scalars['String']['input']>;
   twitterId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -135,7 +134,7 @@ export type MutationMakeReferralArgs = {
 
 
 export type MutationUpdateProfileArgs = {
-  props?: InputMaybe<MutateProfileProps>;
+  profileProps?: InputMaybe<MutateProfileProps>;
 };
 
 export type Profile = {
