@@ -23,6 +23,6 @@ export const getRandomAvatar = () => {
 	return AVATARS[Math.floor(Math.random() * AVATARS.length)];
 };
 
-export const randInt = (left: number, right: number): number => {
-	return Math.floor(Math.random() * (right - left) + left);
+export const randInt = (min: number, max: number): number => {
+	return Math.floor(Math.random() * (max - min) + min);
 };

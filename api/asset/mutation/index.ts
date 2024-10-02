@@ -251,7 +251,6 @@ const consumeUserInventoryItem = async (
 		{ $inc: { 'items.$.amount': -amount } },
 	);
 	if (decreaseResponse.modifiedCount == 0) {
-    console.log(decreaseResponse)
 		throw new SystemError('failed to update inventory item');
 	}
 };
