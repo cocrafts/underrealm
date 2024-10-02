@@ -42,21 +42,25 @@ export const LOTTERY_REWARD_CHANCE = {
 	[ItemType.CHEST_LEGENDARY]: 0.005,
 };
 
+export interface LotteryRewardRateRecord {
+	type: ItemType;
+	rate: number;
+}
+
 // derive the rate of lottery reward from the chance
-export const LOTTERY_REWARD_RATE = Object.entries(LOTTERY_REWARD_CHANCE).reduce(
-	(prev, [itemType, chance]) => {
-		const currentCumulativeRate =
-			prev.length == 0 ? 0 : prev[prev.length - 1].rate;
+export const LOTTERY_REWARD_RATE: LotteryRewardRateRecord[] = Object.entries(
+	LOTTERY_REWARD_CHANCE,
+).reduce((prev, [itemType, chance]) => {
+	const currentCumulativeRate =
+		prev.length == 0 ? 0 : prev[prev.length - 1].rate;
 
-		prev.push({
-			type: itemType as ItemType,
-			rate: currentCumulativeRate + chance,
-		});
+	prev.push({
+		type: itemType,
+		rate: currentCumulativeRate + chance,
+	});
 
-		return prev;
-	},
-	[] as { type: ItemType; rate: number }[],
-);
+	return prev;
+}, []);
 
 // these are predefine system item, these items will be automatically added if they are not already present
 export const DEFAULT_SYSTEM_ITEMS: Record<string, Partial<IItem>> = {

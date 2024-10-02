@@ -5,12 +5,12 @@ import { logger } from 'utils/logger';
 
 import { createSchema } from './utils';
 
-export type IItem = {
+export interface IItem {
 	id: string;
 	type: ItemType;
 	remainAmount: number;
 	metadata: Record<string, string | number>;
-};
+}
 
 export const itemSchema = createSchema({
 	type: String,
@@ -20,21 +20,21 @@ export const itemSchema = createSchema({
 
 itemSchema.index({ type: 1 }, { unique: true });
 
-export type IInventoryItem = {
-	itemId: Types.ObjectId;
+export interface IInventoryItem {
+	itemId: Types.ObjectId | IItem;
 	amount: number;
-};
+}
 
 const inventoryItem = createSchema({
 	itemId: { type: Types.ObjectId, ref: 'Item' },
 	amount: Number,
 });
 
-export type IInventory = {
+export interface IInventory {
 	id: string;
 	userId: Types.ObjectId;
 	items: IInventoryItem[];
-};
+}
 
 const inventorySchema = createSchema({
 	userId: { type: Types.ObjectId, ref: 'User' },
@@ -51,7 +51,7 @@ export const boostrapSystemAssets = async () => {
 		if (systemItemsInfo.findIndex((val) => val.type == type) == -1) {
 			logger.info(`system item ${type} not found, adding...`);
 			const result = await Item.create({ ...item });
-			if (result == undefined) {
+			if (!result) {
 				throw result.errors;
 			}
 		}
@@ -61,6 +61,11 @@ export const boostrapSystemAssets = async () => {
 };
 
 export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
+	if (!isLimitedItem(item)) {
+		// don't change remain amount if this is un
+		return;
+	}
+
 	if (item.remainAmount > 0) {
 		const updateResponse = await Item.updateOne(
 			{ type: item.type },
@@ -72,7 +77,11 @@ export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
 	} else if (item.remainAmount == 0) {
 		throw new Error('item amount cannot be negative');
 	}
+};
+
+export const isLimitedItem = (item: IItem): Boolean => {
 	// TODO: since we don't limit system amount now, treat negative reaminAmount as infinite, so skip update item's remainAmount if remainAmount is already negative
+	return item.remainAmount != -1;
 };
 
 export const Inventory = model<IInventory>('Inventory', inventorySchema);

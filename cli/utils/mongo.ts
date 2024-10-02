@@ -4,13 +4,16 @@ import mongoose, { Schema } from 'mongoose';
 import { MONGO_URI } from './loadEnv';
 
 export const connectToMongoDB = async () => {
+	if (!MONGO_URI) {
+		const msg = 'MONGO_URI is not set';
+		console.error(msg);
+		throw Error(msg);
+	}
 	try {
 		await mongoose.connect(MONGO_URI);
 		console.log('Connect to MongoDB successfully');
 	} catch (err) {
-		console.error(
-			'failed to connect MongoDB, make sure environemt variable MONGO_URI is set',
-		);
+		console.error('failed to connect MongoDB');
 		throw Error(err);
 	}
 };

@@ -2,7 +2,6 @@ import type { IItem } from 'models/asset';
 import { consumeSystemItems, Inventory, Item } from 'models/asset';
 import { PointLogType, PointsHistory } from 'models/points';
 import { User } from 'models/user';
-import { virtualId } from 'models/utils';
 import type { Types } from 'mongoose';
 import {
 	ItemType,
@@ -12,6 +11,7 @@ import {
 } from 'utils/common';
 import { ClientError, SystemError } from 'utils/errors';
 import { logger } from 'utils/logger';
+import { isObjectId, toHex } from 'utils/mongo';
 import type { MutationResolvers } from 'utils/types';
 
 export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
@@ -19,16 +19,16 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	_,
 	{ user },
 ) => {
-	const systemLotteryInfo = await Item.findOne({ type: ItemType.LOTTERY });
-	if (systemLotteryInfo == undefined) {
+	const lottery = await Item.findOne({ type: ItemType.LOTTERY });
+	if (!lottery) {
 		throw new SystemError('failed to get system lottery info');
 	}
 
 	let lotteryPrice: number;
-	if (systemLotteryInfo.metadata.price == undefined) {
+	if (!lottery.metadata.price) {
 		throw new SystemError('lottery price is missing');
 	} else {
-		lotteryPrice = Number(systemLotteryInfo.metadata.price);
+		lotteryPrice = Number(lottery.metadata.price);
 	}
 
 	if (user.points == undefined) {
@@ -39,7 +39,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 		throw new ClientError('user have no enough point');
 	}
 
-	if (systemLotteryInfo.remainAmount == 0) {
+	if (lottery.remainAmount == 0) {
 		throw new SystemError('system have no enough lottery');
 	}
 
@@ -50,13 +50,13 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 		source: PointLogType.BUY_ITEM,
 		points: -lotteryPrice,
 	});
-	if (pointHistory == undefined) {
+	if (!pointHistory) {
 		throw new SystemError('failed to update user point transaction');
 	}
 
 	// second, update the point of user
 	const updateResponse = await User.updateOne(
-		{ _id: user.id },
+		{ _id: user.id, points: { $gte: lotteryPrice } },
 		{ $inc: { points: -lotteryPrice } },
 	);
 
@@ -65,27 +65,17 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	}
 
 	// third, update the remain ticket of the system
-	try {
-		decreaseSystemLotteryAmount(systemLotteryInfo);
-	} catch (err) {
-		logger.error('failed to decrase system lottery amount', err);
-		throw new SystemError('failed to decrase system lottery amount');
-	}
+	await decreaseSystemLotteryAmount(lottery);
 
 	// finnaly, update ticket number in inventory
-	await addUserInventoryItem(
-		virtualId(user).id,
-		virtualId(systemLotteryInfo).id,
-		1,
-	);
-	const result = {
+	await addUserInventoryItem(toHex(user.id), lottery._id, 1);
+	return {
 		source: pointHistory.source,
 		id: pointHistory.id,
 		points: pointHistory.points,
 		userId: user.id,
 		bindingId: user.id,
-	} as never;
-	return result;
+	};
 };
 
 export const openLottery: MutationResolvers['openLottery'] = async (
@@ -93,13 +83,13 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	_,
 	{ user },
 ) => {
-	const userObjectId = virtualId(user).id;
+	const userObjectId = toHex(user.id);
 	// first, check if user's inventory include lottery ticket
-	let userInventory = await Inventory.findOne({ userId: user.id })
-		.populate('items.itemId')
-		.exec();
+	let userInventory = await Inventory.findOne({ userId: user.id }).populate(
+		'items.itemId',
+	);
 
-	if (userInventory == undefined) {
+	if (!userInventory) {
 		userInventory = await Inventory.create({
 			userId: userObjectId,
 			items: [],
@@ -110,12 +100,15 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	// check if user have lottery ticket
 	const userLottery = userInventory.items
 		.filter(
-			(val) =>
-				// PERF: clean this
-				((val.itemId as unknown as IItem).type as ItemType) == ItemType.LOTTERY,
+			(val) => !isObjectId(val.itemId) && val.itemId.type == ItemType.LOTTERY,
 		)
 		.at(0);
-	if (userLottery == undefined || userLottery.amount == 0) {
+
+	if (isObjectId(userLottery.itemId)) {
+		throw new SystemError('received invalid populated result');
+	}
+
+	if (!userLottery || userLottery.amount == 0) {
 		throw new ClientError('user has no lottery ticket');
 	}
 
@@ -152,28 +145,14 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 
 	const rewardInfo = rewardsSystemInfo.find((val) => val.type == reward.type);
 
-	try {
-		// update amount of system item
-		consumeSystemItems(rewardInfo, -1);
-	} catch (err) {
-		logger.info(`failed to subtract system item: ${err}`);
-		throw new SystemError(err);
-	}
+	// update amount of system item
+	await consumeSystemItems(rewardInfo, -1);
 
-	try {
-		// update reward into user inventory
-		await addUserInventoryItem(userObjectId, rewardInfo._id, 1);
-	} catch (err) {
-		logger.info(`failed to add item to user inventory: ${err}`);
-		throw new SystemError(err);
-	}
-	try {
-		// subtract lottery amount in user inventory
-		await consumeUserInventoryItem(userObjectId, userLottery.itemId, 1);
-	} catch (err) {
-		logger.info(`failed to consume lottery ticket from user inventory: ${err}`);
-		throw new SystemError(err);
-	}
+	// update reward into user inventory
+	await addUserInventoryItem(userObjectId, rewardInfo._id, 1);
+
+	// subtract lottery amount in user inventory
+	await consumeUserInventoryItem(userObjectId, toHex(userLottery.itemId.id), 1);
 
 	return {
 		userId: user.id,
@@ -194,11 +173,14 @@ const decreaseSystemLotteryAmount = async (systemLotteryInfo: IItem) => {
 	}
 
 	const decreaseResponse = await Item.updateOne(
-		{ _id: systemLotteryInfo.id, type: ItemType.LOTTERY },
+		{
+			_id: systemLotteryInfo.id,
+			type: ItemType.LOTTERY,
+			remainAmount: { $gte: 1 },
+		},
 		{ $inc: { remainAmount: -1 } },
 	);
 
-	// TODO: find way to update nested field of document
 	if (!decreaseResponse.acknowledged) {
 		throw Error('failed to decreaseSystemLotteryAmount');
 	}
@@ -247,7 +229,7 @@ const addUserInventoryItem = async (
 			{ upsert: true },
 		);
 		if (response.modifiedCount == 0 && response.upsertedCount == 0) {
-			throw new Error('failed to update inventory item');
+			throw new SystemError('failed to update inventory item');
 		}
 	}
 };
@@ -261,10 +243,15 @@ const consumeUserInventoryItem = async (
 		throw new Error('amount must be greater than zero');
 	}
 	const decreaseResponse = await Inventory.updateOne(
-		{ userId: userId, 'items.itemId': itemId },
+		{
+			userId: userId,
+			'items.itemId': itemId,
+			'items.amount': { $gte: amount },
+		},
 		{ $inc: { 'items.$.amount': -amount } },
 	);
 	if (decreaseResponse.modifiedCount == 0) {
-		throw new Error('failed to update inventory item');
+    console.log(decreaseResponse)
+		throw new SystemError('failed to update inventory item');
 	}
 };
