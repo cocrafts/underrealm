@@ -1,6 +1,9 @@
 import type { IItem } from 'models/asset';
 import { consumeSystemItems, Inventory, Item } from 'models/asset';
-import { PointLogType, PointsHistory } from 'models/points';
+import {
+	GeneralPointTransaction,
+	GeneralPointTransactionType,
+} from 'models/generalPoints';
 import { User } from 'models/user';
 import type { Types } from 'mongoose';
 import {
@@ -44,10 +47,9 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	}
 
 	// first, insert the transaction
-	const pointHistory = await PointsHistory.create({
+	const pointHistory = await GeneralPointTransaction.create({
 		userId: user.id,
-		bindingId: user.id,
-		source: PointLogType.BUY_ITEM,
+		type: GeneralPointTransactionType.PURCHASE_LOTTERY,
 		points: -lotteryPrice,
 	});
 	if (!pointHistory) {
@@ -70,11 +72,10 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	// finnaly, update ticket number in inventory
 	await addUserInventoryItem(toHex(user.id), lottery._id, 1);
 	return {
-		source: pointHistory.source,
+		type: pointHistory.type,
 		id: pointHistory.id,
 		points: pointHistory.points,
 		userId: user.id,
-		bindingId: user.id,
 	};
 };
 

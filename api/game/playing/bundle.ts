@@ -13,7 +13,7 @@ import {
 } from '@underrealm/murg';
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
-import { safeAddGamePoints } from 'models/points';
+import { safeAddGamePoints } from 'models/gamePoints';
 
 import type { CommandHandler, ResponseSender } from './types';
 import { EventType } from './types';

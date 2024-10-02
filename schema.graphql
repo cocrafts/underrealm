@@ -74,6 +74,13 @@ type CardPlayerConfig {
 
 scalar DateTime
 
+type GeneralPointHistory {
+  id: String!
+  points: Int
+  type: String!
+  userId: String!
+}
+
 type Inventory {
   id: String!
   items: [InventoryItem!]!
@@ -98,20 +105,12 @@ type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
   openLottery: OpenLotteryResult
-  purchaseLottery: PointHistory
+  purchaseLottery: GeneralPointHistory
 }
 
 type OpenLotteryResult {
   items: [InventoryItem!]!
   userId: ID!
-}
-
-type PointHistory {
-  bindingId: String!
-  id: String!
-  points: Int
-  source: String!
-  userId: String!
 }
 
 type Profile {

@@ -103,6 +103,14 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type GeneralPointHistory = {
+  __typename?: 'GeneralPointHistory';
+  id: Scalars['String']['output'];
+  points?: Maybe<Scalars['Int']['output']>;
+  type: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+};
+
 export type Inventory = {
   __typename?: 'Inventory';
   id: Scalars['String']['output'];
@@ -129,7 +137,7 @@ export type Mutation = {
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
   openLottery?: Maybe<OpenLotteryResult>;
-  purchaseLottery?: Maybe<PointHistory>;
+  purchaseLottery?: Maybe<GeneralPointHistory>;
 };
 
 
@@ -146,15 +154,6 @@ export type OpenLotteryResult = {
   __typename?: 'OpenLotteryResult';
   items: Array<InventoryItem>;
   userId: Scalars['ID']['output'];
-};
-
-export type PointHistory = {
-  __typename?: 'PointHistory';
-  bindingId: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  points?: Maybe<Scalars['Int']['output']>;
-  source: Scalars['String']['output'];
-  userId: Scalars['String']['output'];
 };
 
 export type Profile = {
