@@ -7,7 +7,7 @@ export class SystemError extends GraphQLError {
 		super(message, {
 			extensions: {
 				http: { status: StatusCodes.SERVICE_UNAVAILABLE },
-				code: ApolloServerErrorCode.BAD_REQUEST,
+				code: ApolloServerErrorCode.INTERNAL_SERVER_ERROR,
 			},
 		});
 	}

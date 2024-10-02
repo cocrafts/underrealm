@@ -26,7 +26,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 
 	let lotteryPrice: number;
 	if (systemLotteryInfo.metadata.price == undefined) {
-		throw new SysteError('lottery price is missing');
+		throw new SystemError('lottery price is missing');
 	} else {
 		lotteryPrice = Number(systemLotteryInfo.metadata.price);
 	}
