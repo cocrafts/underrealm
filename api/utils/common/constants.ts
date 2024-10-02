@@ -48,7 +48,7 @@ export interface LotteryRewardRateRecord {
 }
 
 // derive the rate of lottery reward from the chance
-export const LOTTERY_REWARD_RATE: LotteryRewardRateRecord[] = Object.entries(
+export const LOTTERY_REWARD_RATES: LotteryRewardRateRecord[] = Object.entries(
 	LOTTERY_REWARD_CHANCE,
 ).reduce((prev, [itemType, chance]) => {
 	const currentCumulativeRate =

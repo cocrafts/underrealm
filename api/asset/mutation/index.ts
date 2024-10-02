@@ -9,7 +9,7 @@ import type { Types } from 'mongoose';
 import {
 	ItemType,
 	LOTTERY_REWARD_CHANCE,
-	LOTTERY_REWARD_RATE,
+	LOTTERY_REWARD_RATES,
 	randInt,
 } from 'utils/common';
 import { ClientError, SystemError } from 'utils/errors';
@@ -115,36 +115,35 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 
 	// second, check system available reward
 	const reward_types = Object.keys(LOTTERY_REWARD_CHANCE);
-	const local_reward_rate = LOTTERY_REWARD_RATE;
-	const rewardsSystemInfo = await Item.find({
+	const localRewardRates = LOTTERY_REWARD_RATES;
+
+	// find rewards that have remainAmount > 0
+	const filteredRewardsSystemInfo = await Item.find({
 		type: { $in: reward_types },
+		remainAmount: { $ne: 0 },
 	});
 
-	if (rewardsSystemInfo.length != reward_types.length) {
-		logger.info('failed to retrieve reward');
-		throw new SystemError('failed to retrieve reward');
+	if (filteredRewardsSystemInfo.length == 0) {
+		logger.info('reward system is empty');
+		throw new SystemError('reward is unavailable');
 	}
-	const filtered_reward_rates = local_reward_rate.filter((val) => {
-		return (
-			rewardsSystemInfo.findIndex(
-				(reward) => reward.type == val.type && reward.remainAmount != 0,
-			) != -1
-		);
+
+	const filteredRewardRates = filteredRewardsSystemInfo.map((item) => {
+		return localRewardRates.find((val) => val.type == item.type);
 	});
-	if (filtered_reward_rates.length == 0) {
-		logger.info('system have no available rewards');
-		throw new SystemError('system have no available rewards');
-	}
+  console.log(filteredRewardRates)
 
 	// calc reward for user
 	const retried = 10;
-	const reward = calcUserReward(filtered_reward_rates, retried);
+	const reward = calculateUserReward(filteredRewardRates, retried);
 	if (reward == undefined) {
 		logger.info(`failed to retrieve reward for user after ${retried} retries`);
 		throw new SystemError('failed to retrieve reward user');
 	}
 
-	const rewardInfo = rewardsSystemInfo.find((val) => val.type == reward.type);
+	const rewardInfo = filteredRewardsSystemInfo.find(
+		(val) => val.type == reward.type,
+	);
 
 	// update amount of system item
 	await consumeSystemItems(rewardInfo, -1);
@@ -173,7 +172,7 @@ const decreaseSystemLotteryAmount = async (systemLotteryInfo: IItem) => {
 		return;
 	}
 
-	const decreaseResponse = await Item.updateOne(
+	const response = await Item.updateOne(
 		{
 			_id: systemLotteryInfo.id,
 			type: ItemType.LOTTERY,
@@ -182,17 +181,19 @@ const decreaseSystemLotteryAmount = async (systemLotteryInfo: IItem) => {
 		{ $inc: { remainAmount: -1 } },
 	);
 
-	if (!decreaseResponse.acknowledged) {
+	if (!response.acknowledged) {
 		throw Error('failed to decreaseSystemLotteryAmount');
 	}
 	return;
 };
 
-const calcUserReward = (
-	potentialRewardsRates: {
-		type: ItemType;
-		rate: number;
-	}[],
+interface RewardRate {
+	type: ItemType;
+	rate: number;
+}
+
+const calculateUserReward = (
+	potentialRewardsRates: RewardRate[],
 	retries: number = 10,
 ) => {
 	let retried = 0;
@@ -219,12 +220,12 @@ const addUserInventoryItem = async (
 	if (amount <= 0) {
 		throw new Error('amount must be greater than zero');
 	}
-	const updateResponse = await Inventory.updateOne(
+	let response = await Inventory.updateOne(
 		{ userId: userId, 'items.itemId': itemId },
 		{ $inc: { 'items.$.amount': amount } },
 	);
-	if (updateResponse.modifiedCount == 0) {
-		const response = await Inventory.updateOne(
+	if (response.modifiedCount == 0) {
+		response = await Inventory.updateOne(
 			{ userId: userId },
 			{ $push: { items: { itemId: itemId, amount: amount } } },
 			{ upsert: true },
