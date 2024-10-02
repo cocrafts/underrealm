@@ -52,11 +52,12 @@ export const showEndGameRibbon = async (
 			.getChildByPath('ribbon/coin/label')
 			.getComponent(RichText);
 
-		coinNode.string = claimedPoints?.toString();
-
 		if (!claimedPoints || claimedPoints === 0) {
 			coinNode.fontSize = 24;
+			coinNode.lineHeight = 32;
 			coinNode.string = `<color=#F2E0C3>You have taken all the gold today.\n Return once the sun rises again.</color>`;
+		} else {
+			coinNode.string = claimedPoints?.toString();
 		}
 
 		console.log(coinNode.string);
