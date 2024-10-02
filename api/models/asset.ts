@@ -22,11 +22,13 @@ itemSchema.index({ type: 1 }, { unique: true });
 
 export interface IInventoryItem {
 	itemId: Types.ObjectId | IItem;
+	type: ItemType;
 	amount: number;
 }
 
 const inventoryItem = createSchema({
 	itemId: { type: Types.ObjectId, ref: 'Item' },
+	type: String,
 	amount: Number,
 });
 
@@ -60,7 +62,7 @@ export const boostrapSystemAssets = async () => {
 	logger.info('bootstrap system items completed');
 };
 
-export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
+export const consumeSystemItems = async (item: IItem, amount: number = 1) => {
 	if (!isLimitedItem(item)) {
 		// don't change remain amount if this is un
 		return;
@@ -68,8 +70,8 @@ export const consumeSystemItems = async (item: IItem, amount: number = -1) => {
 
 	if (item.remainAmount > 0) {
 		const updateResponse = await Item.updateOne(
-			{ type: item.type },
-			{ $inc: { remainAmount: amount } },
+			{ type: item.type, remainAmount: { $geq: amount } },
+			{ $inc: { remainAmount: -amount } },
 		);
 		if (!updateResponse.acknowledged) {
 			throw new Error("can't subtract reward amount from system");

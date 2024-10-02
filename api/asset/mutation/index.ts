@@ -70,7 +70,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	await decreaseSystemLotteryAmount(lottery);
 
 	// finnaly, update ticket number in inventory
-	await addUserInventoryItem(toHex(user.id), lottery._id, 1);
+	await addUserInventoryItem(toHex(user.id), lottery._id, ItemType.LOTTERY, 1);
 	return {
 		type: pointHistory.type,
 		id: pointHistory.id,
@@ -86,9 +86,12 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 ) => {
 	const userObjectId = toHex(user.id);
 	// first, check if user's inventory include lottery ticket
-	let userInventory = await Inventory.findOne({ userId: user.id }).populate(
-		'items.itemId',
-	);
+	let userInventory = await Inventory.findOne(
+		{ userId: user.id },
+		{
+			items: { $elemMatch: { type: ItemType.LOTTERY } },
+		},
+	).populate('items.itemId');
 
 	if (!userInventory) {
 		userInventory = await Inventory.create({
@@ -97,13 +100,12 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 		});
 		throw new ClientError('user has no ticket');
 	}
+	if (userInventory.items.length == 0) {
+		throw new ClientError('user has no ticket');
+	}
 
 	// check if user have lottery ticket
-	const userLottery = userInventory.items
-		.filter(
-			(val) => !isObjectId(val.itemId) && val.itemId.type == ItemType.LOTTERY,
-		)
-		.at(0);
+	const userLottery = userInventory.items.at(0);
 
 	if (isObjectId(userLottery.itemId)) {
 		throw new SystemError('received invalid populated result');
@@ -148,7 +150,7 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	await consumeSystemItems(rewardInfo, -1);
 
 	// update reward into user inventory
-	await addUserInventoryItem(userObjectId, rewardInfo._id, 1);
+	await addUserInventoryItem(userObjectId, rewardInfo._id, ItemType.LOTTERY, 1);
 
 	// subtract lottery amount in user inventory
 	await consumeUserInventoryItem(userObjectId, toHex(userLottery.itemId.id), 1);
@@ -214,6 +216,7 @@ const calculateUserReward = (
 const addUserInventoryItem = async (
 	userId: Types.ObjectId,
 	itemId: Types.ObjectId,
+	itemType: ItemType,
 	amount: number,
 ) => {
 	if (amount <= 0) {
@@ -226,7 +229,7 @@ const addUserInventoryItem = async (
 	if (response.modifiedCount == 0) {
 		response = await Inventory.updateOne(
 			{ userId: userId },
-			{ $push: { items: { itemId: itemId, amount: amount } } },
+			{ $push: { items: { itemId: itemId, amount: amount, type: itemType } } },
 			{ upsert: true },
 		);
 		if (response.modifiedCount == 0 && response.upsertedCount == 0) {
