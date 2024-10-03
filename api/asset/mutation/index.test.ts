@@ -9,13 +9,13 @@ describe('Random Reward Logic', () => {
 		{ type: ItemType.CHEST_WOODEN, rate: 1 },
 	];
 
-	test('getRandomNumber should return a number between 0 and 1', () => {
+	test('test randInt should return a number between 0 and 1', () => {
 		const randomNumber = randInt(0, 100) / 100;
 		expect(randomNumber).toBeGreaterThanOrEqual(0);
 		expect(randomNumber).toBeLessThanOrEqual(1);
 	});
 
-	test('calculateUserReward should return the correct reward based on random number', () => {
+	test('getRewardByRate should return the correct reward based on random number', () => {
 		expect(getRewardByRate(0.3, rewards).type).toBe(ItemType.CHEST_GOLD); // 0.3 <= 0.5
 		expect(getRewardByRate(0.55, rewards).type).toBe(ItemType.CHEST_LIGHT); // 0.55 > 0.5 and <= 0.6
 		expect(getRewardByRate(0.7, rewards).type).toBe(ItemType.CHEST_WOODEN); // 0.7 > 0.6 and <= 1
