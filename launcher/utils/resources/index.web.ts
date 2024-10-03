@@ -310,4 +310,10 @@ export default {
 			visualBullet: { uri: '/referral/visual-bullet.svg' },
 		},
 	},
+	profile: {
+		tabActiveBackground: { uri: '/profile/tab-active-background.png' },
+		tabBar: { uri: '/profile/tab-bar.png' },
+		separateLine: { uri: '/profile/separate-line.png' },
+		avatarBorder: { uri: '/profile/avatar-border.png' },
+	},
 };
