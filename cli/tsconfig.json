@@ -9,7 +9,8 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "paths": {
-      "utils/*": ["./utils/*"]
+      "utils/*": ["./utils/*"],
+      "@underrealm/api": ["../api/lib/index.ts"]
     }
   },
   "exclude": ["node_modules"]

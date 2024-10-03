@@ -1,15 +1,13 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
+import type { IUser } from '@underrealm/api';
+import { Inventory, Item, ItemType, User } from '@underrealm/api';
 import { parse } from 'csv-parse';
 import yargs from 'yargs';
 
 import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
-
-import type { IUser } from './../user/model';
-import { User } from './../user/model';
-import type { StrictCommandModule } from './../utils/types';
-import { Inventory, Item, ItemType } from './model';
+import type { StrictCommandModule } from '../utils/types';
 
 export const inventoryCommand: StrictCommandModule<object, unknown> = {
 	command: 'inventory',

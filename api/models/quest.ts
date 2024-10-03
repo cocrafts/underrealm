@@ -1,5 +1,7 @@
 import { model, Types } from 'mongoose';
 
+import { generateRandomCode } from '../utils/common';
+
 import { createSchema } from './utils';
 
 const questSchema = createSchema({
@@ -13,8 +15,20 @@ const questSchema = createSchema({
 		type: String,
 		enum: ['INIT', 'LIVE', 'DISABLE'],
 	},
+	code: {
+		type: String,
+		unique: true,
+		length: 4,
+	},
 	url: String,
 	points: Number,
+});
+
+questSchema.pre('save', function (next) {
+	if (!this.code) {
+		this.code = generateRandomCode(4, '1234567890');
+	}
+	next();
 });
 
 export const Quest = model('Quest', questSchema);

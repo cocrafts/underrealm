@@ -1,6 +1,7 @@
 {
   "name": "@underrealm/api",
   "version": "0.0.1",
+  "main": "./lib/index.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
