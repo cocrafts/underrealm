@@ -1,5 +1,11 @@
-import type { IItem } from 'models/asset';
-import { consumeSystemItems, Inventory, Item } from 'models/asset';
+import type { LotteryRewardRateRecord } from 'models/asset';
+import {
+	addUserInventoryItem,
+	consumeSystemItems,
+	consumeUserInventoryItem,
+	Inventory,
+	Item,
+} from 'models/asset';
 import {
 	ItemType,
 	LOTTERY_REWARD_CHANCE,
@@ -10,7 +16,6 @@ import {
 	GeneralPointTransactionType,
 } from 'models/generalPoints';
 import { User } from 'models/user';
-import type { Types } from 'mongoose';
 import { randInt } from 'utils/common';
 import { ClientError, SystemError } from 'utils/errors';
 import { logger } from 'utils/logger';
@@ -67,7 +72,7 @@ export const purchaseLottery: MutationResolvers['purchaseLottery'] = async (
 	}
 
 	// third, update the remain ticket of the system
-	await decreaseSystemLotteryAmount(lottery);
+	await consumeSystemItems(lottery, 1);
 
 	// finnaly, update ticket number in inventory
 	await addUserInventoryItem(toHex(user.id), lottery._id, ItemType.LOTTERY, 1);
@@ -167,94 +172,26 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 	};
 };
 
-const decreaseSystemLotteryAmount = async (systemLotteryInfo: IItem) => {
-	if (systemLotteryInfo.remainAmount < 0) {
-		// skip this case, since we don't limited system lottery
-		return;
-	}
-
-	const response = await Item.updateOne(
-		{
-			_id: systemLotteryInfo.id,
-			type: ItemType.LOTTERY,
-			remainAmount: { $gte: 1 },
-		},
-		{ $inc: { remainAmount: -1 } },
-	);
-
-	if (!response.acknowledged) {
-		throw Error('failed to decreaseSystemLotteryAmount');
-	}
-	return;
-};
-
-interface RewardRate {
-	type: ItemType;
-	rate: number;
-}
-
-const calculateUserReward = (
-	potentialRewardsRates: RewardRate[],
+export const calculateUserReward = (
+	potentialRewardsRates: LotteryRewardRateRecord[],
 	retries: number = 10,
 ) => {
 	let retried = 0;
 	do {
 		const rate = randInt(0, 100) / 100;
-		const potentialRewards = potentialRewardsRates.filter(
-			(value) => value.rate >= rate,
-		);
-
-		if (potentialRewards.length == 0) {
-			retried++;
-			continue;
+		const reward = getRewardByRate(rate, potentialRewardsRates);
+		if (reward) {
+			return reward;
 		}
-		return potentialRewards[0];
+		retried++;
 	} while (retried < retries);
 	return undefined;
 };
 
-const addUserInventoryItem = async (
-	userId: Types.ObjectId,
-	itemId: Types.ObjectId,
-	itemType: ItemType,
-	amount: number,
+export const getRewardByRate = (
+	rate: number,
+	rewardsRate: LotteryRewardRateRecord[],
 ) => {
-	if (amount <= 0) {
-		throw new Error('amount must be greater than zero');
-	}
-	let response = await Inventory.updateOne(
-		{ userId: userId, 'items.itemId': itemId },
-		{ $inc: { 'items.$.amount': amount } },
-	);
-	if (response.modifiedCount == 0) {
-		response = await Inventory.updateOne(
-			{ userId: userId },
-			{ $push: { items: { itemId: itemId, amount: amount, type: itemType } } },
-			{ upsert: true },
-		);
-		if (response.modifiedCount == 0 && response.upsertedCount == 0) {
-			throw new SystemError('failed to update inventory item');
-		}
-	}
-};
-
-const consumeUserInventoryItem = async (
-	userId: Types.ObjectId,
-	itemId: Types.ObjectId,
-	amount: number,
-) => {
-	if (amount <= 0) {
-		throw new Error('amount must be greater than zero');
-	}
-	const decreaseResponse = await Inventory.updateOne(
-		{
-			userId: userId,
-			'items.itemId': itemId,
-			'items.amount': { $gte: amount },
-		},
-		{ $inc: { 'items.$.amount': -amount } },
-	);
-	if (decreaseResponse.modifiedCount == 0) {
-		throw new SystemError('failed to update inventory item');
-	}
+	// as rewardsRate is sorted in increasing order, rewardRate.find will return the reward with nearest greater rate
+	return rewardsRate.find((value) => value.rate >= rate);
 };

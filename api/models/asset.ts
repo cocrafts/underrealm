@@ -69,7 +69,7 @@ export const consumeSystemItems = async (item: IItem, amount: number = 1) => {
 
 	if (item.remainAmount > 0) {
 		const updateResponse = await Item.updateOne(
-			{ type: item.type, remainAmount: { $geq: amount } },
+			{ type: item.type, remainAmount: { $gte: amount } },
 			{ $inc: { remainAmount: -amount } },
 		);
 		if (!updateResponse.acknowledged) {
@@ -83,6 +83,52 @@ export const consumeSystemItems = async (item: IItem, amount: number = 1) => {
 export const isLimitedItem = (item: IItem): Boolean => {
 	// TODO: since we don't limit system amount now, treat negative reaminAmount as infinite, so skip update item's remainAmount if remainAmount is already negative
 	return item.remainAmount != -1;
+};
+
+export const addUserInventoryItem = async (
+	userId: Types.ObjectId,
+	itemId: Types.ObjectId,
+	itemType: ItemType,
+	amount: number,
+) => {
+	if (amount <= 0) {
+		throw new Error('amount must be greater than zero');
+	}
+	let response = await Inventory.updateOne(
+		{ userId: userId, 'items.itemId': itemId },
+		{ $inc: { 'items.$.amount': amount } },
+	);
+	if (response.modifiedCount == 0) {
+		response = await Inventory.updateOne(
+			{ userId: userId },
+			{ $push: { items: { itemId: itemId, amount: amount, type: itemType } } },
+			{ upsert: true },
+		);
+		if (response.modifiedCount == 0 && response.upsertedCount == 0) {
+			throw new Error('failed to update inventory item');
+		}
+	}
+};
+
+export const consumeUserInventoryItem = async (
+	userId: Types.ObjectId,
+	itemId: Types.ObjectId,
+	amount: number,
+) => {
+	if (amount <= 0) {
+		throw new Error('amount must be greater than zero');
+	}
+	const decreaseResponse = await Inventory.updateOne(
+		{
+			userId: userId,
+			'items.itemId': itemId,
+			'items.amount': { $gte: amount },
+		},
+		{ $inc: { 'items.$.amount': -amount } },
+	);
+	if (decreaseResponse.modifiedCount == 0) {
+		throw new Error('failed to update inventory item');
+	}
 };
 
 export const Inventory = model<IInventory>('Inventory', inventorySchema);
