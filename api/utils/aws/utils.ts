@@ -28,6 +28,7 @@ const domainAliases = {
 	development: 'dev',
 };
 
-const stagedDomain = (domainAliases[configs.STAGE] || configs.STAGE).trim();
-const domain = [stagedDomain, 'ws.underrealm.io'].join('.');
-export const wsEndpoint = `https://${domain}`;
+const staged = (domainAliases[configs.STAGE] || configs.STAGE).trim();
+const baseWsDomain = 'ws.underrealm.io';
+const wsDomain = !staged ? baseWsDomain : `${staged}.${baseWsDomain}`;
+export const wsEndpoint = `https://${wsDomain}`;

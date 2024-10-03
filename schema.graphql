@@ -143,7 +143,9 @@ enum QuestStatus {
 }
 
 enum QuestType {
+  CHAT_DISCORD
   COMMENT_X
+  FOLLOW_X
   JOIN_DISCORD
   LIKE_X
   RETWEET_X

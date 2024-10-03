@@ -47,7 +47,7 @@ export class DuelRibbonController extends Component {
 			);
 
 			const url = encodeURIComponent(
-				`https://x.com/PlayUnderRealm/status/${isWin ? '1839192516480151981' : '1839192520351428730'}/photo/1`,
+				`https://x.com/PlayUnderRealm/status/${isWin ? '1840673998012858631' : '1840674001942950110'}/photo/1`,
 			);
 
 			const twitterShareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;

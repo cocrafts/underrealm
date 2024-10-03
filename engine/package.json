@@ -5,7 +5,7 @@
 		"lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
 		"type-check": "tsc --noEmit",
 		"client": "node ./src/client.js",
-		"server": "nodemon ./src/server.js"
+		"server": "nodemon ./src/server.js --ignore duel.json"
 	},
 	"devDependencies": {
 		"@swc-node/register": "^1.5.1",
