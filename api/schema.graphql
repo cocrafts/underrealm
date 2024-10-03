@@ -116,8 +116,10 @@ type CardDuelHistory {
 enum QuestType {
   LIKE_X
   RETWEET_X
-  JOIN_DISCORD
   COMMENT_X
+  FOLLOW_X
+  JOIN_DISCORD
+  CHAT_DISCORD
 }
 
 enum QuestStatus {

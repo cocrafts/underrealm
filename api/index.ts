@@ -31,6 +31,7 @@ const wss = createWebsocketServer(http, '/ws');
 const wsCleanup = useServer(
 	{
 		schema,
+		context,
 		onSubscribe: (ctx, msg) => {
 			logger.info(`Client subscribed: ${inspect(msg)}`);
 		},
