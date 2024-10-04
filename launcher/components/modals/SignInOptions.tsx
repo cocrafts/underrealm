@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { Fragment, useCallback, useEffect, useRef } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import type { ModalConfigs } from '@metacraft/ui';
-import { Button, Hyperlink, modalActions, themeState } from '@metacraft/ui';
+import { Button, modalActions, themeState } from '@metacraft/ui';
 import type { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -23,19 +23,12 @@ interface ModalContext {
 
 export const SignInOptions: FC<Props> = ({ config }) => {
 	const { web3Only } = (config?.context || {}) as ModalContext;
-	const { profile, refetch } = useProfile();
+	const { profile } = useProfile();
 
 	const { colors } = useSnapshot(themeState);
 	const fromSelectRef = useRef(false);
-	const {
-		wallets,
-		wallet,
-		select,
-		connected,
-		disconnect,
-		publicKey,
-		signMessage,
-	} = useWallet();
+	const { wallets, select, connected, disconnect, publicKey, signMessage } =
+		useWallet();
 
 	const containerStyle = [
 		modalStyles.container,
@@ -44,8 +37,6 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 
 	const selectWallet = useCallback(
 		async (adapter: WalletAdapterProps) => {
-			modalActions.hide(config.id as string);
-
 			if (adapter.readyState === WalletReadyState.Installed) {
 				fromSelectRef.current = true;
 				select(adapter.name);
@@ -56,16 +47,25 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 		[select],
 	);
 
-	const signInWallet = useCallback(async () => {
-		modalActions.hide(config.id as string);
-		if (profile?.address !== publicKey?.toString()) {
-			await walletSignIn(publicKey.toString(), signMessage);
-		}
-	}, [connected, publicKey, signMessage]);
-
 	const disconnectWallet = useCallback(async () => {
 		await disconnect();
 	}, [disconnect]);
+
+	const signInWallet = useCallback(async () => {
+		modalActions.hide(config.id as string);
+
+		if (profile?.address !== publicKey?.toString()) {
+			const challengedUser = await walletSignIn(
+				publicKey.toString(),
+				signMessage,
+				disconnectWallet,
+			);
+
+			if (challengedUser) {
+				window.location.reload();
+			}
+		}
+	}, [connected, publicKey, signMessage]);
 
 	const signInGoogle = async () => {
 		modalActions.hide(config.id as string);
@@ -85,46 +85,27 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 			publicKey?.toString() !== profile?.address
 		) {
 			fromSelectRef.current = false;
-			signInWallet().then(() => {
-				console.log('--> refetch');
-				refetch().finally(() => console.log('--> refetch done'));
-			});
+			signInWallet();
 		}
 	}, [publicKey, connected]);
 
 	return (
 		<View style={containerStyle}>
 			<Text style={modalStyles.modalTitle}>Wallet Sign-In</Text>
-			{wallet && connected ? (
-				<Fragment>
+			{wallets.map(({ readyState, adapter }, i) => {
+				const isReady = readyState === WalletReadyState.Installed;
+
+				return (
 					<Button
+						key={i}
 						outline
 						style={modalStyles.buttonContainer}
-						title={wallet.adapter.name}
-						onPress={signInWallet}
+						title={adapter.name}
+						titleStyle={!isReady && styles.idleTitle}
+						onPress={() => selectWallet?.(adapter)}
 					/>
-					<Hyperlink
-						titleStyle={modalStyles.hyperLink}
-						title={`Disconnect ${wallet.adapter.name}`}
-						onPress={disconnectWallet}
-					/>
-				</Fragment>
-			) : (
-				wallets.map(({ readyState, adapter }, i) => {
-					const isReady = readyState === WalletReadyState.Installed;
-
-					return (
-						<Button
-							key={i}
-							outline
-							style={modalStyles.buttonContainer}
-							title={adapter.name}
-							titleStyle={!isReady && styles.idleTitle}
-							onPress={() => selectWallet?.(adapter)}
-						/>
-					);
-				})
-			)}
+				);
+			})}
 			{!web3Only && (
 				<Fragment>
 					{/*<FantasySeparator style={styles.separator} />*/}
