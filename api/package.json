@@ -27,6 +27,7 @@
     "chalk": "^5.3.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "google-auth-library": "^9.14.1",
     "googleapis": "^144.0.0",
     "graphql": "^16.1.0",
     "graphql-subscriptions": "patch:graphql-subscriptions@npm%3A2.0.0#~/.yarn/patches/graphql-subscriptions-npm-2.0.0-53564d1c84.patch",
