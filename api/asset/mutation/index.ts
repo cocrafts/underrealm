@@ -151,15 +151,23 @@ export const openLottery: MutationResolvers['openLottery'] = async (
 		(val) => val.type == reward.type,
 	);
 
-	// update amount of system item
-	await consumeSystemItems(rewardInfo, -1);
-
-	// update reward into user inventory
-	await addUserInventoryItem(userObjectId, rewardInfo._id, ItemType.LOTTERY, 1);
-
-	// subtract lottery amount in user inventory
-	await consumeUserInventoryItem(userObjectId, toHex(userLottery.itemId.id), 1);
-
+	await Promise.all([
+		// update amount of system item
+		await consumeSystemItems(rewardInfo, -1),
+		// update reward into user inventory
+		await addUserInventoryItem(
+			userObjectId,
+			rewardInfo._id,
+			ItemType.LOTTERY,
+			1,
+		),
+		// subtract lottery amount in user inventory
+		await consumeUserInventoryItem(
+			userObjectId,
+			toHex(userLottery.itemId.id),
+			1,
+		),
+	]);
 	return {
 		userId: user.id,
 		items: [
@@ -185,7 +193,7 @@ export const calculateUserReward = (
 		}
 		retried++;
 	} while (retried < retries);
-	return undefined;
+	return;
 };
 
 export const getRewardByRate = (
