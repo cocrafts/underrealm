@@ -23,7 +23,8 @@ interface ModalContext {
 
 export const SignInOptions: FC<Props> = ({ config }) => {
 	const { web3Only } = (config?.context || {}) as ModalContext;
-	const { profile } = useProfile();
+	const { profile, refetch } = useProfile();
+
 	const { colors } = useSnapshot(themeState);
 	const fromSelectRef = useRef(false);
 	const {
@@ -84,7 +85,10 @@ export const SignInOptions: FC<Props> = ({ config }) => {
 			publicKey?.toString() !== profile?.address
 		) {
 			fromSelectRef.current = false;
-			signInWallet();
+			signInWallet().then(() => {
+				console.log('--> refetch');
+				refetch().finally(() => console.log('--> refetch done'));
+			});
 		}
 	}, [publicKey, connected]);
 
