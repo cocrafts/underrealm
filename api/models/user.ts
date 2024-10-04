@@ -16,6 +16,8 @@ export type IUser = {
 	avatarUrl?: string;
 	referralCode: string;
 	points: number;
+	createdAt: Date;
+	udpatedAt: Date;
 };
 
 const UserSchema = createSchema({
