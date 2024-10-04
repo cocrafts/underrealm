@@ -8668,6 +8668,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@underrealm/core@workspace:engine/core":
+  version: 0.0.0-use.local
+  resolution: "@underrealm/core@workspace:engine/core"
+  languageName: unknown
+  linkType: soft
+
 "@underrealm/engine@workspace:engine":
   version: 0.0.0-use.local
   resolution: "@underrealm/engine@workspace:engine"
