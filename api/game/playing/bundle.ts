@@ -14,6 +14,7 @@ import {
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import { safeAddGamePoints } from 'models/points';
+import { User } from 'models/user';
 
 import type { CommandHandler, ResponseSender } from './types';
 import { EventType } from './types';
@@ -54,6 +55,25 @@ const sendGameOver = async (
 	const [winnerPoints, loserPoints] = await Promise.all([
 		safeAddGamePoints(winner, duel.id, true),
 		safeAddGamePoints(loser, duel.id, false),
+		User.findByIdAndUpdate(
+			winner,
+			{
+				$inc: {
+					winMatches: 1,
+					totalMatches: 1,
+				},
+			},
+			{ new: true },
+		),
+		User.findByIdAndUpdate(
+			loser,
+			{
+				$inc: {
+					totalMatches: 1,
+				},
+			},
+			{ new: true },
+		),
 	]);
 
 	await send({ winner, winnerPoints, loserPoints }, EventType.GameOver);

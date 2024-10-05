@@ -134,6 +134,8 @@ export type Profile = {
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
+  totalMatches?: Maybe<Scalars['Int']['output']>;
+  winMatches?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {

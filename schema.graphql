@@ -93,6 +93,8 @@ type Profile {
   points: Int!
   referralCode: String!
   referred: ReferralHistory
+  totalMatches: Int
+  winMatches: Int
 }
 
 type Query {

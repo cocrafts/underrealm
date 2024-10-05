@@ -29,6 +29,8 @@ type Profile {
   referred: ReferralHistory
   referralCode: String!
   points: Int!
+  winMatches: Int
+  totalMatches: Int
 }
 
 type MatchFound {

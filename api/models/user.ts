@@ -16,6 +16,8 @@ export type IUser = {
 	avatarUrl?: string;
 	referralCode: string;
 	points: number;
+	winMatches: number;
+	totalMatches: number;
 };
 
 const UserSchema = createSchema({
@@ -44,6 +46,16 @@ const UserSchema = createSchema({
 	email: {
 		type: String,
 		index: true,
+	},
+	winMatches: {
+		type: Number,
+		min: 0,
+		default: 0,
+	},
+	totalMatches: {
+		type: Number,
+		min: 0,
+		default: 0,
 	},
 	avatarUrl: String,
 });
