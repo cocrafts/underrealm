@@ -99,7 +99,10 @@ export const handler = async (event) => {
 
 	const beginDate = new Date(2024, 9, 1);
 	const newSheetName = new Date().toISOString().split('T')[0];
-	const spreadsheetId = '132w-SGJfo24O0ftvNVDU9Mrs1np6T8LKWfFEq3MXR1U';
+	const spreadsheetId = process.env.GCP_SHEET_SPREADSHEET_ID;
+	if (!spreadsheetId) {
+		console.error('failed to get spreadsheet id from environment');
+	}
 
 	const users = await getNewRegisterUser(beginDate);
 	const newUsersInfo = users.map((val) => {
