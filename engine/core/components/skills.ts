@@ -1,4 +1,4 @@
-import type { Component } from 'core/ecs';
+import type { Component } from '../ecs';
 
 import type { CardType } from './card';
 import type { ComponentType, InspireSource } from './types';

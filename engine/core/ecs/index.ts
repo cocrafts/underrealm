@@ -34,19 +34,24 @@ export class ECS<CT extends string = string> {
 		return entity;
 	}
 
-	addComponent(entityId: number, component: Component<CT>) {
-		this.entities[entityId].components[component.type.toString()] = component;
-	}
-
 	getComponent<T extends Component<CT>>(
-		entity: Entity<CT>,
+		entityId: number,
 		componentType: string,
 	) {
-		return entity[componentType] as T;
+		return this.entities[entityId][componentType] as T;
 	}
 
-	addSystem(system: System<CT>): void {
+	addComponent(entityId: number, component: Component<CT>): this {
+		this.entities[entityId].components[component.type.toString()] = component;
+		return this;
+	}
+
+	/**
+	 * Add system to ECS, the execution priority will bases on adding order
+	 */
+	addSystem(system: System<CT>): this {
 		this.systems.push(system);
+		return this;
 	}
 
 	update(): void {
@@ -58,7 +63,6 @@ export class ECS<CT extends string = string> {
 	toJSON(): object {
 		return {
 			entities: JSON.parse(JSON.stringify(this.entities)),
-			systems: JSON.parse(JSON.stringify(this.systems)),
 		};
 	}
 }

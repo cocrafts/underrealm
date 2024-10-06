@@ -1,8 +1,11 @@
-import { createComponent } from 'core/components';
-import { CardType } from 'core/components/card';
-import { ClassType } from 'core/components/card';
-import { ComponentType, InspireSource } from 'core/components/types';
-import { ECS } from 'core/ecs';
+import {
+	CardType,
+	ClassType,
+	ComponentType,
+	createComponent,
+	InspireSource,
+} from '../components';
+import { ECS } from '../ecs';
 
 export const ecs = new ECS<ComponentType>();
 

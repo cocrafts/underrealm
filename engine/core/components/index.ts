@@ -76,3 +76,7 @@ export const createComponent = <T extends keyof ComponentMap>(
 ): InferComponent<T> => {
 	return { ...value, type } as never;
 };
+
+export * from './card';
+export * from './skills';
+export * from './types';
