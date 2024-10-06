@@ -1,5 +1,3 @@
-import { promises as fs } from 'fs';
-
 import type { GoogleAuth } from 'google-auth-library';
 import { google } from 'googleapis';
 
@@ -10,8 +8,7 @@ const getGoogleSheetsAuth = async () => {
 		return auth;
 	}
 
-	const credentialsPath = './credentials.json';
-	const credentials = JSON.parse(await fs.readFile(credentialsPath, 'utf-8'));
+	const credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT);
 
 	auth = new google.auth.GoogleAuth({
 		credentials,

@@ -94,7 +94,9 @@ const getSystemStatsAggregator = async (
 	return horizontalList;
 };
 
-export const handler = async () => {
+export const handler = async (event) => {
+	console.log('Cron job running...', event);
+
 	const beginDate = new Date(2024, 9, 1);
 	const newSheetName = new Date().toISOString().split('T')[0];
 	const spreadsheetId = '132w-SGJfo24O0ftvNVDU9Mrs1np6T8LKWfFEq3MXR1U';
@@ -152,27 +154,28 @@ export const handler = async () => {
 			],
 			...aggregatedStats,
 		]),
-		writeToGoogleSheet(spreadsheetId, newSheetName, 'A1', [
-			['type', 'address', 'created At'],
-			...newUsersInfo,
-		]),
 	]);
 
 	console.log('Data successfully written to Google Sheets!');
+
+	return {
+		statusCode: 200,
+		body: JSON.stringify({ message: 'Cron job executed successfully!' }),
+	};
 };
 
 await mongo.connect();
 
-const main = async () => {
-	await handler();
-};
+// const main = async () => {
+// 	await handler({});
+// };
 
-main()
-	.then(() => {
-		console.log('done');
-		process.exit(0);
-	})
-	.catch((err) => {
-		console.error('Error:', err);
-		process.exit(1);
-	});
+// main()
+// 	.then(() => {
+// 		console.log('done');
+// 		process.exit(0);
+// 	})
+// 	.catch((err) => {
+// 		console.error('Error:', err);
+// 		process.exit(1);
+// 	});
