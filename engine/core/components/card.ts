@@ -4,10 +4,9 @@ import type { CardPlace } from './types';
 import type { ComponentType } from './types';
 
 export type Metadata = Component<ComponentType.Metadata> & {
-	id: string;
 	name: string;
-	class: ClassType.Assassin;
-	kind: CardType.Hero;
+	class: ClassType;
+	kind: CardType;
 	rarity: 0;
 };
 
@@ -36,16 +35,16 @@ export type Chargeable = Component<ComponentType.Chargeable> & {
 };
 
 export enum ClassType {
-	Assassin = '01',
-	Knight = '02',
-	Tanker = '03',
-	Wizard = '04',
-	Summoner = '05',
-	Beast = '06',
+	Assassin = 'Assassin',
+	Knight = 'Knight',
+	Tanker = 'Tanker',
+	Wizard = 'Wizard',
+	Summoner = 'Summoner',
+	Beast = 'Beast',
 }
 
 export enum CardType {
-	Hero,
-	Troop,
-	Spell,
+	Hero = 'Hero',
+	Troop = 'Troop',
+	Spell = 'Spell',
 }

@@ -7,6 +7,7 @@ export interface Component<T extends Key> {
 export interface Entity<CT extends Key> {
 	id: number;
 	components: Record<string, Component<CT>>;
+	addComponent(component: Component<CT>): Entity<CT>;
 }
 
 export interface System<T extends Key> {
@@ -18,17 +19,23 @@ export class ECS<CT extends string = string> {
 	private systems: System<CT>[] = [];
 	private nextEntityId = 0;
 
-	createEntity(): Entity<CT> {
+	createEntity(): Readonly<Entity<CT>> {
+		const entityId = this.nextEntityId++;
 		const entity: Entity<CT> = {
-			id: this.nextEntityId++,
+			id: entityId,
 			components: {},
+			addComponent: (component) => {
+				this.addComponent(entityId, component);
+				return entity;
+			},
 		};
+		this.entities.push(entity);
 
 		return entity;
 	}
 
-	addComponent(entity: Entity<CT>, component: Component<CT>): void {
-		entity[component.type.toString()] = component;
+	addComponent(entityId: number, component: Component<CT>) {
+		this.entities[entityId].components[component.type.toString()] = component;
 	}
 
 	getComponent<T extends Component<CT>>(
@@ -46,5 +53,12 @@ export class ECS<CT extends string = string> {
 		for (const system of this.systems) {
 			system.update(this.entities);
 		}
+	}
+
+	toJSON(): object {
+		return {
+			entities: JSON.parse(JSON.stringify(this.entities)),
+			systems: JSON.parse(JSON.stringify(this.systems)),
+		};
 	}
 }
