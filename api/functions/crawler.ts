@@ -165,17 +165,3 @@ export const handler = async (event) => {
 };
 
 await mongo.connect();
-
-// const main = async () => {
-// 	await handler({});
-// };
-
-// main()
-// 	.then(() => {
-// 		console.log('done');
-// 		process.exit(0);
-// 	})
-// 	.catch((err) => {
-// 		console.error('Error:', err);
-// 		process.exit(1);
-// 	});
