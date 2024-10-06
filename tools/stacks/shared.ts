@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import type { FunctionProps } from 'sst/constructs';
 
 export const baseDomainName = 'underrealm.io';
 export const hostedZone = 'underrealm.io';
@@ -26,8 +27,16 @@ export const constructDomainName = (
 	console.log('Domain', domainName);
 
 	return domainName;
+export const loadEnvsFromStage = (stage: string): void => {
+	dotenv.config({ path: `api/.env.${stage}` });
 };
 
-export const loadEnvsFromStage = (stage: string): void => {
-	dotenv.config({ path: `.env.${stage}` });
+export const functionDefaultProps: Partial<FunctionProps> = {
+	architecture: 'arm_64',
+	runtime: 'nodejs20.x',
+	nodejs: {
+		esbuild: {
+			resolveExtensions: ['.lambda.ts', '.lambda.js', '.ts', '.js', '.json'],
+		},
+	},
 };

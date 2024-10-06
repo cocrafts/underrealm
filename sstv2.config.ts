@@ -1,6 +1,8 @@
 import type { SSTConfig } from 'sst';
 
 import launcher from './tools/stacks/launcher';
+import { crawler } from './tools/stacks/crawler';
+import { functionDefaultProps } from './tools/stacks/shared';
 
 export default {
 	config() {
@@ -11,5 +13,7 @@ export default {
 	},
 	stacks(app) {
 		app.stack(launcher);
+		app.setDefaultFunctionProps(functionDefaultProps);
+		app.stack(crawler);
 	},
 } satisfies SSTConfig;
