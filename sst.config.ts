@@ -14,5 +14,6 @@ export default $config({
 		import('./tools/infra/api');
 		import('./tools/infra/websocket');
 		import('./tools/infra/launcher');
+		import('./tools/infra/crawler');
 	},
 });

@@ -1,20 +1,17 @@
 import dotenv from 'dotenv';
 
-import { DBEnvs, defaultEnvs, defaultLambdaConfigs } from './shared';
+import { DBEnvs, defaultEnvs, defaultLambdaConfigs, GCPEnvs } from './shared';
 
 dotenv.config({ path: `api/.env.${$app.stage}` });
 
-const crawler = new sst.aws.Function('crawler', {
+const crawler = new sst.aws.Function('data-crawler', {
 	...defaultLambdaConfigs($app.stage),
 	handler: 'api/functions/crawler.handler',
-	environment: { ...defaultEnvs(), ...DBEnvs() },
+	environment: { ...defaultEnvs(), ...DBEnvs(), ...GCPEnvs() },
 });
 
 const cron = new sst.aws.Cron('WeeklyCrawlerSchedule', {
 	job: crawler.arn,
-	schedule: 'rate(7 days)', // AWS Schedule Expression for 1 time per week
+	schedule: 'cron(0 0  ? * 2 *)', // trigger this job every monday at 0:00:00Z
 });
 export { cron };
-
-// TODO: check if this deployment is worked
-// TODO: pin Tan for service account file

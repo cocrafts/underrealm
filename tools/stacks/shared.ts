@@ -27,6 +27,8 @@ export const constructDomainName = (
 	console.log('Domain', domainName);
 
 	return domainName;
+};
+
 export const loadEnvsFromStage = (stage: string): void => {
 	dotenv.config({ path: `api/.env.${stage}` });
 };

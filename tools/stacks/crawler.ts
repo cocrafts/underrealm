@@ -13,13 +13,12 @@ export const crawler = ({ stack, app }: StackContext): void => {
 		environment: {
 			...defaultEnvs(),
 			...DBEnvs(),
-      ...GCPEnvs(),
+			...GCPEnvs(),
 		},
-		copyFiels: [{ from: 'credentials.json', to: './credentials.json' }],
 	});
 
 	new Cron(stack, 'DataCrawlerCronJob', {
-		schedule: 'rate(1 minute)', // trigger this job every day at 0:00:00Z
+		schedule: 'cron(0 0  ? * 2 *)',
 		job: crawler,
 	});
 };
