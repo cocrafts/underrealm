@@ -66,9 +66,12 @@ export const DBEnvs = () => {
 	return getEnvsObjectByKeys(['MONGO_URI', 'REDIS_URI']);
 };
 
-export const GCPEnvs = () =>{
-	return getEnvsObjectByKeys(['GCP_SERVICE_ACCOUNT']);
-}
+export const GCPEnvs = () => {
+	return getEnvsObjectByKeys([
+		'GCP_SERVICE_ACCOUNT',
+		'GCP_SHEET_SPREADSHEET_ID',
+	]);
+};
 
 export const JWTEnvs = (type: 'all' | 'private' | 'public' = 'public') => {
 	if (type === 'all') {

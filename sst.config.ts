@@ -7,7 +7,12 @@ export default $config({
 			name: 'underrealm',
 			removal: input?.stage === 'production' ? 'retain' : 'remove',
 			home: 'aws',
-			providers: { aws: { profile: 'metacraft', region: 'ap-south-1' } },
+			providers: {
+				aws: {
+					profile: process.env.PROFILE || 'metacraft',
+					region: 'ap-south-1',
+				},
+			},
 		};
 	},
 	async run() {
