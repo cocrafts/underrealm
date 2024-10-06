@@ -29,6 +29,11 @@ import {
 } from './systems/skills';
 import { ecs } from './templates/v1';
 
+/**
+ * There are two approaches of registering system:
+ * 1. all entities and queries will be called in all systems
+ * 2. attaching systems by queries, will loop over entities first then picking the systems
+ */
 ecs
 	/**
 	 * Activation systems
