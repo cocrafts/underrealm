@@ -8,6 +8,7 @@ export interface Entity<CT extends Key> {
 	id: number;
 	components: Record<string, Component<CT>>;
 	addComponent(component: Component<CT>): Entity<CT>;
+	removeComponent(type: CT): Entity<CT>;
 }
 
 export interface System<T extends Key> {
@@ -28,21 +29,28 @@ export class ECS<CT extends string = string> {
 				this.addComponent(entityId, component);
 				return entity;
 			},
+			removeComponent: (type) => {
+				this.removeComponent(entityId, type);
+				return entity;
+			},
 		};
+
 		this.entities.push(entity);
 
 		return entity;
 	}
 
-	getComponent<T extends Component<CT>>(
-		entityId: number,
-		componentType: string,
-	) {
-		return this.entities[entityId][componentType] as T;
+	getComponent<T extends Component<CT>>(entityId: number, type: CT) {
+		return this.entities[entityId].components[type.toString()] as T;
 	}
 
 	addComponent(entityId: number, component: Component<CT>): this {
 		this.entities[entityId].components[component.type.toString()] = component;
+		return this;
+	}
+
+	removeComponent(entityId: number, type: CT): this {
+		delete this.entities[entityId].components[type.toString()];
 		return this;
 	}
 

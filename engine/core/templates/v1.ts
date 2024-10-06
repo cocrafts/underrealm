@@ -225,7 +225,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 2,
-			charge: 2,
+			current: 2,
 		}),
 	)
 	.addComponent(
@@ -284,7 +284,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 1,
-			charge: 1,
+			current: 1,
 		}),
 	)
 	.addComponent(
@@ -449,7 +449,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 2,
-			charge: 2,
+			current: 2,
 		}),
 	)
 	.addComponent(createComponent(ComponentType.DoubleAttack, {}));
@@ -514,7 +514,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 2,
-			charge: 2,
+			current: 2,
 		}),
 	)
 	.addComponent(
@@ -546,7 +546,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 2,
-			charge: 2,
+			current: 2,
 		}),
 	)
 	.addComponent(
@@ -577,7 +577,7 @@ ecs
 	.addComponent(
 		createComponent(ComponentType.ChargeActivation, {
 			threshold: 3,
-			charge: 3,
+			current: 3,
 		}),
 	)
 	.addComponent(createComponent(ComponentType.Transform, {}));

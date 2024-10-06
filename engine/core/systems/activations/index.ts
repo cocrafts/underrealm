@@ -1,51 +1,98 @@
-import type { ComponentType } from '../../components';
+import {
+	ComponentType as CT,
+	createComponent,
+	getComponent,
+} from '../../components';
 import type { Entity } from '../../ecs';
+import { queryByComponentTypes } from '../../queries';
 
-export const summonActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const createSkillActivating = () => createComponent(CT.SkillActivating, {});
+
+const summon = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.SummonActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
 };
 
-export const passiveActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const passive = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.PassiveActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
 };
 
-export const fightActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const fight = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.FightActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
 };
 
-export const preFightActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const preFight = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.PreFightActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
 };
 
-export const chargeActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+/**
+ * Enable SkillActivating by checking charge vs threshold
+ */
+const charge = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.ChargeActivation).forEach((entity) => {
+			const charge = getComponent(entity, CT.ChargeActivation);
+			if (charge.current < charge.threshold) return;
+
+			// reset charge
+			charge.current = 0;
+
+			entity.addComponent(createSkillActivating());
+		});
 	};
+
+	return { update };
 };
 
-export const inspireActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const inspire = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.InspireActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
 };
 
-export const gloryActivationSystem = () => {
-	return {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update: (entities: Entity<ComponentType>[]) => {},
+const glory = () => {
+	const update = (entities: Entity<CT>[]) => {
+		queryByComponentTypes(entities, CT.GloryActivation).forEach((entity) =>
+			entity.addComponent(createSkillActivating()),
+		);
 	};
+
+	return { update };
+};
+
+export const activation = {
+	summon,
+	passive,
+	fight,
+	preFight,
+	charge,
+	inspire,
+	glory,
 };

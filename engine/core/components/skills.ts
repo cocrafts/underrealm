@@ -12,8 +12,8 @@ export type FightActivation = Component<ComponentType.FightActivation>;
 export type PreFightActivation = Component<ComponentType.PreFightActivation>;
 
 export type ChargeActivation = Component<ComponentType.ChargeActivation> & {
+	current: number;
 	threshold: number;
-	charge: number;
 };
 
 export type InspireActivation = Component<ComponentType.InspireActivation> & {
@@ -21,6 +21,8 @@ export type InspireActivation = Component<ComponentType.InspireActivation> & {
 };
 
 export type GloryActivation = Component<ComponentType.GloryActivation>;
+
+export type SkillActivating = Component<ComponentType.SkillActivating>;
 
 export type DestroyFacingMinHealth =
 	Component<ComponentType.DestroyFacingMinHealth> & {

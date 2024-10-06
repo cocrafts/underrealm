@@ -1,3 +1,5 @@
+import type { Entity } from '../ecs';
+
 import type {
 	Attribute,
 	Chargeable,
@@ -28,6 +30,7 @@ import type {
 	PassiveActivation,
 	PreFightActivation,
 	SelfBuff,
+	SkillActivating,
 	SummonActivation,
 	Transform,
 } from './skills';
@@ -43,6 +46,7 @@ type ComponentMap = {
 	[ComponentType.Chargeable]: Chargeable;
 	[ComponentType.Ownership]: Ownership;
 	[ComponentType.Place]: Place;
+
 	[ComponentType.SummonActivation]: SummonActivation;
 	[ComponentType.PassiveActivation]: PassiveActivation;
 	[ComponentType.FightActivation]: FightActivation;
@@ -50,6 +54,8 @@ type ComponentMap = {
 	[ComponentType.ChargeActivation]: ChargeActivation;
 	[ComponentType.InspireActivation]: InspireActivation;
 	[ComponentType.GloryActivation]: GloryActivation;
+	[ComponentType.SkillActivating]: SkillActivating;
+
 	[ComponentType.DestroyFacingMinHealth]: DestroyFacingMinHealth;
 	[ComponentType.GainAttackByEnemyDefense]: GainAttackByEnemyDefense;
 	[ComponentType.GainAttackByEnemyMissingHealth]: GainAttackByEnemyMissingHealth;
@@ -74,7 +80,20 @@ export const createComponent = <T extends keyof ComponentMap>(
 	type: T,
 	value: Omit<InferComponent<T>, 'type'>,
 ): InferComponent<T> => {
-	return { ...value, type } as never;
+	return { ...value, type } as InferComponent<T>;
+};
+
+export const getComponent = <T extends keyof ComponentMap>(
+	entity: Entity<ComponentType>,
+	type: T,
+): InferComponent<T> => {
+	if (!entity.components[type]) {
+		throw Error(
+			`component '${type} does not exist in entity '${entity.id}'. Make sure to query correctly before get component`,
+		);
+	}
+
+	return entity.components[type] as InferComponent<T>;
 };
 
 export * from './card';

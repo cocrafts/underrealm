@@ -1,33 +1,7 @@
 import { inspect } from 'util';
 
-import {
-	chargeActivationSystem,
-	fightActivationSystem,
-	gloryActivationSystem,
-	inspireActivationSystem,
-	passiveActivationSystem,
-	preFightActivationSystem,
-	summonActivationSystem,
-} from './systems/activations';
-import {
-	buffAgainstSameEnemy,
-	buffNextTurnSystem,
-	destroyFacingMinHealthSystem,
-	doubleAttackSystem,
-	factorCleaverSystem,
-	fixedCleaverSystem,
-	gainAttackByEnemyDefenseSystem,
-	gainAttackByEnemyMissingHealthSystem,
-	gainAttackByRemainingHealthSystem,
-	ignoreEnemyDefenseSystem,
-	multiplyDamageAgainstSystem,
-	mutateEnemySystem,
-	mutatePlayerSystem,
-	mutateRandomEnemySystem,
-	selfBuffSystem,
-	transformSystem,
-} from './systems/skills';
 import { ecs } from './templates/v1';
+import { activation, resetAllSkillActivatingSystem, skill } from './systems';
 
 /**
  * There are two approaches of registering system:
@@ -37,34 +11,38 @@ import { ecs } from './templates/v1';
  */
 ecs
 	/**
-	 * Activation systems
+	 * Activation systems. The system will check pre-conditions
+	 * of entities' activations to enable SkillActivating
 	 */
-	.addSystem(summonActivationSystem())
-	.addSystem(passiveActivationSystem())
-	.addSystem(fightActivationSystem())
-	.addSystem(preFightActivationSystem())
-	.addSystem(chargeActivationSystem())
-	.addSystem(inspireActivationSystem())
-	.addSystem(gloryActivationSystem())
+	.addSystem(activation.summon())
+	.addSystem(activation.passive())
+	.addSystem(activation.fight())
+	.addSystem(activation.preFight())
+	.addSystem(activation.charge())
+	.addSystem(activation.inspire())
+	.addSystem(activation.glory())
 
 	/**
-	 * Skill systems
+	 * Skill systems. The system will filter entities by SkillActivation
+	 * and their skill component to handle skill effects.
 	 */
-	.addSystem(destroyFacingMinHealthSystem())
-	.addSystem(gainAttackByEnemyDefenseSystem())
-	.addSystem(gainAttackByEnemyMissingHealthSystem())
-	.addSystem(gainAttackByRemainingHealthSystem())
-	.addSystem(mutateEnemySystem())
-	.addSystem(mutateRandomEnemySystem())
-	.addSystem(mutatePlayerSystem())
-	.addSystem(ignoreEnemyDefenseSystem())
-	.addSystem(selfBuffSystem())
-	.addSystem(buffAgainstSameEnemy())
-	.addSystem(buffNextTurnSystem())
-	.addSystem(fixedCleaverSystem())
-	.addSystem(factorCleaverSystem())
-	.addSystem(multiplyDamageAgainstSystem())
-	.addSystem(doubleAttackSystem())
-	.addSystem(transformSystem());
+	.addSystem(skill.destroyFacingMinHealth())
+	.addSystem(skill.gainAttackByEnemyDefense())
+	.addSystem(skill.gainAttackByEnemyMissingHealth())
+	.addSystem(skill.gainAttackByRemainingHealth())
+	.addSystem(skill.mutateEnemy())
+	.addSystem(skill.mutateRandomEnemy())
+	.addSystem(skill.mutatePlayer())
+	.addSystem(skill.ignoreEnemyDefense())
+	.addSystem(skill.selfBuff())
+	.addSystem(skill.buffAgainstSameEnemy())
+	.addSystem(skill.buffNextTurn())
+	.addSystem(skill.fixedCleaver())
+	.addSystem(skill.factorCleaver())
+	.addSystem(skill.multiplyDamageAgainst())
+	.addSystem(skill.doubleAttack())
+	.addSystem(skill.transform())
+
+	.addSystem(resetAllSkillActivatingSystem());
 
 console.log(inspect(ecs.toJSON(), { depth: 10, breakLength: 100 }));

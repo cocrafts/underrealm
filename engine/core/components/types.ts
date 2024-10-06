@@ -8,6 +8,8 @@ export enum ComponentType {
 	Ownership = 'Ownership',
 	Chargeable = 'Chargeable',
 	Place = 'Place',
+
+	Activation = 'Activation',
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',
 	FightActivation = 'FightActivation',
@@ -15,6 +17,13 @@ export enum ComponentType {
 	ChargeActivation = 'ChargeActivation',
 	InspireActivation = 'InspireActivation',
 	GloryActivation = 'GloryActivation',
+
+	/**
+	 * This component will be added to entity if the entity's activation matches,
+	 * and must be reset at the last system update.
+	 */
+	SkillActivating = 'SkillActivating',
+
 	DestroyFacingMinHealth = 'DestroyFacingMinHealth',
 	GainAttackByEnemyDefense = 'GainAttackByEnemyDefense',
 	GainAttackByEnemyMissingHealth = 'GainAttackByEnemyMissingHealth',
