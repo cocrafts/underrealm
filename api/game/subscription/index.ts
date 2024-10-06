@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { GameDuel, MatchFinding } from 'models/game';
+import type { IMatchFinding } from 'models/game';
+import { GameDuel, MatchFinding, StakingPackage } from 'models/game';
+import { User } from 'models/user';
+import type { FilterQuery } from 'mongoose';
 import { configs } from 'utils/config';
 import { logger } from 'utils/logger';
 import { pubsub, topicGenerator } from 'utils/pubsub';
@@ -8,7 +11,10 @@ import type { SubscriptionResolvers } from 'utils/types';
 import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
-	subscribe: async (_, { userId }, { connectionId }) => {
+	subscribe: async (_, { userId, staking }, { connectionId }) => {
+		if (!staking) {
+			throw new Error('staking is required to find match');
+		}
 		const topic = topicGenerator.findMatch({ userId });
 
 		/**
@@ -16,15 +22,46 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 		 */
 		const subscribed = await pubsub.subscribe(topic);
 
-		const opponent = await MatchFinding.findOneAndDelete(
-			{ userId: { $ne: userId } },
-			{ sort: { created_at: 1 } },
-		);
+		const opponentQuery: FilterQuery<IMatchFinding> = {
+			userId: { $ne: userId },
+		};
+
+		if (staking?.enabled) {
+			opponentQuery['staking.enabled'] = true;
+			if (staking.package) {
+				opponentQuery['staking.package'] = staking.package;
+			}
+		} else {
+			opponentQuery['staking.enabled'] = { $ne: true };
+		}
+
+		const opponent = await MatchFinding.findOneAndDelete(opponentQuery, {
+			sort: { created_at: 1 },
+		});
 
 		if (opponent) {
 			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
 			const { config, history } = makeDuel('00001', userId, opponentId);
-			const duel = await GameDuel.create({ config, history });
+			const duel = await GameDuel.create({
+				config,
+				history,
+				stakingPackage: staking?.package,
+			});
+
+			if (staking?.enabled && staking.package) {
+				const pointsToDeduct = getPointsForPackage(staking.package);
+				await Promise.all([
+					User.updateOne(
+						{ _id: userId },
+						{ $inc: { points: -pointsToDeduct } },
+					),
+					User.updateOne(
+						{ _id: opponentId },
+						{ $inc: { points: -pointsToDeduct } },
+					),
+				]);
+			}
+
 			logger.info('created new game duel', duel.id);
 
 			await Promise.all([
@@ -36,6 +73,7 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 				userId: userId,
 				pubsubTopic: topic,
 				connectionId,
+				staking,
 			});
 		}
 
@@ -65,3 +103,14 @@ export const publishFindMatch = async (
 		logger.error('failed to sign jwt and publish match', error);
 	}
 };
+
+export function getPointsForPackage(stakingPackage: StakingPackage): number {
+	switch (stakingPackage) {
+		case StakingPackage.U_10:
+			return 10;
+		case StakingPackage.U_50:
+			return 50;
+		case StakingPackage.U_100:
+			return 100;
+	}
+}

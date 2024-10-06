@@ -216,6 +216,17 @@ export type ReferralHistory = {
   referrerId?: Maybe<Scalars['String']['output']>;
 };
 
+export type StakingInput = {
+  enabled: Scalars['Boolean']['input'];
+  package?: InputMaybe<StakingPackage>;
+};
+
+export enum StakingPackage {
+  U_10 = 'U_10',
+  U_50 = 'U_50',
+  U_100 = 'U_100'
+}
+
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
@@ -224,6 +235,7 @@ export type Subscription = {
 
 
 export type SubscriptionFindMatchArgs = {
+  staking?: InputMaybe<StakingInput>;
   userId: Scalars['String']['input'];
 };
 
@@ -322,6 +334,8 @@ export type ResolversTypes = ResolversObject<{
   QuestStatus: QuestStatus;
   QuestType: QuestType;
   ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
+  StakingInput: StakingInput;
+  StakingPackage: StakingPackage;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -349,6 +363,7 @@ export type ResolversParentTypes = ResolversObject<{
   Quest: Quest;
   QuestAction: QuestAction;
   ReferralHistory: ReferralHistory;
+  StakingInput: StakingInput;
   String: Scalars['String']['output'];
   Subscription: {};
 }>;

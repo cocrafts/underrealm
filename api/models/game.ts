@@ -36,6 +36,7 @@ export type IGameDuel = {
 	winner?: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];
+	stakingPackage?: StakingPackage;
 };
 
 const PlayerConfigSchema = new Schema<PlayerConfig>(
@@ -187,6 +188,12 @@ const DuelCommandBundleSchema = new Schema<DuelCommandBundle>(
 	{ id: false },
 );
 
+export enum StakingPackage {
+	U_10 = 'U_10',
+	U_50 = 'U_50',
+	U_100 = 'U_100',
+}
+
 const GameDuelSchema = createSchema({
 	config: new Schema({
 		version: String,
@@ -211,14 +218,22 @@ const GameDuelSchema = createSchema({
 		),
 	}),
 	history: [DuelCommandBundleSchema],
+	stakingPackage: {
+		type: String,
+		enum: Object.values(StakingPackage),
+	},
 });
 
 export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
 
-type IMatchFinding = {
+export type IMatchFinding = {
 	userId: string;
 	pubsubTopic: string;
 	connectionId: string;
+	staking?: {
+		enabled: boolean;
+		package?: StakingPackage;
+	};
 };
 
 const MatchFindingSchema = createSchema({
@@ -235,6 +250,16 @@ const MatchFindingSchema = createSchema({
 	connectionId: {
 		type: String,
 		unique: true,
+	},
+	staking: {
+		enabled: {
+			type: Boolean,
+			default: false,
+		},
+		package: {
+			type: String,
+			enum: Object.values(StakingPackage),
+		},
 	},
 });
 
