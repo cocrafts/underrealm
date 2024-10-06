@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 		textShadow: '0 0 10px #8D8767',
 		color: '#fff',
 		textAlign: 'center',
-	},
+	} as never,
 	label: {
 		color: '#fff',
 		textAlign: 'center',
