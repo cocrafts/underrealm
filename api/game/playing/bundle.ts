@@ -11,6 +11,7 @@ import {
 	move,
 	runCommand,
 } from '@underrealm/murg';
+import { getPointsForPackage } from 'game/subscription';
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import { safeAddGamePoints } from 'models/points';
@@ -52,6 +53,10 @@ const sendGameOver = async (
 			? duel.config.secondPlayer.id
 			: duel.config.firstPlayer.id;
 
+	const stakingPoints = duel.stakingPackage
+		? getPointsForPackage(duel.stakingPackage) * 2
+		: 0;
+
 	const [winnerPoints, loserPoints] = await Promise.all([
 		safeAddGamePoints(winner, duel.id, true),
 		safeAddGamePoints(loser, duel.id, false),
@@ -61,6 +66,7 @@ const sendGameOver = async (
 				$inc: {
 					winMatches: 1,
 					totalMatches: 1,
+					points: stakingPoints,
 				},
 			},
 			{ new: true },
@@ -76,7 +82,10 @@ const sendGameOver = async (
 		),
 	]);
 
-	await send({ winner, winnerPoints, loserPoints }, EventType.GameOver);
+	await send(
+		{ winner, winnerPoints, loserPoints, stakingPoints },
+		EventType.GameOver,
+	);
 };
 
 export const runBundles = (duel: DuelState, bundles: DuelCommandBundle[]) => {
