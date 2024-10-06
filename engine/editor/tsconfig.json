@@ -1,0 +1,6 @@
+{
+  "extends": "@metacraft/tsconfig/base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
+}
