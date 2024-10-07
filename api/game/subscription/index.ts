@@ -12,9 +12,6 @@ import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
 	subscribe: async (_, { userId, staking }, { connectionId }) => {
-		if (!staking) {
-			throw new Error('staking is required to find match');
-		}
 		const topic = topicGenerator.findMatch({ userId });
 
 		/**
@@ -26,13 +23,18 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 			userId: { $ne: userId },
 		};
 
-		if (staking?.enabled) {
-			opponentQuery['staking.enabled'] = true;
-			if (staking.package) {
-				opponentQuery['staking.package'] = staking.package;
+		if (staking) {
+			const requiredPoints = getPointsForPackage(staking);
+			const user = await User.findById(userId).select('points');
+			if (!user || user.points < requiredPoints) {
+				logger.info('User does not have enough points to stake', {
+					userId,
+					staking,
+					requiredPoints,
+					userPoints: user?.points,
+				});
+				return subscribed;
 			}
-		} else {
-			opponentQuery['staking.enabled'] = { $ne: true };
 		}
 
 		const opponent = await MatchFinding.findOneAndDelete(opponentQuery, {
@@ -45,11 +47,11 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 			const duel = await GameDuel.create({
 				config,
 				history,
-				stakingPackage: staking?.package,
+				stakingPackage: staking,
 			});
 
-			if (staking?.enabled && staking.package) {
-				const pointsToDeduct = getPointsForPackage(staking.package);
+			if (staking) {
+				const pointsToDeduct = getPointsForPackage(staking);
 				await Promise.all([
 					User.updateOne(
 						{ _id: userId },

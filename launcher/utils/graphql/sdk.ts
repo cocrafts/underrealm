@@ -216,11 +216,6 @@ export type ReferralHistory = {
   referrerId?: Maybe<Scalars['String']['output']>;
 };
 
-export type StakingInput = {
-  enabled: Scalars['Boolean']['input'];
-  package?: InputMaybe<StakingPackage>;
-};
-
 export enum StakingPackage {
   U_10 = 'U_10',
   U_50 = 'U_50',
@@ -235,7 +230,7 @@ export type Subscription = {
 
 
 export type SubscriptionFindMatchArgs = {
-  staking?: InputMaybe<StakingInput>;
+  staking?: InputMaybe<StakingPackage>;
   userId: Scalars['String']['input'];
 };
 

@@ -151,11 +151,6 @@ type ReferralHistory {
   referrerId: String
 }
 
-input StakingInput {
-  enabled: Boolean!
-  package: StakingPackage
-}
-
 enum StakingPackage {
   U_10
   U_50
@@ -164,5 +159,5 @@ enum StakingPackage {
 
 type Subscription {
   counterIncreased: Int!
-  findMatch(staking: StakingInput, userId: String!): MatchFound
+  findMatch(staking: StakingPackage, userId: String!): MatchFound
 }
