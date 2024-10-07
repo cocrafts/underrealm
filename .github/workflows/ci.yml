@@ -29,5 +29,8 @@ jobs:
       - name: Create fake jwt
         run: touch api/jwk.json && echo "{}" >> api/jwk.json
 
+      - name: Create fake google-service
+        run: touch api/google-service.json && echo "{}" >> api/google-service.json
+
       - name: Typecheck
         run: yarn type-check

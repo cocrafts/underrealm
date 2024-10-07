@@ -7,12 +7,18 @@ export default $config({
 			name: 'underrealm',
 			removal: input?.stage === 'production' ? 'retain' : 'remove',
 			home: 'aws',
-			providers: { aws: { profile: 'metacraft', region: 'ap-south-1' } },
+			providers: {
+				aws: {
+					profile: process.env.AWS_PROFILE || 'metacraft',
+					region: 'ap-south-1',
+				},
+			},
 		};
 	},
 	async run() {
 		import('./tools/infra/api');
 		import('./tools/infra/websocket');
 		import('./tools/infra/launcher');
+		import('./tools/infra/crawler');
 	},
 });

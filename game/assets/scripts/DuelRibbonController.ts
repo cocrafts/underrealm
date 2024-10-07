@@ -18,6 +18,7 @@ export class DuelRibbonController extends Component {
 		this.shareButton = this.node.getChildByPath('ButtonShare');
 
 		this.lobbyButton.on(NodeEvents.MOUSE_ENTER, this.onMouseEnter.bind(this));
+		this.shareButton.on(NodeEvents.MOUSE_ENTER, this.onMouseEnter.bind(this));
 		this.lobbyButton.on(NodeEvents.MOUSE_LEAVE, this.onMouseLeave.bind(this));
 		this.lobbyButton.on(ButtonEvents.CLICK, this.onLobbyClick.bind(this));
 

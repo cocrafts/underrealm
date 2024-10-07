@@ -37,6 +37,7 @@ const loginMessage = (nonce: string) =>
 export const walletSignIn = async (
 	address: string,
 	signMessage?: (message: Uint8Array) => Promise<Uint8Array>,
+	disconnectWallet?: () => Promise<void>,
 ): Promise<ChallengedUser> => {
 	await signOut();
 	setPendingRedirect();
@@ -51,18 +52,25 @@ export const walletSignIn = async (
 		const message = loginMessage(nextStep.additionalInfo.nonce);
 		const encodedMessage = new TextEncoder().encode(message);
 		const signature = await signMessage?.(encodedMessage);
+
 		const encodedSignature = bs58.encode(signature || []);
 
 		await confirmSignIn({
 			challengeResponse: encodedSignature,
 		});
+
+		return {
+			challengeParam: {
+				signature: encodedSignature,
+			},
+		};
 	} catch (err) {
 		if ((err as AuthError).message?.includes?.('not exist')) {
 			const params = { username: address, password: `@${simpleId(29)}` };
 			await signUp(params);
 			return walletSignIn(address);
 		} else {
-			throw err;
+			await disconnectWallet();
 		}
 	}
 };

@@ -9,7 +9,7 @@ export const usePendingRedirect = () => {
 		if (redirect && redirect !== '/') {
 			console.log('Redirect to', redirect);
 			const state = getStateFromPath(redirect, linking.config);
-			navigationRef.reset({ index: 0, routes: state.routes });
+			if (state) navigationRef.reset({ index: 0, routes: state.routes });
 		}
 	}, []);
 };

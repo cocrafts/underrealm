@@ -48,7 +48,7 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	const [isWallessConnected, setIsWallessConnected] = useState(false);
 	const [isLayoutInstalled, setIsLayoutInstalled] = useState(false);
 	const { wallet, connected } = useWallet();
-	const { profile } = useProfile();
+	const { profile, refetch } = useProfile();
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onMyProfilePress = async () => {
@@ -68,6 +68,12 @@ export const SignedMenu: FC<Props> = ({ config }) => {
 	const innerSignOut = async () => {
 		setPendingRedirect();
 		await signOut();
+		await wallet.adapter.disconnect();
+		try {
+			await refetch();
+		} catch (err) {
+			console.log(err);
+		}
 		modalActions.hide(config.id as string);
 	};
 
