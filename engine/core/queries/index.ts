@@ -1,5 +1,11 @@
 /**
  * Implement all query with cache for optimization
+ * Cache map example:
+ * {
+ * 		[ComponentType]: {
+ * 			[EntityId]: entity
+ * 		}
+ * }
  */
 
 import type { ComponentType } from '../components';
