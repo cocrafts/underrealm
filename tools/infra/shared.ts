@@ -67,10 +67,7 @@ export const DBEnvs = () => {
 };
 
 export const GCPEnvs = () => {
-	return getEnvsObjectByKeys([
-		'GCP_SERVICE_ACCOUNT',
-		'GCP_SHEET_SPREADSHEET_ID',
-	]);
+	return getEnvsObjectByKeys(['GCP_SHEET_SPREADSHEET_ID']);
 };
 
 export const JWTEnvs = (type: 'all' | 'private' | 'public' = 'public') => {
