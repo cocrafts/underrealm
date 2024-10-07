@@ -33,7 +33,7 @@ export const writeToGoogleSheet = async (
 	});
 
 	if (!doc) {
-		console.error('failed to write to google sheet, sheet id is invalid.');
+		logger.error('failed to write to google sheet, sheet id is invalid.');
 		return;
 	}
 	const request = {
