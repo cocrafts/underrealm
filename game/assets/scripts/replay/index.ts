@@ -34,11 +34,10 @@ export const fastReplay = async (): Promise<void> => {
 
 		runCommandBundle(bundle);
 
-		if (!system.winner && isTurnDraw && isMyPhase) {
-			await showTurnRibbon('Your Turn');
-		}
-
 		if (i >= remoteHistoryLength - 3) {
+			if (!system.winner && isTurnDraw && isMyPhase) {
+				await showTurnRibbon('Your Turn');
+			}
 			if (isDraw) {
 				await playDraw(bundle);
 			} else if (BundleGroup.Summon === group) {
