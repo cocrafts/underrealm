@@ -111,6 +111,7 @@ export type MatchFound = {
 export type MutateProfileProps = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   discordId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   telegramId?: InputMaybe<Scalars['String']['input']>;
   twitterId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -145,6 +146,7 @@ export type Profile = {
   discordId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
@@ -476,6 +478,7 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   discordId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;

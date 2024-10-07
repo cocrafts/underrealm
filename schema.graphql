@@ -82,6 +82,7 @@ type MatchFound {
 input MutateProfileProps {
   avatarUrl: String
   discordId: String
+  name: String
   telegramId: String
   twitterId: String
 }
@@ -99,6 +100,7 @@ type Profile {
   discordId: String
   email: String
   id: String!
+  name: String
   points: Int!
   referralCode: String!
   referred: ReferralHistory

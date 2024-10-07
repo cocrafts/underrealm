@@ -25,6 +25,7 @@ type Profile {
   id: String!
   bindingId: String
   address: String
+  name: String
   email: String
   avatarUrl: String
   referred: ReferralHistory
@@ -115,6 +116,7 @@ type CardDuelHistory {
 }
 
 input MutateProfileProps {
+  name: String
   avatarUrl: String
   discordId: String
   twitterId: String

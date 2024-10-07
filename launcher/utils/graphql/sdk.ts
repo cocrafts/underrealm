@@ -111,6 +111,7 @@ export type MatchFound = {
 export type MutateProfileProps = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   discordId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   telegramId?: InputMaybe<Scalars['String']['input']>;
   twitterId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -145,6 +146,7 @@ export type Profile = {
   discordId?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
@@ -241,6 +243,13 @@ export type SubscriptionFindMatchArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type UpdateProfileMutationVariables = Exact<{
+  props?: InputMaybe<MutateProfileProps>;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'Profile', id: string, name?: string | null, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, telegramId?: string | null, discordId?: string | null, twitterId?: string | null, referralCode: string } | null };
+
 export type CreateQuestActionMutationVariables = Exact<{
   questId: Scalars['ID']['input'];
 }>;
@@ -260,12 +269,12 @@ export type GreetingQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GreetingQuery = { __typename?: 'Query', greeting?: string | null };
 
-export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string };
+export type ProfileFieldsFragment = { __typename?: 'Profile', id: string, name?: string | null, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, telegramId?: string | null, discordId?: string | null, twitterId?: string | null, referralCode: string };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, referralCode: string, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
+export type ProfileQuery = { __typename?: 'Query', profile?: { __typename?: 'Profile', id: string, name?: string | null, address?: string | null, email?: string | null, points: number, avatarUrl?: string | null, telegramId?: string | null, discordId?: string | null, twitterId?: string | null, referralCode: string, referred?: { __typename?: 'ReferralHistory', id: string, referrerId?: string | null, createdAt?: any | null } | null } | null };
 
 export type QuestsQueryVariables = Exact<{
   status?: InputMaybe<QuestStatus>;
@@ -294,13 +303,59 @@ export type FindMatchSubscription = { __typename?: 'Subscription', findMatch?: {
 export const ProfileFieldsFragmentDoc = gql`
     fragment ProfileFields on Profile {
   id
+  name
   address
   email
   points
   avatarUrl
+  telegramId
+  discordId
+  twitterId
   referralCode
 }
     `;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($props: MutateProfileProps) {
+  updateProfile(profileProps: $props) {
+    id
+    name
+    address
+    email
+    points
+    avatarUrl
+    telegramId
+    discordId
+    twitterId
+    referralCode
+  }
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      props: // value for 'props'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!) {
   createQuestAction(questId: $questId) {
