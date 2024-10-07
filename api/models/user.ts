@@ -1,9 +1,10 @@
 import { model } from 'mongoose';
+
 import {
 	generateRandomCode,
 	getRandomAvatar,
 	REFERRAL_CODE_LENGTH,
-} from 'utils/common';
+} from '../utils/common';
 
 import { createSchema } from './utils';
 

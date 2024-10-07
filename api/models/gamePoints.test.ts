@@ -11,7 +11,7 @@ import {
 	MAX_GAME_POINTS_PER_DAY,
 	safeAddGamePoints,
 	WINNER_POINTS,
-} from './points';
+} from './gamePoints';
 import type { IUser } from './user';
 import { User } from './user';
 

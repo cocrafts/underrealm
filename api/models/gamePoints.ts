@@ -5,25 +5,35 @@ import { logger } from 'utils/logger';
 import { User } from './user';
 import { createSchema } from './utils';
 
-export type IPointsHistory = {
+export enum GamePointLogType {
+	GAME = 'GAME',
+	QUEST = 'QUEST',
+}
+
+export type IGamePointsHistory = {
 	id: string;
 	userId: string;
 	bindingId: string;
-	source: 'GAME' | 'QUEST';
+	source: GamePointLogType;
+	points: number;
 };
 
-const PointsHistorySchema = createSchema({
+const GamePointsHistorySchema = createSchema({
 	userId: { type: Types.ObjectId, ref: 'User', required: true },
 	bindingId: { type: Types.ObjectId, required: true },
-	source: { type: String, enum: ['GAME', 'QUEST'], required: true },
+	source: {
+		type: String,
+		enum: Object.values(GamePointLogType),
+		required: true,
+	},
 	points: { type: Number, required: true },
 });
 
-PointsHistorySchema.index({ userId: 1, bindingId: 1 }, { unique: true });
+GamePointsHistorySchema.index({ userId: 1, bindingId: 1 }, { unique: true });
 
-export const PointsHistory = model<IPointsHistory>(
-	'PointsHistory',
-	PointsHistorySchema,
+export const PointsHistory = model<IGamePointsHistory>(
+	'GamePointsHistory',
+	GamePointsHistorySchema,
 );
 
 export const WINNER_POINTS = 50;

@@ -1,0 +1,12 @@
+[
+  {
+    "email": "email@email.com",
+    "item": "CHEST_LEGENDARY",
+    "amount": 1
+  },
+  {
+    "address": "address.wallet",
+    "item": "CHEST_LEGENDARY",
+    "amount": 1
+  }
+]

@@ -8658,13 +8658,16 @@ __metadata:
   dependencies:
     "@types/prompts": "npm:^2"
     "@underrealm/api": "npm:*"
+    chalk: "npm:4.1.2"
+    csv-parse: "npm:^5.5.6"
     dotenv: "npm:^16.4.5"
     prompts: "npm:^2.4.2"
+    replace-in-file: "npm:^8.2.0"
     rimraf: "npm:^6.0.1"
     typescript: "npm:5.4.5"
     yargs: "npm:^17.7.2"
   bin:
-    ur: ./dist/index.js
+    ur: ./dist/cli/index.js
   languageName: unknown
   linkType: soft
 
@@ -10679,6 +10682,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:4.1.2, chalk@npm:^4, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "chalk@npm:4.1.2"
+  dependencies:
+    ansi-styles: "npm:^4.1.0"
+    supports-color: "npm:^7.1.0"
+  checksum: 10c0/4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^2.4.1, chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -10687,16 +10700,6 @@ __metadata:
     escape-string-regexp: "npm:^1.0.5"
     supports-color: "npm:^5.3.0"
   checksum: 10c0/e6543f02ec877732e3a2d1c3c3323ddb4d39fbab687c23f526e25bd4c6a9bf3b83a696e8c769d078e04e5754921648f7821b2a2acfd16c550435fd630026e073
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^4, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "chalk@npm:4.1.2"
-  dependencies:
-    ansi-styles: "npm:^4.1.0"
-    supports-color: "npm:^7.1.0"
-  checksum: 10c0/4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
   languageName: node
   linkType: hard
 
@@ -13614,7 +13617,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.7":
+"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.7, glob@npm:^10.4.2":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
   dependencies:
@@ -19261,6 +19264,19 @@ __metadata:
   version: 1.0.8
   resolution: "remove-trailing-spaces@npm:1.0.8"
   checksum: 10c0/b9a4d74fd77e4a81b83cd19152abe1d658e5ecf13bc9b789c2699d7166d3879258a61625f8fc0274ef5719ab70e514ae86234fee481f6b41b50729949b837c1b
+  languageName: node
+  linkType: hard
+
+"replace-in-file@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "replace-in-file@npm:8.2.0"
+  dependencies:
+    chalk: "npm:^5.3.0"
+    glob: "npm:^10.4.2"
+    yargs: "npm:^17.7.2"
+  bin:
+    replace-in-file: bin/cli.js
+  checksum: 10c0/a6e4283a774c155c484f222ac11f9dbc21ce64f180b240e95206e05ac856e23205ed0b0b6b0286746b453df0ec3b37a64f93c23b7df9b70cdda8eab57fc6d2d8
   languageName: node
   linkType: hard
 

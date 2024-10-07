@@ -1,5 +1,5 @@
 scalar DateTime
-
+scalar JSON
 type Query {
   greeting: String
   profile(address: String): Profile
@@ -8,11 +8,14 @@ type Query {
   cardDuel(id: String!): CardDuel
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]
+  inventory: Inventory
 }
 
 type Mutation {
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
+  purchaseLottery: GeneralPointHistory
+  openLottery: OpenLotteryResult
 }
 
 type Subscription {
@@ -152,4 +155,30 @@ type ReferralHistory {
   refereeUser: Profile
   claimedPoints: Int
   createdAt: DateTime
+}
+
+type OpenLotteryResult {
+  userId: ID!
+  items: [InventoryItem!]!
+}
+
+type InventoryItem  {
+  itemId: String!
+  amount: Int!
+  type: String!
+  metadata: JSON
+}
+
+type Inventory {
+  id: String!
+  userId: String!
+  items: [InventoryItem!]!
+}
+
+
+type  GeneralPointHistory {
+  id: String!
+  type: String!
+  userId: String!
+  points: Int
 }

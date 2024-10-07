@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -102,6 +103,29 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type GeneralPointHistory = {
+  __typename?: 'GeneralPointHistory';
+  id: Scalars['String']['output'];
+  points?: Maybe<Scalars['Int']['output']>;
+  type: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+};
+
+export type Inventory = {
+  __typename?: 'Inventory';
+  id: Scalars['String']['output'];
+  items: Array<InventoryItem>;
+  userId: Scalars['String']['output'];
+};
+
+export type InventoryItem = {
+  __typename?: 'InventoryItem';
+  amount: Scalars['Int']['output'];
+  itemId: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  type: Scalars['String']['output'];
+};
+
 export type MatchFound = {
   __typename?: 'MatchFound';
   id: Scalars['String']['output'];
@@ -112,6 +136,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
+  openLottery?: Maybe<OpenLotteryResult>;
+  purchaseLottery?: Maybe<GeneralPointHistory>;
 };
 
 
@@ -122,6 +148,12 @@ export type MutationCreateQuestActionArgs = {
 
 export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
+};
+
+export type OpenLotteryResult = {
+  __typename?: 'OpenLotteryResult';
+  items: Array<InventoryItem>;
+  userId: Scalars['ID']['output'];
 };
 
 export type Profile = {
@@ -142,6 +174,7 @@ export type Query = {
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
   greeting?: Maybe<Scalars['String']['output']>;
+  inventory?: Maybe<Inventory>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
@@ -309,10 +342,15 @@ export type ResolversTypes = ResolversObject<{
   CardDuelSetting: ResolverTypeWrapper<CardDuelSetting>;
   CardPlayerConfig: ResolverTypeWrapper<CardPlayerConfig>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  GeneralPointHistory: ResolverTypeWrapper<GeneralPointHistory>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Inventory: ResolverTypeWrapper<Inventory>;
+  InventoryItem: ResolverTypeWrapper<InventoryItem>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   MatchFound: ResolverTypeWrapper<MatchFound>;
   Mutation: ResolverTypeWrapper<{}>;
+  OpenLotteryResult: ResolverTypeWrapper<OpenLotteryResult>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
   Quest: ResolverTypeWrapper<Quest>;
@@ -338,10 +376,15 @@ export type ResolversParentTypes = ResolversObject<{
   CardDuelSetting: CardDuelSetting;
   CardPlayerConfig: CardPlayerConfig;
   DateTime: Scalars['DateTime']['output'];
+  GeneralPointHistory: GeneralPointHistory;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Inventory: Inventory;
+  InventoryItem: InventoryItem;
+  JSON: Scalars['JSON']['output'];
   MatchFound: MatchFound;
   Mutation: {};
+  OpenLotteryResult: OpenLotteryResult;
   Profile: Profile;
   Query: {};
   Quest: Quest;
@@ -439,6 +482,33 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type GeneralPointHistoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['GeneralPointHistory'] = ResolversParentTypes['GeneralPointHistory']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  points?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InventoryResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Inventory'] = ResolversParentTypes['Inventory']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['InventoryItem']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InventoryItemResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['InventoryItem'] = ResolversParentTypes['InventoryItem']> = ResolversObject<{
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
+
 export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['MatchFound'] = ResolversParentTypes['MatchFound']> = ResolversObject<{
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   jwt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -448,6 +518,14 @@ export type MatchFoundResolvers<ContextType = ApiContext, ParentType extends Res
 export type MutationResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createQuestAction?: Resolver<Maybe<ResolversTypes['QuestAction']>, ParentType, ContextType, RequireFields<MutationCreateQuestActionArgs, 'questId'>>;
   makeReferral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMakeReferralArgs, 'referralCode'>>;
+  openLottery?: Resolver<Maybe<ResolversTypes['OpenLotteryResult']>, ParentType, ContextType>;
+  purchaseLottery?: Resolver<Maybe<ResolversTypes['GeneralPointHistory']>, ParentType, ContextType>;
+}>;
+
+export type OpenLotteryResultResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['OpenLotteryResult'] = ResolversParentTypes['OpenLotteryResult']> = ResolversObject<{
+  items?: Resolver<Array<ResolversTypes['InventoryItem']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProfileResolvers<ContextType = ApiContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
@@ -467,6 +545,7 @@ export type QueryResolvers<ContextType = ApiContext, ParentType extends Resolver
   cardDuelHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardDuelHistory']>>>, ParentType, ContextType, Partial<QueryCardDuelHistoryArgs>>;
   cardDuelPlaying?: Resolver<Maybe<ResolversTypes['CardDuelHistory']>, ParentType, ContextType>;
   greeting?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  inventory?: Resolver<Maybe<ResolversTypes['Inventory']>, ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, Partial<QueryProfileArgs>>;
   quests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Quest']>>>, ParentType, ContextType, Partial<QueryQuestsArgs>>;
   referralHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReferralHistory']>>>, ParentType, ContextType>;
@@ -521,8 +600,13 @@ export type Resolvers<ContextType = ApiContext> = ResolversObject<{
   CardDuelSetting?: CardDuelSettingResolvers<ContextType>;
   CardPlayerConfig?: CardPlayerConfigResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  GeneralPointHistory?: GeneralPointHistoryResolvers<ContextType>;
+  Inventory?: InventoryResolvers<ContextType>;
+  InventoryItem?: InventoryItemResolvers<ContextType>;
+  JSON?: GraphQLScalarType;
   MatchFound?: MatchFoundResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  OpenLotteryResult?: OpenLotteryResultResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Quest?: QuestResolvers<ContextType>;

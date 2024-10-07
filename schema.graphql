@@ -74,6 +74,28 @@ type CardPlayerConfig {
 
 scalar DateTime
 
+type GeneralPointHistory {
+  id: String!
+  points: Int
+  type: String!
+  userId: String!
+}
+
+type Inventory {
+  id: String!
+  items: [InventoryItem!]!
+  userId: String!
+}
+
+type InventoryItem {
+  amount: Int!
+  itemId: String!
+  metadata: JSON
+  type: String!
+}
+
+scalar JSON
+
 type MatchFound {
   id: String!
   jwt: String!
@@ -82,6 +104,13 @@ type MatchFound {
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
+  openLottery: OpenLotteryResult
+  purchaseLottery: GeneralPointHistory
+}
+
+type OpenLotteryResult {
+  items: [InventoryItem!]!
+  userId: ID!
 }
 
 type Profile {
@@ -100,6 +129,7 @@ type Query {
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   greeting: String
+  inventory: Inventory
   profile(address: String): Profile
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]

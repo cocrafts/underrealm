@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type CardBoardTarget = {
@@ -102,6 +103,29 @@ export type CardPlayerConfig = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type GeneralPointHistory = {
+  __typename?: 'GeneralPointHistory';
+  id: Scalars['String']['output'];
+  points?: Maybe<Scalars['Int']['output']>;
+  type: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+};
+
+export type Inventory = {
+  __typename?: 'Inventory';
+  id: Scalars['String']['output'];
+  items: Array<InventoryItem>;
+  userId: Scalars['String']['output'];
+};
+
+export type InventoryItem = {
+  __typename?: 'InventoryItem';
+  amount: Scalars['Int']['output'];
+  itemId: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  type: Scalars['String']['output'];
+};
+
 export type MatchFound = {
   __typename?: 'MatchFound';
   id: Scalars['String']['output'];
@@ -112,6 +136,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   createQuestAction?: Maybe<QuestAction>;
   makeReferral?: Maybe<Scalars['Boolean']['output']>;
+  openLottery?: Maybe<OpenLotteryResult>;
+  purchaseLottery?: Maybe<GeneralPointHistory>;
 };
 
 
@@ -122,6 +148,12 @@ export type MutationCreateQuestActionArgs = {
 
 export type MutationMakeReferralArgs = {
   referralCode: Scalars['String']['input'];
+};
+
+export type OpenLotteryResult = {
+  __typename?: 'OpenLotteryResult';
+  items: Array<InventoryItem>;
+  userId: Scalars['ID']['output'];
 };
 
 export type Profile = {
@@ -142,6 +174,7 @@ export type Query = {
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
   greeting?: Maybe<Scalars['String']['output']>;
+  inventory?: Maybe<Inventory>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
@@ -230,7 +263,7 @@ export type CreateQuestActionMutationVariables = Exact<{
 }>;
 
 
-export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, userId: string, questId: string, claimedPoints: number } | null };
+export type CreateQuestActionMutation = { __typename?: 'Mutation', createQuestAction?: { __typename?: 'QuestAction', id: string, questId: string, claimedPoints: number } | null };
 
 export type MakeReferralMutationVariables = Exact<{
   referralCode: Scalars['String']['input'];
@@ -289,7 +322,6 @@ export const CreateQuestActionDocument = gql`
     mutation CreateQuestAction($questId: ID!) {
   createQuestAction(questId: $questId) {
     id
-    userId
     questId
     claimedPoints
   }

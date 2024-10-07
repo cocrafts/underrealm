@@ -9,6 +9,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import cors from 'cors';
 import express from 'express';
 import { useServer } from 'graphql-ws/lib/use/ws';
+import { boostrapSystemAssets } from 'models/asset';
 import { ApolloServerPluginDrainWsServer } from 'utils/apollo';
 import { GraphQLLoggingMiddleware } from 'utils/common';
 import { configs } from 'utils/config';
@@ -46,7 +47,12 @@ apollo.addPlugin(ApolloServerPluginDrainHttpServer({ httpServer: http }));
 // Proper shutdown for the WebSocket server.
 apollo.addPlugin(ApolloServerPluginDrainWsServer(wsCleanup));
 
-await Promise.all([apollo.start(), redis.connect(), mongo.connect()]);
+await Promise.all([
+	apollo.start(),
+	redis.connect(),
+	mongo.connect(),
+	boostrapSystemAssets(),
+]);
 
 app.use(cors());
 app.use(express.json());

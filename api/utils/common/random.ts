@@ -1,10 +1,12 @@
 const randomCharset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 
-export const generateRandomCode = (length: number) => {
+export const generateRandomCode = (
+	length: number,
+	charset: string = randomCharset,
+) => {
 	let code = '';
 	for (let i = 0; i <= length; i++) {
-		const randomChar =
-			randomCharset[Math.floor(Math.random() * randomCharset.length)];
+		const randomChar = charset[Math.floor(Math.random() * charset.length)];
 		code += randomChar;
 	}
 	return code;
@@ -21,4 +23,8 @@ export const AVATARS = [
 
 export const getRandomAvatar = () => {
 	return AVATARS[Math.floor(Math.random() * AVATARS.length)];
+};
+
+export const randInt = (min: number, max: number): number => {
+	return Math.floor(Math.random() * (max - min) + min);
 };

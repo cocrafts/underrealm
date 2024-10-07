@@ -1,5 +1,6 @@
 import { parse } from 'graphql';
-import { logger } from 'utils/logger';
+
+import { logger } from '../../utils/logger';
 
 export const GraphQLLoggingMiddleware = () => {
 	return (req, res, next) => {

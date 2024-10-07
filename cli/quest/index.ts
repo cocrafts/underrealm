@@ -1,11 +1,10 @@
+import { Quest } from '@underrealm/api';
 import type { PromptObject } from 'prompts';
 import prompts from 'prompts';
 import type { StrictCommandModule } from 'utils/types';
 import yargs from 'yargs';
 
 import { connectToMongoDB, disconnectToMongoDB } from '../utils/mongo';
-
-import { Quest } from './model';
 
 export const questCommand: StrictCommandModule<object, unknown> = {
 	command: 'quest',
