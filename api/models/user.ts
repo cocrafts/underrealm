@@ -17,7 +17,7 @@ export type IUser = {
 	referralCode: string;
 	points: number;
 	createdAt: Date;
-	udpatedAt: Date;
+	updatedAt: Date;
 };
 
 const UserSchema = createSchema({
