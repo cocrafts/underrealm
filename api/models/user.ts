@@ -16,6 +16,9 @@ export type IUser = {
 	avatarUrl?: string;
 	referralCode: string;
 	points: number;
+	discordId?: string;
+	twitterId?: string;
+	telegramId?: string;
 	createdAt: Date;
 	updatedAt: Date;
 };
@@ -48,6 +51,18 @@ const UserSchema = createSchema({
 		index: true,
 	},
 	avatarUrl: String,
+	discordId: {
+		type: String,
+		unique: true,
+	},
+	twitterId: {
+		type: String,
+		unique: true,
+	},
+	telegramId: {
+		type: String,
+		unique: true,
+	},
 });
 
 UserSchema.pre('save', function (next) {

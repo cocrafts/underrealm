@@ -1,11 +1,10 @@
 import type { FC } from 'react';
 import { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AnimateDirections, BindDirections, modalActions } from '@metacraft/ui';
+import { navigationRef } from 'stacks/Browser/shared';
 import type { Profile } from 'utils/graphql';
 
 import Account from './Account';
-import SignedMenu from './Menu';
 
 const styles = StyleSheet.create({
 	container: {
@@ -21,13 +20,7 @@ export const Signed: FC<Props> = ({ profile }) => {
 	const containerRef = useRef<View>(null);
 
 	const onPress = () => {
-		modalActions.show({
-			id: 'signedOptions',
-			component: SignedMenu,
-			bindingRef: containerRef,
-			bindingDirection: BindDirections.BottomLeft,
-			animateDirection: AnimateDirections.BottomLeft,
-		});
+		navigationRef.navigate('Profile');
 	};
 
 	return (

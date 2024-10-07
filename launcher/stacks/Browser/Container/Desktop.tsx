@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from 'screens/Home';
+import ProfileScreen from 'screens/Profile';
 import QuestScreen from 'screens/Quest';
 import StoryScreen from 'screens/Story';
 import CardLibraryStack from 'stacks/Browser/CardLibrary';
@@ -29,6 +30,7 @@ export const BrowserStack: FC = () => {
 			<Stack.Screen name="Story" component={StoryScreen} />
 			<Stack.Screen name="CardLibrary" component={CardLibraryStack} />
 			<Stack.Screen name="Quest" component={QuestScreen} />
+			<Stack.Screen name="Profile" component={ProfileScreen} />
 		</Stack.Navigator>
 	);
 };

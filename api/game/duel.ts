@@ -55,7 +55,7 @@ export const generateRandomDeck = (meta: CardMeta, size = 30) => {
 		const randomIndex = Math.floor(Math.random() * sources.length);
 		const randomId = sources[randomIndex];
 		const sku = randomId.substring(0, 5);
-		const existedCard = results.find((id) => id.startsWith(sku));
+		const existedCard = results.find((id) => id?.startsWith(sku));
 
 		if (!existedCard) {
 			results.push(randomId);

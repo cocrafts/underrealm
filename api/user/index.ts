@@ -7,6 +7,8 @@ import type {
 	SubscriptionResolvers,
 } from 'utils/types';
 
+import type { MutationResolvers, Profile } from './../utils/types/graphql';
+
 const profile: QueryResolvers['profile'] = requireAuth(
 	async (root, _, { user }) => {
 		return user;
@@ -18,6 +20,21 @@ export const refereeUser: ReferralHistoryResolvers['refereeUser'] = async ({
 }) => {
 	return await User.findById(refereeId);
 };
+
+export const updateProfile: MutationResolvers['updateProfile'] = requireAuth(
+	async (_, { profileProps }, { user }) => {
+		const userId = user.id;
+
+		const updatedUser = await User.findByIdAndUpdate<Profile>(
+			{ _id: userId },
+			{
+				...profileProps,
+			},
+		);
+
+		return updatedUser;
+	},
+);
 
 export const UserQueryResolvers = {
 	profile,

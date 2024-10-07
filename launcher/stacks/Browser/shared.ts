@@ -68,6 +68,7 @@ export type RootParamList = {
 	Quest: undefined;
 	CardLibrary: NavigatorScreenParams<CardLibraryParamList>;
 	AuthResponse: undefined;
+	Profile: undefined;
 };
 
 export const linking: LinkingOptions<RootParamList> = {
