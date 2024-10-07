@@ -19,6 +19,8 @@ export type IUser = {
 	discordId?: string;
 	twitterId?: string;
 	telegramId?: string;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 const UserSchema = createSchema({
