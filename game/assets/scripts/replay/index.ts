@@ -16,6 +16,7 @@ import { playSummon } from './summon';
 let replaying = false;
 const { BundleGroup, mergeFragmentToState, runCommand, move } = Engine;
 
+export const minimumReplicateStep = 10;
 export const fastReplay = async (): Promise<void> => {
 	const remoteHistoryLength = system.history.length;
 	const isUpToDate = system.historyLevel >= remoteHistoryLength;
@@ -34,7 +35,7 @@ export const fastReplay = async (): Promise<void> => {
 
 		runCommandBundle(bundle);
 
-		if (i >= remoteHistoryLength - 3) {
+		if (i >= remoteHistoryLength - minimumReplicateStep + 1) {
 			if (!system.winner && isTurnDraw && isMyPhase) {
 				await showTurnRibbon('Your Turn');
 			}
@@ -49,7 +50,7 @@ export const fastReplay = async (): Promise<void> => {
 			} else {
 				await playGeneric(bundle);
 			}
-		} else if (i === remoteHistoryLength - 4) {
+		} else if (i === remoteHistoryLength - minimumReplicateStep) {
 			replicateState();
 		}
 
