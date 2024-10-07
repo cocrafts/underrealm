@@ -4,6 +4,7 @@ import { GameDuel } from 'models/game';
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
 import { createGoogleSheetTab, writeToGoogleSheet } from 'utils/google';
+import { logger } from 'utils/logger';
 
 const getNewRegisterUser = async (startDate: Date): Promise<IUser[]> => {
 	return await User.find({ createdAt: { $gte: startDate } });
@@ -95,13 +96,13 @@ const getSystemStatsAggregator = async (
 };
 
 export const handler = async (event) => {
-	console.log('Cron job running...', event);
+	logger.info('Cron job running...', event);
 
 	const beginDate = new Date(2024, 9, 1);
 	const newSheetName = new Date().toISOString().split('T')[0];
 	const spreadsheetId = process.env.GCP_SHEET_SPREADSHEET_ID;
 	if (!spreadsheetId) {
-		console.error('failed to get spreadsheet id from environment');
+		logger.error('failed to get spreadsheet id from environment');
 	}
 
 	const users = await getNewRegisterUser(beginDate);
@@ -159,7 +160,7 @@ export const handler = async (event) => {
 		]),
 	]);
 
-	console.log('Data successfully written to Google Sheets!');
+	logger.info('Data successfully written to Google Sheets!');
 
 	return {
 		statusCode: 200,

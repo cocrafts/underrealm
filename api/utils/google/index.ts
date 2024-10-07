@@ -1,5 +1,6 @@
 import type { GoogleAuth } from 'google-auth-library';
 import { google } from 'googleapis';
+import { logger } from 'utils/logger';
 
 let auth: GoogleAuth;
 // Load Google Sheets credentials
@@ -67,7 +68,7 @@ export const createGoogleSheetTab = async (
 	);
 
 	if (sheetExists) {
-		console.log(
+		logger.info(
 			`Sheet "${sheetName}" existed. No need to create the new one...`,
 		);
 		return;
@@ -91,9 +92,9 @@ export const createGoogleSheetTab = async (
 
 	try {
 		const response = await sheets.spreadsheets.batchUpdate(createSheetRequest);
-		console.log('created new Sheet, receive', response.status);
+		logger.info('created new Sheet, receive', response.status);
 	} catch (error) {
-		console.error('Error adding new sheet or writing data:', error);
+		logger.error('error adding new sheet or writing data:', error);
 		throw error;
 	}
 };
