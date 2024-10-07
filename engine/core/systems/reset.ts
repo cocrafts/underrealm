@@ -5,7 +5,7 @@ import { queryByComponentTypes } from '../queries';
 export const resetAllSkillActivatingSystem = () => {
 	const update = (entities: Entity<CT>[]) => {
 		queryByComponentTypes(entities, CT.SkillActivating).forEach((entity) => {
-			delete entity.components[CT.SkillActivating];
+			entity.removeComponent(CT.SkillActivating);
 		});
 	};
 
