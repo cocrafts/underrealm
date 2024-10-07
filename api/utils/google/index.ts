@@ -2,6 +2,8 @@ import type { GoogleAuth } from 'google-auth-library';
 import { google } from 'googleapis';
 import { logger } from 'utils/logger';
 
+import GoogleServiceAccount from '../../google-service.json';
+
 let auth: GoogleAuth;
 // Load Google Sheets credentials
 const getGoogleSheetsAuth = async () => {
@@ -9,10 +11,8 @@ const getGoogleSheetsAuth = async () => {
 		return auth;
 	}
 
-	const credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT);
-
 	auth = new google.auth.GoogleAuth({
-		credentials,
+		credentials: GoogleServiceAccount,
 		scopes: ['https://www.googleapis.com/auth/spreadsheets'], // Scope to access Google Sheets
 	});
 
@@ -23,7 +23,7 @@ export const writeToGoogleSheet = async (
 	spreadsheetId: string,
 	sheetName: string,
 	startCell: string = 'A1',
-	data,
+	data: unknown,
 ) => {
 	const auth = await getGoogleSheetsAuth();
 	const sheets = google.sheets({ version: 'v4' });
