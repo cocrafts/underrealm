@@ -9,7 +9,7 @@ export default $config({
 			home: 'aws',
 			providers: {
 				aws: {
-					profile: process.env.PROFILE || 'metacraft',
+					profile: process.env.AWS_PROFILE || 'metacraft',
 					region: 'ap-south-1',
 				},
 			},
