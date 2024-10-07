@@ -5,7 +5,7 @@ import { Text } from '@metacraft/ui';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
-import Avatar from './avatar';
+import Avatar from './Avatar';
 import TabSelection from './TabSelection';
 
 export enum Tabs {

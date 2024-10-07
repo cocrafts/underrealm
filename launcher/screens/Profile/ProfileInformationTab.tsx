@@ -13,7 +13,7 @@ import { useUpdateProfileMutation } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
-import Avatar from './avatar';
+import Avatar from './Avatar';
 
 const profileImages = [
 	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar1.png',
