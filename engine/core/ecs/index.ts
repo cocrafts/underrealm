@@ -11,13 +11,21 @@ export interface Entity<CT extends Key> {
 	removeComponent(type: CT): Entity<CT>;
 }
 
-export interface System<T extends Key> {
-	update(entities: Entity<T>[]): void;
+export interface System<CT extends Key> {
+	update(entities: Entity<CT>[]): void;
 }
 
-export class ECS<CT extends string = string> {
+export interface Handler<CT extends Key> {
+	handle(entities: Entity<CT>[]): void;
+}
+
+export class ECS<
+	CT extends Key = string, // Component type
+	ET extends Key = string, // Event type
+> {
 	private entities: Entity<CT>[] = [];
 	private systems: System<CT>[] = [];
+	private eventHandlers: Record<string, Handler<CT>> = {};
 	private nextEntityId = 0;
 
 	createEntity(): Readonly<Entity<CT>> {
@@ -60,6 +68,19 @@ export class ECS<CT extends string = string> {
 	addSystem(system: System<CT>): this {
 		this.systems.push(system);
 		return this;
+	}
+
+	addHandler(event: ET, handler: Handler<CT>): this {
+		this.eventHandlers[event.toString()] = handler;
+		return this;
+	}
+
+	handle(event: ET) {
+		const handler = this.eventHandlers[event.toString()];
+		if (!handler) return;
+
+		handler.handle(this.entities);
+		this.update();
 	}
 
 	update(): void {
