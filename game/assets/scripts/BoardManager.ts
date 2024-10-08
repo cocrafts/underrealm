@@ -17,7 +17,6 @@ const {
 	selectHand,
 	selectPlayer,
 	selectStateKey,
-	version: engineVersion,
 } = Engine;
 
 const { ccclass } = _decorator;
@@ -54,7 +53,6 @@ export class BoardManager extends Component {
 		const enemyHandGuide = this.node.getChildByPath('Guide/enemyHand');
 		const enemyGroundGuide = this.node.getChildByPath('Guide/enemyGround');
 		const summonZoneGuide = this.node.getChildByPath('Guide/summonZone');
-		const version = this.node.getChildByPath('Hud/version');
 		const playerHealth = this.node.getChildByPath('Hud/playerHealth');
 		const playerHealthPredict = this.node.getChildByPath(
 			'Hud/playerHealthPredict',
@@ -70,8 +68,6 @@ export class BoardManager extends Component {
 		this.enemyDeckCount = this.node
 			.getChildByPath('Surface/enemyDeckCount')
 			.getComponent(Label);
-
-		version.getComponent(Label).string = `version ${engineVersion}`;
 
 		system.globalNodes.board = this.node;
 		system.globalNodes.fog = fog;
