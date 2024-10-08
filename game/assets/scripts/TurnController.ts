@@ -84,7 +84,11 @@ export class TurnController extends Component {
 			const label = isMyPhase ? 'end turn' : 'enemy turn';
 
 			animateSwapLabel(this.turnLabel, label, color).then(() => {
-				isMyPhase && this.startCountdown();
+				if (isMyPhase) {
+					this.startCountdown();
+				} else {
+					this.stopCountdown();
+				}
 			});
 		} else if (phase === DuelPhases.PreFight) {
 			animateSwapLabel(this.turnLabel, 'pre fight', white);
@@ -123,6 +127,7 @@ export class TurnController extends Component {
 		this.stopCountdown();
 	}
 
+	// TODO: Migrate this turn countdown to game logic
 	startCountdown() {
 		let timer = this.turnMaxTime;
 		const calculateCountdown = () => {
