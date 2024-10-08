@@ -36,6 +36,8 @@ export type IGameDuel = {
 	winner?: string;
 	config: DuelConfig;
 	history: DuelCommandBundle[];
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 const PlayerConfigSchema = new Schema<PlayerConfig>(

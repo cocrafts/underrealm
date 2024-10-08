@@ -1,5 +1,13 @@
 import Engine from '@underrealm/murg';
-import { _decorator, Button, Color, Component, Node } from 'cc';
+import {
+	_decorator,
+	Button,
+	CCInteger,
+	Color,
+	Component,
+	Label,
+	Node,
+} from 'cc';
 
 import { setCursor } from './util/helper';
 import { playEffectSound } from './util/resources';
@@ -9,7 +17,7 @@ import { animateFade, animateSwapLabel } from './tween';
 
 const { DuelPhases } = Engine;
 
-const { ccclass } = _decorator;
+const { ccclass, property } = _decorator;
 const NodeEvents = Node.EventType;
 const ButtonEvents = Button.EventType;
 
@@ -20,6 +28,9 @@ export class TurnController extends Component {
 	enemyTurnGlow: Node;
 	turnLabel: Node;
 	orb: Node;
+	countdown: () => void;
+	@property(Label) labelCountdown: Label = null!;
+	@property(CCInteger) turnMaxTime: number = 0;
 
 	start(): void {
 		this.playerTurnGlow = this.node.getChildByPath('Orb/Player Glow');
@@ -72,7 +83,9 @@ export class TurnController extends Component {
 		} else if (phase === DuelPhases.Setup) {
 			const label = isMyPhase ? 'end turn' : 'enemy turn';
 
-			animateSwapLabel(this.turnLabel, label, color);
+			animateSwapLabel(this.turnLabel, label, color).then(() => {
+				isMyPhase && this.startCountdown();
+			});
 		} else if (phase === DuelPhases.PreFight) {
 			animateSwapLabel(this.turnLabel, 'pre fight', white);
 		} else if (phase === DuelPhases.Fight) {
@@ -100,8 +113,39 @@ export class TurnController extends Component {
 		const isMyPhase = system.duel.phaseOf === system.playerIds.me;
 
 		if (!system.winner && isSetupPhase && isMyPhase) {
-			playEffectSound('end-turn');
-			sendEndTurn();
+			this.endTurn();
 		}
+	}
+
+	endTurn() {
+		playEffectSound('end-turn');
+		sendEndTurn();
+		this.stopCountdown();
+	}
+
+	startCountdown() {
+		let timer = this.turnMaxTime;
+		const calculateCountdown = () => {
+			const minute = Math.floor(timer / 60);
+			const second = timer % 60;
+			this.labelCountdown.string = `${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
+			timer--;
+		};
+		calculateCountdown();
+
+		this.countdown = function () {
+			if (timer === 0) {
+				this.endTurn();
+			}
+			calculateCountdown();
+		};
+
+		this.schedule(this.countdown, 1);
+		this.labelCountdown.node.active = true;
+	}
+
+	stopCountdown() {
+		this.unschedule(this.countdown);
+		this.labelCountdown.node.active = false;
 	}
 }
