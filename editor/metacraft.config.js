@@ -1,4 +1,4 @@
-const { swcOptions, copyAssets } = require('../../tools/configs/bundler');
+const { swcOptions, copyAssets } = require('../tools/configs/bundler');
 
 module.exports = {
 	swcOptions,

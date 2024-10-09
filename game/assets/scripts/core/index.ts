@@ -1,7 +1,7 @@
-import { inspect } from 'util';
-
 import { ecs } from './templates/v1';
 import { activation, resetAllSkillActivatingSystem, skill } from './systems';
+
+console.log('Hello world');
 
 /**
  * There are two approaches of registering system:
@@ -45,4 +45,6 @@ ecs
 
 	.addSystem(resetAllSkillActivatingSystem());
 
-console.log(inspect(ecs.toJSON(), { depth: 10, breakLength: 100 }));
+export { ecs } from './templates/v1';
+
+console.log(ecs.toJSON());

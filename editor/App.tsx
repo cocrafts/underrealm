@@ -1,3 +1,6 @@
+import { ecs } from '@underrealm/game';
+console.log(ecs);
+
 import { ReactFlow } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';

@@ -9923,20 +9923,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@underrealm/core@workspace:engine/core":
+"@underrealm/editor@workspace:editor":
   version: 0.0.0-use.local
-  resolution: "@underrealm/core@workspace:engine/core"
-  dependencies:
-    tsx: "npm:^4.19.0"
-  languageName: unknown
-  linkType: soft
-
-"@underrealm/editor@workspace:engine/editor":
-  version: 0.0.0-use.local
-  resolution: "@underrealm/editor@workspace:engine/editor"
+  resolution: "@underrealm/editor@workspace:editor"
   dependencies:
     "@types/react": "npm:^18.3.11"
     "@types/react-dom": "npm:^18.3.0"
+    "@underrealm/game": "npm:*"
     "@xyflow/react": "npm:^12.3.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -9976,7 +9969,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@underrealm/game@workspace:game":
+"@underrealm/game@npm:*, @underrealm/game@workspace:game":
   version: 0.0.0-use.local
   resolution: "@underrealm/game@workspace:game"
   dependencies:
