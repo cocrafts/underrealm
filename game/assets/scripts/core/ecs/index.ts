@@ -1,3 +1,7 @@
+import type { ComponentMap, InferComponent } from '../components';
+
+import { createProxy } from './proxy';
+
 export type Key = string | number;
 
 export interface Component<T extends Key> {
@@ -23,13 +27,17 @@ export class ECS<
 	CT extends Key = string, // Component type
 	ET extends Key = string, // Event type
 > {
-	private entities: Entity<CT>[] = [];
+	public entities: Entity<CT>[] = [];
 	private systems: System<CT>[] = [];
 	private eventHandlers: Record<string, Handler<CT>> = {};
 	private nextEntityId = 0;
 
-	createEntity(): Readonly<Entity<CT>> {
+	/**
+	 * `useProxy` determines the entity object is subscribable or not by using valtio
+	 */
+	createEntity(useProxy: boolean = false): Readonly<Entity<CT>> {
 		const entityId = this.nextEntityId++;
+
 		const entity: Entity<CT> = {
 			id: entityId,
 			components: {},
@@ -43,7 +51,11 @@ export class ECS<
 			},
 		};
 
-		this.entities.push(entity);
+		if (useProxy) {
+			this.entities.push(createProxy(entity));
+		} else {
+			this.entities.push(entity);
+		}
 
 		return entity;
 	}
@@ -61,6 +73,40 @@ export class ECS<
 		delete this.entities[entityId].components[type.toString()];
 		return this;
 	}
+
+	query = <T extends keyof ComponentMap>(
+		type?: T,
+		filter?: Partial<Omit<InferComponent<T>, 'type'>>,
+		pairs = [],
+	) => {
+		if (type) pairs.push({ type, filter });
+
+		return {
+			exec: (): Entity<CT>[] => {
+				return this.entities.filter((e) => {
+					return pairs.every(({ type, filter }) => {
+						const hasComponent = e.components[type];
+						if (!hasComponent) return false;
+						if (!filter) return true;
+
+						const isFilterMatched = Object.keys(filter).every(
+							(k) => e.components[type][k] === filter[k],
+						);
+
+						return isFilterMatched;
+					});
+				});
+			},
+			and: <T extends keyof ComponentMap>(
+				type: T,
+				filter?: Partial<Omit<InferComponent<T>, 'type'>>,
+			) => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				pairs.push({ type, filter });
+				return this.query(null, null, pairs);
+			},
+		};
+	};
 
 	/**
 	 * Add system to ECS, the execution priority will bases on adding order
@@ -89,9 +135,22 @@ export class ECS<
 		}
 	}
 
-	toJSON(): object {
+	toJSON() {
 		return {
 			entities: JSON.parse(JSON.stringify(this.entities)),
 		};
+	}
+
+	static fromJSON<
+		CT extends Key = string, // Component type
+		ET extends Key = string, // Event type
+	>(entities: Entity<CT>[], useProxy: boolean = false): ECS<CT, ET> {
+		const ecs = new ECS<CT, ET>();
+		ecs.entities = entities.map((entity) => {
+			if (useProxy) return createProxy(entity);
+			else return entity;
+		});
+
+		return ecs;
 	}
 }

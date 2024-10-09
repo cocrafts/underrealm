@@ -1,13 +1,10 @@
-import type { ComponentType } from './components';
-import { ECS } from './ecs';
-import { activation, resetAllSkillActivatingSystem, skill } from './systems';
-import { duel } from './templates';
+import { activation, resetAllSkillActivatingSystem, skill } from '../systems';
 
-export const core = ECS.fromJSON<ComponentType>(duel.entities);
+import { duelECS } from './duel';
+import { ecs } from './v1';
 
-export const system = {
-	playerId: 'me',
-};
+export const ecsv1 = ecs.toJSON();
+export const duel = duelECS.toJSON();
 
 /**
  * There are two approaches of registering system:
@@ -15,7 +12,7 @@ export const system = {
  * 2. attaching systems by queries, will loop over entities first then picking the systems
  * -> register queries for systems and then using operation to merge them (and/or)
  */
-core
+ecs
 	/**
 	 * Activation systems. The system will check pre-conditions
 	 * of entities' activations to enable SkillActivating

@@ -39,7 +39,7 @@ import type { ComponentType } from './types';
 /**
  * Remap type to object for supporting strict type checking
  */
-type ComponentMap = {
+export type ComponentMap = {
 	[ComponentType.Metadata]: Metadata;
 	[ComponentType.Attribute]: Attribute;
 	[ComponentType.Classification]: Classification;
@@ -74,7 +74,7 @@ type ComponentMap = {
 	[ComponentType.Transform]: Transform;
 };
 
-type InferComponent<T extends keyof ComponentMap> = ComponentMap[T];
+export type InferComponent<T extends keyof ComponentMap> = ComponentMap[T];
 
 export const createComponent = <T extends keyof ComponentMap>(
 	type: T,
