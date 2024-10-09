@@ -5,7 +5,7 @@
   "files": [
     "assets/scripts/core/**/**.ts"
   ],
-  "version": "3.6.3",
+  "version": "0.0.1",
   "creator": {
     "version": "3.8.3"
   },
