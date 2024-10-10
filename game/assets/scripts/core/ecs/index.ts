@@ -5,8 +5,6 @@ import type {
 } from '../components';
 import type { EventType } from '../events';
 
-import { createProxy } from './proxy';
-
 export type QueryFilter<CM extends ComponentMap, T extends keyof CM> = Partial<
 	Omit<InferComponent<CM, T>, 'type'>
 >;
@@ -45,10 +43,7 @@ export class ECS<
 	private eventHandlers: Record<string, Handler<CT, ET>> = {};
 	private nextEntityId = 0;
 
-	/**
-	 * `useProxy` determines the entity object is subscribable or not by using valtio
-	 */
-	createEntity(useProxy: boolean = false): Readonly<Entity<CT>> {
+	createEntity(): Readonly<Entity<CT>> {
 		const entityId = this.nextEntityId++;
 
 		const entity: Entity<CT> = {
@@ -64,11 +59,7 @@ export class ECS<
 			},
 		};
 
-		if (useProxy) {
-			this.entities.push(createProxy(entity));
-		} else {
-			this.entities.push(entity);
-		}
+		this.entities.push(entity);
 
 		return entity;
 	}
@@ -155,12 +146,9 @@ export class ECS<
 		CT = ComponentType, // Component type
 		ET = EventType, // Event type
 		CM extends ComponentMap = ComponentMap,
-	>(exported: ExportedECS, useProxy: boolean = false): ECS<CT, ET, CM> {
+	>(exported: ExportedECS): ECS<CT, ET, CM> {
 		const ecs = new ECS<CT, ET>();
-		ecs.entities = exported.entities.map((entity) => {
-			if (useProxy) return createProxy(entity);
-			else return entity;
-		});
+		ecs.entities = exported.entities;
 		ecs.nextEntityId = ecs.entities.length;
 
 		return ecs;
