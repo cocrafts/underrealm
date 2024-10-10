@@ -6,7 +6,9 @@
     "assets/scripts/core/**/**.ts"
   ],
   "scripts": {
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix"
   },
   "version": "0.0.1",
   "creator": {
@@ -17,6 +19,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191"
+    "@types/lodash": "^4.14.191",
+    "eslint": "^8.57.0"
   }
 }
