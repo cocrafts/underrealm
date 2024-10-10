@@ -150,7 +150,15 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 
 	static fromJSON<CM, ET>(exported: ExportedECS): ECS<CM, ET> {
 		const ecs = new ECS<CM, ET>();
-		ecs.entities = exported.entities;
+
+		exported.entities.forEach((entityData) => {
+			const entity = ecs.createEntity();
+
+			Object.keys(entityData).forEach((key) => {
+				entity.addComponent(key as keyof CM, entityData);
+			});
+		});
+
 		ecs.nextEntityId = ecs.entities.length;
 
 		return ecs;
