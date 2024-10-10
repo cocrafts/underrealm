@@ -8,7 +8,7 @@ import type { ECS } from '../../ecs';
 const createSkillActivating = () => createComponent(CT.SkillActivating, {});
 
 const summon = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SummonActivation).exec();
 
 		entities.forEach((entity) => {
@@ -20,7 +20,7 @@ const summon = () => {
 };
 
 const passive = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.PassiveActivation).exec();
 
 		entities.forEach((entity) => {
@@ -32,7 +32,7 @@ const passive = () => {
 };
 
 const fight = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.FightActivation).exec();
 
 		entities.forEach((entity) => {
@@ -44,7 +44,7 @@ const fight = () => {
 };
 
 const preFight = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.PreFightActivation).exec();
 
 		entities.forEach((entity) => {
@@ -59,7 +59,7 @@ const preFight = () => {
  * Enable SkillActivating by checking charge vs threshold
  */
 const charge = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.PreFightActivation).exec();
 
 		entities.forEach((entity) => {
@@ -77,7 +77,7 @@ const charge = () => {
 };
 
 const inspire = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.InspireActivation).exec();
 
 		entities.forEach((entity) => {
@@ -89,7 +89,7 @@ const inspire = () => {
 };
 
 const glory = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.GloryActivation).exec();
 		entities.forEach((entity) => {
 			entity.addComponent(createSkillActivating());

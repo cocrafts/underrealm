@@ -1,9 +1,16 @@
 import type { Node } from 'cc';
 
+import type { Component } from '../../core';
+
 export enum GameComponentType {
-	DeckCounter,
+	DeckCounter = 'DeckCounter',
 }
 
 export type GameComponentMap = {
-	[GameComponentType.DeckCounter]: { node: Node };
+	[GameComponentType.DeckCounter]: DeckCounter;
+};
+
+type DeckCounter = Component<GameComponentType> & {
+	node: Node;
+	ownerId: string;
 };

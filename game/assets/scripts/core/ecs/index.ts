@@ -1,35 +1,44 @@
-import type { ComponentMap, InferComponent } from '../components';
+import type {
+	ComponentMap,
+	ComponentType,
+	InferComponent,
+} from '../components';
+import type { EventType } from '../events';
 
 import { createProxy } from './proxy';
 
-export type Key = string | number;
-
-export type QueryFilter<T extends keyof ComponentMap> = Partial<
-	Omit<InferComponent<T>, 'type'>
+export type QueryFilter<CM extends ComponentMap, T extends keyof CM> = Partial<
+	Omit<InferComponent<CM, T>, 'type'>
 >;
 
-export interface Component<T extends Key> {
+export interface Component<T> {
 	type: T;
 }
 
-export interface Entity<CT extends Key> {
+export interface Entity<CT> {
 	id: number;
 	components: Record<string, Component<CT>>;
 	addComponent(component: Component<CT>): Entity<CT>;
 	removeComponent(type: CT): Entity<CT>;
 }
 
-export interface System<CT extends Key, ET extends Key> {
+export interface System<CT, ET> {
 	update(ecs: ECS<CT, ET>): void;
 }
 
-export interface Handler<CT extends Key, ET extends Key> {
+export interface Handler<CT, ET> {
 	handle(ecs: ECS<CT, ET>): void;
 }
 
+export type ExportedECS = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	entities: any[];
+};
+
 export class ECS<
-	CT extends Key = string, // Component type
-	ET extends Key = string, // Event type
+	CT = keyof ComponentMap, // Component type
+	ET = EventType, // Event type
+	CM extends ComponentMap = ComponentMap,
 > {
 	public entities: Entity<CT>[] = [];
 	private systems: System<CT, ET>[] = [];
@@ -78,9 +87,9 @@ export class ECS<
 		return this;
 	}
 
-	query = <T extends keyof ComponentMap>(
+	query = <T extends keyof CM>(
 		type?: T,
-		filter?: QueryFilter<T>,
+		filter?: QueryFilter<CM, T>,
 		pairs = [],
 	) => {
 		if (type) pairs.push({ type, filter });
@@ -102,7 +111,7 @@ export class ECS<
 			exec: (): Entity<CT>[] => {
 				return this.entities.filter(checkFilters);
 			},
-			and: <T extends keyof ComponentMap>(type: T, filter?: QueryFilter<T>) => {
+			and: <T extends keyof CM>(type: T, filter?: QueryFilter<CM, T>) => {
 				pairs.push({ type, filter });
 				return this.query(null, null, pairs);
 			},
@@ -136,18 +145,19 @@ export class ECS<
 		}
 	}
 
-	toJSON() {
+	toJSON(): ExportedECS {
 		return {
 			entities: JSON.parse(JSON.stringify(this.entities)),
 		};
 	}
 
 	static fromJSON<
-		CT extends Key = string, // Component type
-		ET extends Key = string, // Event type
-	>(entities: Entity<CT>[], useProxy: boolean = false): ECS<CT, ET> {
+		CT = ComponentType, // Component type
+		ET = EventType, // Event type
+		CM extends ComponentMap = ComponentMap,
+	>(exported: ExportedECS, useProxy: boolean = false): ECS<CT, ET, CM> {
 		const ecs = new ECS<CT, ET>();
-		ecs.entities = entities.map((entity) => {
+		ecs.entities = exported.entities.map((entity) => {
 			if (useProxy) return createProxy(entity);
 			else return entity;
 		});

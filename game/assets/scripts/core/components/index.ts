@@ -1,40 +1,37 @@
-import type { Entity } from '../ecs';
+import type { Component, Entity } from '../ecs';
 
 import type {
-	Attribute,
-	Chargeable,
-	Classification,
-	Metadata,
-	Ownership,
-	Place,
-} from './card';
-import type {
-	BuffAgainstSameEnemy,
-	BuffNextTurn,
-	ChargeActivation,
-	DestroyFacingMinHealth,
-	DoubleAttack,
-	FactorCleaver,
-	FightActivation,
-	FixedCleaver,
-	GainAttackByEnemyDefense,
-	GainAttackByEnemyMissingHealth,
-	GainAttackByRemainingHealth,
-	GloryActivation,
-	IgnoreEnemyDefense,
-	InspireActivation,
-	MultiplyDamageAgainst,
-	MutateEnemy,
-	MutatePlayer,
-	MutateRandomEnemy,
-	PassiveActivation,
-	PreFightActivation,
-	SelfBuff,
-	SkillActivating,
-	SummonActivation,
-	Transform,
-} from './skills';
-import type { ComponentType } from './types';
+	CardPlace,
+	CardType,
+	ClassType,
+	ComponentType,
+	InspireSource,
+} from './types';
+
+export * from './types';
+
+export type InferComponent<CM, T extends keyof CM> = CM[T];
+
+export const createComponent = <T extends keyof CM, CM = ComponentMap>(
+	type: T,
+	value: Omit<InferComponent<CM, T>, 'type'>,
+): InferComponent<CM, T> => {
+	return { ...value, type } as InferComponent<CM, T>;
+};
+
+export const getComponent = <T extends keyof CM, CM = ComponentMap>(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	entity: Entity<any>,
+	type: T,
+): InferComponent<CM, T> => {
+	if (!entity.components[type.toString()]) {
+		throw Error(
+			`component '${type.toString()} does not exist in entity '${entity.id}'. Make sure to query correctly before get component`,
+		);
+	}
+
+	return entity.components[type.toString()] as InferComponent<CM, T>;
+};
 
 /**
  * Remap type to object for supporting strict type checking
@@ -74,28 +71,137 @@ export type ComponentMap = {
 	[ComponentType.Transform]: Transform;
 };
 
-export type InferComponent<T extends keyof ComponentMap> = ComponentMap[T];
-
-export const createComponent = <T extends keyof ComponentMap>(
-	type: T,
-	value: Omit<InferComponent<T>, 'type'>,
-): InferComponent<T> => {
-	return { ...value, type } as InferComponent<T>;
+/**
+ * Card components
+ */
+export type Metadata = Component<ComponentType.Metadata> & {
+	name: string;
+	class: ClassType;
+	kind: CardType;
+	rarity: 0;
 };
 
-export const getComponent = <T extends keyof ComponentMap>(
-	entity: Entity<ComponentType>,
-	type: T,
-): InferComponent<T> => {
-	if (!entity.components[type]) {
-		throw Error(
-			`component '${type} does not exist in entity '${entity.id}'. Make sure to query correctly before get component`,
-		);
-	}
-
-	return entity.components[type] as InferComponent<T>;
+export type Classification = Component<ComponentType.Classification> & {
+	kind: CardType;
+	class: ClassType;
 };
 
-export * from './card';
-export * from './skills';
-export * from './types';
+export type Attribute = Component<ComponentType.Attribute> & {
+	attack: number;
+	health: number;
+	defense: number;
+};
+
+export type Place = Component<ComponentType.Place> & {
+	index: number;
+	place: CardPlace;
+};
+
+export type Ownership = Component<ComponentType.Ownership> & {
+	owner: string;
+};
+
+export type Chargeable = Component<ComponentType.Chargeable> & {
+	charge: number;
+};
+
+/**
+ * Skill components
+ */
+export type SummonActivation = Component<ComponentType.SummonActivation>;
+
+export type PassiveActivation = Component<ComponentType.PassiveActivation>;
+
+export type FightActivation = Component<ComponentType.FightActivation>;
+
+export type PreFightActivation = Component<ComponentType.PreFightActivation>;
+
+export type ChargeActivation = Component<ComponentType.ChargeActivation> & {
+	current: number;
+	threshold: number;
+};
+
+export type InspireActivation = Component<ComponentType.InspireActivation> & {
+	source: InspireSource;
+};
+
+export type GloryActivation = Component<ComponentType.GloryActivation>;
+
+export type SkillActivating = Component<ComponentType.SkillActivating>;
+
+export type DestroyFacingMinHealth =
+	Component<ComponentType.DestroyFacingMinHealth> & {
+		minHealth: number;
+		cardTypes: CardType[];
+	};
+
+export type GainAttackByEnemyDefense =
+	Component<ComponentType.GainAttackByEnemyDefense>;
+
+export type GainAttackByEnemyMissingHealth =
+	Component<ComponentType.GainAttackByEnemyMissingHealth>;
+
+export type GainAttackByRemainingHealth =
+	Component<ComponentType.GainAttackByRemainingHealth>;
+
+export type MutateEnemy = Component<ComponentType.MutateEnemy> & {
+	health: number;
+	defense: number;
+	attack: number;
+};
+
+export type MutateRandomEnemy = Component<ComponentType.MutateRandomEnemy> & {
+	health: number;
+	defense: number;
+	attack: number;
+};
+
+export type MutatePlayer = Component<ComponentType.MutatePlayer> & {
+	health: number;
+};
+
+export type IgnoreEnemyDefense = Component<ComponentType.IgnoreEnemyDefense> & {
+	defense?: number;
+};
+
+export type SelfBuff = Component<ComponentType.SelfBuff> & {
+	life: number;
+	health: number;
+	defense: number;
+	attack: number;
+};
+
+export type BuffAgainstSameEnemy =
+	Component<ComponentType.BuffAgainstSameEnemy> & {
+		firstEnemyId: string;
+		health: number;
+		defense: number;
+		attack: number;
+	};
+
+export type BuffNextTurn = Component<ComponentType.BuffNextTurn> & {
+	turn: number;
+	health: number;
+	defense: number;
+	attack: number;
+};
+
+export type FixedCleaver = Component<ComponentType.FixedCleaver> & {
+	life: number;
+	radius: number;
+	damage: number;
+};
+
+export type FactorCleaver = Component<ComponentType.FactorCleaver> & {
+	damageFactor: number;
+};
+
+export type MultiplyDamageAgainst =
+	Component<ComponentType.MultiplyDamageAgainst> & {
+		factor: number;
+		cardTypes: CardType[];
+	};
+
+export type DoubleAttack = Component<ComponentType.DoubleAttack>;
+
+export type Transform = Component<ComponentType.Transform>;

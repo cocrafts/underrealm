@@ -54,6 +54,21 @@ export enum ComponentType {
 	 */
 }
 
+export enum ClassType {
+	Assassin = 'Assassin',
+	Knight = 'Knight',
+	Tanker = 'Tanker',
+	Wizard = 'Wizard',
+	Summoner = 'Summoner',
+	Beast = 'Beast',
+}
+
+export enum CardType {
+	Hero = 'Hero',
+	Troop = 'Troop',
+	Spell = 'Spell',
+}
+
 export enum CardPlace {
 	Ground = 'Ground',
 	Hand = 'Hand',

@@ -1,7 +1,6 @@
-import { _decorator, Component, Enum, Label } from 'cc';
+import { _decorator, Component, Enum } from 'cc';
 
-import { CardPlace, ComponentType } from '../core/components';
-import { core, system } from '../game';
+import { core, createGameComponent, GameComponentType, system } from '../game';
 import { Owner } from '../util/v2/manager';
 const { ccclass, property } = _decorator;
 
@@ -11,15 +10,15 @@ export class DeckCounter extends Component {
 	private owner: number;
 
 	start() {
-		const owner = this.owner === Owner.Player ? system.playerId : undefined;
+		const ownerId =
+			this.owner === Owner.Player ? system.playerId : system.enemyId;
+		const node = this.node.parent.getChildByPath('Count');
 
-		const cards = core
-			.query(ComponentType.Ownership, { owner })
-			.and(ComponentType.Place, { place: CardPlace.Deck })
-			.exec();
-
-		const count = cards.length.toString();
-
-		this.node.parent.getChildByPath('Count').getComponent(Label).string = count;
+		core.createEntity().addComponent(
+			createGameComponent(GameComponentType.DeckCounter, {
+				node,
+				ownerId,
+			}),
+		);
 	}
 }
