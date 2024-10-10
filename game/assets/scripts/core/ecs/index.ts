@@ -159,8 +159,6 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 			});
 		});
 
-		ecs.nextEntityId = ecs.entities.length;
-
 		return ecs;
 	}
 }
