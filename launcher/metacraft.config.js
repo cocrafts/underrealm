@@ -6,7 +6,7 @@ const {
 	injectEnvironments,
 	extraPolyfills,
 	babelLoaderAsFallback,
-} = require('./webpack');
+} = require('../tools/configs/bundler');
 
 module.exports = {
 	publicPath: () => process.env.PUBLIC_URL || '/',

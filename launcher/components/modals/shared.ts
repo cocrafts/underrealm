@@ -16,7 +16,7 @@ export const modalStyles = StyleSheet.create({
 		textAlign: 'center',
 		paddingHorizontal: 12,
 		marginBottom: 8,
-	},
+	} as never,
 	buttonContainer: {
 		marginVertical: 4,
 		marginHorizontal: 24,
