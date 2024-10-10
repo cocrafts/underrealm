@@ -1,5 +1,6 @@
-import { ecs } from '@underrealm/game';
-console.log(ecs);
+import { duel } from '@underrealm/game';
+
+console.log(duel);
 
 import { ReactFlow } from '@xyflow/react';
 

@@ -5,6 +5,9 @@
   "files": [
     "assets/scripts/core/**/**.ts"
   ],
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
   "version": "0.0.1",
   "creator": {
     "version": "3.8.3"
