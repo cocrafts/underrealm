@@ -1,7 +1,7 @@
 import { _decorator, Component, Enum, Label } from 'cc';
 
-import { core, system } from '../core';
 import { CardPlace, ComponentType } from '../core/components';
+import { core, system } from '../game';
 import { Owner } from '../util/v2/manager';
 const { ccclass, property } = _decorator;
 

@@ -19,12 +19,12 @@ export interface Entity<CT extends Key> {
 	removeComponent(type: CT): Entity<CT>;
 }
 
-export interface System<CT extends Key> {
-	update(entities: Entity<CT>[]): void;
+export interface System<CT extends Key, ET extends Key> {
+	update(ecs: ECS<CT, ET>): void;
 }
 
-export interface Handler<CT extends Key> {
-	handle(entities: Entity<CT>[]): void;
+export interface Handler<CT extends Key, ET extends Key> {
+	handle(ecs: ECS<CT, ET>): void;
 }
 
 export class ECS<
@@ -32,8 +32,8 @@ export class ECS<
 	ET extends Key = string, // Event type
 > {
 	public entities: Entity<CT>[] = [];
-	private systems: System<CT>[] = [];
-	private eventHandlers: Record<string, Handler<CT>> = {};
+	private systems: System<CT, ET>[] = [];
+	private eventHandlers: Record<string, Handler<CT, ET>> = {};
 	private nextEntityId = 0;
 
 	/**
@@ -112,12 +112,12 @@ export class ECS<
 	/**
 	 * Add system to ECS, the execution priority will bases on adding order
 	 */
-	addSystem(system: System<CT>): this {
+	addSystem(system: System<CT, ET>): this {
 		this.systems.push(system);
 		return this;
 	}
 
-	addHandler(event: ET, handler: Handler<CT>): this {
+	addHandler(event: ET, handler: Handler<CT, ET>): this {
 		this.eventHandlers[event.toString()] = handler;
 		return this;
 	}
@@ -126,13 +126,13 @@ export class ECS<
 		const handler = this.eventHandlers[event.toString()];
 		if (!handler) return;
 
-		handler.handle(this.entities);
+		handler.handle(this);
 		this.update();
 	}
 
 	update(): void {
 		for (const system of this.systems) {
-			system.update(this.entities);
+			system.update(this);
 		}
 	}
 
@@ -151,6 +151,7 @@ export class ECS<
 			if (useProxy) return createProxy(entity);
 			else return entity;
 		});
+		ecs.nextEntityId = ecs.entities.length;
 
 		return ecs;
 	}

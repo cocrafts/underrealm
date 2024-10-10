@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { ComponentType as CT, getComponent } from '../../components';
-import type { Entity } from '../../ecs';
-import { queryByComponentTypes } from '../../queries';
-
-const skillQuery = (entities: Entity<CT>[], type: CT) => {
-	return queryByComponentTypes(entities, CT.SkillActivating, type);
-};
+import { ComponentType as CT } from '../../components';
+import { getComponent } from '../../components';
+import type { ECS } from '../../ecs';
 
 const destroyFacingMinHealth = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.DestroyFacingMinHealth).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.DestroyFacingMinHealth)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.DestroyFacingMinHealth);
 			// do something
 		});
@@ -20,8 +21,13 @@ const destroyFacingMinHealth = () => {
 };
 
 const gainAttackByEnemyDefense = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.GainAttackByEnemyDefense).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.GainAttackByEnemyDefense)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.GainAttackByEnemyDefense);
 			// do something
 		});
@@ -30,20 +36,30 @@ const gainAttackByEnemyDefense = () => {
 	return { update };
 };
 
-const gainAttackByEnemyMissingHealth = () => ({
-	update: (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.GainAttackByEnemyMissingHealth).forEach(
-			(entity) => {
-				const skill = getComponent(entity, CT.GainAttackByEnemyMissingHealth);
-				// do something
-			},
-		);
-	},
-});
+const gainAttackByEnemyMissingHealth = () => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.GainAttackByEnemyMissingHealth)
+			.exec();
+
+		entities.forEach((entity) => {
+			const skill = getComponent(entity, CT.GainAttackByEnemyMissingHealth);
+			// do something
+		});
+	};
+
+	return { update };
+};
 
 const gainAttackByRemainingHealth = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.GainAttackByRemainingHealth).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.GainAttackByRemainingHealth)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.GainAttackByRemainingHealth);
 			// do something
 		});
@@ -53,8 +69,10 @@ const gainAttackByRemainingHealth = () => {
 };
 
 const mutateEnemy = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.MutateEnemy).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.MutateEnemy).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.MutateEnemy);
 			// do something
 		});
@@ -64,8 +82,13 @@ const mutateEnemy = () => {
 };
 
 const mutateRandomEnemy = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.MutateRandomEnemy).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.MutateRandomEnemy)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.MutateRandomEnemy);
 			// do something
 		});
@@ -75,8 +98,10 @@ const mutateRandomEnemy = () => {
 };
 
 const mutatePlayer = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.MutatePlayer).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.MutatePlayer).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.MutatePlayer);
 			// do something
 		});
@@ -86,8 +111,13 @@ const mutatePlayer = () => {
 };
 
 const ignoreEnemyDefense = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.IgnoreEnemyDefense).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.IgnoreEnemyDefense)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.IgnoreEnemyDefense);
 			// do something
 		});
@@ -97,8 +127,10 @@ const ignoreEnemyDefense = () => {
 };
 
 const selfBuff = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.SelfBuff).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.SelfBuff).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.SelfBuff);
 			// do something
 		});
@@ -108,8 +140,13 @@ const selfBuff = () => {
 };
 
 const buffAgainstSameEnemy = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.BuffAgainstSameEnemy).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.BuffAgainstSameEnemy)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.BuffAgainstSameEnemy);
 			// do something
 		});
@@ -119,8 +156,10 @@ const buffAgainstSameEnemy = () => {
 };
 
 const buffNextTurn = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.BuffNextTurn).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.BuffNextTurn).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.BuffNextTurn);
 			// do something
 		});
@@ -130,8 +169,10 @@ const buffNextTurn = () => {
 };
 
 const fixedCleaver = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.FixedCleaver).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.FixedCleaver).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.FixedCleaver);
 			// do something
 		});
@@ -141,8 +182,10 @@ const fixedCleaver = () => {
 };
 
 const factorCleaver = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.FactorCleaver).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.FactorCleaver).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.FactorCleaver);
 			// do something
 		});
@@ -152,8 +195,13 @@ const factorCleaver = () => {
 };
 
 const multiplyDamageAgainst = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.MultiplyDamageAgainst).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs
+			.query(CT.SkillActivating)
+			.and(CT.MultiplyDamageAgainst)
+			.exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.MultiplyDamageAgainst);
 			// do something
 		});
@@ -161,9 +209,12 @@ const multiplyDamageAgainst = () => {
 
 	return { update };
 };
+
 const doubleAttack = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.DoubleAttack).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.DoubleAttack).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.DoubleAttack);
 			// do something
 		});
@@ -173,8 +224,10 @@ const doubleAttack = () => {
 };
 
 const transform = () => {
-	const update = (entities: Entity<CT>[]) => {
-		skillQuery(entities, CT.Transform).forEach((entity) => {
+	const update = (ecs: ECS<CT>) => {
+		const entities = ecs.query(CT.SkillActivating).and(CT.Transform).exec();
+
+		entities.forEach((entity) => {
 			const skill = getComponent(entity, CT.Transform);
 			// do something
 		});

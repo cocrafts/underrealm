@@ -1,12 +1,12 @@
 import { ComponentType as CT } from '../components';
-import type { Entity } from '../ecs';
-import { queryByComponentTypes } from '../queries';
+import type { ECS } from '../ecs';
 
 export const resetAllSkillActivatingSystem = () => {
-	const update = (entities: Entity<CT>[]) => {
-		queryByComponentTypes(entities, CT.SkillActivating).forEach((entity) => {
-			entity.removeComponent(CT.SkillActivating);
-		});
+	const update = (ecs: ECS<CT>) => {
+		ecs
+			.query(CT.SkillActivating)
+			.exec()
+			.forEach((entity) => entity.removeComponent(CT.SkillActivating));
 	};
 
 	return { update };
