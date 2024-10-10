@@ -35,5 +35,8 @@ jobs:
       - name: Create fake tsconfig.cocos.json
         run: mkdir game/temp && touch game/temp/tsconfig.cocos.json && echo "{}" >> game/temp/tsconfig.cocos.json
 
+      - name: Build murg engine
+        run: cd engine/murg && yarn build && cd ../..
+
       - name: Typecheck
         run: yarn type-check
