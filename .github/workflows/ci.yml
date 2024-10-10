@@ -32,5 +32,8 @@ jobs:
       - name: Create fake google-service
         run: touch api/google-service.json && echo "{}" >> api/google-service.json
 
+      - name: Create fake tsconfig.cocos.json
+        run: mkdir game/temp && touch game/temp/tsconfig.cocos.json && echo "{}" >> game/temp/tsconfig.cocos.json
+
       - name: Typecheck
         run: yarn type-check

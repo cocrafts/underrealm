@@ -10,6 +10,7 @@ module.exports = {
 		'tool/animationClipExample.ts',
 		'game/assets/scripts/util/graphql.ts',
 		'game/types',
+		'game/extensions',
 		'api/utils/types/graphql.ts',
 	],
 	env: {
