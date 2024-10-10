@@ -2,7 +2,7 @@ import { ComponentType as CT } from '../components';
 import type { ECS } from '../ecs';
 
 export const resetAllSkillActivatingSystem = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		ecs
 			.query(CT.SkillActivating)
 			.exec()

@@ -1,4 +1,4 @@
-import type { Component, Entity } from '../ecs';
+import type { Component } from '../ecs';
 
 import type {
 	CardPlace,
@@ -9,29 +9,6 @@ import type {
 } from './types';
 
 export * from './types';
-
-export type InferComponent<CM, T extends keyof CM> = CM[T];
-
-export const createComponent = <T extends keyof CM, CM = ComponentMap>(
-	type: T,
-	value: Omit<InferComponent<CM, T>, 'type'>,
-): InferComponent<CM, T> => {
-	return { ...value, type } as InferComponent<CM, T>;
-};
-
-export const getComponent = <T extends keyof CM, CM = ComponentMap>(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	entity: Entity<any>,
-	type: T,
-): InferComponent<CM, T> => {
-	if (!entity.components[type.toString()]) {
-		throw Error(
-			`component '${type.toString()} does not exist in entity '${entity.id}'. Make sure to query correctly before get component`,
-		);
-	}
-
-	return entity.components[type.toString()] as InferComponent<CM, T>;
-};
 
 /**
  * Remap type to object for supporting strict type checking

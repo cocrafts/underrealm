@@ -9,7 +9,6 @@ export enum ComponentType {
 	Chargeable = 'Chargeable',
 	Place = 'Place',
 
-	Activation = 'Activation',
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',
 	FightActivation = 'FightActivation',

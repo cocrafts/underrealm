@@ -1,6 +1,12 @@
-import { _decorator, Component, Enum } from 'cc';
+import { _decorator, Component, Enum, Label } from 'cc';
 
-import { core, createGameComponent, GameComponentType, system } from '../game';
+import {
+	CardPlace,
+	core,
+	GameComponentType,
+	LogicComponentType,
+	system,
+} from '../game';
 import { Owner } from '../util/v2/manager';
 const { ccclass, property } = _decorator;
 
@@ -14,11 +20,26 @@ export class DeckCounter extends Component {
 			this.owner === Owner.Player ? system.playerId : system.enemyId;
 		const node = this.node.parent.getChildByPath('Count');
 
-		core.createEntity().addComponent(
-			createGameComponent(GameComponentType.DeckCounter, {
-				node,
-				ownerId,
-			}),
-		);
+		core
+			.createEntity()
+			.addComponent(GameComponentType.DeckCounter, { node, ownerId });
+
+		core.addSystem({
+			update(ecs) {
+				const counters = ecs.query(GameComponentType.DeckCounter).exec();
+				counters.forEach((counter) => {
+					const { node, ownerId } = counter.getComponent(
+						GameComponentType.DeckCounter,
+					);
+
+					const cards = ecs
+						.query(LogicComponentType.Ownership, { owner: ownerId })
+						.and(LogicComponentType.Place, { place: CardPlace.Deck })
+						.exec();
+
+					node.getComponent(Label).string = cards.length.toString();
+				});
+			},
+		});
 	}
 }

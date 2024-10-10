@@ -1,32 +1,20 @@
-import {
-	CardPlace,
-	CardType,
-	ClassType,
-	ComponentType,
-	createComponent,
-} from '../components';
+import { CardPlace, CardType, ClassType, ComponentType } from '../components';
 import { ECS } from '../ecs';
 
-export const duelECS = new ECS<ComponentType>();
+export const duelECS = new ECS();
 
 duelECS
 	.createEntity()
-	.addComponent(createComponent(ComponentType.Ownership, { owner: 'me' }))
-	.addComponent(
-		createComponent(ComponentType.Place, { place: CardPlace.Deck, index: 0 }),
-	)
-	.addComponent(
-		createComponent(ComponentType.Metadata, {
-			name: 'Troop',
-			class: ClassType.Knight,
-			kind: CardType.Hero,
-			rarity: 0,
-		}),
-	)
-	.addComponent(
-		createComponent(ComponentType.Attribute, {
-			attack: 20,
-			defense: 0,
-			health: 40,
-		}),
-	);
+	.addComponent(ComponentType.Ownership, { owner: 'me' })
+	.addComponent(ComponentType.Place, { place: CardPlace.Deck, index: 0 })
+	.addComponent(ComponentType.Metadata, {
+		name: 'Troop',
+		class: ClassType.Knight,
+		kind: CardType.Hero,
+		rarity: 0,
+	})
+	.addComponent(ComponentType.Attribute, {
+		attack: 20,
+		defense: 0,
+		health: 40,
+	});

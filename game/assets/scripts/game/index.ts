@@ -1,14 +1,8 @@
-import type {
-	ComponentMap as LogicComponentMap,
-	Entity,
-	InferComponent,
-} from '../core';
+import type { ComponentMap as LogicComponentMap } from '../core';
 import {
 	activation,
 	ComponentType as LogicComponentType,
-	createComponent,
 	ECS,
-	getComponent,
 	resetAllSkillActivatingSystem,
 	skill,
 } from '../core';
@@ -16,36 +10,16 @@ import type { EventType } from '../core/events';
 import { duel } from '../core/templates';
 
 import type { GameComponentMap } from './components';
-import type { GameComponentType } from './components';
 
 export * from '../core';
 export * from './components';
 
 export { GameComponentMap, LogicComponentType };
 
-export type ComponentType = GameComponentType | LogicComponentType;
 export type ComponentMap = GameComponentMap & LogicComponentMap;
-export type GameECS = ECS<ComponentType, EventType, ComponentMap>;
+export type GameECS = ECS<ComponentMap, EventType>;
 
-export const createGameComponent = <T extends keyof ComponentMap>(
-	type: T,
-	value: Omit<InferComponent<ComponentMap, T>, 'type'>,
-): InferComponent<ComponentMap, T> => {
-	return createComponent<T, ComponentMap>(type, value);
-};
-
-export const getGameComponent = <T extends keyof ComponentMap>(
-	entity: Entity<ComponentType>,
-	type: T,
-): InferComponent<ComponentMap, T> => {
-	return getComponent<T, ComponentMap>(entity, type);
-};
-
-export const core = ECS.fromJSON<
-	GameComponentType | LogicComponentType,
-	EventType,
-	ComponentMap
->(duel);
+export const core = ECS.fromJSON<ComponentMap, EventType>(duel);
 
 export const system = {
 	playerId: 'me',

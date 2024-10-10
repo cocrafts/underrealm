@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { ComponentType as CT } from '../../components';
-import { getComponent } from '../../components';
 import type { ECS } from '../../ecs';
 
 const destroyFacingMinHealth = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.DestroyFacingMinHealth)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.DestroyFacingMinHealth);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.DestroyFacingMinHealth);
 			// do something
 		});
 	};
@@ -21,14 +19,15 @@ const destroyFacingMinHealth = () => {
 };
 
 const gainAttackByEnemyDefense = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.GainAttackByEnemyDefense)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.GainAttackByEnemyDefense);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.GainAttackByEnemyDefense);
 			// do something
 		});
 	};
@@ -37,14 +36,15 @@ const gainAttackByEnemyDefense = () => {
 };
 
 const gainAttackByEnemyMissingHealth = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.GainAttackByEnemyMissingHealth)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.GainAttackByEnemyMissingHealth);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.GainAttackByEnemyMissingHealth);
 			// do something
 		});
 	};
@@ -53,14 +53,15 @@ const gainAttackByEnemyMissingHealth = () => {
 };
 
 const gainAttackByRemainingHealth = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.GainAttackByRemainingHealth)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.GainAttackByRemainingHealth);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.GainAttackByRemainingHealth);
 			// do something
 		});
 	};
@@ -69,11 +70,12 @@ const gainAttackByRemainingHealth = () => {
 };
 
 const mutateEnemy = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.MutateEnemy).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.MutateEnemy);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.MutateEnemy);
 			// do something
 		});
 	};
@@ -82,14 +84,15 @@ const mutateEnemy = () => {
 };
 
 const mutateRandomEnemy = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.MutateRandomEnemy)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.MutateRandomEnemy);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.MutateRandomEnemy);
 			// do something
 		});
 	};
@@ -98,11 +101,12 @@ const mutateRandomEnemy = () => {
 };
 
 const mutatePlayer = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.MutatePlayer).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.MutatePlayer);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.MutatePlayer);
 			// do something
 		});
 	};
@@ -111,14 +115,15 @@ const mutatePlayer = () => {
 };
 
 const ignoreEnemyDefense = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.IgnoreEnemyDefense)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.IgnoreEnemyDefense);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.IgnoreEnemyDefense);
 			// do something
 		});
 	};
@@ -127,11 +132,12 @@ const ignoreEnemyDefense = () => {
 };
 
 const selfBuff = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.SelfBuff).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.SelfBuff);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.SelfBuff);
 			// do something
 		});
 	};
@@ -140,14 +146,15 @@ const selfBuff = () => {
 };
 
 const buffAgainstSameEnemy = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.BuffAgainstSameEnemy)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.BuffAgainstSameEnemy);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.BuffAgainstSameEnemy);
 			// do something
 		});
 	};
@@ -156,11 +163,12 @@ const buffAgainstSameEnemy = () => {
 };
 
 const buffNextTurn = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.BuffNextTurn).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.BuffNextTurn);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.BuffNextTurn);
 			// do something
 		});
 	};
@@ -169,11 +177,12 @@ const buffNextTurn = () => {
 };
 
 const fixedCleaver = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.FixedCleaver).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.FixedCleaver);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.FixedCleaver);
 			// do something
 		});
 	};
@@ -182,11 +191,12 @@ const fixedCleaver = () => {
 };
 
 const factorCleaver = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.FactorCleaver).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.FactorCleaver);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.FactorCleaver);
 			// do something
 		});
 	};
@@ -195,14 +205,15 @@ const factorCleaver = () => {
 };
 
 const multiplyDamageAgainst = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs
 			.query(CT.SkillActivating)
 			.and(CT.MultiplyDamageAgainst)
 			.exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.MultiplyDamageAgainst);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.MultiplyDamageAgainst);
 			// do something
 		});
 	};
@@ -211,11 +222,12 @@ const multiplyDamageAgainst = () => {
 };
 
 const doubleAttack = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.DoubleAttack).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.DoubleAttack);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.DoubleAttack);
 			// do something
 		});
 	};
@@ -224,11 +236,12 @@ const doubleAttack = () => {
 };
 
 const transform = () => {
-	const update = (ecs: ECS<CT>) => {
+	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.SkillActivating).and(CT.Transform).exec();
 
 		entities.forEach((entity) => {
-			const skill = getComponent(entity, CT.Transform);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const skill = entity.getComponent(CT.Transform);
 			// do something
 		});
 	};
