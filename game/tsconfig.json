@@ -17,5 +17,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "exclude": ["extensions"]
+  "exclude": ["extensions", "assets/textMeshPro"]
 }
