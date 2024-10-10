@@ -4,6 +4,10 @@ import { createProxy } from './proxy';
 
 export type Key = string | number;
 
+export type QueryFilter<T extends keyof ComponentMap> = Partial<
+	Omit<InferComponent<T>, 'type'>
+>;
+
 export interface Component<T extends Key> {
 	type: T;
 }
@@ -76,32 +80,29 @@ export class ECS<
 
 	query = <T extends keyof ComponentMap>(
 		type?: T,
-		filter?: Partial<Omit<InferComponent<T>, 'type'>>,
+		filter?: QueryFilter<T>,
 		pairs = [],
 	) => {
 		if (type) pairs.push({ type, filter });
 
+		const checkFilters = (entity: Entity<CT>) => {
+			return pairs.every(({ type, filter }) => {
+				const component = entity.components[type];
+				if (!component) return false;
+				if (!filter) return true;
+
+				const checkValue = (key: string) => component[key] === filter[key];
+				const isFilterMatched = Object.keys(filter).every(checkValue);
+
+				return isFilterMatched;
+			});
+		};
+
 		return {
 			exec: (): Entity<CT>[] => {
-				return this.entities.filter((e) => {
-					return pairs.every(({ type, filter }) => {
-						const hasComponent = e.components[type];
-						if (!hasComponent) return false;
-						if (!filter) return true;
-
-						const isFilterMatched = Object.keys(filter).every(
-							(k) => e.components[type][k] === filter[k],
-						);
-
-						return isFilterMatched;
-					});
-				});
+				return this.entities.filter(checkFilters);
 			},
-			and: <T extends keyof ComponentMap>(
-				type: T,
-				filter?: Partial<Omit<InferComponent<T>, 'type'>>,
-			) => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			and: <T extends keyof ComponentMap>(type: T, filter?: QueryFilter<T>) => {
 				pairs.push({ type, filter });
 				return this.query(null, null, pairs);
 			},
