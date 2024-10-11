@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import type { DimensionState } from '@metacraft/ui';
 import { dimensionState, Text } from '@metacraft/ui';
-import FooterSection from 'components/layouts/Footer';
 import ScrollLayout from 'components/layouts/Scroll';
 import Banner from 'screens/Story/Banner';
 import Header from 'screens/Story/Header';
@@ -55,7 +54,6 @@ const Story: FC = () => {
 						</Text>
 						<Banner />
 					</View>
-					<FooterSection />
 				</View>
 			</ScrollLayout>
 		</View>
