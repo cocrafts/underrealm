@@ -22,11 +22,7 @@ export const postToConnection = async (connectionId: string, payload: any) => {
 			}),
 		);
 	} catch (error) {
-		// ignore GoneException
-		logger.error('Can not post to connection', {
-			connectionId,
-			payload,
-			error,
-		});
+		// GoneException, PayloadTooLargeException
+		logger.error('Can not post to connection', { connectionId, error });
 	}
 };
