@@ -94,7 +94,7 @@ export default InformationTab;
 const stylesheet = createStyleSheet(() => ({
 	container: {
 		flex: 1,
-		alignItems: 'center',
+		marginHorizontal: 'auto',
 	},
 	titleContainer: {
 		alignItems: 'center',
@@ -121,7 +121,6 @@ const stylesheet = createStyleSheet(() => ({
 		height: 68,
 	},
 	input: {
-		width: { xs: 260, lg: 480 },
 		height: 40,
 		borderWidth: 2,
 		borderColor: '#5A5A5A',
@@ -140,7 +139,6 @@ const stylesheet = createStyleSheet(() => ({
 	imageContainer: {
 		flexDirection: 'row',
 		gap: 8,
-		width: { xs: 260, md: '100%' },
 		flexWrap: 'wrap',
 	},
 	contentContainer: {
