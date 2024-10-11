@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles,
-} from 'react-native-unistyles';
-import { Button } from '@metacraft/ui';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { signOut } from 'aws-amplify/auth';
 import ScrollLayout from 'components/layouts/Scroll';
@@ -21,13 +16,10 @@ import TabsDropdown from './TabsDropdown';
 
 const ProfileScreen = () => {
 	const [tab, setTab] = useState(Tabs.INFORMATION);
-	const { styles } = useStyles(stylesheet);
+	const { styles, breakpoint } = useStyles(stylesheet);
 	const { wallet } = useWallet();
 	const { refetch } = useProfile();
-
-	const isMobile =
-		UnistylesRuntime.breakpoint === 'xs' ||
-		UnistylesRuntime.breakpoint === 'sm';
+	const isMobile = breakpoint === 'xs' || breakpoint === 'sm';
 
 	const handleSignOut = async () => {
 		setPendingRedirect();
@@ -42,26 +34,31 @@ const ProfileScreen = () => {
 
 	return (
 		<ScrollLayout style={styles.container}>
-			<View style={[styles.container, isMobile && { flexDirection: 'column' }]}>
+			<View style={styles.innerContainer}>
 				{isMobile ? (
 					<TabsDropdown tab={tab} onSelectTab={setTab} />
 				) : (
 					<SideBar tab={tab} onSelectTab={setTab} onSignOut={handleSignOut} />
 				)}
 
-				{tab === Tabs.ACCOUNT_LINKING ? (
-					<AccountLinkingTab />
-				) : tab === Tabs.INVENTORY ? (
-					<InventoryTab />
-				) : (
-					<InformationTab />
-				)}
+				<View style={styles.contentContainer}>
+					{tab === Tabs.ACCOUNT_LINKING ? (
+						<AccountLinkingTab />
+					) : tab === Tabs.INVENTORY ? (
+						<InventoryTab />
+					) : (
+						<InformationTab />
+					)}
 
-				{isMobile && (
-					<Button style={styles.logoutButton} onPress={handleSignOut}>
-						<Text style={styles.logoutText}>Log out</Text>
-					</Button>
-				)}
+					{isMobile && (
+						<TouchableOpacity
+							style={styles.logoutButton}
+							onPress={handleSignOut}
+						>
+							<Text style={styles.logoutText}>Log out</Text>
+						</TouchableOpacity>
+					)}
+				</View>
 			</View>
 		</ScrollLayout>
 	);
@@ -69,14 +66,21 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
-const stylesheet = createStyleSheet((_, { screen }) => ({
+const stylesheet = createStyleSheet(() => ({
 	container: {
-		flexDirection: 'row',
-		width: screen.width,
 		backgroundColor: '#24120F',
 	},
+	innerContainer: {
+		flexDirection: {
+			xs: 'column',
+			md: 'row',
+		},
+	},
+	contentContainer: {
+		flex: 1,
+		marginHorizontal: 24,
+	},
 	logoutButton: {
-		width: screen.width - 60,
 		padding: 12,
 		justifyContent: 'center',
 		alignSelf: 'center',

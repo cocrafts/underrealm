@@ -88,7 +88,11 @@ const TabsDropdown: FC<MenuProps> = ({ onSelectTab, tab }) => {
 export default TabsDropdown;
 
 const stylesheet = createStyleSheet(() => ({
-	container: { paddingVertical: 20, gap: 12 },
+	container: {
+		marginTop: 32,
+		paddingVertical: 20,
+		gap: 12,
+	},
 	infoContainer: {
 		alignItems: 'center',
 		gap: 8,
