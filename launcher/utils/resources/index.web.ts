@@ -315,5 +315,6 @@ export default {
 		tabBar: { uri: '/profile/tab-bar.png' },
 		separateLine: { uri: '/profile/separate-line.png' },
 		avatarBorder: { uri: '/profile/avatar-border.png' },
+		dropdown: { uri: '/profile/dropdown.png' },
 	},
 };

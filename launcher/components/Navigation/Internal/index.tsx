@@ -57,17 +57,11 @@ export const InternalNavigation: FC<Props> = ({
 			} as ImageStyle)
 		: {};
 
-	const rightContent = isMobile ? (
-		// Temporally hiding
-		// <TouchableOpacity>
-		// 	<UserSolidIcon size={28} />
-		// </TouchableOpacity>
-		<View style={{ width: 30 }} />
-	) : (
+	const rightContent = (
 		<View style={styles.buttonsContainer}>
 			<AuthenticationBundle />
 
-			{!isHidingPlayButton && (
+			{!isMobile && !isHidingPlayButton && (
 				<UnderRealmButton
 					style={styles.button}
 					onPress={() => navigate('Game')}

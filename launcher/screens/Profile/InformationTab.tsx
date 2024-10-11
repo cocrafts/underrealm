@@ -13,15 +13,7 @@ import UnderRealmButton from 'components/Marketplace/Button';
 import { useUpdateProfileMutation } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
-
-const profileImages = [
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar1.png',
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar2.png',
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar3.png',
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar4.png',
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar5.png',
-	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar6.png',
-];
+import { profileImages } from './internal';
 
 const InformationTab = () => {
 	const { styles } = useStyles(stylesheet);
@@ -44,8 +36,6 @@ const InformationTab = () => {
 	const handleSelectAvatar = (url: string) => {
 		setUpdateProfileInput({ ...updateProfileInput, avatarUrl: url });
 	};
-
-	console.log(updateProfileInput.avatarUrl);
 
 	return (
 		<View style={styles.container}>
@@ -72,7 +62,6 @@ const InformationTab = () => {
 					<View style={styles.imageContainer}>
 						{profileImages.map((image) => {
 							const isSelected = image === updateProfileInput.avatarUrl;
-							console.log('here');
 
 							return (
 								<TouchableOpacity
@@ -131,7 +120,7 @@ const stylesheet = createStyleSheet(() => ({
 		height: 68,
 	},
 	input: {
-		width: 480,
+		width: { xs: 260, lg: 480 },
 		height: 40,
 		borderWidth: 2,
 		borderColor: '#5A5A5A',
@@ -150,6 +139,8 @@ const stylesheet = createStyleSheet(() => ({
 	imageContainer: {
 		flexDirection: 'row',
 		gap: 8,
+		width: { xs: 260, md: '100%' },
+		flexWrap: 'wrap',
 	},
 	contentContainer: {
 		gap: 32,

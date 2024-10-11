@@ -30,7 +30,7 @@ export default TabSelection;
 
 const stylesheet = createStyleSheet(() => ({
 	container: {
-		padding: 8,
+		paddingVertical: 8,
 	},
 	imageBackground: {
 		alignSelf: 'flex-start',
