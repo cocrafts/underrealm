@@ -72,6 +72,11 @@ export const replay = async (): Promise<void> => {
 
 	for (let i = system.historyLevel; i < remoteHistoryLength; i += 1) {
 		const bundle = system.history[i];
+		if (!bundle) {
+			console.warn(`got undefined bundle at ${i} of duel ${system.matchId}`);
+			continue;
+		}
+
 		const group = bundle?.group;
 		const isInitialDraw = group === BundleGroup.InitialDraw;
 		const isTurnDraw = group === BundleGroup.TurnDraw;
