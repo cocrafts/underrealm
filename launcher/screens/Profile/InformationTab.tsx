@@ -45,8 +45,6 @@ const InformationTab = () => {
 		setUpdateProfileInput({ ...updateProfileInput, avatarUrl: url });
 	};
 
-	console.log(updateProfileInput.avatarUrl);
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.titleContainer}>
@@ -72,7 +70,6 @@ const InformationTab = () => {
 					<View style={styles.imageContainer}>
 						{profileImages.map((image) => {
 							const isSelected = image === updateProfileInput.avatarUrl;
-							console.log('here');
 
 							return (
 								<TouchableOpacity
