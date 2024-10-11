@@ -22,7 +22,8 @@ export const postToConnection = async (connectionId: string, payload: any) => {
 			}),
 		);
 	} catch (error) {
-		// GoneException, PayloadTooLargeException
+		// ignore GoneException
+		// PayloadTooLargeException: WS Message payload size 128 KB. Duel v1 took 296KB when duel history length equals to 249
 		logger.error('Can not post to connection', { connectionId, error });
 	}
 };
