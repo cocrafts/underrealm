@@ -134,12 +134,12 @@ async function handleMatchMaking(
 			if (stakingRecord) {
 				const updateResults = await Promise.all([
 					User.updateOne(
-						{ _id: userId },
+						{ _id: userId, points: { $gte: pointsToDeduct } },
 						{ $inc: { points: -pointsToDeduct } },
 						{ new: true },
 					),
 					User.updateOne(
-						{ _id: opponentId },
+						{ _id: opponentId, points: { $gte: pointsToDeduct } },
 						{ $inc: { points: -pointsToDeduct } },
 						{ new: true },
 					),

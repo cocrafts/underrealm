@@ -72,3 +72,27 @@ UserSchema.pre('save', function (next) {
 });
 
 export const User = model<IUser>('User', UserSchema);
+
+export async function updateWinner(userId: string, stakingPoints: number) {
+	return User.findByIdAndUpdate(
+		userId,
+		{
+			$inc: { points: stakingPoints, winMatches: 1, totalMatches: 1 },
+		},
+		{
+			new: true,
+		},
+	);
+}
+
+export async function updateLoser(userId: string) {
+	return User.findByIdAndUpdate(
+		userId,
+		{
+			$inc: { totalMatches: 1 },
+		},
+		{
+			new: true,
+		},
+	);
+}
