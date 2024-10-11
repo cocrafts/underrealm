@@ -59,7 +59,7 @@ const replicateHandState = ({
 		const node = instantiate(system.globalNodes.cardTemplate);
 		node.setPosition(handPositions[i]);
 		node.setScale(new Vec3(scaleFactor, scaleFactor, 1));
-		!isPlayerHand && node.setRotation(Quat.fromEuler(new Quat(), 0, 0, 180));
+		if (!isPlayerHand) node.setRotation(Quat.fromEuler(new Quat(), 0, 0, 180));
 		node.getComponent(CardManager).setCardId(cardId);
 		node.getChildByPath('back').active = !isPlayerHand;
 		node.parent = parentNode;
