@@ -10,7 +10,6 @@ export const quests: QueryResolvers['quests'] = async (
 	{ status },
 	{ user },
 ) => {
-	console.log('query quest', user);
 	if (!user) {
 		return await Quest.find({ status: status || QuestStatus.Live });
 	} else {
