@@ -276,4 +276,10 @@ export default {
 			visualBullet: require('../../../assets/referral/visual-bullet.svg'),
 		},
 	},
+	profile: {
+		tabActiveBackground: require('../../../assets/profile/tab-active-background.png'),
+		tabBar: require('../../../assets/profile/tab-bar.png'),
+		separateLine: require('../../../assets/profile/separate-line.png'),
+		avatarBorder: require('../../../assets/profile/avatar-border.png'),
+	},
 };
