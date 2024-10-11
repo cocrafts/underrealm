@@ -11,10 +11,10 @@ import {
 	move,
 	runCommand,
 } from '@underrealm/murg';
-import { getPointsForPackage } from 'game/subscription';
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import { safeAddGamePoints } from 'models/points';
+import { Staking, StakingStatus } from 'models/staking';
 import { User } from 'models/user';
 
 import type { CommandHandler, ResponseSender } from './types';
@@ -53,9 +53,36 @@ const sendGameOver = async (
 			? duel.config.secondPlayer.id
 			: duel.config.firstPlayer.id;
 
-	const stakingPoints = duel.stakingPackage
-		? getPointsForPackage(duel.stakingPackage) * 2
-		: 0;
+	/*
+	 * Check if staking record exists for the duel
+	 */
+	const staking = await Staking.findOne({ duelId: duel.id });
+	let stakingPoints = 0;
+
+	/*
+	 * Using sum of points staked by participants as reward for winner
+	 * instead of fixed amount for each package to make it easier to
+	 * add more packages or customization in the future.
+	 */
+	if (staking) {
+		stakingPoints = staking.participants.reduce(
+			(sum, p) => sum + p.pointsStaked,
+			0,
+		);
+		/*
+		 * Update staking record with winner and status
+		 * when the game is over.
+		 */
+		await Staking.updateOne(
+			{ _id: staking.id },
+			{
+				$set: {
+					winnerId: winner,
+					status: StakingStatus.ACCEPTED,
+				},
+			},
+		);
+	}
 
 	const [winnerPoints, loserPoints] = await Promise.all([
 		safeAddGamePoints(winner, duel.id, true),
