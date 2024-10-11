@@ -13,6 +13,7 @@ import UnderRealmButton from 'components/Marketplace/Button';
 import { useUpdateProfileMutation } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
+
 import { profileImages } from './internal';
 
 const InformationTab = () => {

@@ -6,8 +6,9 @@ import Avatar from 'components/Avatar';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
+import type { MenuProps } from './internal';
+import { Tabs } from './internal';
 import TabSelection from './TabSelection';
-import { MenuProps, Tabs } from './internal';
 
 type Props = MenuProps & {
 	onSignOut: () => void;

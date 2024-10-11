@@ -5,19 +5,19 @@ import {
 	UnistylesRuntime,
 	useStyles,
 } from 'react-native-unistyles';
+import { Button } from '@metacraft/ui';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { signOut } from 'aws-amplify/auth';
 import ScrollLayout from 'components/layouts/Scroll';
+import { useProfile } from 'utils/hooks';
+import { setPendingRedirect } from 'utils/lib/auth/redirect';
 
 import AccountLinkingTab from './AccountLinkingTab';
 import InformationTab from './InformationTab';
+import { Tabs } from './internal';
 import InventoryTab from './InventoryTab';
 import SideBar from './SideBar';
-import { Tabs } from './internal';
 import TabsDropdown from './TabsDropdown';
-import { Button } from '@metacraft/ui';
-import { signOut } from 'aws-amplify/auth';
-import { setPendingRedirect } from 'utils/lib/auth/redirect';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useProfile } from 'utils/hooks';
 
 const ProfileScreen = () => {
 	const [tab, setTab] = useState(Tabs.INFORMATION);
