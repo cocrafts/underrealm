@@ -4,12 +4,12 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import ScrollLayout from 'components/layouts/Scroll';
 
 import AccountLinkingTab from './AccountLinkingTab';
+import InformationTab from './InformationTab';
 import InventoryTab from './InventoryTab';
-import ProfileInformationTab from './ProfileInformationTab';
 import SideBar, { Tabs } from './SideBar';
 
 const ProfileScreen = () => {
-	const [tab, setTab] = useState(Tabs.PERSONAL_INFORMATION);
+	const [tab, setTab] = useState(Tabs.INFORMATION);
 	const { styles } = useStyles(stylesheet);
 
 	return (
@@ -22,7 +22,7 @@ const ProfileScreen = () => {
 				) : tab === Tabs.INVENTORY ? (
 					<InventoryTab />
 				) : (
-					<ProfileInformationTab />
+					<InformationTab />
 				)}
 			</View>
 		</ScrollLayout>
@@ -31,10 +31,10 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
-const stylesheet = createStyleSheet((_, screen) => ({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	container: {
 		flexDirection: 'row',
-		width: screen.screen.width,
+		width: screen.width,
 		backgroundColor: '#24120F',
 	},
 }));

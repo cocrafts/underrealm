@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const updateProfile = gql`
-	mutation UpdateProfile($props: MutateProfileProps) {
-		updateProfile(profileProps: $props) {
+	mutation UpdateProfile($input: MutateProfileInput) {
+		updateProfile(profileInput: $input) {
 			id
 			name
 			address

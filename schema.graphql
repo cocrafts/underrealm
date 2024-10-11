@@ -79,18 +79,15 @@ type MatchFound {
   jwt: String!
 }
 
-input MutateProfileProps {
+input MutateProfileInput {
   avatarUrl: String
-  discordId: String
   name: String
-  telegramId: String
-  twitterId: String
 }
 
 type Mutation {
   createQuestAction(questId: ID!): QuestAction
   makeReferral(referralCode: String!): Boolean
-  updateProfile(profileProps: MutateProfileProps): Profile
+  updateProfile(profileInput: MutateProfileInput): Profile
 }
 
 type Profile {

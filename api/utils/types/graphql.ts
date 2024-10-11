@@ -108,12 +108,9 @@ export type MatchFound = {
   jwt: Scalars['String']['output'];
 };
 
-export type MutateProfileProps = {
+export type MutateProfileInput = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
-  discordId?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  telegramId?: InputMaybe<Scalars['String']['input']>;
-  twitterId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -135,7 +132,7 @@ export type MutationMakeReferralArgs = {
 
 
 export type MutationUpdateProfileArgs = {
-  profileProps?: InputMaybe<MutateProfileProps>;
+  profileInput?: InputMaybe<MutateProfileInput>;
 };
 
 export type Profile = {
@@ -330,7 +327,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   MatchFound: ResolverTypeWrapper<MatchFound>;
-  MutateProfileProps: MutateProfileProps;
+  MutateProfileInput: MutateProfileInput;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
@@ -360,7 +357,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   MatchFound: MatchFound;
-  MutateProfileProps: MutateProfileProps;
+  MutateProfileInput: MutateProfileInput;
   Mutation: {};
   Profile: Profile;
   Query: {};

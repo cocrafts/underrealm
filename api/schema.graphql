@@ -13,7 +13,7 @@ type Query {
 type Mutation {
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
-  updateProfile(profileProps: MutateProfileProps): Profile
+  updateProfile(profileInput: MutateProfileInput): Profile
 }
 
 type Subscription {
@@ -115,12 +115,9 @@ type CardDuelHistory {
   timestamp: String!
 }
 
-input MutateProfileProps {
+input MutateProfileInput {
   name: String
   avatarUrl: String
-  discordId: String
-  twitterId: String
-  telegramId: String
 }
 
 enum QuestType {

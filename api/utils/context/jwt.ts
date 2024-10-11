@@ -40,7 +40,7 @@ const extractCognitoProfile = (payload: JwtPayload): CognitoUser => {
 };
 
 const providerFromUsername = (username: string) => {
-	if (username?.startsWith('Google_')) {
+	if (username.startsWith('Google_')) {
 		return 'Google';
 	}
 

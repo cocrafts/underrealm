@@ -8,12 +8,11 @@ import {
 } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
+import Avatar from 'components/Avatar';
 import UnderRealmButton from 'components/Marketplace/Button';
 import { useUpdateProfileMutation } from 'utils/graphql';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
-
-import Avatar from './Avatar';
 
 const profileImages = [
 	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar1.png',
@@ -24,18 +23,16 @@ const profileImages = [
 	'https://underrealm.s3.ap-south-1.amazonaws.com/avatars/avatar6.png',
 ];
 
-const ProfileInformationTab = () => {
+const InformationTab = () => {
 	const { styles } = useStyles(stylesheet);
 	const { profile, refetch } = useProfile();
-	const [mutateProps, setMutateProps] = useState({
+	const [updateProfileInput, setUpdateProfileInput] = useState({
 		name: profile?.name,
 		avatarUrl: profile?.avatarUrl,
 	});
 	const [updateProfileMutation, { loading }] = useUpdateProfileMutation({
 		variables: {
-			props: {
-				...mutateProps,
-			},
+			input: updateProfileInput,
 		},
 	});
 
@@ -45,8 +42,10 @@ const ProfileInformationTab = () => {
 	};
 
 	const handleSelectAvatar = (url: string) => {
-		setMutateProps({ ...mutateProps, avatarUrl: url });
+		setUpdateProfileInput({ ...updateProfileInput, avatarUrl: url });
 	};
+
+	console.log(updateProfileInput.avatarUrl);
 
 	return (
 		<View style={styles.container}>
@@ -54,7 +53,6 @@ const ProfileInformationTab = () => {
 				<Text style={styles.title}>Personal Information</Text>
 				<Image style={styles.titleCharm} source={resources.quest.titleCharm} />
 			</View>
-
 			<View style={styles.contentContainer}>
 				<View style={styles.mutateView}>
 					<Text style={styles.headingText}>Username</Text>
@@ -62,9 +60,9 @@ const ProfileInformationTab = () => {
 						style={styles.input}
 						placeholder="Change your username"
 						onChangeText={(text) =>
-							setMutateProps({ ...mutateProps, name: text })
+							setUpdateProfileInput({ ...updateProfileInput, name: text })
 						}
-						value={mutateProps.name}
+						value={updateProfileInput.name}
 						placeholderTextColor={'#5A5A5A'}
 					/>
 				</View>
@@ -73,8 +71,8 @@ const ProfileInformationTab = () => {
 					<Text style={styles.headingText}>Profile image</Text>
 					<View style={styles.imageContainer}>
 						{profileImages.map((image) => {
-							const url = { uri: image };
-							const isSelected = image === mutateProps.avatarUrl;
+							const isSelected = image === updateProfileInput.avatarUrl;
+							console.log('here');
 
 							return (
 								<TouchableOpacity
@@ -82,7 +80,7 @@ const ProfileInformationTab = () => {
 									onPress={() => handleSelectAvatar(image)}
 									key={image}
 								>
-									<Avatar source={url} size={72} />
+									<Avatar imageUri={image} size={72} />
 								</TouchableOpacity>
 							);
 						})}
@@ -101,7 +99,7 @@ const ProfileInformationTab = () => {
 	);
 };
 
-export default ProfileInformationTab;
+export default InformationTab;
 
 const stylesheet = createStyleSheet(() => ({
 	container: {

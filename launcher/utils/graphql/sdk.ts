@@ -108,12 +108,9 @@ export type MatchFound = {
   jwt: Scalars['String']['output'];
 };
 
-export type MutateProfileProps = {
+export type MutateProfileInput = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
-  discordId?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  telegramId?: InputMaybe<Scalars['String']['input']>;
-  twitterId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -135,7 +132,7 @@ export type MutationMakeReferralArgs = {
 
 
 export type MutationUpdateProfileArgs = {
-  profileProps?: InputMaybe<MutateProfileProps>;
+  profileInput?: InputMaybe<MutateProfileInput>;
 };
 
 export type Profile = {
@@ -244,7 +241,7 @@ export type SubscriptionFindMatchArgs = {
 };
 
 export type UpdateProfileMutationVariables = Exact<{
-  props?: InputMaybe<MutateProfileProps>;
+  input?: InputMaybe<MutateProfileInput>;
 }>;
 
 
@@ -315,8 +312,8 @@ export const ProfileFieldsFragmentDoc = gql`
 }
     `;
 export const UpdateProfileDocument = gql`
-    mutation UpdateProfile($props: MutateProfileProps) {
-  updateProfile(profileProps: $props) {
+    mutation UpdateProfile($input: MutateProfileInput) {
+  updateProfile(profileInput: $input) {
     id
     name
     address
@@ -345,7 +342,7 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutat
  * @example
  * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
  *   variables: {
- *      props: // value for 'props'
+ *      input: // value for 'input'
  *   },
  * });
  */

@@ -2,14 +2,14 @@ import type { FC } from 'react';
 import { Image, ImageBackground, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
+import Avatar from 'components/Avatar';
 import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
-import Avatar from './Avatar';
 import TabSelection from './TabSelection';
 
 export enum Tabs {
-	PERSONAL_INFORMATION = 'Personal Information',
+	INFORMATION = 'Personal Information',
 	ACCOUNT_LINKING = 'Account Linking',
 	INVENTORY = 'Inventory',
 }
@@ -22,7 +22,6 @@ interface Props {
 const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
-	const avatar = { uri: profile?.avatarUrl };
 
 	return (
 		<ImageBackground
@@ -31,7 +30,7 @@ const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 			resizeMode="stretch"
 		>
 			<View style={styles.basicInfoContainer}>
-				<Avatar source={avatar} />
+				<Avatar imageUri={profile?.avatarUrl} size={64} />
 
 				<View style={styles.nameContainer}>
 					<Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
@@ -49,20 +48,24 @@ const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 
 			<View style={styles.tabContainer}>
 				<TabSelection
-					title={Tabs.PERSONAL_INFORMATION}
-					isActive={tab === Tabs.PERSONAL_INFORMATION}
-					onPress={() => onSelectTab(Tabs.PERSONAL_INFORMATION)}
+					title={Tabs.INFORMATION}
+					isActive={tab === Tabs.INFORMATION}
+					onPress={() => onSelectTab(Tabs.INFORMATION)}
 				/>
-				<TabSelection
-					title={Tabs.ACCOUNT_LINKING}
-					isActive={tab === Tabs.ACCOUNT_LINKING}
-					onPress={() => onSelectTab(Tabs.ACCOUNT_LINKING)}
-				/>
-				<TabSelection
-					title={Tabs.INVENTORY}
-					isActive={tab === Tabs.INVENTORY}
-					onPress={() => onSelectTab(Tabs.INVENTORY)}
-				/>
+				{__DEV__ && (
+					<TabSelection
+						title={Tabs.ACCOUNT_LINKING}
+						isActive={tab === Tabs.ACCOUNT_LINKING}
+						onPress={() => onSelectTab(Tabs.ACCOUNT_LINKING)}
+					/>
+				)}
+				{__DEV__ && (
+					<TabSelection
+						title={Tabs.INVENTORY}
+						isActive={tab === Tabs.INVENTORY}
+						onPress={() => onSelectTab(Tabs.INVENTORY)}
+					/>
+				)}
 			</View>
 			<Image
 				style={styles.separateLine}
@@ -76,10 +79,10 @@ const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 
 export default SideBar;
 
-const stylesheet = createStyleSheet((_, screen) => ({
+const stylesheet = createStyleSheet((_, { screen }) => ({
 	container: {
 		width: { lg: 280 },
-		minHeight: screen.screen.height - 68,
+		minHeight: screen.height - 68,
 		paddingLeft: 24,
 		paddingTop: 40,
 		paddingRight: 28,
