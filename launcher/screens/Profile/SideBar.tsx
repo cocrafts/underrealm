@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Image, ImageBackground, View } from 'react-native';
+import { Image, ImageBackground, TouchableOpacity, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import Avatar from 'components/Avatar';
@@ -7,19 +7,13 @@ import { useProfile } from 'utils/hooks';
 import resources from 'utils/resources';
 
 import TabSelection from './TabSelection';
+import { MenuProps, Tabs } from './internal';
 
-export enum Tabs {
-	INFORMATION = 'Personal Information',
-	ACCOUNT_LINKING = 'Account Linking',
-	INVENTORY = 'Inventory',
-}
+type Props = MenuProps & {
+	onSignOut: () => void;
+};
 
-interface Props {
-	tab: Tabs;
-	onSelectTab: (tab: Tabs) => void;
-}
-
-const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
+const SideBar: FC<Props> = ({ tab, onSelectTab, onSignOut }) => {
 	const { styles } = useStyles(stylesheet);
 	const { profile } = useProfile();
 
@@ -41,6 +35,7 @@ const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 					</Text>
 				</View>
 			</View>
+
 			<Image
 				style={styles.separateLine}
 				source={resources.profile.separateLine}
@@ -72,7 +67,9 @@ const SideBar: FC<Props> = ({ tab, onSelectTab }) => {
 				source={resources.profile.separateLine}
 			/>
 
-			<View></View>
+			<TouchableOpacity onPress={onSignOut}>
+				<Text>Log Out</Text>
+			</TouchableOpacity>
 		</ImageBackground>
 	);
 };
