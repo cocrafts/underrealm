@@ -1,7 +1,7 @@
 import type { DuelCommandBundle } from '@underrealm/murg';
 import Engine from '@underrealm/murg';
 
-import { replay } from '../replay';
+import { fastReplay, minimumReplicateStep, replay } from '../replay';
 import { raiseHandCard, showEndGameRibbon } from '../tween';
 import { extractPlayerIds } from '../util/helper';
 import { system } from '../util/system';
@@ -29,7 +29,11 @@ export const connect = (
 	system.globalNodes.board?.emit('stateReady');
 
 	mergeRemoteHistory(history, 0);
-	setTimeout(() => replay(), 200);
+	setTimeout(
+		() =>
+			system.history.length > minimumReplicateStep ? fastReplay() : replay(),
+		200,
+	);
 };
 
 export interface IncomingBundles {
