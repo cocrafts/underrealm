@@ -9,6 +9,7 @@ import { refereeUser } from 'user';
 import { logger } from 'utils/logger';
 import type { Resolvers } from 'utils/types';
 
+import { UserMutationResolvers } from './user/index';
 import {
 	GameMutationResolvers,
 	GameQueryResolvers,
@@ -29,6 +30,7 @@ const resolvers: Resolvers = {
 	Mutation: {
 		...GameMutationResolvers,
 		...SocialMutationResolvers,
+		...UserMutationResolvers,
 	},
 	Subscription: {
 		...UserSubscriptionResolvers,

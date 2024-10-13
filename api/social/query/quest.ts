@@ -9,7 +9,6 @@ import { QuestStatus } from 'utils/types';
 export const quests: QueryResolvers['quests'] = requiredChain(
 	[requireUser],
 	async (_, { status }, { user }) => {
-		console.log('query quest', user);
 		if (!user) {
 			return await Quest.find({ status: status || QuestStatus.Live });
 		} else {

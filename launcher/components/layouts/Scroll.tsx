@@ -65,7 +65,7 @@ export const ScrollLayout: FC<Props> = ({
 		<View style={[styles.container, containerStyle, style]}>
 			<Animated.View style={navigationStyle}>
 				{/* {!isMobile && <StormNavigation />} */}
-				<InternalNavigation isMobile={isMobile} />
+				<InternalNavigation />
 			</Animated.View>
 			<Animated.ScrollView
 				ref={scrollRef}

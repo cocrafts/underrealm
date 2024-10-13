@@ -11,10 +11,10 @@ interface Props {
 	onAvatarPress?: () => void;
 }
 
-export const Account: FC<Props> = ({ profile, onPress, onAvatarPress }) => {
+export const Account: FC<Props> = ({ profile, onAvatarPress }) => {
 	return (
-		<TouchableOpacity onPress={onPress} style={styles.container}>
-			<Avatar size={42} onPress={onAvatarPress} imageUri={profile.avatarUrl} />
+		<TouchableOpacity onPress={onAvatarPress} style={styles.container}>
+			<Avatar size={42} imageUri={profile.avatarUrl} />
 			{/* <View style={styles.infoContainer}></View> */}
 		</TouchableOpacity>
 	);

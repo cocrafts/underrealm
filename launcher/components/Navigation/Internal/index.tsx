@@ -1,13 +1,8 @@
 import type { FC } from 'react';
 import { Fragment } from 'react';
 import type { ImageStyle, ViewStyle } from 'react-native';
-import {
-	Image,
-	ImageBackground,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { Image, ImageBackground, TouchableOpacity, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Text } from '@metacraft/ui';
 import BurgerIcon from 'components/icons/Burger';
 import UnderRealmButton from 'components/Marketplace/Button';
@@ -26,14 +21,13 @@ import AuthenticationBundle from '../AuthenticationBundle';
 import NavigationItem from './Item';
 
 interface Props {
-	isMobile?: boolean;
 	isHidingPlayButton?: boolean;
 }
 
-export const InternalNavigation: FC<Props> = ({
-	isMobile,
-	isHidingPlayButton,
-}) => {
+export const InternalNavigation: FC<Props> = ({ isHidingPlayButton }) => {
+	const { styles, breakpoint } = useStyles(stylesheet);
+	const isMobile = breakpoint === 'xs' || breakpoint === 'sm';
+
 	const backgroundResizeMode = isMobile ? 'cover' : 'repeat';
 	const onNavigate = (item: NavigationConfig) => {
 		const { route, params } = item;
@@ -57,17 +51,11 @@ export const InternalNavigation: FC<Props> = ({
 			} as ImageStyle)
 		: {};
 
-	const rightContent = isMobile ? (
-		// Temporally hiding
-		// <TouchableOpacity>
-		// 	<UserSolidIcon size={28} />
-		// </TouchableOpacity>
-		<View style={{ width: 30 }} />
-	) : (
+	const rightContent = (
 		<View style={styles.buttonsContainer}>
 			<AuthenticationBundle />
 
-			{!isHidingPlayButton && (
+			{!isMobile && !isHidingPlayButton && (
 				<UnderRealmButton
 					style={styles.button}
 					onPress={() => navigate('Game')}
@@ -93,7 +81,7 @@ export const InternalNavigation: FC<Props> = ({
 			>
 				{isMobile && (
 					<TouchableOpacity
-						style={styles.buttonContainer}
+						style={[styles.buttonContainer, styles.burgerContainer]}
 						onPress={() => {
 							drawerHelper.navigation?.openDrawer();
 						}}
@@ -136,7 +124,8 @@ export const InternalNavigation: FC<Props> = ({
 export default InternalNavigation;
 
 const logoHeight = 84;
-const styles = StyleSheet.create({
+
+const stylesheet = createStyleSheet({
 	container: {
 		backgroundColor: '#21150f',
 		height: navigationHeight.local,
@@ -157,6 +146,9 @@ const styles = StyleSheet.create({
 	},
 	commandContainer: {
 		flexDirection: 'row',
+	},
+	burgerContainer: {
+		width: 38,
 	},
 	buttonContainer: {
 		justifyContent: 'center',

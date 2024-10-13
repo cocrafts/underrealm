@@ -14,6 +14,7 @@ type Query {
 type Mutation {
   makeReferral(referralCode: String!): Boolean
   createQuestAction(questId: ID!): QuestAction
+  updateProfile(profileInput: MutateProfileInput): Profile
 }
 
 type Subscription {
@@ -25,11 +26,15 @@ type Profile {
   id: String!
   bindingId: String
   address: String
+  name: String
   email: String
   avatarUrl: String
   referred: ReferralHistory
   referralCode: String!
   points: Int!
+  discordId: String
+  twitterId: String
+  telegramId: String
 }
 
 type MatchFound {
@@ -109,6 +114,11 @@ type CardDuelHistory {
   enemy: Profile
   victory: Boolean
   timestamp: String!
+}
+
+input MutateProfileInput {
+  name: String
+  avatarUrl: String
 }
 
 enum QuestType {

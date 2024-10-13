@@ -1,11 +1,6 @@
 import type { FC } from 'react';
 import type { ViewStyle } from 'react-native';
-import {
-	Image,
-	ImageBackground,
-	StyleSheet,
-	TouchableOpacity,
-} from 'react-native';
+import { Image, ImageBackground, StyleSheet } from 'react-native';
 import resources from 'utils/resources';
 
 import UserSolidIcon from './icons/UserSolid';
@@ -17,7 +12,7 @@ interface Props {
 	onPress?: () => void;
 }
 
-export const Avatar: FC<Props> = ({ style, imageUri, size = 32, onPress }) => {
+export const Avatar: FC<Props> = ({ style, imageUri, size = 32 }) => {
 	const avatarSize = size - 2 * 2;
 
 	const containerStyle = {
@@ -33,18 +28,16 @@ export const Avatar: FC<Props> = ({ style, imageUri, size = 32, onPress }) => {
 	};
 
 	return (
-		<TouchableOpacity onPress={onPress}>
-			<ImageBackground
-				source={resources.navigation.userIconBackground}
-				style={[styles.container, containerStyle, style]}
-			>
-				{imageUri ? (
-					<Image source={{ uri: imageUri }} style={avatarStyle} />
-				) : (
-					<UserSolidIcon size={size * 0.7} />
-				)}
-			</ImageBackground>
-		</TouchableOpacity>
+		<ImageBackground
+			source={resources.navigation.userIconBackground}
+			style={[styles.container, containerStyle, style]}
+		>
+			{imageUri ? (
+				<Image source={{ uri: imageUri }} style={avatarStyle} />
+			) : (
+				<UserSolidIcon size={size * 0.7} />
+			)}
+		</ImageBackground>
 	);
 };
 
