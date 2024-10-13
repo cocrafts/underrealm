@@ -1,5 +1,5 @@
 import { User } from 'models/user';
-import { requireAuth } from 'utils/context';
+import { requiredChain, requireNonce, requireUser } from 'utils/context';
 import { pubsub, topicGenerator } from 'utils/pubsub';
 import type {
 	QueryResolvers,
@@ -7,7 +7,8 @@ import type {
 	SubscriptionResolvers,
 } from 'utils/types';
 
-const profile: QueryResolvers['profile'] = requireAuth(
+const profile: QueryResolvers['profile'] = requiredChain(
+	[requireUser, requireNonce],
 	async (root, _, { user }) => {
 		return user;
 	},

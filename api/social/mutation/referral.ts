@@ -1,10 +1,10 @@
 import { Referral } from 'models/referral';
 import { User } from 'models/user';
-import { requireAuth } from 'utils/context';
+import { requireUser } from 'utils/context';
 import { ClientError } from 'utils/errors';
 import type { MutationResolvers } from 'utils/types';
 
-export const makeReferral: MutationResolvers['makeReferral'] = requireAuth(
+export const makeReferral: MutationResolvers['makeReferral'] = requireUser(
 	async (root, { referralCode }, { user }) => {
 		const referrer = await User.findOne({ referralCode });
 		if (!referrer?.id) {
