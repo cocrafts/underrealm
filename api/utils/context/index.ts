@@ -17,6 +17,26 @@ export const graphqlContext: ContextFunction<
 	return { nonce: nonce, auth: authHeader };
 };
 
+/**
+ * Applies a chain of middlewares to a given resolver function.
+ *
+ * `requiredChain` receives a list of middlewares that will be called before the main resolver.
+ * The order in which the middlewares are called will be from the beginning of the array to the end.
+ *
+ * @template TResult - The type of the return value of the resolver.
+ * @template TParent - The type of the parent object in the resolver.
+ * @template TArgs - The type of the arguments for the resolver.
+ *
+ * @param {Array<Function>} middlewares - An array of middleware functions that modify the resolver. Each middleware
+ * takes a resolver function as input and returns a modified resolver function.
+ *
+ * @param {Function} resolver - The original resolver function to which the middlewares will be applied.
+ *
+ * @returns {Function} A new resolver function that wraps the original resolver with the specified middlewares.
+ *
+ * @async
+ * @throws {Error} If any middleware or resolver function throws an error during execution.
+ */
 export const requiredChain = <TResult, TParent, TArgs>(
 	middlewares: Array<
 		(
