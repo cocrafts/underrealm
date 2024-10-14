@@ -2,6 +2,7 @@ import { activation, resetAllSkillActivatingSystem, skill } from '../systems';
 
 import { ecs } from './v1';
 
+export * from './duel';
 export const ecsv1 = ecs.toJSON();
 
 /**
