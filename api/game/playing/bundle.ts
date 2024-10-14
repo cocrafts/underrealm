@@ -65,10 +65,7 @@ const sendGameOver = async (
 	 * add more packages or customization in the future.
 	 */
 	if (staking) {
-		stakingPoints = staking.participants.reduce(
-			(sum, p) => sum + p.pointsStaked,
-			0,
-		);
+		stakingPoints = staking.player1.pointsStaked + staking.player2.pointsStaked;
 		/*
 		 * Update staking record with winner and status
 		 * when the game is over.

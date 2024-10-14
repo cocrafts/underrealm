@@ -12,11 +12,7 @@ import type { SubscriptionResolvers } from 'utils/types';
 import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
-	subscribe: async (
-		_,
-		{ userId, staking = StakingPackage.U_10 },
-		{ connectionId },
-	) => {
+	subscribe: async (_, { userId, staking }, { connectionId }) => {
 		const topic = topicGenerator.findMatch({ userId });
 
 		/*
@@ -24,10 +20,50 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 		 */
 		const subscribed = await pubsub.subscribe(topic);
 
-		handleMatchMaking(userId, staking, topic, connectionId).catch((error) => {
-			logger.error('Failed to handle match making', { error, userId, staking });
+		const opponentQuery: FilterQuery<IMatchFinding> = {
+			userId: { $ne: userId },
+		};
+		if (staking) {
+			/*
+			 * If staking is provided, check if user has enough points
+			 */
+			validateStaking(userId, staking);
+		} else {
+			opponentQuery.stakingPackage = { $exists: false };
+		}
+
+		const opponent = await MatchFinding.findOneAndDelete(opponentQuery, {
+			sort: { created_at: 1 },
 		});
 
+		if (opponent) {
+			console.log('Opponent found', opponent.userId);
+			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
+			const { config, history } = makeDuel('00001', userId, opponentId);
+			const duel = await GameDuel.create({ config, history });
+
+			if (staking) {
+				prepairStaking(duel.id, userId, opponentId, staking);
+			}
+
+			logger.info('created new game duel', duel.id);
+			await Promise.all([
+				publishFindMatch(topic, userId, duel.id),
+				publishFindMatch(opponentTopic, opponentId, duel.id),
+			]);
+		} else {
+			// If no opponent found, update the match finding record
+			await MatchFinding.findOneAndUpdate(
+				{ userId },
+				{
+					userId: userId,
+					pubsubTopic: topic,
+					connectionId,
+					staking,
+				},
+				{ upsert: true, new: true },
+			);
+		}
 		return subscribed;
 	},
 };
@@ -66,111 +102,64 @@ export function getPointsForPackage(stakingPackage: StakingPackage): number {
 	}
 }
 
-async function handleMatchMaking(
-	userId: string,
-	stakingPackage: StakingPackage | undefined,
-	topic: string,
-	connectionId: string,
-) {
-	const opponentQuery: FilterQuery<IMatchFinding> = {
-		userId: { $ne: userId },
-	};
-
-	if (stakingPackage) {
-		console.log('Staking Package: ', stakingPackage);
-		const requiredPoints = getPointsForPackage(stakingPackage);
-
-		opponentQuery.stakingPackage = stakingPackage;
-
-		const user = await User.findById(userId).select('points');
-		if (!user || user.points < requiredPoints) {
-			logger.info('User does not have enough points to stake', {
-				userId,
-				stakingPackage,
-				requiredPoints,
-				userPoints: user?.points,
-			});
-			throw new Error('User does not have enough points to stake');
-		}
-	} else {
-		opponentQuery.stakingPackage = { $exists: false };
-	}
-
-	console.log('opponentQuery', opponentQuery);
-
-	// Find the opponent with the earliest created_at that qualifies
-	const opponent = await MatchFinding.findOneAndDelete(opponentQuery, {
-		sort: { created_at: 1 },
-	});
-
-	console.log('opponent', opponent);
-
-	if (opponent) {
-		console.log('opponent found', opponent);
-		const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
-		const { config, history } = makeDuel('00001', userId, opponentId);
-		const duel = await GameDuel.create({
-			config,
-			history,
+async function validateStaking(userId: string, staking: StakingPackage) {
+	const requiredPoints = getPointsForPackage(staking);
+	const user = await User.findById(userId).select('points');
+	if (!user || user.points < requiredPoints) {
+		logger.info('User does not have enough points to stake', {
+			userId,
+			staking,
+			requiredPoints,
+			userPoints: user?.points,
 		});
-		//console.log('duel', duel);
-		if (stakingPackage) {
-			const pointsToDeduct = getPointsForPackage(stakingPackage);
+		throw new Error('User does not have enough points to stake');
+	}
+}
 
-			// Create a staking record in database
-			const stakingRecord = Staking.create([
-				{
-					duelId: duel.id,
-					package: stakingPackage,
-					participants: [
-						{ userId, pointsStaked: pointsToDeduct },
-						{ userId: opponentId, pointsStaked: pointsToDeduct },
-					],
-					status: StakingStatus.PENDING,
-				},
-			]);
+async function prepairStaking(
+	duelId: string,
+	userId: string,
+	opponentId: string,
+	stakingPackage: StakingPackage,
+) {
+	const pointsToDeduct = getPointsForPackage(stakingPackage);
 
-			// Only deduct points if staking record is created successfully
-			if (stakingRecord) {
-				const updateResults = await Promise.all([
-					User.updateOne(
-						{ _id: userId, points: { $gte: pointsToDeduct } },
-						{ $inc: { points: -pointsToDeduct } },
-						{ new: true },
-					),
-					User.updateOne(
-						{ _id: opponentId, points: { $gte: pointsToDeduct } },
-						{ $inc: { points: -pointsToDeduct } },
-						{ new: true },
-					),
-				]);
-
-				// Check if both users' points are updated successfully
-				const updatedUsers = updateResults.filter(Boolean);
-				if (updatedUsers.length !== 2) {
-					throw new Error('Failed to update user points');
-				}
-			}
-		}
-
-		logger.info('created new game duel', duel.id);
-		await Promise.all([
-			publishFindMatch(topic, userId, duel.id),
-			publishFindMatch(opponentTopic, opponentId, duel.id),
-		]);
-	} else {
-		console.log('No opponent found for ', userId);
-		// If no opponent found, update the match finding record
-		await MatchFinding.findOneAndUpdate(
-			{ userId },
-			{
-				userId: userId,
-				pubsubTopic: topic,
-				connectionId,
-				stakingPackage,
+	// Create a staking record in database
+	const stakingRecord = Staking.create([
+		{
+			duelId,
+			package: stakingPackage,
+			player1: {
+				userId,
+				pointsStaked: pointsToDeduct,
 			},
-			{ upsert: true, new: true },
-		);
-		console.log('Match finding...', userId);
+			player2: {
+				userId: opponentId,
+				pointsStaked: pointsToDeduct,
+			},
+			status: StakingStatus.PENDING,
+		},
+	]);
+
+	// Only deduct points if staking record is created successfully
+	if (stakingRecord) {
+		const updateResults = await Promise.all([
+			User.updateOne(
+				{ _id: userId, points: { $gte: pointsToDeduct } },
+				{ $inc: { points: -pointsToDeduct } },
+				{ new: true },
+			),
+			User.updateOne(
+				{ _id: opponentId, points: { $gte: pointsToDeduct } },
+				{ $inc: { points: -pointsToDeduct } },
+				{ new: true },
+			),
+		]);
+
+		// Check if both users' points are updated successfully
+		const updatedUsers = updateResults.filter(Boolean);
+		if (updatedUsers.length !== 2) {
+			throw new Error('Failed to update user points');
+		}
 	}
 }

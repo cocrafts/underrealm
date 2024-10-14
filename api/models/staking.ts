@@ -23,7 +23,8 @@ export interface IStaking {
 	id: string;
 	duelId: string;
 	package: StakingPackage;
-	participants: StakingParticipant[];
+	player1: StakingParticipant;
+	player2: StakingParticipant;
 	winnerId?: string;
 	status: StakingStatus;
 }
@@ -52,16 +53,13 @@ const StakingSchema = createSchema({
 		enum: Object.values(StakingPackage),
 		required: true,
 	},
-	participants: {
-		type: [StakingParticipantSchema],
+	player1: {
+		type: StakingParticipantSchema,
 		required: true,
-		validate: [
-			{
-				validator: (participants: StakingParticipant[]) =>
-					participants.length === 2,
-				message: 'Staking must have exactly two participants',
-			},
-		],
+	},
+	player2: {
+		type: StakingParticipantSchema,
+		required: true,
 	},
 	winnerId: {
 		type: Types.ObjectId,
