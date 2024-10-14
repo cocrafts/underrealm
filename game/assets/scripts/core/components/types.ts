@@ -1,5 +1,10 @@
 export enum ComponentType {
 	/**
+	 * Player components
+	 */
+	PlayerAttribute = 'PlayerAttribute',
+
+	/**
 	 * Card components
 	 */
 	Metadata = 'Metadata',
@@ -39,10 +44,6 @@ export enum ComponentType {
 	MultiplyDamageAgainst = 'MultiplyDamageAgainst',
 	DoubleAttack = 'DoubleAttack',
 	Transform = 'Transform',
-
-	/**
-	 * Player components
-	 */
 
 	/**
 	 * Board components

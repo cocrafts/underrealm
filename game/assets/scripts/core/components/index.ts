@@ -14,6 +14,8 @@ export * from './types';
  * Remap type to object for supporting strict type checking
  */
 export type ComponentMap = {
+	[ComponentType.PlayerAttribute]: PlayerAttribute;
+
 	[ComponentType.Metadata]: Metadata;
 	[ComponentType.Attribute]: Attribute;
 	[ComponentType.Classification]: Classification;
@@ -46,6 +48,13 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
+};
+
+/**
+ * Player components
+ */
+export type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
+	health: number;
 };
 
 /**
