@@ -12,11 +12,7 @@ import type { SubscriptionResolvers } from 'utils/types';
 import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
-	subscribe: async (
-		_,
-		{ userId, staking = StakingPackage.U_50 },
-		{ connectionId },
-	) => {
+	subscribe: async (_, { userId, staking }, { connectionId }) => {
 		const topic = topicGenerator.findMatch({ userId });
 
 		/*
@@ -41,7 +37,6 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 		});
 
 		if (opponent) {
-			console.log('Opponent found', opponent.userId);
 			const { userId: opponentId, pubsubTopic: opponentTopic } = opponent;
 			const { config, history } = makeDuel('00001', userId, opponentId);
 			const duel = await GameDuel.create({ config, history });
