@@ -46,8 +46,9 @@ export enum ComponentType {
 	Player = 'Player',
 
 	/**
-	 * Board components
+	 * Duel components
 	 */
+	DuelManager = 'DuelManager',
 
 	/**
 	 * Config components
@@ -88,4 +89,14 @@ export enum InspireSource {
 	Death = 'Death',
 	Spell = 'Spell',
 	Skill = 'Skill',
+}
+
+export enum DuelPhase {
+	InitialDistribution = 'InitialDistribution',
+	Draw = 'Draw',
+	Setup = 'Setup',
+	PreFight = 'PreFight',
+	Fight = 'Fight',
+	PostFight = 'PostFight',
+	CleanUp = 'CleanUp',
 }

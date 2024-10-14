@@ -5,6 +5,7 @@ import type {
 	CardType,
 	ClassType,
 	ComponentType,
+	DuelPhase,
 	InspireSource,
 } from './types';
 
@@ -48,6 +49,8 @@ export type ComponentMap = {
 	[ComponentType.Transform]: Transform;
 
 	[ComponentType.Player]: Player;
+
+	[ComponentType.DuelManager]: DuelManager;
 
 	[ComponentType.Config]: Config;
 };
@@ -194,6 +197,14 @@ export type Transform = Component<ComponentType.Transform>;
 export type Player = Component<ComponentType.Player> & {
 	id: string;
 	health: number;
+};
+
+/**
+ * Duel components
+ */
+export type DuelManager = Component<ComponentType.DuelManager> & {
+	phase: DuelPhase;
+	turnOf: string;
 };
 
 /**
