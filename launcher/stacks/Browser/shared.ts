@@ -120,6 +120,9 @@ export const linking: LinkingOptions<RootParamList> = {
 			Quest: {
 				path: '/quest',
 			},
+			Profile: {
+				path: '/profile',
+			},
 			CardLibrary: {
 				path: '/card-library',
 				screens: {
