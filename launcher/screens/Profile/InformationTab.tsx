@@ -42,7 +42,11 @@ const InformationTab = () => {
 		<View style={styles.container}>
 			<View style={styles.titleContainer}>
 				<Text style={styles.title}>Personal Information</Text>
-				<Image style={styles.titleCharm} source={resources.quest.titleCharm} />
+				<Image
+					style={styles.titleCharm}
+					resizeMode="contain"
+					source={resources.quest.titleCharm}
+				/>
 			</View>
 			<View style={styles.contentContainer}>
 				<View style={styles.mutateView}>
@@ -107,7 +111,7 @@ const stylesheet = createStyleSheet(() => ({
 		fontWeight: '600',
 	},
 	titleCharm: {
-		width: 400,
+		width: '100%',
 		height: 13,
 		opacity: 0.3,
 	},
