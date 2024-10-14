@@ -13,39 +13,39 @@ export const ecs = new ECS();
  */
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Troop',
 		class: ClassType.Knight,
 		kind: CardType.Hero,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
 	});
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Wolf',
 		kind: CardType.Troop,
 		class: ClassType.Beast,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 20,
 	});
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Snake',
 		kind: CardType.Troop,
 		class: ClassType.Beast,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 10,
 		defense: 0,
 		health: 20,
@@ -56,13 +56,13 @@ ecs
  */
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'The Raven',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 30,
@@ -75,13 +75,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'The Mystic',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 40,
 		defense: 0,
 		health: 30,
@@ -91,13 +91,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'The Shield Breaker',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 40,
 		defense: 0,
 		health: 30,
@@ -111,13 +111,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'The Stinger',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 60,
 		defense: 0,
 		health: 20,
@@ -127,13 +127,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Vesu Beast',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -143,13 +143,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Cavalier',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 5,
 		health: 35,
@@ -162,13 +162,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Fire Champion',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -191,13 +191,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'War Chief',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 0,
 		defense: 0,
 		health: 60,
@@ -207,13 +207,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Marcus',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 15,
 		defense: 0,
 		health: 50,
@@ -230,13 +230,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Nepia',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
@@ -249,13 +249,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Knight Captain',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -272,13 +272,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Brawler',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -295,13 +295,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Legionnaire',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 25,
 		defense: 5,
 		health: 50,
@@ -311,13 +311,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Head Hunter',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 50,
@@ -332,13 +332,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'War Hound',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -351,13 +351,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Paladin',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 25,
 		defense: 0,
 		health: 50,
@@ -367,13 +367,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Knight of Vesu',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 5,
 		health: 55,
@@ -381,13 +381,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Fire Warrior',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 35,
 		defense: 0,
 		health: 35,
@@ -405,13 +405,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Destroyer',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -428,13 +428,13 @@ ecs
 
 ecs
 	.createEntity()
-	.addComponent(ComponentType.Metadata, {
+	.addComponent(ComponentType.CardMetadata, {
 		name: 'Infiltrator',
 		kind: CardType.Hero,
 		class: ClassType.Tanker,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.Attribute, {
+	.addComponent(ComponentType.CardAttribute, {
 		attack: 15,
 		defense: 5,
 		health: 50,

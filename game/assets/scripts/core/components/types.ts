@@ -7,12 +7,12 @@ export enum ComponentType {
 	/**
 	 * Card components
 	 */
-	Metadata = 'Metadata',
-	Classification = 'Classification',
-	Attribute = 'Attribute',
-	Ownership = 'Ownership',
-	Chargeable = 'Chargeable',
-	Place = 'Place',
+	CardMetadata = 'CardMetadata',
+	CardClass = 'CardClass',
+	CardAttribute = 'CardAttribute',
+	CardOwnership = 'CardOwnership',
+	CardChargeable = 'CardChargeable',
+	CardPlace = 'CardPlace',
 
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',

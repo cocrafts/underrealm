@@ -25,7 +25,6 @@ export class PlayerController extends Component {
 			healthPredictNode: this.healthPredictNode,
 			owner,
 		});
-		core.update();
 	}
 }
 
@@ -36,9 +35,10 @@ core.addSystem({
 			const { healthNode, owner } = player.getComponent(GCT.PlayerController);
 
 			const playerAttribute = ecs
-				.query(LCT.Ownership, { owner })
+				.query(LCT.CardOwnership, { owner })
 				.and(LCT.PlayerAttribute)
-				.exec()[0]
+				.exec()
+				.first()
 				.getComponent(LCT.PlayerAttribute);
 
 			healthNode.getComponent(Label).string = playerAttribute.health.toString();

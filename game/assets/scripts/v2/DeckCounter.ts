@@ -18,7 +18,6 @@ export class DeckCounter extends Component {
 		const node = this.counterNode;
 
 		core.createEntity().addComponent(GCT.DeckCounter, { node, owner });
-		core.update();
 	}
 }
 
@@ -28,8 +27,8 @@ core.addSystem({
 		counters.forEach((counter) => {
 			const { node, owner } = counter.getComponent(GCT.DeckCounter);
 			const cards = ecs
-				.query(LCT.Ownership, { owner })
-				.and(LCT.Place, { place: CardPlace.Deck })
+				.query(LCT.CardOwnership, { owner })
+				.and(LCT.CardPlace, { place: CardPlace.Deck })
 				.exec();
 
 			node.getComponent(Label).string = cards.length.toString();
