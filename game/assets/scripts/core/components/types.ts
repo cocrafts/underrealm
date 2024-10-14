@@ -43,6 +43,7 @@ export enum ComponentType {
 	/**
 	 * Player components
 	 */
+	Player = 'Player',
 
 	/**
 	 * Board components
@@ -51,6 +52,7 @@ export enum ComponentType {
 	/**
 	 * Config components
 	 */
+	Config = 'Config',
 }
 
 export enum ClassType {

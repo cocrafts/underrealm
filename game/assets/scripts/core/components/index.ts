@@ -46,12 +46,17 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
+
+	[ComponentType.Player]: Player;
+
+	[ComponentType.Config]: Config;
 };
 
 /**
  * Card components
  */
 export type Metadata = Component<ComponentType.Metadata> & {
+	id: string;
 	name: string;
 	class: ClassType;
 	kind: CardType;
@@ -182,3 +187,29 @@ export type MultiplyDamageAgainst =
 export type DoubleAttack = Component<ComponentType.DoubleAttack>;
 
 export type Transform = Component<ComponentType.Transform>;
+
+/**
+ * Player components
+ */
+export type Player = Component<ComponentType.Player> & {
+	id: string;
+	health: number;
+};
+
+/**
+ * Config components
+ */
+export type Config = Component<ComponentType.Config> & {
+	initialCardCount: number;
+	initialPlayerHealth: number;
+	elementalFactor: number;
+	handSize: number;
+	groundSize: number;
+	maxDeckSize: number;
+	maxAttachment: number;
+	spellIncreaseCycle: number;
+	perTurnDraw: number;
+	perTurnHero: number;
+	perTurnSpell: number;
+	perTurnTroop: number;
+};
