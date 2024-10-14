@@ -3,6 +3,7 @@ import { CardPlace, ComponentType } from '../components';
 import type { ExportedECS } from '../ecs';
 import { ECS } from '../ecs';
 import type { EventType } from '../events';
+import { initialCardDraw } from '../systems';
 
 export const defaultSetting: Omit<Config, 'type'> = {
 	initialCardCount: 5,
@@ -35,6 +36,8 @@ export const initializeDuel = (
 
 	generateRandomDeck(duelECS, template, config.maxDeckSize, firstPlayer.id);
 	generateRandomDeck(duelECS, template, config.maxDeckSize, secondPlayer.id);
+
+	duelECS.addSystem(initialCardDraw());
 
 	return duelECS;
 };
