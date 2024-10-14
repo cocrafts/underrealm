@@ -22,17 +22,19 @@ export const defaultSetting: Omit<Config, 'type'> = {
 export const initializeDuel = (
 	cardTemplate: ExportedECS,
 	config: Omit<Config, 'type'>,
-	[firstPlayerId, secondPlayerId]: string[],
+	[firstPlayer, secondPlayer]: Array<{ id: string }>,
 ) => {
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
 
 	const duelECS = new ECS();
 
 	duelECS.createEntity().addComponent(ComponentType.Config, config);
-	generatePlayer(duelECS, firstPlayerId, config.initialPlayerHealth);
-	generatePlayer(duelECS, secondPlayerId, config.initialPlayerHealth);
-	generateRandomDeck(duelECS, template, config.maxDeckSize, firstPlayerId);
-	generateRandomDeck(duelECS, template, config.maxDeckSize, secondPlayerId);
+
+	generatePlayer(duelECS, firstPlayer.id, config.initialPlayerHealth);
+	generatePlayer(duelECS, secondPlayer.id, config.initialPlayerHealth);
+
+	generateRandomDeck(duelECS, template, config.maxDeckSize, firstPlayer.id);
+	generateRandomDeck(duelECS, template, config.maxDeckSize, secondPlayer.id);
 
 	return duelECS;
 };
