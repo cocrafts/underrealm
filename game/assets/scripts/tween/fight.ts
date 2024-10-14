@@ -42,6 +42,13 @@ export const animateCardAttack = async (
 				}
 
 				instantiatePrefab('prefabs/HitEffect').then((hit) => {
+					if (!hit) {
+						console.warn(
+							'instantiatePrefab prefabs/HitEffect return undefined',
+						);
+						return;
+					}
+
 					hit.parent = node;
 					hit.setScale(new Vec3(5, 5, 1));
 					const animation = hit.getComponent(Animation);

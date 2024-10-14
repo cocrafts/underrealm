@@ -37,6 +37,8 @@ export const sendConnect = (): void => {
 };
 
 export const sendBundles = (bundles: DuelCommandBundle[]): void => {
+	// fix reading undefined bundle in `replay`
+	bundles = bundles.filter(Boolean);
 	send(GameEventType.SendBundle, bundles);
 
 	/* optimistic simulate command success, will be overrides by server response */

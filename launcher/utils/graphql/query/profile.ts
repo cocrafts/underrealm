@@ -3,10 +3,14 @@ import { gql } from '@apollo/client';
 export const profileFields = gql`
 	fragment ProfileFields on Profile {
 		id
+		name
 		address
 		email
 		points
 		avatarUrl
+		telegramId
+		discordId
+		twitterId
 		referralCode
 	}
 `;
