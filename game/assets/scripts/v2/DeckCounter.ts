@@ -1,12 +1,6 @@
 import { _decorator, Component, Enum, Label, Node } from 'cc';
 
-import {
-	CardPlace,
-	core,
-	GameComponentType as GCT,
-	LogicComponentType,
-	system,
-} from '../game';
+import { CardPlace, core, GCT, LCT, system } from '../game';
 import { Owner } from '../util/v2/manager';
 const { ccclass, property } = _decorator;
 
@@ -33,15 +27,12 @@ core.addSystem({
 		const counters = ecs.query(GCT.DeckCounter).exec();
 		counters.forEach((counter) => {
 			const { node, owner } = counter.getComponent(GCT.DeckCounter);
-
 			const cards = ecs
-				.query(LogicComponentType.Ownership, { owner })
-				.and(LogicComponentType.Place, { place: CardPlace.Deck })
+				.query(LCT.Ownership, { owner })
+				.and(LCT.Place, { place: CardPlace.Deck })
 				.exec();
 
-			const count = cards.length.toString();
-
-			node.getComponent(Label).string = count;
+			node.getComponent(Label).string = cards.length.toString();
 		});
 	},
 });

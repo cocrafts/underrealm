@@ -12,9 +12,8 @@ import { duel } from '../core/templates';
 import type { GameComponentMap } from './components';
 
 export * from '../core';
-export * from './components';
-
-export { GameComponentMap, LogicComponentType };
+export { GameComponentType, GameComponentType as GCT } from './components';
+export { GameComponentMap, LogicComponentType as LCT, LogicComponentType };
 
 export type ComponentMap = GameComponentMap & LogicComponentMap;
 export type GameECS = ECS<ComponentMap, EventType>;
