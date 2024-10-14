@@ -12,7 +12,11 @@ import type { SubscriptionResolvers } from 'utils/types';
 import { makeDuel } from '../duel';
 
 const findMatch: SubscriptionResolvers['findMatch'] = {
-	subscribe: async (_, { userId, staking }, { connectionId }) => {
+	subscribe: async (
+		_,
+		{ userId, staking = StakingPackage.U_50 },
+		{ connectionId },
+	) => {
 		const topic = topicGenerator.findMatch({ userId });
 
 		/*
@@ -124,9 +128,41 @@ async function prepairStaking(
 ) {
 	const pointsToDeduct = getPointsForPackage(stakingPackage);
 
-	// Create a staking record in database
-	const stakingRecord = Staking.create([
-		{
+	try {
+		// Attempt to deduct points from both users
+		const [user1Update, user2Update] = await Promise.all([
+			User.findOneAndUpdate(
+				{ _id: userId, points: { $gte: pointsToDeduct } },
+				{ $inc: { points: -pointsToDeduct } },
+				{ new: true },
+			),
+			User.findOneAndUpdate(
+				{ _id: opponentId, points: { $gte: pointsToDeduct } },
+				{ $inc: { points: -pointsToDeduct } },
+				{ new: true },
+			),
+		]);
+
+		// Check if both users' points were updated successfully
+		if (!user1Update || !user2Update) {
+			// If either update failed, we need to refund any points that were deducted
+			if (user1Update) {
+				await User.updateOne(
+					{ _id: userId },
+					{ $inc: { points: pointsToDeduct } },
+				);
+			}
+			if (user2Update) {
+				await User.updateOne(
+					{ _id: opponentId },
+					{ $inc: { points: pointsToDeduct } },
+				);
+			}
+			throw new Error('One or both users do not have enough points to stake');
+		}
+
+		// Create a staking record in the database
+		await Staking.create({
 			duelId,
 			package: stakingPackage,
 			player1: {
@@ -138,28 +174,22 @@ async function prepairStaking(
 				pointsStaked: pointsToDeduct,
 			},
 			status: StakingStatus.PENDING,
-		},
-	]);
+		});
 
-	// Only deduct points if staking record is created successfully
-	if (stakingRecord) {
-		const updateResults = await Promise.all([
-			User.updateOne(
-				{ _id: userId, points: { $gte: pointsToDeduct } },
-				{ $inc: { points: -pointsToDeduct } },
-				{ new: true },
-			),
-			User.updateOne(
-				{ _id: opponentId, points: { $gte: pointsToDeduct } },
-				{ $inc: { points: -pointsToDeduct } },
-				{ new: true },
-			),
-		]);
-
-		// Check if both users' points are updated successfully
-		const updatedUsers = updateResults.filter(Boolean);
-		if (updatedUsers.length !== 2) {
-			throw new Error('Failed to update user points');
-		}
+		logger.info('Staking prepared successfully', {
+			duelId,
+			userId,
+			opponentId,
+			stakingPackage,
+		});
+	} catch (error) {
+		logger.error('Failed to prepare staking', {
+			duelId,
+			userId,
+			opponentId,
+			stakingPackage,
+			error,
+		});
+		throw new Error('Failed to prepare staking');
 	}
 }
