@@ -12,5 +12,5 @@ export type GameComponentMap = {
 
 type DeckCounter = Component<GameComponentType> & {
 	node: Node;
-	ownerId: string;
+	owner: string;
 };

@@ -1,9 +1,9 @@
-import { _decorator, Component, Enum, Label } from 'cc';
+import { _decorator, Component, Enum, Label, Node } from 'cc';
 
 import {
 	CardPlace,
 	core,
-	GameComponentType,
+	GameComponentType as GCT,
 	LogicComponentType,
 	system,
 } from '../game';
@@ -12,34 +12,36 @@ const { ccclass, property } = _decorator;
 
 @ccclass('DeckCounter')
 export class DeckCounter extends Component {
-	@property({ type: Enum(Owner), editorOnly: true })
+	@property({ type: Enum(Owner) })
 	private owner: number;
 
+	@property(Node)
+	private counterNode: Node;
+
 	start() {
-		const ownerId =
-			this.owner === Owner.Player ? system.playerId : system.enemyId;
-		const node = this.node.parent.getChildByPath('Count');
+		const { playerId, enemyId } = system;
+		const owner = this.owner === Owner.Player ? playerId : enemyId;
+		const node = this.counterNode;
 
-		core
-			.createEntity()
-			.addComponent(GameComponentType.DeckCounter, { node, ownerId });
-
-		core.addSystem({
-			update(ecs) {
-				const counters = ecs.query(GameComponentType.DeckCounter).exec();
-				counters.forEach((counter) => {
-					const { node, ownerId } = counter.getComponent(
-						GameComponentType.DeckCounter,
-					);
-
-					const cards = ecs
-						.query(LogicComponentType.Ownership, { owner: ownerId })
-						.and(LogicComponentType.Place, { place: CardPlace.Deck })
-						.exec();
-
-					node.getComponent(Label).string = cards.length.toString();
-				});
-			},
-		});
+		core.createEntity().addComponent(GCT.DeckCounter, { node, owner });
+		core.update();
 	}
 }
+
+core.addSystem({
+	update(ecs) {
+		const counters = ecs.query(GCT.DeckCounter).exec();
+		counters.forEach((counter) => {
+			const { node, owner } = counter.getComponent(GCT.DeckCounter);
+
+			const cards = ecs
+				.query(LogicComponentType.Ownership, { owner })
+				.and(LogicComponentType.Place, { place: CardPlace.Deck })
+				.exec();
+
+			const count = cards.length.toString();
+
+			node.getComponent(Label).string = count;
+		});
+	},
+});
