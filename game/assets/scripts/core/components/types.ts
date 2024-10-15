@@ -8,6 +8,8 @@ export enum ComponentType {
 	Ownership = 'Ownership',
 	Chargeable = 'Chargeable',
 	Place = 'Place',
+	Variant = 'Variant',
+	Template = 'Template',
 
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',
@@ -75,6 +77,7 @@ export enum CardPlace {
 	Ground = 'Ground',
 	Hand = 'Hand',
 	Deck = 'Deck',
+	Grave = 'Grave',
 }
 
 export enum InspireSource {
@@ -89,6 +92,16 @@ export enum InspireSource {
 	Death = 'Death',
 	Spell = 'Spell',
 	Skill = 'Skill',
+}
+
+export enum ElementalType {
+	Metal = '01',
+	Wood = '02',
+	Water = '03',
+	Fire = '04',
+	Earth = '05',
+	Light = '06',
+	Dark = '07',
 }
 
 export enum DuelPhase {

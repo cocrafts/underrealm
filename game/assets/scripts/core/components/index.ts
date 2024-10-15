@@ -6,6 +6,7 @@ import type {
 	ClassType,
 	ComponentType,
 	DuelPhase,
+	ElementalType,
 	InspireSource,
 } from './types';
 
@@ -21,6 +22,8 @@ export type ComponentMap = {
 	[ComponentType.Chargeable]: Chargeable;
 	[ComponentType.Ownership]: Ownership;
 	[ComponentType.Place]: Place;
+	[ComponentType.Variant]: Variant;
+	[ComponentType.Template]: Template;
 
 	[ComponentType.SummonActivation]: SummonActivation;
 	[ComponentType.PassiveActivation]: PassiveActivation;
@@ -65,6 +68,13 @@ export type Metadata = Component<ComponentType.Metadata> & {
 	kind: CardType;
 	rarity: 0;
 };
+
+//TODO: will handle elemental in next update
+export type Variant = Component<ComponentType.Variant> & {
+	element: ElementalType;
+};
+
+export type Template = Component<ComponentType.Template>;
 
 export type Classification = Component<ComponentType.Classification> & {
 	kind: CardType;
