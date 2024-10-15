@@ -1,9 +1,9 @@
 import type { ComponentMap, Config } from '../components';
-import { CardPlace, ComponentType } from '../components';
+import { CardPlace, CardType, ComponentType, DuelPhase } from '../components';
 import type { ExportedECS } from '../ecs';
 import { ECS } from '../ecs';
 import type { EventType } from '../events';
-import { initialCardDraw } from '../systems';
+import { initialCardDraw, turnCardDraw } from '../systems';
 
 export const defaultSetting: Omit<Config, 'type'> = {
 	initialCardCount: 5,
@@ -55,6 +55,7 @@ export const initializeDuel = (
 	);
 
 	duelECS.addSystem(initialCardDraw());
+	duelECS.addSystem(turnCardDraw());
 	duelECS.update();
 
 	return duelECS;

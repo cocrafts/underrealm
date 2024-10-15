@@ -14,6 +14,28 @@ const drawCards = (
 		cardPlace.index = handIndex + i;
 	}
 };
+
+const drawTroop = (
+	ecs: ECS<ComponentMap>,
+	handIndex: number,
+	playerId: string,
+) => {
+	const [troopTemplate] = ecs
+		.query(ComponentType.Classification, {
+			kind: CardType.Troop,
+		})
+		.and(ComponentType.Metadata, { name: 'Troop' })
+		.and(ComponentType.Template)
+		.exec();
+	const newTroop = cloneEntity(ecs, troopTemplate);
+	newTroop
+		.removeComponent(ComponentType.Template)
+		.addComponent(ComponentType.Place, {
+			place: CardPlace.Hand,
+			index: handIndex,
+		})
+		.addComponent(ComponentType.Ownership, { owner: playerId });
+	return newTroop;
 };
 
 export const initialCardDraw = () => {
@@ -47,6 +69,36 @@ export const initialCardDraw = () => {
 		drawCards(firstDeck, initialCardCount, firstHand.length);
 		drawCards(secondDeck, initialCardCount, secondHand.length);
 		duelManagerComp.phase = DuelPhase.Draw;
+	};
+
+	return { update };
+};
+
+export const turnCardDraw = () => {
+	const update = (ecs: ECS) => {
+		const [duelManager] = ecs.query(ComponentType.DuelManager).exec();
+		const duelManagerComp = duelManager.getComponent(ComponentType.DuelManager);
+
+		if (duelManagerComp.phase !== DuelPhase.Draw) return;
+
+		const [config] = ecs.query(ComponentType.Config).exec();
+		const turnDrawCards = config.getComponent(ComponentType.Config).perTurnDraw;
+		const players = ecs.query(ComponentType.Player).exec();
+		const [player1Id, player2Id] = players.map(
+			(player) => player.getComponent(ComponentType.Player).id,
+		);
+		const firstDeck = selectDeck(ecs, player1Id);
+		const firstHand = selectHand(ecs, player1Id);
+		const secondDeck = selectDeck(ecs, player2Id);
+		const secondHand = selectHand(ecs, player2Id);
+
+		drawCards(firstDeck, turnDrawCards, firstHand.length);
+		drawTroop(ecs, firstHand.length, player1Id);
+
+		drawCards(secondDeck, turnDrawCards, secondHand.length);
+		drawTroop(ecs, secondHand.length, player2Id);
+
+		duelManagerComp.phase = DuelPhase.Setup;
 	};
 
 	return { update };
