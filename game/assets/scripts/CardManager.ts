@@ -132,17 +132,17 @@ export class CardManager extends Component {
 
 			resources.load<SpriteFrame>(visualUri, (err, frame) => {
 				if (err) return;
-				this.cardVisual.spriteFrame = frame;
+				if (this.cardVisual) this.cardVisual.spriteFrame = frame;
 			});
 
 			resources.load<SpriteFrame>(foilUri, (err, frame) => {
 				if (err) return;
-				this.cardFoil.spriteFrame = frame;
+				if (this.cardFoil) this.cardFoil.spriteFrame = frame;
 			});
 
 			resources.load<SpriteFrame>(classUri, (err, frame) => {
 				if (err) return;
-				this.cardClass.spriteFrame = frame;
+				if (this.cardClass) this.cardClass.spriteFrame = frame;
 			});
 		}
 	}

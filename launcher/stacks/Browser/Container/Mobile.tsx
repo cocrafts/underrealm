@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import type { DrawerContentComponentProps } from 'components/DrawerNavigation';
 import { createDrawerNavigator } from 'components/DrawerNavigation';
 import HomeScreen from 'screens/Home';
+import ProfileScreen from 'screens/Profile';
 import QuestScreen from 'screens/Quest';
 import StoryScreen from 'screens/Story';
 import CardLibraryStack from 'stacks/Browser/CardLibrary';
@@ -34,6 +35,7 @@ export const Mobile: FC = () => {
 			<Drawer.Screen name="Quest" component={QuestScreen} />
 			<Drawer.Screen name="Guide" component={GuideScreen} />
 			<Drawer.Screen name="Story" component={StoryScreen} />
+			<Drawer.Screen name="Profile" component={ProfileScreen} />
 			<Drawer.Screen name="CardLibrary" component={CardLibraryStack} />
 		</Drawer.Navigator>
 	);
