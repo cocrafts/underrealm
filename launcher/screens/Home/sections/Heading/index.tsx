@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Volkhov',
 		color: '#fff',
 		textShadow: '0 0 5px black',
-	},
+	} as never,
 	actionButtonContainer: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
@@ -107,5 +107,5 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: '#fff',
 		textShadow: '0 0 10px black',
-	},
+	} as never,
 });

@@ -74,13 +74,13 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginBottom: 28,
 		textShadow: '0 0 5px black',
-	},
+	} as never,
 	intro: {
 		maxWidth: 800,
 		fontSize: 18,
 		textAlign: 'center',
 		textShadow: '0 0 10px black',
-	},
+	} as never,
 	bold: {
 		fontWeight: '500',
 	},

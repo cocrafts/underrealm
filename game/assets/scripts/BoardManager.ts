@@ -3,6 +3,8 @@ import Engine from '@underrealm/murg';
 import type { Animation } from 'cc';
 import { _decorator, Component, Label } from 'cc';
 
+import './core';
+
 import { getPositionExpos } from './util/layout';
 import { switchBackgroundSound } from './util/resources';
 import { system } from './util/system';

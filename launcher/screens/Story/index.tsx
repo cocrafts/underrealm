@@ -29,7 +29,9 @@ const Story: FC = () => {
 						resizeMode="contain"
 					/>
 					<Header />
-					<View style={[styles.contentContainer, { width: viewWidth }]}>
+					<View
+						style={[styles.contentContainer, { width: viewWidth as never }]}
+					>
 						<View style={styles.mapContainer}>
 							<Image
 								source={resources.story.atemWorldMap}

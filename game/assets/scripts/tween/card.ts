@@ -5,20 +5,17 @@ import { playEffectSound } from '../util/resources';
 
 export interface PlayerCardOption {
 	node: Node;
-	delay?: number;
 	from?: Vec3;
 	dest?: Vec3;
 	expoDest?: Vec3;
+	delay?: number;
 	speed?: number;
 }
 
-const defaultExpoDest = new Vec3(440, -15, 0);
-const defaultFrom = new Vec3(425, -232, 0);
-
 export const animateExpoCard = ({
 	node,
-	from = defaultFrom,
-	dest = defaultExpoDest,
+	from,
+	dest,
 	delay = 0,
 	speed = 1,
 }: PlayerCardOption): Tween<Node> => {
@@ -62,6 +59,8 @@ export const animateExpoCard = ({
 	return tween(node).delay(delay).parallel(translate, rotate, scale);
 };
 
+const defaultFrom = new Vec3(425, -232, 0);
+const defaultExpoDest = new Vec3(440, -15, 0);
 const defaultRevealDest = new Vec3(0, -360, 0);
 
 export const animateDrawPlayerCard = ({
@@ -72,6 +71,42 @@ export const animateDrawPlayerCard = ({
 	delay = 0,
 	speed = 1,
 }: PlayerCardOption): Promise<void> => {
+	return new Promise((resolve) => {
+		animateExpoCard({ node, from, dest: expoDest, delay, speed })
+			.to(
+				0.8,
+				{ position: dest, scale: new Vec3(0.4, 0.4, 1) },
+				{ easing: 'expoOut' },
+			)
+			.call(() => {
+				playEffectSound('light-fire', 0.3);
+				resolve();
+			})
+			.start();
+	});
+};
+
+export interface DrawPlayerCardOptions {
+	node: Node;
+	index: number;
+	total: number;
+	delay?: number;
+	speed?: number;
+}
+
+export const drawPlayerCard = ({
+	node,
+	index,
+	total,
+	delay = 0,
+	speed = 1,
+}: DrawPlayerCardOptions): Promise<void> => {
+	const from = new Vec3(425, -232, 0);
+	const expoDest = new Vec3(440, -15, 0);
+	const centerDest = new Vec3(0, -360, 0);
+	const centerIndex = Math.floor(total / 2);
+	const dest = centerDest.add(new Vec3((index - centerIndex) * 80, 0, index));
+
 	return new Promise((resolve) => {
 		animateExpoCard({ node, from, dest: expoDest, delay, speed })
 			.to(
