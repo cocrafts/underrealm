@@ -9,7 +9,7 @@ const drawCards = (
 	handIndex: number,
 ) => {
 	for (let i = 0; i < numberOfCards; i++) {
-		const cardPlace = entities[i].getComponent(ComponentType.Place);
+		const cardPlace = entities[i].getComponent(ComponentType.CardPlace);
 		cardPlace.place = CardPlace.Hand;
 		cardPlace.index = handIndex + i;
 	}
@@ -21,20 +21,20 @@ const drawTroop = (
 	playerId: string,
 ) => {
 	const [troopTemplate] = ecs
-		.query(ComponentType.Classification, {
+		.query(ComponentType.CardClass, {
 			kind: CardType.Troop,
 		})
-		.and(ComponentType.Metadata, { name: 'Troop' })
+		.and(ComponentType.CardMetadata, { name: 'Troop' })
 		.and(ComponentType.Template)
 		.exec();
 	const newTroop = cloneEntity(ecs, troopTemplate);
 	newTroop
 		.removeComponent(ComponentType.Template)
-		.addComponent(ComponentType.Place, {
+		.addComponent(ComponentType.CardPlace, {
 			place: CardPlace.Hand,
 			index: handIndex,
 		})
-		.addComponent(ComponentType.Ownership, { owner: playerId });
+		.addComponent(ComponentType.CardOwnership, { owner: playerId });
 	return newTroop;
 };
 
@@ -45,25 +45,25 @@ export const initialCardDraw = () => {
 
 		if (duelManagerComp.phase !== DuelPhase.InitialDistribution) return;
 
-		const [player1, player2] = ecs.query(ComponentType.Player).exec();
+		const [player1, player2] = ecs.query(ComponentType.PlayerAttribute).exec();
 		const [config] = ecs.query(ComponentType.Config).exec();
 		const { initialCardCount } = config.getComponent(ComponentType.Config);
 
 		const firstDeck = selectDeck(
 			ecs,
-			player1.getComponent(ComponentType.Player).id,
+			player1.getComponent(ComponentType.PlayerAttribute).id,
 		);
 		const firstHand = selectHand(
 			ecs,
-			player1.getComponent(ComponentType.Player).id,
+			player1.getComponent(ComponentType.PlayerAttribute).id,
 		);
 		const secondDeck = selectDeck(
 			ecs,
-			player2.getComponent(ComponentType.Player).id,
+			player2.getComponent(ComponentType.PlayerAttribute).id,
 		);
 		const secondHand = selectHand(
 			ecs,
-			player2.getComponent(ComponentType.Player).id,
+			player2.getComponent(ComponentType.PlayerAttribute).id,
 		);
 
 		drawCards(firstDeck, initialCardCount, firstHand.length);
@@ -83,9 +83,9 @@ export const turnCardDraw = () => {
 
 		const [config] = ecs.query(ComponentType.Config).exec();
 		const turnDrawCards = config.getComponent(ComponentType.Config).perTurnDraw;
-		const players = ecs.query(ComponentType.Player).exec();
+		const players = ecs.query(ComponentType.PlayerAttribute).exec();
 		const [player1Id, player2Id] = players.map(
-			(player) => player.getComponent(ComponentType.Player).id,
+			(player) => player.getComponent(ComponentType.PlayerAttribute).id,
 		);
 		const firstDeck = selectDeck(ecs, player1Id);
 		const firstHand = selectHand(ecs, player1Id);

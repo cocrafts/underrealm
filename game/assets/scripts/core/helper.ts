@@ -4,15 +4,15 @@ import type { ECS, Entity } from './ecs';
 
 export const selectDeck = (ecs: ECS<ComponentMap>, playerId: string) => {
 	return ecs
-		.query(ComponentType.Place, { place: CardPlace.Deck })
-		.and(ComponentType.Ownership, { owner: playerId })
+		.query(ComponentType.CardPlace, { place: CardPlace.Deck })
+		.and(ComponentType.CardOwnership, { owner: playerId })
 		.exec();
 };
 
 export const selectHand = (ecs: ECS<ComponentMap>, playerId: string) => {
 	return ecs
-		.query(ComponentType.Place, { place: CardPlace.Hand })
-		.and(ComponentType.Ownership, { owner: playerId })
+		.query(ComponentType.CardPlace, { place: CardPlace.Hand })
+		.and(ComponentType.CardOwnership, { owner: playerId })
 		.exec();
 };
 
