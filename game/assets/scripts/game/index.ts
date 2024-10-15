@@ -12,10 +12,10 @@ import { duel } from '../core/templates';
 import type { GameComponentMap } from './components';
 
 export * from '../core';
-export * from './components';
+export { GameComponentType, GameComponentType as GCT } from './components';
+export { GameComponentMap, LogicComponentType as LCT, LogicComponentType };
 
-export { GameComponentMap, LogicComponentType };
-
+export type CM = ComponentMap;
 export type ComponentMap = GameComponentMap & LogicComponentMap;
 export type GameECS = ECS<ComponentMap, EventType>;
 
@@ -67,3 +67,7 @@ core
 	.addSystem(skill.transform())
 
 	.addSystem(resetAllSkillActivatingSystem());
+
+setTimeout(() => {
+	core.update();
+}, 1000);

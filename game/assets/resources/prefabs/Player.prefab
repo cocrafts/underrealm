@@ -408,7 +408,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 47.13597106933594,
+      "width": 47.1227478713132,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -447,7 +447,7 @@
     "_string": "150",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
+    "_actualFontSize": 35.6,
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -570,8 +570,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 35.265960693359375,
-      "height": 27.72
+      "width": 35.25877534673455,
+      "height": 27.720000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -609,7 +609,7 @@
     "_string": "250",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 22,
+    "_actualFontSize": 24.475,
     "_fontSize": 22,
     "_fontFamily": "Arial",
     "_lineHeight": 22,
@@ -726,6 +726,12 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 28
+    },
+    "healthNode": {
+      "__id__": 14
+    },
+    "healthPredictNode": {
+      "__id__": 20
     },
     "_id": ""
   },

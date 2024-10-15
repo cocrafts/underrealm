@@ -127,7 +127,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 22.079971313476562,
+      "width": 22.079982114641854,
       "height": 25.2
     },
     "_anchorPoint": {
@@ -166,7 +166,7 @@
     "_string": "30",
     "_horizontalAlign": 1,
     "_verticalAlign": 0,
-    "_actualFontSize": 20,
+    "_actualFontSize": 22.25,
     "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 20,
@@ -283,6 +283,9 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 10
+    },
+    "counterNode": {
+      "__id__": 2
     },
     "_id": ""
   },

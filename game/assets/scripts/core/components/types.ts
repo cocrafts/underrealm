@@ -1,15 +1,20 @@
 export enum ComponentType {
 	/**
+	 * Player components
+	 */
+	PlayerAttribute = 'PlayerAttribute',
+
+	/**
 	 * Card components
 	 */
-	Metadata = 'Metadata',
-	Classification = 'Classification',
-	Attribute = 'Attribute',
-	Ownership = 'Ownership',
-	Chargeable = 'Chargeable',
-	Place = 'Place',
 	Variant = 'Variant',
 	Template = 'Template',
+	CardMetadata = 'CardMetadata',
+	CardClass = 'CardClass',
+	CardAttribute = 'CardAttribute',
+	CardOwnership = 'CardOwnership',
+	CardChargeable = 'CardChargeable',
+	CardPlace = 'CardPlace',
 
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',
@@ -43,9 +48,8 @@ export enum ComponentType {
 	Transform = 'Transform',
 
 	/**
-	 * Player components
+	 * Board components
 	 */
-	Player = 'Player',
 
 	/**
 	 * Duel components

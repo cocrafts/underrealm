@@ -34,6 +34,10 @@ export type ExportedECS = {
 	entities: never[];
 };
 
+export type QueryResult<CM> = Entity<CM>[] & {
+	first: () => Entity<CM> | null;
+};
+
 export class ECS<CM = ComponentMap, ET = EventType> {
 	private entities: Entity<CM>[] = [];
 	private systems: System<CM, ET>[] = [];
@@ -84,6 +88,11 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 		return this;
 	}
 
+	queryById = (entityId: number) => {
+		if (entityId > this.entities.length) return;
+		return this.entities[entityId];
+	};
+
 	query = <T extends keyof CM>(
 		type?: T,
 		filter?: QueryFilter<T, CM>,
@@ -105,8 +114,15 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 		};
 
 		return {
-			exec: (): Entity<CM>[] => {
-				return this.entities.filter(checkFilters);
+			exec: (): QueryResult<CM> => {
+				const entities = this.entities.filter(checkFilters);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(entities as any).first = () => {
+					if (entities.length === 0) return;
+					return entities[0];
+				};
+
+				return entities as QueryResult<CM>;
 			},
 			and: <T extends keyof CM>(type: T, filter?: QueryFilter<T, CM>) => {
 				pairs.push({ type, filter });
@@ -151,11 +167,10 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 	static fromJSON<CM, ET>(exported: ExportedECS): ECS<CM, ET> {
 		const ecs = new ECS<CM, ET>();
 
-		exported.entities.forEach((entityData) => {
+		exported.entities.forEach(({ components }: Entity<CM>) => {
 			const entity = ecs.createEntity();
-
-			Object.keys(entityData).forEach((key) => {
-				entity.addComponent(key as keyof CM, entityData);
+			Object.keys(components).forEach((key) => {
+				entity.addComponent(key as keyof CM, components[key] as never);
 			});
 		});
 
