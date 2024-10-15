@@ -1,11 +1,19 @@
 import type { ComponentMap } from '../components';
-import { CardPlace, ComponentType, DuelPhase } from '../components';
+import { CardPlace, CardType, ComponentType, DuelPhase } from '../components';
 import type { ECS, Entity } from '../ecs';
+import { cloneEntity, selectDeck, selectHand } from '../helper';
 
-const drawCards = (entities: Entity<ComponentMap>[], initialCards: number) => {
-	for (let i = 0; i < initialCards; i++) {
-		entities[i].getComponent(ComponentType.Place).place = CardPlace.Hand;
+const drawCards = (
+	entities: Entity<ComponentMap>[],
+	numberOfCards: number,
+	handIndex: number,
+) => {
+	for (let i = 0; i < numberOfCards; i++) {
+		const cardPlace = entities[i].getComponent(ComponentType.Place);
+		cardPlace.place = CardPlace.Hand;
+		cardPlace.index = handIndex + i;
 	}
+};
 };
 
 export const initialCardDraw = () => {
@@ -17,27 +25,27 @@ export const initialCardDraw = () => {
 
 		const [player1, player2] = ecs.query(ComponentType.Player).exec();
 		const [config] = ecs.query(ComponentType.Config).exec();
-		const initialCards = config.getComponent(
-			ComponentType.Config,
-		).initialCardCount;
+		const { initialCardCount } = config.getComponent(ComponentType.Config);
 
-		const firstDeck = ecs
-			.query(ComponentType.Metadata)
-			.and(ComponentType.Place, { place: CardPlace.Deck })
-			.and(ComponentType.Ownership, {
-				owner: player1.getComponent(ComponentType.Player).id,
-			})
-			.exec();
-		const secondDeck = ecs
-			.query(ComponentType.Metadata)
-			.and(ComponentType.Place, { place: CardPlace.Deck })
-			.and(ComponentType.Ownership, {
-				owner: player2.getComponent(ComponentType.Player).id,
-			})
-			.exec();
+		const firstDeck = selectDeck(
+			ecs,
+			player1.getComponent(ComponentType.Player).id,
+		);
+		const firstHand = selectHand(
+			ecs,
+			player1.getComponent(ComponentType.Player).id,
+		);
+		const secondDeck = selectDeck(
+			ecs,
+			player2.getComponent(ComponentType.Player).id,
+		);
+		const secondHand = selectHand(
+			ecs,
+			player2.getComponent(ComponentType.Player).id,
+		);
 
-		drawCards(firstDeck, initialCards);
-		drawCards(secondDeck, initialCards);
+		drawCards(firstDeck, initialCardCount, firstHand.length);
+		drawCards(secondDeck, initialCardCount, secondHand.length);
 		duelManagerComp.phase = DuelPhase.Draw;
 	};
 

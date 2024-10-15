@@ -26,20 +26,56 @@ export const initializeDuel = (
 	[firstPlayer, secondPlayer]: Array<{ id: string }>,
 ) => {
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
-
 	const duelECS = new ECS();
+	const { initialPlayerHealth, initialCardCount, maxDeckSize } = config;
 
 	duelECS.createEntity().addComponent(ComponentType.Config, config);
+	duelECS.createEntity().addComponent(ComponentType.DuelManager, {
+		phase: DuelPhase.InitialDistribution,
+		turnOf: firstPlayer.id,
+	});
+	createTroopTemplate(duelECS, template);
 
-	generatePlayer(duelECS, firstPlayer.id, config.initialPlayerHealth);
-	generatePlayer(duelECS, secondPlayer.id, config.initialPlayerHealth);
+	generatePlayer(duelECS, firstPlayer.id, initialPlayerHealth);
+	generatePlayer(duelECS, secondPlayer.id, initialPlayerHealth);
 
-	generateRandomDeck(duelECS, template, config.maxDeckSize, firstPlayer.id);
-	generateRandomDeck(duelECS, template, config.maxDeckSize, secondPlayer.id);
+	generateRandomDeck(
+		duelECS,
+		template,
+		maxDeckSize,
+		initialCardCount,
+		firstPlayer.id,
+	);
+	generateRandomDeck(
+		duelECS,
+		template,
+		maxDeckSize,
+		initialCardCount,
+		secondPlayer.id,
+	);
 
 	duelECS.addSystem(initialCardDraw());
+	duelECS.update();
 
 	return duelECS;
+};
+
+const createTroopTemplate = (
+	duel: ECS<ComponentMap, EventType>,
+	template: ECS<ComponentMap, EventType>,
+) => {
+	const troopCards = template
+		.query(ComponentType.Metadata, { kind: CardType.Troop })
+		.exec();
+
+	troopCards.forEach((entity) => {
+		const card = duel.createEntity();
+		Object.keys(entity.components).forEach(
+			(componentKey: keyof ComponentMap) => {
+				card.addComponent(componentKey, entity.getComponent(componentKey));
+			},
+		);
+	});
 };
 
 const generatePlayer = (
@@ -57,15 +93,18 @@ const generateRandomDeck = (
 	duel: ECS<ComponentMap, EventType>,
 	template: ECS<ComponentMap, EventType>,
 	maxDeckSize: number,
+	initialCards: number,
 	playerId: string,
 ) => {
-	const cards = template.query(ComponentType.Metadata).exec();
-	const maxSize = Math.floor(cards.length);
+	const heroCards = template
+		.query(ComponentType.Metadata, { kind: CardType.Hero })
+		.exec();
+	const maxSize = Math.floor(heroCards.length);
 	const safeSize = Math.min(maxSize, maxDeckSize);
 	let count = 0;
 
 	while (count < safeSize) {
-		const randomIndex = Math.floor(Math.random() * cards.length);
+		const randomIndex = Math.floor(Math.random() * heroCards.length);
 		const newCard = duel
 			.createEntity()
 			.addComponent(ComponentType.Ownership, { owner: playerId })
@@ -74,11 +113,11 @@ const generateRandomDeck = (
 				place: CardPlace.Deck,
 			});
 
-		Object.keys(cards[randomIndex].components).forEach(
+		Object.keys(heroCards[randomIndex].components).forEach(
 			(component: keyof ComponentMap) => {
 				newCard.addComponent(
 					component,
-					cards[randomIndex].getComponent(component),
+					heroCards[randomIndex].getComponent(component),
 				);
 			},
 		);

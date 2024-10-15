@@ -16,15 +16,16 @@ ecs
 	.addComponent(ComponentType.Metadata, {
 		id: '999990000',
 		name: 'Troop',
-		class: ClassType.Knight,
-		kind: CardType.Hero,
+		class: ClassType.Beast,
+		kind: CardType.Troop,
 		rarity: 0,
 	})
 	.addComponent(ComponentType.Attribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 ecs
 	.createEntity()
 	.addComponent(ComponentType.Metadata, {
@@ -38,7 +39,8 @@ ecs
 		attack: 20,
 		defense: 0,
 		health: 20,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 ecs
 	.createEntity()
 	.addComponent(ComponentType.Metadata, {
@@ -52,7 +54,8 @@ ecs
 		attack: 10,
 		defense: 0,
 		health: 20,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 
 /**
  * Hero Cards
