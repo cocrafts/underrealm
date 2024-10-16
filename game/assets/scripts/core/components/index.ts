@@ -1,6 +1,7 @@
 import type { Component } from '../ecs';
 
 import type {
+	ActivationType,
 	CardPlace as CardPlaceType,
 	CardType,
 	ClassType,
@@ -31,6 +32,7 @@ export type ComponentMap = {
 	[ComponentType.PassiveActivation]: PassiveActivation;
 	[ComponentType.FightActivation]: FightActivation;
 	[ComponentType.PreFightActivation]: PreFightActivation;
+	[ComponentType.PostFightActivation]: PostFightActivation;
 	[ComponentType.ChargeActivation]: ChargeActivation;
 	[ComponentType.InspireActivation]: InspireActivation;
 	[ComponentType.GloryActivation]: GloryActivation;
@@ -119,6 +121,8 @@ type FightActivation = Component<ComponentType.FightActivation>;
 
 type PreFightActivation = Component<ComponentType.PreFightActivation>;
 
+type PostFightActivation = Component<ComponentType.PostFightActivation>;
+
 type ChargeActivation = Component<ComponentType.ChargeActivation> & {
 	current: number;
 	threshold: number;
@@ -130,7 +134,9 @@ type InspireActivation = Component<ComponentType.InspireActivation> & {
 
 type GloryActivation = Component<ComponentType.GloryActivation>;
 
-type SkillActivating = Component<ComponentType.SkillActivating>;
+type SkillActivating = Component<ComponentType.SkillActivating> & {
+	activationType?: ActivationType;
+};
 
 type DestroyFacingMinHealth =
 	Component<ComponentType.DestroyFacingMinHealth> & {

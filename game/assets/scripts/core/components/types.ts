@@ -20,6 +20,7 @@ export enum ComponentType {
 	PassiveActivation = 'PassiveActivation',
 	FightActivation = 'FightActivation',
 	PreFightActivation = 'PreFightActivation',
+	PostFightActivation = 'PostFightActivation',
 	ChargeActivation = 'ChargeActivation',
 	InspireActivation = 'InspireActivation',
 	GloryActivation = 'GloryActivation',
@@ -116,4 +117,15 @@ export enum DuelPhase {
 	Fight = 'Fight',
 	PostFight = 'PostFight',
 	CleanUp = 'CleanUp',
+}
+
+export enum ActivationType {
+	Summon = 'Summon',
+	PreFight = 'PreFight',
+	Fight = 'Fight',
+	PostFight = 'PostFight',
+	InspireSkill = 'InspireSkill',
+	InspireDeath = 'InspireDeath',
+	Chargeable = 'Chargeable',
+	Glory = 'Glory',
 }
