@@ -1,6 +1,6 @@
 {
   "name": "@underrealm/launcher",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.web.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "bn.js": "^5.2.1",
     "bs58": "^5.0.0",
     "color2k": "^2.0.0",
+    "firebase": "^10.14.1",
     "graphql": "^16.6.0",
     "graphql-ws": "^5.16.0",
     "numeral": "^2.0.6",
