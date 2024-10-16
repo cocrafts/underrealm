@@ -41,7 +41,7 @@ export const buttonList: ButtonText[] = [
 
 export const socialLinkList: SocialLink[] = [
 	{
-		href: 'https://discord.gg/fhN6vEcg',
+		href: 'https://discord.com/invite/7rXVXSBvEh',
 		Component: DiscordIcon,
 		props: {
 			size: 42,
