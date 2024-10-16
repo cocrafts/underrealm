@@ -26,3 +26,25 @@ export const cloneEntity = (
 	});
 	return newCard;
 };
+
+export const selectFacingCard = (
+	ecs: ECS<ComponentMap>,
+	card: Entity<ComponentMap>,
+) => {
+	if (card.getComponent(ComponentType.CardPlace).place !== CardPlace.Ground)
+		return;
+
+	const cards = ecs
+		.query(ComponentType.CardPlace, {
+			place: CardPlace.Ground,
+			index: card.getComponent(ComponentType.CardPlace).index,
+		})
+		.exec();
+	const [facingCard] = cards.filter(
+		(c) =>
+			c.getComponent(ComponentType.CardOwnership).owner !=
+			card.getComponent(ComponentType.CardOwnership).owner,
+	);
+
+	return facingCard;
+};
