@@ -55,6 +55,7 @@ Open `game` with Cocos Creator
 - Choose correct game scene
 - Enable MD5 cache to solve the problem of CDN or browser asset caching.
 - Enable Source Map for debugging
+- Manually update script imports with hash extension in `index.html`
 
 ## Launcher
 
