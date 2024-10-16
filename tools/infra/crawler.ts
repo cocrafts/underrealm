@@ -12,6 +12,6 @@ const crawler = new sst.aws.Function('data-crawler', {
 
 const cron = new sst.aws.Cron('WeeklyCrawlerSchedule', {
 	job: crawler.arn,
-	schedule: 'cron(0 0  ? * 2 *)', // trigger this job every monday at 0:00:00Z
+	schedule: 'cron(0 0 ? * 2 *)', // trigger this job every monday at 0:00:00Z
 });
 export { cron };
