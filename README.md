@@ -48,7 +48,14 @@ Then open web link of client A or client B and enjoy the game
 
 ### Build game
 
-- Build game to `launcher/assets/murg`, we are currently using `web-mobile` build option
+Open `game` with Cocos Creator
+
+- Select `Build` with `Web Mobile` platform
+- Specify build path to `launcher/assets/murg`
+- Choose correct game scene
+- Enable MD5 cache to solve the problem of CDN or browser asset caching.
+- Enable Source Map for debugging
+- Manually update script imports with hash extension in `index.html`
 
 ## Launcher
 
