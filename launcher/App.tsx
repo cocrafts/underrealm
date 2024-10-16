@@ -16,6 +16,7 @@ import {
 	useRequireReferral,
 	useSnapshot,
 } from 'utils/hooks';
+import { useLatestVersion } from 'utils/hooks/latestVersion';
 import { useNetworkEndpoint, useWalletAdapters } from 'utils/hooks/web3';
 import { extractReferralFromUrl } from 'utils/referral';
 import { launcherTheme } from 'utils/styles';
@@ -34,6 +35,7 @@ const InternalApp: FC = () => {
 		console.log(error);
 	}, []);
 
+	useLatestVersion();
 	useRequireReferral();
 	useAppInit();
 
