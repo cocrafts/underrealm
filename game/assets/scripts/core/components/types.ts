@@ -56,6 +56,7 @@ export enum ComponentType {
 	 * Duel components
 	 */
 	DuelManager = 'DuelManager',
+	Command = 'Command',
 
 	/**
 	 * Config components
@@ -128,4 +129,9 @@ export enum ActivationType {
 	InspireDeath = 'InspireDeath',
 	Chargeable = 'Chargeable',
 	Glory = 'Glory',
+}
+
+export enum CommandType {
+	Summon = 'Summon',
+	EndTurn = 'EndTurn',
 }

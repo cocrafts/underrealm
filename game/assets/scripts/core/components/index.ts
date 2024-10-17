@@ -5,6 +5,7 @@ import type {
 	CardPlace as CardPlaceType,
 	CardType,
 	ClassType,
+	CommandType,
 	ComponentType,
 	DuelPhase,
 	ElementalType,
@@ -56,6 +57,7 @@ export type ComponentMap = {
 	[ComponentType.Transform]: Transform;
 
 	[ComponentType.DuelManager]: DuelManager;
+	[ComponentType.Command]: Command;
 
 	[ComponentType.Config]: Config;
 };
@@ -219,6 +221,13 @@ type Transform = Component<ComponentType.Transform>;
 type DuelManager = Component<ComponentType.DuelManager> & {
 	phase: DuelPhase;
 	turnOf: string;
+};
+
+type Command = Component<ComponentType.Command> & {
+	index: number;
+	commandType: CommandType;
+	from?: CardPlace;
+	to?: CardPlace;
 };
 
 /**
