@@ -71,6 +71,10 @@ const createTroopTemplate = (
 				card.addComponent(componentKey, entity.getComponent(componentKey));
 			},
 		);
+		card.addComponent(
+			ComponentType.CardFightAttribute,
+			card.getComponent(ComponentType.CardAttribute),
+		);
 	});
 };
 
@@ -107,7 +111,11 @@ const generateRandomDeck = (
 			.addComponent(ComponentType.CardPlace, {
 				index: count,
 				place: CardPlace.Deck,
-			});
+			})
+			.addComponent(
+				ComponentType.CardFightAttribute,
+				heroCards[randomIndex].getComponent(ComponentType.CardAttribute),
+			);
 
 		Object.keys(heroCards[randomIndex].components).forEach(
 			(component: keyof ComponentMap) => {
