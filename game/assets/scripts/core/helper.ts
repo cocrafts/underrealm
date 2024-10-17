@@ -48,3 +48,56 @@ export const selectFacingCard = (
 
 	return facingCard;
 };
+
+export const handleCardFight = ([attackCard, defenseCard]: Array<
+	Entity<ComponentMap>
+>) => {
+	const { attack: snapshotAttack } = sumAttribute(attackCard);
+
+	const { defense: snapshotDefense, health: snapshotHealth } =
+		sumAttribute(defenseCard);
+
+	const defenseFightAttribute = defenseCard.getComponent(
+		ComponentType.CardFightAttribute,
+	);
+
+	defenseFightAttribute.health =
+		snapshotHealth - (snapshotAttack - snapshotDefense);
+};
+
+export const sumAttribute = (card: Entity<ComponentMap>) => {
+	return [
+		ComponentType.CardFightAttribute,
+		ComponentType.CardBuffAttribute,
+		ComponentType.CardDebuffAttribute,
+	].reduce(
+		(
+			attribute,
+			key:
+				| ComponentType.CardFightAttribute
+				| ComponentType.CardBuffAttribute
+				| ComponentType.CardDebuffAttribute,
+		) => {
+			attribute.attack += card.getComponent<
+				| ComponentType.CardFightAttribute
+				| ComponentType.CardBuffAttribute
+				| ComponentType.CardDebuffAttribute
+			>(key).attack;
+
+			attribute.defense += card.getComponent<
+				| ComponentType.CardFightAttribute
+				| ComponentType.CardBuffAttribute
+				| ComponentType.CardDebuffAttribute
+			>(key).defense;
+
+			attribute.health += card.getComponent<
+				| ComponentType.CardFightAttribute
+				| ComponentType.CardBuffAttribute
+				| ComponentType.CardDebuffAttribute
+			>(key).health;
+
+			return attribute;
+		},
+		{ attack: 0, defense: 0, health: 0 },
+	);
+};

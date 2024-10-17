@@ -28,6 +28,9 @@ export type ComponentMap = {
 	[ComponentType.CardPlace]: CardPlace;
 	[ComponentType.Variant]: Variant;
 	[ComponentType.Template]: Template;
+	[ComponentType.CardFightAttribute]: CardAttribute;
+	[ComponentType.CardBuffAttribute]: CardAttribute;
+	[ComponentType.CardDebuffAttribute]: CardAttribute;
 
 	[ComponentType.SummonActivation]: SummonActivation;
 	[ComponentType.PassiveActivation]: PassiveActivation;

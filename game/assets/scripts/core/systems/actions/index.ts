@@ -5,6 +5,7 @@ import {
 	ComponentType,
 } from '../../components';
 import type { ECS } from '../../ecs';
+import { handleCardFight } from '../../helper';
 
 const summon = () => {
 	const update = (ecs: ECS) => {
@@ -35,6 +36,27 @@ const summon = () => {
 	return { update };
 };
 
+const fight = () => {
+	const update = (ecs: ECS) => {
+		const [config] = ecs.query(ComponentType.Config).exec();
+		const { groundSize } = config.getComponent(ComponentType.Config);
+		for (let i = 0; i < groundSize; i++) {
+			const [card1, card2] = ecs
+				.query(ComponentType.CardPlace, {
+					place: CardPlace.Ground,
+					index: i,
+				})
+				.exec();
+
+			handleCardFight([card1, card2]);
+			handleCardFight([card2, card1]);
+		}
+	};
+
+	return { update };
+};
+
 export const actions = {
 	summon,
+	fight,
 };
