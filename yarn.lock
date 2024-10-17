@@ -9975,9 +9975,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@underrealm/game@workspace:game"
   dependencies:
+    "@types/jest": "npm:^28.1.1"
     "@types/lodash": "npm:^4.14.191"
     "@underrealm/murg": "npm:*"
     eslint: "npm:^8.57.0"
+    jest: "npm:^28.1.1"
     lodash: "npm:^4.17.21"
   languageName: unknown
   linkType: soft
