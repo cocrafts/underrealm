@@ -52,7 +52,7 @@ export class Card extends Component {
 	public drawToPlayerHand() {
 		const cardsInHand = core
 			.query(LCT.CardPlace, { place: CardPlace.Hand })
-			.and(LCT.CardOwnership, { owner: system.playerId })
+			.and(LCT.Ownership, { owner: system.playerId })
 			.exec();
 		const centerIndex = Math.floor(cardsInHand.length / 2);
 		const card = core.queryById(this.entityId);
@@ -85,7 +85,7 @@ export class Card extends Component {
 	public drawToEnemyHand(): Promise<void> {
 		const cardsInHand = core
 			.query(LCT.CardPlace, { place: CardPlace.Hand })
-			.and(LCT.CardOwnership, { owner: system.enemyId })
+			.and(LCT.Ownership, { owner: system.enemyId })
 			.exec();
 		const centerIndex = Math.floor(cardsInHand.length / 2);
 		const card = core.queryById(this.entityId);

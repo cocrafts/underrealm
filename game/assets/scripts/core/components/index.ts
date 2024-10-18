@@ -14,13 +14,14 @@ export * from './types';
  * Remap type to object for supporting strict type checking
  */
 export type ComponentMap = {
+	[ComponentType.Ownership]: Ownership;
+
 	[ComponentType.PlayerAttribute]: PlayerAttribute;
 
 	[ComponentType.CardMetadata]: Metadata;
 	[ComponentType.CardAttribute]: CardAttribute;
 	[ComponentType.CardClass]: CardClass;
 	[ComponentType.CardChargeable]: CardChargeable;
-	[ComponentType.CardOwnership]: Ownership;
 	[ComponentType.CardPlace]: CardPlace;
 
 	[ComponentType.SummonActivation]: SummonActivation;
@@ -48,6 +49,13 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
+};
+
+/**
+ * Common components
+ */
+type Ownership = Component<ComponentType.Ownership> & {
+	owner: string;
 };
 
 /**
@@ -81,10 +89,6 @@ type CardAttribute = Component<ComponentType.CardAttribute> & {
 type CardPlace = Component<ComponentType.CardPlace> & {
 	index: number;
 	place: CardPlaceType;
-};
-
-type Ownership = Component<ComponentType.CardOwnership> & {
-	owner: string;
 };
 
 type CardChargeable = Component<ComponentType.CardChargeable> & {

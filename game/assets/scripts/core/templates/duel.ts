@@ -5,17 +5,18 @@ export const duelECS = new ECS();
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.CardOwnership, { owner: 'me' })
+	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.PlayerAttribute, { health: 149 });
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.CardOwnership, { owner: 'enemy' })
+	.addComponent(ComponentType.Ownership, { owner: 'enemy' })
+	.addComponent(ComponentType.CardPlace, { place: CardPlace.Deck, index: 0 })
 	.addComponent(ComponentType.PlayerAttribute, { health: 149 });
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.CardOwnership, { owner: 'me' })
+	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Deck, index: 0 })
 	.addComponent(ComponentType.CardMetadata, {
 		name: 'Troop',
@@ -31,7 +32,7 @@ duelECS
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.CardOwnership, { owner: 'me' })
+	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 0 })
 	.addComponent(ComponentType.CardMetadata, {
 		name: 'Troop',
@@ -47,7 +48,7 @@ duelECS
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.CardOwnership, { owner: 'me' })
+	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 1 })
 	.addComponent(ComponentType.CardMetadata, {
 		name: 'Troop',

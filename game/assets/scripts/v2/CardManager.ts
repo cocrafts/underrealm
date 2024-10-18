@@ -61,7 +61,7 @@ export class CardManager extends Component {
 	static queryByCardPlace = (core: ECS<CM>, owner: string) => {
 		return core
 			.query(LCT.CardPlace, { place: CardPlace.Hand })
-			.and(LCT.CardOwnership, { owner: owner })
+			.and(LCT.Ownership, { owner: owner })
 			.exec()
 			.sort(CardManager.sortByCardPlaceIndex);
 	};

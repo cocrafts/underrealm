@@ -35,7 +35,7 @@ core.addSystem({
 			const { healthNode, owner } = player.getComponent(GCT.PlayerController);
 
 			const playerAttribute = ecs
-				.query(LCT.CardOwnership, { owner })
+				.query(LCT.Ownership, { owner })
 				.and(LCT.PlayerAttribute)
 				.exec()
 				.first()

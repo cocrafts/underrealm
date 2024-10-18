@@ -27,7 +27,7 @@ core.addSystem({
 		counters.forEach((counter) => {
 			const { node, owner } = counter.getComponent(GCT.DeckCounter);
 			const cards = ecs
-				.query(LCT.CardOwnership, { owner })
+				.query(LCT.Ownership, { owner })
 				.and(LCT.CardPlace, { place: CardPlace.Deck })
 				.exec();
 
