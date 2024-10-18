@@ -27,7 +27,7 @@ import {
 	DuelPlace,
 	EffectIds,
 } from '@underrealm/murg';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 
 import { createSchema } from './utils';
 
@@ -213,6 +213,7 @@ const GameDuelSchema = createSchema({
 		),
 	}),
 	history: [DuelCommandBundleSchema],
+	winner: { type: Types.ObjectId, ref: 'User' },
 });
 
 export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
