@@ -38,15 +38,17 @@ export class CardManager extends Component {
 			const cardManagerState = entity.getComponent(GCT.CardManagerState);
 			if (cardManagerState.initialized) return;
 
-			const playerCards = CardManager.queryByCardPlace(core, system.playerId);
+			const { playerId, enemyId } = system;
+
+			const playerCards = CardManager.querySortedCardsInHand(core, playerId);
 			for (let i = 0; i < playerCards.length; i++) {
 				const card = playerCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToPlayerHand();
 			}
 
-			const enemyCards = CardManager.queryByCardPlace(core, system.enemyId);
-			for (const i in enemyCards) {
+			const enemyCards = CardManager.querySortedCardsInHand(core, enemyId);
+			for (let i = 0; i < enemyCards.length; i++) {
 				const card = enemyCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToEnemyHand();
@@ -58,10 +60,10 @@ export class CardManager extends Component {
 		return { update };
 	}
 
-	static queryByCardPlace = (core: ECS<CM>, owner: string) => {
+	static querySortedCardsInHand = (core: ECS<CM>, owner: string) => {
 		return core
 			.query(LCT.CardPlace, { place: CardPlace.Hand })
-			.and(LCT.Ownership, { owner: owner })
+			.and(LCT.Ownership, { owner })
 			.exec()
 			.sort(CardManager.sortByCardPlaceIndex);
 	};

@@ -11,13 +11,12 @@ duelECS
 duelECS
 	.createEntity()
 	.addComponent(ComponentType.Ownership, { owner: 'enemy' })
-	.addComponent(ComponentType.CardPlace, { place: CardPlace.Deck, index: 0 })
 	.addComponent(ComponentType.PlayerAttribute, { health: 149 });
 
 duelECS
 	.createEntity()
-	.addComponent(ComponentType.Ownership, { owner: 'me' })
-	.addComponent(ComponentType.CardPlace, { place: CardPlace.Deck, index: 0 })
+	.addComponent(ComponentType.Ownership, { owner: 'enemy' })
+	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 0 })
 	.addComponent(ComponentType.CardMetadata, {
 		name: 'Troop',
 		class: ClassType.Knight,
