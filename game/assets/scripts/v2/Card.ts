@@ -10,7 +10,7 @@ import {
 	warn,
 } from 'cc';
 
-import { CardPlace, core, GCT, LCT, system } from '../game';
+import { CardPlace, core, LCT, system } from '../game';
 import { animateExpoCard } from '../tween';
 import { playEffectSound } from '../util/resources';
 const { ccclass, property } = _decorator;
@@ -38,15 +38,19 @@ export class Card extends Component {
 	onLoad(): void {
 		if (!this.glowNode) {
 			console.error('Glow node not found in this card', this.entityId);
+		} else if (!this.cardNode) {
+			console.error('Card node not found in this card', this.entityId);
 		}
-
-		this.enabled = false;
 	}
 
 	start() {
-		core
-			.queryById(this.entityId)
-			.addComponent(GCT.CardNode, { node: this.node });
+		this.cardNode.on(Node.EventType.MOUSE_ENTER, () => {
+			this.glowOn();
+		});
+
+		this.cardNode.on(Node.EventType.MOUSE_LEAVE, () => {
+			this.glowOff();
+		});
 	}
 
 	public drawToPlayerHand() {
