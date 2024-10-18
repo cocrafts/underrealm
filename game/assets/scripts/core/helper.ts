@@ -1,5 +1,5 @@
 import type { ComponentMap } from './components';
-import { CardPlace, ComponentType } from './components';
+import { ActivationType, CardPlace, ComponentType } from './components';
 import type { ECS, Entity } from './ecs';
 
 export const selectDeck = (ecs: ECS<ComponentMap>, playerId: string) => {
@@ -47,6 +47,30 @@ export const selectFacingCard = (
 	);
 
 	return facingCard;
+};
+
+export const handleCardFightPlayer = (
+	ecs: ECS<ComponentMap>,
+	card: Entity<ComponentMap>,
+) => {
+	const { attack } = sumAttribute(card);
+	const cardOwner = card.getComponent(ComponentType.CardOwnership).owner;
+
+	const players = ecs.query(ComponentType.PlayerAttribute).exec();
+	const [playerEnemy] = players.filter(
+		(player) =>
+			player.getComponent(ComponentType.PlayerAttribute).id !== cardOwner,
+	);
+	playerEnemy.getComponent(ComponentType.PlayerAttribute).health -= attack;
+
+	const checkGlory = Object.keys(card.components).indexOf(
+		ComponentType.GloryActivation,
+	);
+	if (checkGlory === -1) return;
+
+	card.addComponent(ComponentType.SkillActivating, {
+		activationType: ActivationType.Glory,
+	});
 };
 
 export const handleCardFight = ([attackCard, defenseCard]: Array<

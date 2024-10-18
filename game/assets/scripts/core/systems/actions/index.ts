@@ -5,7 +5,7 @@ import {
 	ComponentType,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { handleCardFight } from '../../helper';
+import { handleCardFight, handleCardFightPlayer } from '../../helper';
 
 const summon = () => {
 	const update = (ecs: ECS) => {
@@ -47,6 +47,10 @@ const fight = () => {
 					index: i,
 				})
 				.exec();
+
+			if (!card2) {
+				handleCardFightPlayer(ecs, card1);
+			}
 
 			handleCardFight([card1, card2]);
 			handleCardFight([card2, card1]);
