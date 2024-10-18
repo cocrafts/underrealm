@@ -8,6 +8,7 @@ import {
 } from '../core';
 import type { EventType } from '../core/events';
 import { duel } from '../core/templates';
+import { CardManager } from '../v2/CardManager';
 
 import type { GameComponentMap } from './components';
 
@@ -65,6 +66,8 @@ core
 	.addSystem(skill.multiplyDamageAgainst())
 	.addSystem(skill.doubleAttack())
 	.addSystem(skill.transform())
+
+	.addSystem(CardManager.distributeCardSystem())
 
 	.addSystem(resetAllSkillActivatingSystem());
 
