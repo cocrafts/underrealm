@@ -35,12 +35,18 @@ export class CardsManager extends Component {
 
 		const cards = core.query(LCT.CardAttribute).exec();
 		cards.forEach((card) => {
+			const { owner } = card.getComponent(LCT.Ownership);
 			const cardNode = instantiate(this.cardPrefab);
 			cardNode.setPosition(v3(0, 0, 0));
 			cardNode.getComponent(Card).entityId = card.id;
-			cardNode.getComponent(Card).handNode = this.playerHandNode;
-			cardNode.getComponent(Card).deckNode = this.playerDeckNode;
 			cardNode.getComponent(Card).groundNode = this.groundNode;
+			if (owner === system.playerId) {
+				cardNode.getComponent(Card).handNode = this.playerHandNode;
+				cardNode.getComponent(Card).deckNode = this.playerDeckNode;
+			} else {
+				cardNode.getComponent(Card).handNode = this.enemyHandNode;
+				cardNode.getComponent(Card).deckNode = this.enemyDeckNode;
+			}
 			this.node.addChild(cardNode);
 
 			card.addComponent(GCT.CardNode, { node: cardNode });
@@ -55,13 +61,13 @@ export class CardsManager extends Component {
 			const playerCards = querySortedCards(core, playerId, CardPlace.Hand);
 			for (let i = 0; i < playerCards.length; i++) {
 				const { node } = playerCards[i].getComponent(GCT.CardNode);
-				await node.getComponent(Card).drawToPlayerHand();
+				await node.getComponent(Card).drawExpo();
 			}
 
 			const enemyCards = querySortedCards(core, enemyId, CardPlace.Hand);
 			for (let i = 0; i < enemyCards.length; i++) {
 				const { node } = enemyCards[i].getComponent(GCT.CardNode);
-				await node.getComponent(Card).drawToEnemyHand();
+				await node.getComponent(Card).draw();
 			}
 
 			CardsManager.firstDistribution = false;

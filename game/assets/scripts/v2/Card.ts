@@ -1,7 +1,9 @@
+import type { EventMouse } from 'cc';
 import {
 	_decorator,
 	CCInteger,
 	Component,
+	find,
 	Node,
 	Quat,
 	tween,
@@ -17,8 +19,8 @@ import { playEffectSound } from '../util/resources';
 import { queryCards } from '../util/v2/queries';
 const { ccclass, property } = _decorator;
 
-const FROM_ENEMY_DECK = new Vec3(-425, 232, 0);
-const TO_ENEMY_HAND = new Vec3(0, 360, 0);
+const { MOUSE_ENTER, MOUSE_LEAVE, MOUSE_UP, MOUSE_DOWN, MOUSE_MOVE } =
+	Node.EventType;
 
 @ccclass('Card')
 export class Card extends Component {
@@ -46,25 +48,32 @@ export class Card extends Component {
 	@property({ type: Node, visible: false })
 	public groundNode: Node;
 
-	private allowDrag: boolean;
-
-	private dragging: boolean;
+	private allowDrag: boolean = false;
+	private allowHover: boolean = false;
+	private dragging: boolean = false;
+	private mouseMoveCallback: Function = (e: EventMouse) => this.onMouseMove(e);
+	private mouseUpCallback: Function = () => this.onMouseUp();
 
 	start() {
-		this.cardNode.on(Node.EventType.MOUSE_ENTER, () => this.onMouseEnter());
-		this.cardNode.on(Node.EventType.MOUSE_LEAVE, () => this.onMouseLeave());
-		this.cardNode.on(Node.EventType.MOUSE_UP, () => this.onMouseUp());
-		this.cardNode.on(Node.EventType.MOUSE_DOWN, () => this.onMouseDown());
+		this.cardNode.on(MOUSE_ENTER, () => this.onMouseEnter());
+		this.cardNode.on(MOUSE_LEAVE, () => this.onMouseLeave());
+		this.cardNode.on(MOUSE_DOWN, () => this.onMouseDown());
+		find('Canvas').on(MOUSE_MOVE, this.mouseMoveCallback);
+		find('Canvas').on(MOUSE_UP, this.mouseUpCallback);
 	}
 
 	onDestroy() {
-		this.cardNode.off(Node.EventType.MOUSE_ENTER);
-		this.cardNode.off(Node.EventType.MOUSE_LEAVE);
-		this.cardNode.off(Node.EventType.MOUSE_UP);
-		this.cardNode.off(Node.EventType.MOUSE_DOWN);
+		this.cardNode.off(MOUSE_ENTER);
+		this.cardNode.off(MOUSE_LEAVE);
+		this.cardNode.off(MOUSE_DOWN);
+		this.cardNode.off(MOUSE_UP);
+		find('Canvas').off(MOUSE_MOVE, this.mouseMoveCallback);
+		find('Canvas').off(MOUSE_DOWN, this.mouseUpCallback);
 	}
 
 	private onMouseEnter() {
+		if (!this.allowHover || this.dragging) return;
+
 		const card = core.queryById(this.entityId);
 		const { place } = card.getComponent(LCT.CardPlace);
 		const { owner } = card.getComponent(LCT.Ownership);
@@ -75,19 +84,9 @@ export class Card extends Component {
 		}
 	}
 
-	private showDetailOnHand() {
-		const position = new Vec3(
-			this.cardNode.position.x,
-			this.handNode.position.y + 168,
-			100,
-		);
-		const scale = new Vec3(0.6, 0.6, 1);
-		tween(this.cardNode)
-			.to(0.5, { position, scale }, { easing: 'expoInOut' })
-			.start();
-	}
-
 	private onMouseLeave() {
+		if (!this.allowHover || this.dragging) return;
+
 		const card = core.queryById(this.entityId);
 		const { place } = card.getComponent(LCT.CardPlace);
 		const { owner } = card.getComponent(LCT.Ownership);
@@ -98,28 +97,55 @@ export class Card extends Component {
 		}
 	}
 
-	private hideDetailOnHand() {
-		const { index } = core.queryById(this.entityId).getComponent(LCT.CardPlace);
-		const position = new Vec3(
-			this.cardNode.position.x,
-			this.handNode.position.y,
-			index,
-		);
+	private onMouseDown() {
+		if (!this.allowDrag) return;
+		this.dragging = true;
+	}
+
+	private onMouseUp() {
+		if (!this.allowDrag || !this.dragging) return;
+		this.dragging = false;
+		const position = this.cardPositionInHand();
 		const scale = new Vec3(0.4, 0.4, 1);
 		tween(this.cardNode)
 			.to(0.5, { position, scale }, { easing: 'expoInOut' })
 			.start();
 	}
 
-	private onMouseUp() {}
+	private onMouseMove(e: EventMouse) {
+		if (!this.allowDrag || !this.dragging) return;
+		const { x, y } = e.getDelta();
+		this.cardNode.position = this.cardNode.position.add3f(x, y, 0);
+	}
 
-	private onMouseDown() {}
+	private showDetailOnHand() {
+		const position = this.cardNode.position.clone();
+		position.y = this.handNode.position.y + 168;
+		const scale = new Vec3(0.6, 0.6, 1);
+		tween(this.cardNode)
+			.to(0.5, { position, scale }, { easing: 'expoInOut' })
+			.start();
+	}
 
-	public drawToPlayerHand() {
-		const cardsInHand = queryCards(core, system.playerId, CardPlace.Hand);
-		const { index } = core.queryById(this.entityId).getComponent(LCT.CardPlace);
-		const dest = this.cardPositionOnPlayerHand(index, cardsInHand.length);
+	private hideDetailOnHand() {
+		const position = this.cardNode.position.clone();
+		position.y = this.handNode.position.y;
+		const scale = new Vec3(0.4, 0.4, 1);
+		tween(this.cardNode)
+			.to(0.8, { position, scale }, { easing: 'expoInOut' })
+			.start();
+	}
 
+	/**
+	 * This drawing is only used for player cards, it will enable hover/drag flags after drawing
+	 */
+	public drawExpo() {
+		const { owner } = core.queryById(this.entityId).getComponent(LCT.Ownership);
+		if (owner !== system.playerId) {
+			throw Error("Can not draw expo for non-player's cards");
+		}
+
+		const dest = this.cardPositionInHand();
 		return new Promise<void>((resolve) => {
 			animateExpoCard({
 				node: this.cardNode,
@@ -135,26 +161,23 @@ export class Card extends Component {
 				)
 				.call(() => {
 					playEffectSound('light-fire', 0.3);
+					this.allowHover = true;
+					this.allowDrag = true;
 					resolve();
 				})
 				.start();
 		});
 	}
 
-	public drawToEnemyHand(): Promise<void> {
-		const cardsInHand = queryCards(core, system.enemyId, CardPlace.Hand);
-		const { index } = core.queryById(this.entityId).getComponent(LCT.CardPlace);
-		const delay = index * 0.2;
-		const dest = this.cardPositionOnEnemyHand(index, cardsInHand.length);
-
+	public draw(): Promise<void> {
+		const dest = this.cardPositionInHand();
 		return new Promise<void>((resolve) => {
 			const r1 = Quat.fromEuler(new Quat(), 0, 0, 90);
 			const r2 = Quat.fromEuler(new Quat(), 0, 0, 180);
 			tween(this.cardNode)
-				.delay(delay)
 				.call(() => playEffectSound('card-flip', 0.3))
 				.set({
-					position: FROM_ENEMY_DECK,
+					position: this.deckNode.position,
 					rotation: r1,
 					scale: new Vec3(0.18, 0.18, 1),
 				})
@@ -237,19 +260,18 @@ export class Card extends Component {
 			.start();
 	}
 
-	private cardPositionOnPlayerHand(index: number, total: number): Vec3 {
-		const centerIndex = Math.floor(total / 2);
+	private cardPositionInHand(): Vec3 {
+		const { place, index } = core
+			.queryById(this.entityId)
+			.getComponent(LCT.CardPlace);
+		if (place !== CardPlace.Hand)
+			warn("Card isn't in hand to get in-hand position", this.entityId);
+
+		const cardsInHand = queryCards(core, system.playerId, CardPlace.Hand);
+		const centerIndex = Math.floor(cardsInHand.length / 2);
 		const xPad = (index - centerIndex) * 80;
 		const playerHandPosition = this.handNode.position.clone();
 		const position = playerHandPosition.add3f(xPad, 0, index);
-
-		return position;
-	}
-
-	private cardPositionOnEnemyHand(index: number, total: number): Vec3 {
-		const centerIndex = Math.floor(total / 2);
-		const xPad = (index - centerIndex) * 80;
-		const position = TO_ENEMY_HAND.clone().add3f(xPad, 0, index);
 
 		return position;
 	}
