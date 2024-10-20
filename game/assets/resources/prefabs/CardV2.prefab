@@ -41,10 +41,13 @@
       },
       {
         "__id__": 92
+      },
+      {
+        "__id__": 94
       }
     ],
     "_prefab": {
-      "__id__": 94
+      "__id__": 96
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2130,6 +2133,52 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "2fDsSiUANMgZBth9h+B5dn"
+  },
+  {
+    "__type__": "262627ZmNhJJofOm0SLcpoO",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 95
+    },
+    "entityId": -1,
+    "visualNode": {
+      "__id__": 11
+    },
+    "foilNode": {
+      "__id__": 17
+    },
+    "nameNode": {
+      "__id__": 23
+    },
+    "skillNode": {
+      "__id__": 29
+    },
+    "classNode": {
+      "__id__": 35
+    },
+    "rarity": {
+      "__id__": 41
+    },
+    "healthNode": {
+      "__id__": 53
+    },
+    "defenseNode": {
+      "__id__": 61
+    },
+    "attackNode": {
+      "__id__": 69
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "89veqRvy1JvLduUGJLSYCZ"
   },
   {
     "__type__": "cc.PrefabInfo",
