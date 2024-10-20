@@ -31,22 +31,20 @@ export class Card extends Component {
 	@property({ type: Node, editorOnly: true })
 	private glowNode: Node;
 
-	@property(Node)
+	@property({ type: Node, editorOnly: true })
+	private frontNode: Node;
+
+	@property({ type: Node, editorOnly: true })
+	private backNode: Node;
+
+	@property({ type: Node, visible: false })
 	public handNode: Node;
 
-	@property(Node)
+	@property({ type: Node, visible: false })
 	public deckNode: Node;
 
-	@property(Node)
+	@property({ type: Node, visible: false })
 	public groundNode: Node;
-
-	onLoad(): void {
-		if (!this.glowNode) {
-			console.error('Glow node not found in this card', this.entityId);
-		} else if (!this.cardNode) {
-			console.error('Card node not found in this card', this.entityId);
-		}
-	}
 
 	start() {
 		this.cardNode.on(Node.EventType.MOUSE_ENTER, () => this.onMouseEnter());
