@@ -33,7 +33,12 @@ export class Card extends Component {
 	public glowNode: Node;
 
 	@property(Node)
-	private groundNode: number;
+	// reference to the center of hand position
+	public handNode: Node;
+
+	@property(Node)
+	// reference to the center of ground position
+	public groundNode: Node;
 
 	onLoad(): void {
 		if (!this.glowNode) {

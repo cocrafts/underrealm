@@ -1583,6 +1583,12 @@
       "__uuid__": "6847f06c-a318-460e-bc3a-685c4a8f614d",
       "__expectedType__": "cc.Prefab"
     },
+    "playerHandNode": {
+      "__id__": 97
+    },
+    "enemyHandNode": {
+      "__id__": 99
+    },
     "_id": "07l4Cq9/tEZJvswbsTVWwf"
   },
   {

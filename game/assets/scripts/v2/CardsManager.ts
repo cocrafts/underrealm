@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Prefab, v3 } from 'cc';
+import { _decorator, Component, instantiate, Node, Prefab, v3 } from 'cc';
 
 import type { GameECS } from '../game';
 import { core, GCT, LCT, system } from '../game';
@@ -9,8 +9,20 @@ const { ccclass, property } = _decorator;
 
 @ccclass('CardsManager')
 export class CardsManager extends Component {
-	@property(Prefab)
-	cardPrefab: Prefab;
+	@property({ type: Prefab, editorOnly: true })
+	private cardPrefab: Prefab;
+
+	@property({ type: Node, editorOnly: true })
+	// reference to the center of hand position
+	private playerHandNode: Node;
+
+	@property({ type: Node, editorOnly: true })
+	// reference to the center of hand position
+	private enemyHandNode: Node;
+
+	@property({ type: Node, editorOnly: true })
+	// reference to the center of ground position
+	private groundNode: Node;
 
 	start() {
 		if (!this.cardPrefab)
@@ -21,8 +33,11 @@ export class CardsManager extends Component {
 			const cardNode = instantiate(this.cardPrefab);
 			cardNode.setPosition(v3(0, 0, 0));
 			cardNode.getComponent(Card).entityId = card.id;
-			card.addComponent(GCT.CardNode, { node: cardNode });
+			cardNode.getComponent(Card).handNode = this.playerHandNode;
+			cardNode.getComponent(Card).groundNode = this.groundNode;
 			this.node.addChild(cardNode);
+
+			card.addComponent(GCT.CardNode, { node: cardNode });
 		});
 
 		core
