@@ -54,15 +54,13 @@ export class CardsManager extends Component {
 
 			const playerCards = querySortedCards(core, playerId, CardPlace.Hand);
 			for (let i = 0; i < playerCards.length; i++) {
-				const card = playerCards[i];
-				const { node } = card.getComponent(GCT.CardNode);
+				const { node } = playerCards[i].getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToPlayerHand();
 			}
 
 			const enemyCards = querySortedCards(core, enemyId, CardPlace.Hand);
 			for (let i = 0; i < enemyCards.length; i++) {
-				const card = enemyCards[i];
-				const { node } = card.getComponent(GCT.CardNode);
+				const { node } = enemyCards[i].getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToEnemyHand();
 			}
 
