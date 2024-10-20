@@ -41,13 +41,10 @@
       },
       {
         "__id__": 92
-      },
-      {
-        "__id__": 94
       }
     ],
     "_prefab": {
-      "__id__": 96
+      "__id__": 94
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -647,8 +644,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 130.29610133062215,
-      "height": 50.400000000000006
+      "width": 130.31988525390625,
+      "height": 50.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -686,7 +683,7 @@
     "_string": "Ivar, The Myst",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 27.375,
+    "_actualFontSize": 20,
     "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1352,8 +1349,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55.719994113869866,
-      "height": 58.400000000000006
+      "width": 55.71998596191406,
+      "height": 58.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1391,7 +1388,7 @@
     "_string": "40",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 54.75,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1574,7 +1571,7 @@
     "_string": "0",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 54.75,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1718,8 +1715,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55.719994113869866,
-      "height": 58.400000000000006
+      "width": 55.71998596191406,
+      "height": 58.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1757,7 +1754,7 @@
     "_string": "40",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 54.75,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -2085,24 +2082,6 @@
     "fileId": "deEnx8NklMx5+x+gSYntDz"
   },
   {
-    "__type__": "cae62yZ7hdE5aT7BjgC31RY",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 91
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "39gS6PBvlN+aiMxjaDsZ4K"
-  },
-  {
     "__type__": "cc.UIOpacity",
     "_name": "",
     "_objFlags": 0,
@@ -2112,7 +2091,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 93
+      "__id__": 91
     },
     "_opacity": 255,
     "_id": ""
@@ -2131,7 +2110,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 95
+      "__id__": 93
     },
     "entityId": -1,
     "cardNode": {

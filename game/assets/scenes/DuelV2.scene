@@ -1526,73 +1526,6 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "CardsManager",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "_parent": {
-      "__id__": 7
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 96
-      }
-    ],
-    "_prefab": null,
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_mobility": 0,
-    "_layer": 33554432,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_id": "de3nGsLuBJwJDKlGFufp3G"
-  },
-  {
-    "__type__": "6c96dZzLARAC6jhXiPJFh9f",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 95
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "cardPrefab": {
-      "__uuid__": "6847f06c-a318-460e-bc3a-685c4a8f614d",
-      "__expectedType__": "cc.Prefab"
-    },
-    "playerHandNode": {
-      "__id__": 97
-    },
-    "enemyHandNode": {
-      "__id__": 99
-    },
-    "_id": "07l4Cq9/tEZJvswbsTVWwf"
-  },
-  {
-    "__type__": "cc.Node",
     "_name": "PlayerHand",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1603,7 +1536,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 98
+        "__id__": 96
       }
     ],
     "_prefab": null,
@@ -1642,7 +1575,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 97
+      "__id__": 95
     },
     "_enabled": true,
     "__prefab": null,
@@ -1670,7 +1603,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 100
+        "__id__": 98
       }
     ],
     "_prefab": null,
@@ -1709,7 +1642,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 99
+      "__id__": 97
     },
     "_enabled": true,
     "__prefab": null,
@@ -1724,6 +1657,79 @@
       "y": 0.5
     },
     "_id": "7brx95ak9A56fzBwxsc4qc"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "CardsManager",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 7
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 100
+      }
+    ],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "de3nGsLuBJwJDKlGFufp3G"
+  },
+  {
+    "__type__": "6c96dZzLARAC6jhXiPJFh9f",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 99
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "cardPrefab": {
+      "__uuid__": "6847f06c-a318-460e-bc3a-685c4a8f614d",
+      "__expectedType__": "cc.Prefab"
+    },
+    "playerHandNode": {
+      "__id__": 95
+    },
+    "enemyHandNode": {
+      "__id__": 97
+    },
+    "playerDeckNode": {
+      "__id__": 60
+    },
+    "enemyDeckNode": {
+      "__id__": 74
+    },
+    "_id": "07l4Cq9/tEZJvswbsTVWwf"
   },
   {
     "__type__": "cc.UITransform",

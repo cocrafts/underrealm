@@ -13,15 +13,18 @@ export class CardsManager extends Component {
 	private cardPrefab: Prefab;
 
 	@property({ type: Node, editorOnly: true })
-	// reference to the center of hand position
 	private playerHandNode: Node;
 
 	@property({ type: Node, editorOnly: true })
-	// reference to the center of hand position
 	private enemyHandNode: Node;
 
 	@property({ type: Node, editorOnly: true })
-	// reference to the center of ground position
+	private playerDeckNode: Node;
+
+	@property({ type: Node, editorOnly: true })
+	private enemyDeckNode: Node;
+
+	@property({ type: Node, editorOnly: true })
 	private groundNode: Node;
 
 	start() {
@@ -34,6 +37,7 @@ export class CardsManager extends Component {
 			cardNode.setPosition(v3(0, 0, 0));
 			cardNode.getComponent(Card).entityId = card.id;
 			cardNode.getComponent(Card).handNode = this.playerHandNode;
+			cardNode.getComponent(Card).deckNode = this.playerDeckNode;
 			cardNode.getComponent(Card).groundNode = this.groundNode;
 			this.node.addChild(cardNode);
 
