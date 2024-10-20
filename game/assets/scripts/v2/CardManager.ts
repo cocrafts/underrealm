@@ -1,8 +1,8 @@
 import { _decorator, Component, instantiate, Prefab, v3 } from 'cc';
 
-import type { CM, ECS, GameECS } from '../game';
-import type { Entity } from '../game';
-import { CardPlace, core, GCT, LCT, system } from '../game';
+import type { GameECS } from '../game';
+import { core, GCT, LCT, system } from '../game';
+import { querySortedCardsInHand } from '../util/v2/queries';
 
 import { Card } from './Card';
 const { ccclass, property } = _decorator;
@@ -40,14 +40,14 @@ export class CardManager extends Component {
 
 			const { playerId, enemyId } = system;
 
-			const playerCards = CardManager.querySortedCardsInHand(core, playerId);
+			const playerCards = querySortedCardsInHand(core, playerId);
 			for (let i = 0; i < playerCards.length; i++) {
 				const card = playerCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToPlayerHand();
 			}
 
-			const enemyCards = CardManager.querySortedCardsInHand(core, enemyId);
+			const enemyCards = querySortedCardsInHand(core, enemyId);
 			for (let i = 0; i < enemyCards.length; i++) {
 				const card = enemyCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
@@ -59,19 +59,4 @@ export class CardManager extends Component {
 
 		return { update };
 	}
-
-	static querySortedCardsInHand = (core: ECS<CM>, owner: string) => {
-		return core
-			.query(LCT.CardPlace, { place: CardPlace.Hand })
-			.and(LCT.Ownership, { owner })
-			.exec()
-			.sort(CardManager.sortByCardPlaceIndex);
-	};
-
-	static sortByCardPlaceIndex = (card1: Entity<CM>, card2: Entity<CM>) => {
-		const { index: i1 } = card1.getComponent(LCT.CardPlace);
-		const { index: i2 } = card2.getComponent(LCT.CardPlace);
-
-		return i1 > i2 ? 1 : 0;
-	};
 }
