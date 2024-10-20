@@ -8,11 +8,11 @@ const { ccclass, property } = _decorator;
 
 @ccclass('DeckCounter')
 export class DeckCounter extends Component {
-	@property({ type: Enum(Owner) })
+	@property({ type: Enum(Owner), editorOnly: true })
 	private owner: number;
 
-	@property(Node)
-	private counterNode: Node;
+	@property({ type: Node, editorOnly: true })
+	private countNode: Node;
 
 	start() {
 		const { playerId, enemyId } = system;
@@ -22,14 +22,18 @@ export class DeckCounter extends Component {
 			.addComponent(GCT.DeckCounter, { node: this.node, owner });
 	}
 
+	updateCount(count: number) {
+		this.countNode.getComponent(Label).string = count.toString();
+	}
+
 	static updateDeckCountersSystem() {
 		const update = (core: GameECS) => {
 			const counters = core.query(GCT.DeckCounter).exec();
 			counters.forEach((counter) => {
 				const { node, owner } = counter.getComponent(GCT.DeckCounter);
 				const cardsInDeck = queryCards(core, owner, CardPlace.Deck);
-				const counterNode = node.getComponent(DeckCounter).counterNode;
-				counterNode.getComponent(Label).string = cardsInDeck.length.toString();
+				const deckCounter = node.getComponent(DeckCounter);
+				deckCounter.updateCount(cardsInDeck.length);
 			});
 		};
 

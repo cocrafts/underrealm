@@ -75,4 +75,4 @@ core
 
 setTimeout(() => {
 	core.update();
-}, 1000);
+}, 10000);

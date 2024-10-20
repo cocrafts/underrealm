@@ -1,9 +1,10 @@
 import { _decorator, Component, instantiate, Node, Prefab, v3 } from 'cc';
 
 import { CardPlace, core, GCT, LCT, system } from '../game';
-import { querySortedCards } from '../util/v2/queries';
+import { queryCards, querySortedCards } from '../util/v2/queries';
 
 import { Card } from './Card';
+import { DeckCounter } from './DeckCounter';
 const { ccclass, property } = _decorator;
 
 @ccclass('CardsManager')
@@ -66,16 +67,34 @@ export class CardsManager extends Component {
 	private async distributeCards() {
 		const { playerId, enemyId } = system;
 
-		const playerCards = querySortedCards(core, playerId, CardPlace.Hand);
-		for (let i = 0; i < playerCards.length; i++) {
-			const { node } = playerCards[i].getComponent(GCT.CardNode);
+		// adding in-hand cards to player's deck for initial distribution
+		const playerCardsInDeck = queryCards(core, playerId, CardPlace.Deck);
+		const playerCardsInHand = querySortedCards(core, playerId, CardPlace.Hand);
+		const playerDeckCounter = this.playerDeckNode
+			.getChildByPath('DeckCounter')
+			.getComponent(DeckCounter);
+		let playerCardCount = playerCardsInDeck.length + playerCardsInHand.length;
+		playerDeckCounter.updateCount(playerCardCount);
+
+		// adding in-hand cards to enemy's deck for initial distribution
+		const enemyCardsInDeck = queryCards(core, enemyId, CardPlace.Deck);
+		const enemyCardsInHand = querySortedCards(core, enemyId, CardPlace.Hand);
+		const enemyDeckCounter = this.enemyDeckNode
+			.getChildByPath('DeckCounter')
+			.getComponent(DeckCounter);
+		let enemyCardCount = enemyCardsInDeck.length + enemyCardsInHand.length;
+		enemyDeckCounter.updateCount(enemyCardCount);
+
+		for (let i = 0; i < playerCardsInHand.length; i++) {
+			const { node } = playerCardsInHand[i].getComponent(GCT.CardNode);
 			await node.getComponent(Card).drawExpo();
+			playerDeckCounter.updateCount(--playerCardCount);
 		}
 
-		const enemyCards = querySortedCards(core, enemyId, CardPlace.Hand);
-		for (let i = 0; i < enemyCards.length; i++) {
-			const { node } = enemyCards[i].getComponent(GCT.CardNode);
+		for (let i = 0; i < enemyCardsInHand.length; i++) {
+			const { node } = enemyCardsInHand[i].getComponent(GCT.CardNode);
 			await node.getComponent(Card).draw();
+			enemyDeckCounter.updateCount(--enemyCardCount);
 		}
 	}
 }
