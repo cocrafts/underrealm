@@ -7,8 +7,8 @@ import { querySortedCardsInHand } from '../util/v2/queries';
 import { Card } from './Card';
 const { ccclass, property } = _decorator;
 
-@ccclass('CardManager')
-export class CardManager extends Component {
+@ccclass('CardsManager')
+export class CardsManager extends Component {
 	@property(Prefab)
 	cardPrefab: Prefab;
 
@@ -30,7 +30,7 @@ export class CardManager extends Component {
 			.addComponent(GCT.CardManagerState, { initialized: false });
 	}
 
-	static distributeCardSystem() {
+	static distributeCardsSystem() {
 		const update = async (ecs: GameECS) => {
 			const entity = ecs.query(GCT.CardManagerState).exec().first();
 			if (!entity) return;
