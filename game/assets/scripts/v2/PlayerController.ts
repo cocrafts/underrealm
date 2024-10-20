@@ -1,9 +1,10 @@
 import { _decorator, Component, Enum, Label, Node } from 'cc';
 
 import type { GameECS } from '../game';
-import { GCT, LCT, system } from '../game';
+import { GCT, system } from '../game';
 import { core } from '../game';
 import { Owner } from '../util/v2/manager';
+import { queryPlayerAttribute } from '../util/v2/queries';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerController')
@@ -21,28 +22,19 @@ export class PlayerController extends Component {
 		const { playerId, enemyId } = system;
 		const owner = this.owner === Owner.Player ? playerId : enemyId;
 
-		core.createEntity().addComponent(GCT.PlayerController, {
-			healthNode: this.healthNode,
-			healthPredictNode: this.healthPredictNode,
-			owner,
-		});
+		core
+			.createEntity()
+			.addComponent(GCT.PlayerController, { node: this.node, owner });
 	}
 
 	static updatePlayersAttributeSystem() {
-		const update = (ecs: GameECS) => {
-			const players = ecs.query(GCT.PlayerController).exec();
+		const update = (core: GameECS) => {
+			const players = core.query(GCT.PlayerController).exec();
 			players.forEach((player) => {
-				const { healthNode, owner } = player.getComponent(GCT.PlayerController);
-
-				const playerAttribute = ecs
-					.query(LCT.Ownership, { owner })
-					.and(LCT.PlayerAttribute)
-					.exec()
-					.first()
-					.getComponent(LCT.PlayerAttribute);
-
-				healthNode.getComponent(Label).string =
-					playerAttribute.health.toString();
+				const { node, owner } = player.getComponent(GCT.PlayerController);
+				const { health } = queryPlayerAttribute(core, owner);
+				const healthNode = node.getComponent(PlayerController).healthNode;
+				healthNode.getComponent(Label).string = health.toString();
 			});
 		};
 

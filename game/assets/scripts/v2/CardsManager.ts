@@ -1,14 +1,16 @@
 import { _decorator, Component, instantiate, Node, Prefab, v3 } from 'cc';
 
 import type { GameECS } from '../game';
-import { core, GCT, LCT, system } from '../game';
-import { querySortedCardsInHand } from '../util/v2/queries';
+import { CardPlace, core, GCT, LCT, system } from '../game';
+import { querySortedCards } from '../util/v2/queries';
 
 import { Card } from './Card';
 const { ccclass, property } = _decorator;
 
 @ccclass('CardsManager')
 export class CardsManager extends Component {
+	private static firstDistribution: boolean = true;
+
 	@property({ type: Prefab, editorOnly: true })
 	private cardPrefab: Prefab;
 
@@ -43,37 +45,28 @@ export class CardsManager extends Component {
 
 			card.addComponent(GCT.CardNode, { node: cardNode });
 		});
-
-		core
-			.createEntity()
-			.addComponent(GCT.CardManagerState, { initialized: false });
 	}
 
 	static distributeCardsSystem() {
-		const update = async (ecs: GameECS) => {
-			const entity = ecs.query(GCT.CardManagerState).exec().first();
-			if (!entity) return;
-
-			const cardManagerState = entity.getComponent(GCT.CardManagerState);
-			if (cardManagerState.initialized) return;
-
+		const update = async (core: GameECS) => {
+			if (!CardsManager.firstDistribution) return;
 			const { playerId, enemyId } = system;
 
-			const playerCards = querySortedCardsInHand(core, playerId);
+			const playerCards = querySortedCards(core, playerId, CardPlace.Hand);
 			for (let i = 0; i < playerCards.length; i++) {
 				const card = playerCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToPlayerHand();
 			}
 
-			const enemyCards = querySortedCardsInHand(core, enemyId);
+			const enemyCards = querySortedCards(core, enemyId, CardPlace.Hand);
 			for (let i = 0; i < enemyCards.length; i++) {
 				const card = enemyCards[i];
 				const { node } = card.getComponent(GCT.CardNode);
 				await node.getComponent(Card).drawToEnemyHand();
 			}
 
-			cardManagerState.initialized = true;
+			CardsManager.firstDistribution = false;
 		};
 
 		return { update };

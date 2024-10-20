@@ -14,7 +14,7 @@ import { CardPlace, core, LCT, system } from '../game';
 import { animateExpoCard } from '../tween';
 import { setCursor } from '../util/helper';
 import { playEffectSound } from '../util/resources';
-import { queryCardsInHand } from '../util/v2/queries';
+import { queryCards } from '../util/v2/queries';
 const { ccclass, property } = _decorator;
 
 const FROM_ENEMY_DECK = new Vec3(-425, 232, 0);
@@ -45,6 +45,10 @@ export class Card extends Component {
 
 	@property({ type: Node, visible: false })
 	public groundNode: Node;
+
+	private allowDrag: boolean;
+
+	private dragging: boolean;
 
 	start() {
 		this.cardNode.on(Node.EventType.MOUSE_ENTER, () => this.onMouseEnter());
@@ -112,7 +116,7 @@ export class Card extends Component {
 	private onMouseDown() {}
 
 	public drawToPlayerHand() {
-		const cardsInHand = queryCardsInHand(core, system.playerId);
+		const cardsInHand = queryCards(core, system.playerId, CardPlace.Hand);
 		const { index } = core.queryById(this.entityId).getComponent(LCT.CardPlace);
 		const dest = this.cardPositionOnPlayerHand(index, cardsInHand.length);
 
@@ -138,7 +142,7 @@ export class Card extends Component {
 	}
 
 	public drawToEnemyHand(): Promise<void> {
-		const cardsInHand = queryCardsInHand(core, system.enemyId);
+		const cardsInHand = queryCards(core, system.enemyId, CardPlace.Hand);
 		const { index } = core.queryById(this.entityId).getComponent(LCT.CardPlace);
 		const delay = index * 0.2;
 		const dest = this.cardPositionOnEnemyHand(index, cardsInHand.length);

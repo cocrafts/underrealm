@@ -1,15 +1,30 @@
-import type { CM, Entity, GameECS } from '../../game';
-import { CardPlace, LCT } from '../../game';
+import type { CardPlace, CM, Entity, GameECS } from '../../game';
+import { LCT } from '../../game';
 
-export const queryCardsInHand = (core: GameECS, owner: string) => {
+export const queryPlayerAttribute = (core: GameECS, owner: string) => {
+	const playerAttribute = core
+		.query(LCT.Ownership, { owner })
+		.and(LCT.PlayerAttribute)
+		.exec()
+		.first()
+		.getComponent(LCT.PlayerAttribute);
+
+	return playerAttribute;
+};
+
+export const queryCards = (core: GameECS, owner: string, place: CardPlace) => {
 	return core
-		.query(LCT.CardPlace, { place: CardPlace.Hand })
+		.query(LCT.CardPlace, { place })
 		.and(LCT.Ownership, { owner })
 		.exec();
 };
 
-export const querySortedCardsInHand = (core: GameECS, owner: string) => {
-	return queryCardsInHand(core, owner).sort(sortByCardPlaceIndex);
+export const querySortedCards = (
+	core: GameECS,
+	owner: string,
+	place: CardPlace,
+) => {
+	return queryCards(core, owner, place).sort(sortByCardPlaceIndex);
 };
 
 export const sortByCardPlaceIndex = (card1: Entity<CM>, card2: Entity<CM>) => {

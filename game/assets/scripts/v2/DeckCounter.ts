@@ -1,8 +1,9 @@
 import { _decorator, Component, Enum, Label, Node } from 'cc';
 
 import type { GameECS } from '../game';
-import { CardPlace, core, GCT, LCT, system } from '../game';
+import { CardPlace, core, GCT, system } from '../game';
 import { Owner } from '../util/v2/manager';
+import { queryCards } from '../util/v2/queries';
 const { ccclass, property } = _decorator;
 
 @ccclass('DeckCounter')
@@ -16,22 +17,19 @@ export class DeckCounter extends Component {
 	start() {
 		const { playerId, enemyId } = system;
 		const owner = this.owner === Owner.Player ? playerId : enemyId;
-		const node = this.counterNode;
-
-		core.createEntity().addComponent(GCT.DeckCounter, { node, owner });
+		core
+			.createEntity()
+			.addComponent(GCT.DeckCounter, { node: this.node, owner });
 	}
 
 	static updateDeckCountersSystem() {
-		const update = (ecs: GameECS) => {
-			const counters = ecs.query(GCT.DeckCounter).exec();
+		const update = (core: GameECS) => {
+			const counters = core.query(GCT.DeckCounter).exec();
 			counters.forEach((counter) => {
 				const { node, owner } = counter.getComponent(GCT.DeckCounter);
-				const cards = ecs
-					.query(LCT.Ownership, { owner })
-					.and(LCT.CardPlace, { place: CardPlace.Deck })
-					.exec();
-
-				node.getComponent(Label).string = cards.length.toString();
+				const cardsInDeck = queryCards(core, owner, CardPlace.Deck);
+				const counterNode = node.getComponent(DeckCounter).counterNode;
+				counterNode.getComponent(Label).string = cardsInDeck.length.toString();
 			});
 		};
 
