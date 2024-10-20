@@ -70,18 +70,14 @@ export class CardsManager extends Component {
 		// adding in-hand cards to player's deck for initial distribution
 		const playerCardsInDeck = queryCards(core, playerId, CardPlace.Deck);
 		const playerCardsInHand = querySortedCards(core, playerId, CardPlace.Hand);
-		const playerDeckCounter = this.playerDeckNode
-			.getChildByPath('DeckCounter')
-			.getComponent(DeckCounter);
+		const playerDeckCounter = this.playerDeckNode.getComponent(DeckCounter);
 		let playerCardCount = playerCardsInDeck.length + playerCardsInHand.length;
 		playerDeckCounter.updateCount(playerCardCount);
 
 		// adding in-hand cards to enemy's deck for initial distribution
 		const enemyCardsInDeck = queryCards(core, enemyId, CardPlace.Deck);
 		const enemyCardsInHand = querySortedCards(core, enemyId, CardPlace.Hand);
-		const enemyDeckCounter = this.enemyDeckNode
-			.getChildByPath('DeckCounter')
-			.getComponent(DeckCounter);
+		const enemyDeckCounter = this.enemyDeckNode.getComponent(DeckCounter);
 		let enemyCardCount = enemyCardsInDeck.length + enemyCardsInHand.length;
 		enemyDeckCounter.updateCount(enemyCardCount);
 
