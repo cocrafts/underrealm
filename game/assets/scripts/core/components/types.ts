@@ -2,7 +2,7 @@ export enum ComponentType {
 	/**
 	 * Common components
 	 */
-	Ownership = 'CardOwnership',
+	Ownership = 'Ownership',
 
 	/**
 	 * Player components
