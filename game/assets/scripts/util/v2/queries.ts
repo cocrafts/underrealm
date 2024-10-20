@@ -1,6 +1,14 @@
 import type { CardPlace, CM, Entity, GameECS } from '../../game';
 import { LCT } from '../../game';
 
+export const queryPlaceOwnerById = (core: GameECS, id: number) => {
+	const entity = core.queryById(id);
+	return {
+		...entity.getComponent(LCT.CardPlace),
+		...entity.getComponent(LCT.Ownership),
+	};
+};
+
 export const queryPlayerAttribute = (core: GameECS, owner: string) => {
 	const playerAttribute = core
 		.query(LCT.Ownership, { owner })

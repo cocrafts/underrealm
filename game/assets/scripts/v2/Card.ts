@@ -5,10 +5,8 @@ import {
 	Component,
 	find,
 	Node,
-	Quat,
 	tween,
 	UIOpacity,
-	Vec3,
 	warn,
 } from 'cc';
 
@@ -21,8 +19,7 @@ import {
 	revealCard,
 } from '../tween/v2/card';
 import { setCursor } from '../util/helper';
-import { playEffectSound } from '../util/resources';
-import { queryCards } from '../util/v2/queries';
+import { queryCards, queryPlaceOwnerById } from '../util/v2/queries';
 const { ccclass, property } = _decorator;
 
 const { MOUSE_ENTER, MOUSE_LEAVE, MOUSE_UP, MOUSE_DOWN, MOUSE_MOVE } =
@@ -79,11 +76,7 @@ export class Card extends Component {
 
 	private onMouseEnter() {
 		if (!this.allowHover || this.dragging) return;
-
-		const card = core.queryById(this.entityId);
-		const { place } = card.getComponent(LCT.CardPlace);
-		const { owner } = card.getComponent(LCT.Ownership);
-
+		const { place, owner } = queryPlaceOwnerById(core, this.entityId);
 		if (place === CardPlace.Hand && owner === system.playerId) {
 			setCursor('grab');
 			this.showDetailInHand();
@@ -92,11 +85,7 @@ export class Card extends Component {
 
 	private onMouseLeave() {
 		if (!this.allowHover || this.dragging) return;
-
-		const card = core.queryById(this.entityId);
-		const { place } = card.getComponent(LCT.CardPlace);
-		const { owner } = card.getComponent(LCT.Ownership);
-
+		const { place, owner } = queryPlaceOwnerById(core, this.entityId);
 		if (place === CardPlace.Hand && owner === system.playerId) {
 			setCursor('auto');
 			this.hideDetailInHand();
@@ -147,13 +136,13 @@ export class Card extends Component {
 	 */
 	public async drawExpo() {
 		await drawExpoCard({
-				node: this.cardNode,
-				from: this.deckNode.position,
+			node: this.cardNode,
+			from: this.deckNode.position,
 			dest: this.cardPositionInHand(),
 		});
 
-					this.allowHover = true;
-					this.allowDrag = true;
+		this.allowHover = true;
+		this.allowDrag = true;
 	}
 
 	public async draw() {
@@ -190,9 +179,7 @@ export class Card extends Component {
 	}
 
 	private cardPositionInHand(): Vec3 {
-		const { place, index } = core
-			.queryById(this.entityId)
-			.getComponent(LCT.CardPlace);
+		const { place, index } = queryPlaceOwnerById(core, this.entityId);
 		if (place !== CardPlace.Hand)
 			warn("Card isn't in hand to get in-hand position", this.entityId);
 
