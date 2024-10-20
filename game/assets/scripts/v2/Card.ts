@@ -1,4 +1,4 @@
-import type { EventMouse } from 'cc';
+import type { EventMouse, Vec3 } from 'cc';
 import {
 	_decorator,
 	CCInteger,
@@ -13,7 +13,13 @@ import {
 } from 'cc';
 
 import { CardPlace, core, LCT, system } from '../game';
-import { animateExpoCard } from '../tween';
+import {
+	defaultCardScale,
+	detailedCardScale,
+	drawCard,
+	drawExpoCard,
+	revealCard,
+} from '../tween/v2/card';
 import { setCursor } from '../util/helper';
 import { playEffectSound } from '../util/resources';
 import { queryCards } from '../util/v2/queries';
@@ -80,7 +86,7 @@ export class Card extends Component {
 
 		if (place === CardPlace.Hand && owner === system.playerId) {
 			setCursor('grab');
-			this.showDetailOnHand();
+			this.showDetailInHand();
 		}
 	}
 
@@ -93,7 +99,7 @@ export class Card extends Component {
 
 		if (place === CardPlace.Hand && owner === system.playerId) {
 			setCursor('auto');
-			this.hideDetailOnHand();
+			this.hideDetailInHand();
 		}
 	}
 
@@ -106,7 +112,7 @@ export class Card extends Component {
 		if (!this.allowDrag || !this.dragging) return;
 		this.dragging = false;
 		const position = this.cardPositionInHand();
-		const scale = new Vec3(0.4, 0.4, 1);
+		const scale = defaultCardScale;
 		tween(this.cardNode)
 			.to(0.5, { position, scale }, { easing: 'expoInOut' })
 			.start();
@@ -118,19 +124,19 @@ export class Card extends Component {
 		this.cardNode.position = this.cardNode.position.add3f(x, y, 0);
 	}
 
-	private showDetailOnHand() {
+	private showDetailInHand() {
 		const position = this.cardNode.position.clone();
 		position.y = this.handNode.position.y + 168;
-		const scale = new Vec3(0.6, 0.6, 1);
+		const scale = detailedCardScale;
 		tween(this.cardNode)
 			.to(0.5, { position, scale }, { easing: 'expoInOut' })
 			.start();
 	}
 
-	private hideDetailOnHand() {
+	private hideDetailInHand() {
 		const position = this.cardNode.position.clone();
 		position.y = this.handNode.position.y;
-		const scale = new Vec3(0.4, 0.4, 1);
+		const scale = defaultCardScale;
 		tween(this.cardNode)
 			.to(0.8, { position, scale }, { easing: 'expoInOut' })
 			.start();
@@ -139,110 +145,33 @@ export class Card extends Component {
 	/**
 	 * This drawing is only used for player cards, it will enable hover/drag flags after drawing
 	 */
-	public drawExpo() {
-		const { owner } = core.queryById(this.entityId).getComponent(LCT.Ownership);
-		if (owner !== system.playerId) {
-			throw Error("Can not draw expo for non-player's cards");
-		}
-
-		const dest = this.cardPositionInHand();
-		return new Promise<void>((resolve) => {
-			animateExpoCard({
+	public async drawExpo() {
+		await drawExpoCard({
 				node: this.cardNode,
 				from: this.deckNode.position,
-				dest: this.deckNode.position.clone().add3f(0, 240, 0),
-				delay: 0,
-				speed: 1,
-			})
-				.to(
-					0.8,
-					{ position: dest, scale: new Vec3(0.4, 0.4, 1) },
-					{ easing: 'expoOut' },
-				)
-				.call(() => {
-					playEffectSound('light-fire', 0.3);
+			dest: this.cardPositionInHand(),
+		});
+
 					this.allowHover = true;
 					this.allowDrag = true;
-					resolve();
-				})
-				.start();
+	}
+
+	public async draw() {
+		await drawCard({
+			node: this.cardNode,
+			from: this.deckNode.position,
+			dest: this.cardPositionInHand(),
 		});
 	}
 
-	public draw(): Promise<void> {
-		const dest = this.cardPositionInHand();
-		return new Promise<void>((resolve) => {
-			const r1 = Quat.fromEuler(new Quat(), 0, 0, 90);
-			const r2 = Quat.fromEuler(new Quat(), 0, 0, 180);
-			tween(this.cardNode)
-				.call(() => playEffectSound('card-flip', 0.3))
-				.set({
-					position: this.deckNode.position,
-					rotation: r1,
-					scale: new Vec3(0.18, 0.18, 1),
-				})
-				.to(
-					1,
-					{ position: dest, rotation: r2, scale: new Vec3(0.28, 0.28, 1) },
-					{ easing: 'expoInOut' },
-				)
-				.call(() => resolve())
-				.start();
-		});
-	}
-
-	public reveal(): Promise<void> {
+	public async reveal() {
 		const card = core.queryById(this.entityId);
 		if (card.getComponent(LCT.CardPlace).place !== CardPlace.Ground) {
 			warn('Card is not on ground for revealing', this.entityId);
 			return;
 		}
 
-		return new Promise((resolve) => {
-			let flipped = false;
-			const distance = 50;
-
-			const translate = tween(this.cardNode)
-				.by(0.25, { position: new Vec3(0, distance, 0) }, { easing: 'backOut' })
-				.by(
-					0.75,
-					{ position: new Vec3(0, -distance, 0) },
-					{ easing: 'expoOut' },
-				);
-
-			const scale = tween(this.cardNode)
-				.to(0.25, { scale: new Vec3(0.25, 0.25, 1) })
-				.to(0.75, { scale: new Vec3(0.24, 0.24, 1) }, { easing: 'backOut' });
-
-			const r1 = Quat.fromEuler(new Quat(), 180, 0, 0);
-			const r2 = Quat.fromEuler(new Quat(), 0, 0, 0);
-			const rotate = tween(this.cardNode)
-				.set({ rotation: r1 })
-				.to(
-					1,
-					{ rotation: r2 },
-					{
-						easing: 'expoOut',
-						onUpdate: (node: Node) => {
-							if (flipped) return;
-							const angle = new Vec3(0, 0, 0);
-							node.rotation.getEulerAngles(angle);
-
-							if (angle.x < 90) {
-								node.getChildByPath('back').active = false;
-								flipped = true;
-							}
-						},
-					},
-				)
-				.call(resolve)
-				.start();
-
-			tween(this.cardNode)
-				.parallel(translate, scale, rotate)
-				.call(resolve)
-				.start();
-		});
+		await revealCard({ node: this.cardNode });
 	}
 
 	public glowOn() {
