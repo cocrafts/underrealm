@@ -1,5 +1,6 @@
 import { _decorator, Component, Enum, Label, Node } from 'cc';
 
+import type { GameECS } from '../game';
 import { GCT, LCT, system } from '../game';
 import { core } from '../game';
 import { Owner } from '../util/v2/manager';
@@ -26,22 +27,25 @@ export class PlayerController extends Component {
 			owner,
 		});
 	}
+
+	static updatePlayersAttributeSystem() {
+		const update = (ecs: GameECS) => {
+			const players = ecs.query(GCT.PlayerController).exec();
+			players.forEach((player) => {
+				const { healthNode, owner } = player.getComponent(GCT.PlayerController);
+
+				const playerAttribute = ecs
+					.query(LCT.Ownership, { owner })
+					.and(LCT.PlayerAttribute)
+					.exec()
+					.first()
+					.getComponent(LCT.PlayerAttribute);
+
+				healthNode.getComponent(Label).string =
+					playerAttribute.health.toString();
+			});
+		};
+
+		return { update };
+	}
 }
-
-core.addSystem({
-	update(ecs) {
-		const players = ecs.query(GCT.PlayerController).exec();
-		players.forEach((player) => {
-			const { healthNode, owner } = player.getComponent(GCT.PlayerController);
-
-			const playerAttribute = ecs
-				.query(LCT.Ownership, { owner })
-				.and(LCT.PlayerAttribute)
-				.exec()
-				.first()
-				.getComponent(LCT.PlayerAttribute);
-
-			healthNode.getComponent(Label).string = playerAttribute.health.toString();
-		});
-	},
-});

@@ -9,6 +9,8 @@ import {
 import type { EventType } from '../core/events';
 import { duel } from '../core/templates';
 import { CardsManager } from '../v2/CardsManager';
+import { DeckCounter } from '../v2/DeckCounter';
+import { PlayerController } from '../v2/PlayerController';
 
 import type { GameComponentMap } from './components';
 
@@ -67,6 +69,8 @@ core
 	.addSystem(skill.doubleAttack())
 	.addSystem(skill.transform())
 
+	.addSystem(DeckCounter.updateDeckCountersSystem())
+	.addSystem(PlayerController.updatePlayersAttributeSystem())
 	.addSystem(CardsManager.distributeCardsSystem())
 
 	.addSystem(resetAllSkillActivatingSystem());
