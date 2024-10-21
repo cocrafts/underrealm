@@ -20,7 +20,7 @@ ecs
 		kind: CardType.Troop,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
@@ -35,7 +35,7 @@ ecs
 		class: ClassType.Beast,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 20,
@@ -50,7 +50,7 @@ ecs
 		class: ClassType.Beast,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 10,
 		defense: 0,
 		health: 20,
@@ -69,7 +69,7 @@ ecs
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 30,
@@ -89,7 +89,7 @@ ecs
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 40,
 		defense: 0,
 		health: 30,
@@ -106,7 +106,7 @@ ecs
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 40,
 		defense: 0,
 		health: 30,
@@ -127,7 +127,7 @@ ecs
 		class: ClassType.Assassin,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 60,
 		defense: 0,
 		health: 20,
@@ -144,7 +144,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -161,7 +161,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 20,
 		defense: 5,
 		health: 35,
@@ -181,7 +181,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -211,7 +211,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 0,
 		defense: 0,
 		health: 60,
@@ -228,7 +228,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 15,
 		defense: 0,
 		health: 50,
@@ -252,7 +252,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
@@ -272,7 +272,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -296,7 +296,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -320,7 +320,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 25,
 		defense: 5,
 		health: 50,
@@ -337,7 +337,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 50,
@@ -359,7 +359,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -379,7 +379,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 25,
 		defense: 0,
 		health: 50,
@@ -396,7 +396,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 5,
 		health: 55,
@@ -411,7 +411,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 35,
 		defense: 0,
 		health: 35,
@@ -436,7 +436,7 @@ ecs
 		class: ClassType.Knight,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 30,
 		defense: 0,
 		health: 40,
@@ -460,7 +460,7 @@ ecs
 		class: ClassType.Tanker,
 		rarity: 0,
 	})
-	.addComponent(ComponentType.CardAttribute, {
+	.addComponent(ComponentType.CardOriginalAttribute, {
 		attack: 15,
 		defense: 5,
 		health: 50,

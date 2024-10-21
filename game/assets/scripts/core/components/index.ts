@@ -21,6 +21,7 @@ export type ComponentMap = {
 	[ComponentType.PlayerAttribute]: PlayerAttribute;
 
 	[ComponentType.CardMetadata]: Metadata;
+	[ComponentType.CardOriginalAttribute]: CardAttribute;
 	[ComponentType.CardAttribute]: CardAttribute;
 	[ComponentType.CardClass]: CardClass;
 	[ComponentType.CardChargeable]: CardChargeable;
@@ -28,9 +29,6 @@ export type ComponentMap = {
 	[ComponentType.CardPlace]: CardPlace;
 	[ComponentType.Variant]: Variant;
 	[ComponentType.Template]: Template;
-	[ComponentType.CardFightAttribute]: CardAttribute;
-	[ComponentType.CardBuffAttribute]: CardAttribute;
-	[ComponentType.CardDebuffAttribute]: CardAttribute;
 
 	[ComponentType.SummonActivation]: SummonActivation;
 	[ComponentType.PassiveActivation]: PassiveActivation;

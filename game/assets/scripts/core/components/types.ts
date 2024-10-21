@@ -15,9 +15,7 @@ export enum ComponentType {
 	CardOwnership = 'CardOwnership',
 	CardChargeable = 'CardChargeable',
 	CardPlace = 'CardPlace',
-	CardFightAttribute = 'CardFightAttribute',
-	CardBuffAttribute = 'CardBuffAttribute',
-	CardDebuffAttribute = 'CardDebuffAttribute',
+	CardOriginalAttribute = 'CardOriginalAttribute',
 
 	SummonActivation = 'SummonActivation',
 	PassiveActivation = 'PassiveActivation',
