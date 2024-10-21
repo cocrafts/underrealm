@@ -5,14 +5,13 @@ import { sign, verify } from 'jsonwebtoken';
 
 // import { injectBotMove } from './handlers/ai';
 import type {
-	Client,
 	CommandPayload,
 	CommandResponse,
 	Context,
 	JwtPayload,
 	ResponseSender,
 } from './util/type';
-import { EventType as ET } from './util/type';
+import { EventType } from './util/type';
 import {
 	onIncomingBundle,
 	onIncomingConnect,
@@ -22,7 +21,7 @@ import {
 const app = express();
 const socket = injectSocket(app);
 
-const duelClients: Record<string, Array<Client>> = {};
+const duelClients: Record<string, Array<{ player: string; ws: unknown }>> = {};
 const jwtSecret = 'shh!!';
 
 socket.app.ws('/', (ws) => {
@@ -33,7 +32,7 @@ socket.app.ws('/', (ws) => {
 			const { userId, duelId } = verify(data.jwt, jwtSecret) as JwtPayload;
 
 			const players = duelClients[duelId] || [];
-			const findPlayer = (client: Client) => client.id === userId;
+			const findPlayer = (i) => i.player === userId;
 			const playerIndex = players.findIndex(findPlayer);
 
 			const send: ResponseSender = async (payload, command): Promise<void> => {
@@ -58,14 +57,14 @@ socket.app.ws('/', (ws) => {
 			};
 
 			if (playerIndex === -1) {
-				players.push({ id: userId, ws });
+				players.push({ player: userId, ws });
 				duelClients[duelId] = players;
 			}
-			if (data.type === ET.ConnectMatch) {
-				await onIncomingConnect(duelId, duelClients[duelId]);
-			} else if (data.type === ET.SendBundle) {
+			if (data.type === EventType.ConnectMatch) {
+				await onIncomingConnect(context, data.payload);
+			} else if (data.type === EventType.SendBundle) {
 				await onIncomingBundle(context, data.payload);
-			} else if (data.type === ET.CardHover) {
+			} else if (data.type === EventType.CardHover) {
 				await onInComingHover(context, data.payload);
 			}
 		} catch (err) {

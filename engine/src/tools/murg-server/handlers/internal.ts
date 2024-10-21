@@ -1,4 +1,3 @@
-import type { ComponentMap, ECS, EventType } from '@underrealm/game';
 import type { DuelConfig, PlayerConfig } from '@underrealm/murg';
 import {
 	defaultSetting,
@@ -53,14 +52,4 @@ export const fetchDuel = (id: string, version = '00001'): DuelRecord => {
 	}
 
 	return duelCache[id];
-};
-
-const ecsMap: Record<string, ECS<ComponentMap, EventType>> = {};
-
-export const fetchECS = (duelId: string) => {
-	return ecsMap[duelId];
-};
-
-export const setECS = (duelId: string, ecs: ECS<ComponentMap, EventType>) => {
-	ecsMap[duelId] = ecs;
 };
