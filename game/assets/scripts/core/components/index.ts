@@ -61,8 +61,6 @@ export type ComponentMap = {
 
 	[ComponentType.DuelManager]: DuelManager;
 	[ComponentType.Command]: Command;
-
-	[ComponentType.Config]: Config;
 };
 
 /**
@@ -231,22 +229,4 @@ type Command = Component<ComponentType.Command> & {
 	commandType: CommandType;
 	from?: CardPlace;
 	to?: CardPlace;
-};
-
-/**
- * Config components
- */
-export type Config = Component<ComponentType.Config> & {
-	initialCardCount: number;
-	initialPlayerHealth: number;
-	elementalFactor: number;
-	handSize: number;
-	groundSize: number;
-	maxDeckSize: number;
-	maxAttachment: number;
-	spellIncreaseCycle: number;
-	perTurnDraw: number;
-	perTurnHero: number;
-	perTurnSpell: number;
-	perTurnTroop: number;
 };

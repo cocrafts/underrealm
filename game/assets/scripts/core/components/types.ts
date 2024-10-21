@@ -60,11 +60,6 @@ export enum ComponentType {
 	 */
 	DuelManager = 'DuelManager',
 	Command = 'Command',
-
-	/**
-	 * Config components
-	 */
-	Config = 'Config',
 }
 
 export enum ClassType {
