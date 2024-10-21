@@ -116,7 +116,7 @@ export class Card extends Component {
 	}
 
 	private showDetailInHand() {
-		const position = this.cardNode.position.clone();
+		const position = this.cardPositionInHand();
 		position.y = this.handNode.position.y + 168;
 		const scale = detailedCardScale;
 		tween(this.cardNode)
@@ -125,8 +125,7 @@ export class Card extends Component {
 	}
 
 	private hideDetailInHand() {
-		const position = this.cardNode.position.clone();
-		position.y = this.handNode.position.y;
+		const position = this.cardPositionInHand();
 		const scale = defaultCardScale;
 		tween(this.cardNode)
 			.to(0.8, { position, scale }, { easing: 'expoInOut' })
