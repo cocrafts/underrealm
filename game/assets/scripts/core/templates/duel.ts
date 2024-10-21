@@ -68,7 +68,7 @@ export const initializeDuel = (
 			const randomIndex = Math.floor(Math.random() * heroCards.length);
 			const newCard = duelECS
 				.createEntity()
-				.addComponent(ComponentType.CardOwnership, { owner: player.id })
+				.addComponent(ComponentType.Ownership, { owner: player.id })
 				.addComponent(ComponentType.CardPlace, {
 					index: count,
 					place: CardPlace.Deck,

@@ -9932,6 +9932,7 @@ __metadata:
     "@types/react-dom": "npm:^18.3.0"
     "@underrealm/game": "npm:*"
     "@xyflow/react": "npm:^12.3.1"
+    eslint: "npm:^8.57.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
   languageName: unknown

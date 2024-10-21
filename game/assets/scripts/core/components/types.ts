@@ -1,5 +1,10 @@
 export enum ComponentType {
 	/**
+	 * Common components
+	 */
+	Ownership = 'Ownership',
+
+	/**
 	 * Player components
 	 */
 	PlayerAttribute = 'PlayerAttribute',
@@ -12,7 +17,6 @@ export enum ComponentType {
 	CardMetadata = 'CardMetadata',
 	CardClass = 'CardClass',
 	CardAttribute = 'CardAttribute',
-	CardOwnership = 'CardOwnership',
 	CardChargeable = 'CardChargeable',
 	CardPlace = 'CardPlace',
 	CardOriginalAttribute = 'CardOriginalAttribute',
