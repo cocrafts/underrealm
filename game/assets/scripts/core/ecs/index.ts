@@ -38,11 +38,34 @@ export type QueryResult<CM> = Entity<CM>[] & {
 	first: () => Entity<CM> | null;
 };
 
+export type Config = {
+	initialCardCount: number;
+	initialPlayerHealth: number;
+	elementalFactor: number;
+	handSize: number;
+	groundSize: number;
+	maxDeckSize: number;
+	maxAttachment: number;
+	spellIncreaseCycle: number;
+	perTurnDraw: number;
+	perTurnHero: number;
+	perTurnSpell: number;
+	perTurnTroop: number;
+};
+
 export class ECS<CM = ComponentMap, ET = EventType> {
 	private entities: Entity<CM>[] = [];
 	private systems: System<CM, ET>[] = [];
 	private eventHandlers: Record<string, Handler<CM, ET>> = {};
 	private nextEntityId = 0;
+	public config: Config;
+	public updateCount = 0;
+
+	constructor(config?: Config) {
+		if (config) {
+			this.config = config;
+		}
+	}
 
 	createEntity(): Readonly<Entity<CM>> {
 		const entityId = this.nextEntityId++;
@@ -156,6 +179,7 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 		for (const system of this.systems) {
 			system.update(this);
 		}
+		this.updateCount++;
 	}
 
 	toJSON(): ExportedECS {
@@ -164,8 +188,8 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 		};
 	}
 
-	static fromJSON<CM, ET>(exported: ExportedECS): ECS<CM, ET> {
-		const ecs = new ECS<CM, ET>();
+	static fromJSON<CM, ET>(exported: ExportedECS, config?: Config): ECS<CM, ET> {
+		const ecs = new ECS<CM, ET>(config);
 
 		exported.entities.forEach(({ components }: Entity<CM>) => {
 			const entity = ecs.createEntity();
