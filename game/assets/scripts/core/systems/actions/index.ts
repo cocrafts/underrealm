@@ -38,8 +38,7 @@ const summon = () => {
 
 const fight = () => {
 	const update = (ecs: ECS) => {
-		const [config] = ecs.query(ComponentType.Config).exec();
-		const { groundSize } = config.getComponent(ComponentType.Config);
+		const { groundSize } = ecs.config;
 		for (let i = 0; i < groundSize; i++) {
 			const [card1, card2] = ecs
 				.query(ComponentType.CardPlace, {

@@ -16,15 +16,13 @@ export const selectHand = (ecs: ECS<ComponentMap>, playerId: string) => {
 		.exec();
 };
 
-export const cloneEntity = (
-	ecs: ECS<ComponentMap>,
+export const cloneComponents = (
 	entity: Entity<ComponentMap>,
+	source: Entity<ComponentMap>,
 ) => {
-	const newCard = ecs.createEntity();
-	Object.keys(entity).forEach((key: keyof ComponentMap) => {
-		newCard.addComponent(key, entity.getComponent(key));
+	Object.keys(source).forEach((key: keyof ComponentMap) => {
+		entity.addComponent(key, entity.getComponent(key));
 	});
-	return newCard;
 };
 
 export const selectFacingCard = (
