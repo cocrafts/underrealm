@@ -99,11 +99,13 @@ export class Card extends Component {
 
 	private onMouseUp() {
 		if (!this.allowDrag || !this.dragging) return;
-		this.dragging = false;
 		const position = this.cardPositionInHand();
 		const scale = defaultCardScale;
 		tween(this.cardNode)
 			.to(0.5, { position, scale }, { easing: 'expoInOut' })
+			.call(() => {
+				this.dragging = false;
+			})
 			.start();
 	}
 
