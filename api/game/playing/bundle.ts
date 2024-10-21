@@ -72,12 +72,7 @@ const sendGameOver = async (
 		 */
 		await Staking.updateOne(
 			{ _id: staking.id },
-			{
-				$set: {
-					winnerId: winner,
-					status: StakingStatus.ACCEPTED,
-				},
-			},
+			{ $set: { winnerId: winner, status: StakingStatus.ACCEPTED } },
 		);
 	}
 

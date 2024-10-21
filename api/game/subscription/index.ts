@@ -27,6 +27,7 @@ const findMatch: SubscriptionResolvers['findMatch'] = {
 			/*
 			 * If staking is provided, check if user has enough points
 			 */
+			//opponentQuery.stakingPackage = staking;
 			validateStaking(userId, staking);
 		} else {
 			opponentQuery.stakingPackage = { $exists: false };

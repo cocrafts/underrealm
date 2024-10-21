@@ -147,10 +147,10 @@ export type Profile = {
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
-  totalMatches?: Maybe<Scalars['Int']['output']>;
-  winMatches?: Maybe<Scalars['Int']['output']>;
   telegramId?: Maybe<Scalars['String']['output']>;
+  totalMatches?: Maybe<Scalars['Int']['output']>;
   twitterId?: Maybe<Scalars['String']['output']>;
+  winMatches?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {
@@ -489,10 +489,10 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
-  totalMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  winMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   telegramId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   twitterId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  winMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

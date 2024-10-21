@@ -147,10 +147,10 @@ export type Profile = {
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
-  totalMatches?: Maybe<Scalars['Int']['output']>;
-  winMatches?: Maybe<Scalars['Int']['output']>;
   telegramId?: Maybe<Scalars['String']['output']>;
+  totalMatches?: Maybe<Scalars['Int']['output']>;
   twitterId?: Maybe<Scalars['String']['output']>;
+  winMatches?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {
