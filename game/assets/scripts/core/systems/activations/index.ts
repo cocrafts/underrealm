@@ -1,24 +1,20 @@
-import { ComponentType as CT } from '../../components';
+import {
+	ActivationType,
+	CardPlace,
+	ComponentType as CT,
+	DuelPhase,
+} from '../../components';
 import type { ECS } from '../../ecs';
-
-const summon = () => {
-	const update = (ecs: ECS) => {
-		const entities = ecs.query(CT.SummonActivation).exec();
-
-		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
-		});
-	};
-
-	return { update };
-};
+import { getDuelManager, selectFacingCard } from '../../helper';
 
 const passive = () => {
 	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.PassiveActivation).exec();
 
 		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.Fight,
+			});
 		});
 	};
 
@@ -30,7 +26,9 @@ const fight = () => {
 		const entities = ecs.query(CT.FightActivation).exec();
 
 		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.Fight,
+			});
 		});
 	};
 
@@ -39,10 +37,32 @@ const fight = () => {
 
 const preFight = () => {
 	const update = (ecs: ECS) => {
+		const duelManager = getDuelManager(ecs);
+		if (duelManager.phase !== DuelPhase.PreFight) return;
+
 		const entities = ecs.query(CT.PreFightActivation).exec();
 
 		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.PreFight,
+			});
+		});
+	};
+
+	return { update };
+};
+
+const postFight = () => {
+	const update = (ecs: ECS) => {
+		const duelManager = getDuelManager(ecs);
+		if (duelManager.phase !== DuelPhase.PostFight) return;
+
+		const entities = ecs.query(CT.PostFightActivation).exec();
+
+		entities.forEach((entity) => {
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.PostFight,
+			});
 		});
 	};
 
@@ -54,7 +74,7 @@ const preFight = () => {
  */
 const charge = () => {
 	const update = (ecs: ECS) => {
-		const entities = ecs.query(CT.PreFightActivation).exec();
+		const entities = ecs.query(CT.CardChargeable).exec();
 
 		entities.forEach((entity) => {
 			const charge = entity.getComponent(CT.ChargeActivation);
@@ -63,13 +83,16 @@ const charge = () => {
 			// reset charge
 			charge.current = 0;
 
-			entity.addComponent(CT.SkillActivating, {});
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.Chargeable,
+			});
 		});
 	};
 
 	return { update };
 };
 
+// TODO: Define trigger condition (inspire source)
 const inspire = () => {
 	const update = (ecs: ECS) => {
 		const entities = ecs.query(CT.InspireActivation).exec();
@@ -84,9 +107,17 @@ const inspire = () => {
 
 const glory = () => {
 	const update = (ecs: ECS) => {
-		const entities = ecs.query(CT.GloryActivation).exec();
+		const entities = ecs
+			.query(CT.GloryActivation)
+			.and(CT.CardPlace, { place: CardPlace.Ground })
+			.exec();
 		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
+			const facingCard = selectFacingCard(ecs, entity);
+			if (facingCard) return;
+
+			entity.addComponent(CT.SkillActivating, {
+				activationType: ActivationType.Glory,
+			});
 
 			entity.getComponent(CT.GloryActivation);
 		});
@@ -96,10 +127,10 @@ const glory = () => {
 };
 
 export const activation = {
-	summon,
 	passive,
 	fight,
 	preFight,
+	postFight,
 	charge,
 	inspire,
 	glory,

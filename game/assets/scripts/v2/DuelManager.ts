@@ -26,7 +26,6 @@ export class DuelManager extends Component {
 			 * Activation systems. The system will check pre-conditions
 			 * of entities' activations to enable SkillActivating
 			 */
-			.addSystem(activation.summon())
 			.addSystem(activation.passive())
 			.addSystem(activation.fight())
 			.addSystem(activation.preFight())

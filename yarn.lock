@@ -9869,6 +9869,7 @@ __metadata:
     "@types/node": "npm:^17.0.29"
     "@types/uuid": "npm:^10"
     "@types/ws": "npm:^8"
+    "@underrealm/game": "npm:*"
     "@underrealm/murg": "npm:*"
     body-parser: "npm:^1.19.0"
     chalk: "npm:^5.3.0"
@@ -9974,9 +9975,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@underrealm/game@workspace:game"
   dependencies:
+    "@types/jest": "npm:^28.1.1"
     "@types/lodash": "npm:^4.14.191"
     "@underrealm/murg": "npm:*"
     eslint: "npm:^8.57.0"
+    jest: "npm:^28.1.1"
     lodash: "npm:^4.17.21"
   languageName: unknown
   linkType: soft
