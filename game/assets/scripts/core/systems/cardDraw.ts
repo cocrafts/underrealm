@@ -5,40 +5,17 @@ import {
 	DuelPhase,
 } from '../components';
 import type { ECS } from '../ecs';
-import { cloneComponents, selectDeck, selectHand } from '../helper';
-
-export const initialCardDraw = () => {
-	const update = (ecs: ECS) => {
-		const [duelManager] = ecs.query(CT.DuelManager).exec();
-		const duelManagerComp = duelManager.getComponent(CT.DuelManager);
-
-		if (duelManagerComp.phase !== DuelPhase.InitialDistribution) return;
-
-		const playerEntities = ecs.query(CT.PlayerAttribute).exec();
-		const { initialCardCount } = ecs.config;
-		playerEntities.forEach((entity) => {
-			const player = entity.getComponent(CT.PlayerAttribute);
-			const deck = selectDeck(ecs, player.id);
-			const hand = selectHand(ecs, player.id);
-			for (let i = 0; i < initialCardCount; i++) {
-				const cardPlace = deck[i].getComponent(CT.CardPlace);
-				cardPlace.place = CardPlace.Hand;
-				cardPlace.index = hand.length + i;
-			}
-		});
-
-		duelManagerComp.phase = DuelPhase.Draw;
-	};
-
-	return { update };
-};
+import {
+	cloneComponents,
+	getDuelManager,
+	selectDeck,
+	selectHand,
+} from '../helper';
 
 export const turnCardDraw = () => {
 	const update = (ecs: ECS) => {
-		const [duelManager] = ecs.query(CT.DuelManager).exec();
-		const duelManagerComp = duelManager.getComponent(CT.DuelManager);
-
-		if (duelManagerComp.phase !== DuelPhase.Draw) return;
+		const duelManager = getDuelManager(ecs);
+		if (duelManager.phase !== DuelPhase.Draw) return;
 
 		const { perTurnDraw } = ecs.config;
 		const playerEntities = ecs.query(CT.PlayerAttribute).exec();
@@ -84,7 +61,7 @@ export const turnCardDraw = () => {
 				.addComponent(CT.Ownership, { owner: player.id });
 		});
 
-		duelManagerComp.phase = DuelPhase.Setup;
+		duelManager.phase = DuelPhase.Setup;
 	};
 
 	return { update };
