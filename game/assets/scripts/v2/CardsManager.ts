@@ -32,6 +32,7 @@ export class CardsManager extends Component {
 
 	async start() {
 		this.initCardNodes();
+		Card.updateCardInHandPositions(core);
 		await this.distributeCards();
 		await this.assignPlayerCardComponents();
 	}
@@ -116,9 +117,11 @@ export class CardsManager extends Component {
 				cardDetail.entityId = card.id;
 				cardDetail.cardNode = node;
 				cardDetail.handNode = this.playerHandNode;
+				cardDetail.initialize();
 				const cardSummonable = node.addComponent(CardSummonable);
 				cardSummonable.entityId = card.id;
 				cardSummonable.cardNode = node;
+				cardSummonable.initialize();
 			}
 		}
 	}

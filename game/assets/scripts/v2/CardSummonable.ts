@@ -25,7 +25,7 @@ export class CardSummonable extends Component {
 	private mouseMoveCallback: Function = (e: EventMouse) => this.onMouseMove(e);
 	private mouseDownCallback: Function = () => this.onMouseDown();
 
-	start() {
+	initialize() {
 		this.cardNode.on(MOUSE_DOWN, this.mouseDownCallback);
 		find('Canvas').on(MOUSE_MOVE, this.mouseMoveCallback);
 		find('Canvas').on(MOUSE_UP, this.mouseUpCallback);

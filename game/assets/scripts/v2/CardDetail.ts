@@ -19,7 +19,7 @@ export class CardDetail extends Component {
 	@property({ type: Node, visible: false })
 	public handNode: Node;
 
-	start() {
+	initialize() {
 		this.cardNode.on(MOUSE_ENTER, () => this.onMouseEnter());
 		this.cardNode.on(MOUSE_LEAVE, () => this.onMouseLeave());
 	}
