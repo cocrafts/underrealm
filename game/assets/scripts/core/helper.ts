@@ -16,6 +16,13 @@ export const selectHand = (ecs: ECS<ComponentMap>, playerId: string) => {
 		.exec();
 };
 
+export const selectGround = (ecs: ECS<ComponentMap>, playerId: string) => {
+	return ecs
+		.query(ComponentType.CardPlace, { place: CardPlace.Ground })
+		.and(ComponentType.Ownership, { owner: playerId })
+		.exec();
+};
+
 export const cloneComponents = (
 	entity: Entity<ComponentMap>,
 	source: Entity<ComponentMap>,

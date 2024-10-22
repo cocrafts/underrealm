@@ -18,5 +18,6 @@ export const addPackageSystems = (ecs: ECS<ComponentMap>) => {
 
 		.addSystem(activation.postFight())
 		.addSystem(actions.changePhase(DuelPhase.CleanUp))
+		.addSystem(actions.cleanUp())
 		.addSystem(actions.changePhase(DuelPhase.Draw));
 };
