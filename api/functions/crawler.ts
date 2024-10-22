@@ -1,5 +1,3 @@
-import { exit } from 'process';
-
 import { mongo } from 'models';
 import { getLastCrawlDate, updateCrawlDate } from 'models/crawl';
 import type { IGameDuel } from 'models/game';
@@ -134,7 +132,6 @@ export const handler = async (event) => {
 		systemDAUStats,
 	);
 
-	// Step 4: Write data to Google Sheets
 	await Promise.all([
 		writeToGoogleSheet(spreadsheetId, newTabName, 'A1', [
 			['user stats', '', '', '', '', '', ''],
