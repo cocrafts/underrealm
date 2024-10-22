@@ -132,14 +132,43 @@ export const cleanUp = () => {
 
 		// Reallocate cards on ground
 		const playerEntities = ecs.query(CT.PlayerAttribute).exec();
+		const centerIndex = 5;
 		playerEntities.forEach((entity) => {
 			const player = entity.getComponent(CT.PlayerAttribute);
 			const ground = selectGround(ecs, player.id);
-			const centerCard = Math.floor(ground.length / 2);
-			ground[centerCard].getComponent(CT.CardPlace).index = 5;
-			for (let i = 1; i < Math.floor(ground.length / 2); i++) {
-				ground[centerCard - i].getComponent(CT.CardPlace).index = 5 - i;
-				ground[centerCard + i].getComponent(CT.CardPlace).index = 5 + i;
+			const sortedGround = ground.sort((entityA, entityB) => {
+				const cardPlaceA = entityA.getComponent(CT.CardPlace);
+				const cardPlaceB = entityB.getComponent(CT.CardPlace);
+				return cardPlaceA.index - cardPlaceB.index;
+			});
+			const leftGround = sortedGround.filter(
+				(entity) => entity.getComponent(CT.CardPlace).index < centerIndex,
+			);
+			const rightGround = sortedGround.filter(
+				(entity) => entity.getComponent(CT.CardPlace).index > centerIndex,
+			);
+			const centerGroundIndex = sortedGround.findIndex(
+				(entity) => entity.getComponent(CT.CardPlace).index === centerIndex,
+			);
+			if (centerGroundIndex === -1) {
+				if (leftGround.length < rightGround.length) {
+					rightGround[rightGround.length - 1].getComponent(CT.CardPlace).index =
+						centerIndex;
+					rightGround.pop();
+				} else {
+					leftGround[leftGround.length - 1].getComponent(CT.CardPlace).index =
+						centerIndex;
+					leftGround.pop();
+				}
+			}
+
+			for (let i = 1; i <= leftGround.length; i++) {
+				leftGround[leftGround.length - i].getComponent(CT.CardPlace).index =
+					centerIndex - i;
+			}
+
+			for (let i = 0; i < rightGround.length; i++) {
+				rightGround[i].getComponent(CT.CardPlace).index = centerIndex + 1 + i;
 			}
 		});
 	};
