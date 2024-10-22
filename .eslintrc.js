@@ -1,7 +1,7 @@
 module.exports = {
 	root: true,
-	extends: ['@metacraft/eslint-config'],
-	plugins: ['import'],
+	extends: ['@metacraft/eslint-config', 'plugin:jest/recommended'],
+	plugins: ['import', 'jest'],
 	ignorePatterns: [
 		'dist',
 		'node_modules',

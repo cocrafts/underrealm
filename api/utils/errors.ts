@@ -34,3 +34,17 @@ export class ClientError extends GraphQLError {
 		});
 	}
 }
+
+class NoErrorThrownError extends Error {}
+
+// ref: https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/no-conditional-expect.md
+export const getError = async <TError = Error>(
+	call: () => unknown,
+): Promise<TError> => {
+	try {
+		await call();
+		throw new NoErrorThrownError();
+	} catch (error: unknown) {
+		return error as TError;
+	}
+};
