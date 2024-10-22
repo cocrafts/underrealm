@@ -55,6 +55,7 @@
     "@types/ws": "^8",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "eslint": "^8.56.0",
     "express-ws": "^5.0.2",
     "jest": "^28.1.1",
     "module-alias": "^2.2.2",

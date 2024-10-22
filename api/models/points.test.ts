@@ -52,11 +52,11 @@ describe('Test safeAddGoPoints', () => {
 		for (let i = 0; i < maxCount; i++) {
 			const totalGamePointsToday = await getTotalGamePointsToday(user.id);
 			const points = await safeAddGamePoints(user.id, mockId(), true);
-			if (i === maxCount - 1) {
-				expect(points).toEqual(MAX_GAME_POINTS_PER_DAY - totalGamePointsToday);
-			} else {
-				expect(points).toEqual(WINNER_POINTS);
-			}
+			const expectedPoints =
+				i === maxCount - 1
+					? MAX_GAME_POINTS_PER_DAY - totalGamePointsToday
+					: WINNER_POINTS;
+			expect(points).toEqual(expectedPoints);
 		}
 	});
 
@@ -64,15 +64,19 @@ describe('Test safeAddGoPoints', () => {
 		const maxCount = Math.ceil(MAX_GAME_POINTS_PER_DAY / WINNER_POINTS);
 
 		for (let i = 0; i < maxCount; i++) {
+			let points = 0;
+			let expectedPoints = -1;
 			if (i === maxCount - 1) {
 				await safeAddGamePoints(user.id, mockId(), false);
 				const totalGamePointsToday = await getTotalGamePointsToday(user.id);
-				const points = await safeAddGamePoints(user.id, mockId(), true);
-				expect(points).toEqual(MAX_GAME_POINTS_PER_DAY - totalGamePointsToday);
+				points = await safeAddGamePoints(user.id, mockId(), true);
+				expectedPoints = MAX_GAME_POINTS_PER_DAY - totalGamePointsToday;
 			} else {
-				const points = await safeAddGamePoints(user.id, mockId(), true);
-				expect(points).toEqual(WINNER_POINTS);
+				points = await safeAddGamePoints(user.id, mockId(), true);
+				expectedPoints = WINNER_POINTS;
 			}
+
+			expect(points).toEqual(expectedPoints);
 		}
 	});
 });
