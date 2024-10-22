@@ -4,7 +4,7 @@
 
   /* Add your custom configuration here. */
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2017",
     "module": "ES2015",
     "experimentalDecorators": true,
     "isolatedModules": true,
@@ -16,9 +16,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": [
-        "jest"
-    ]
+    "types": ["jest"]
   },
   "exclude": ["extensions", "assets/textMeshPro"]
 }
