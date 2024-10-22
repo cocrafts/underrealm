@@ -11,7 +11,7 @@ export const calculateIndexPosition = ({
 	index,
 	total,
 	centerPosition,
-	offset = 80,
+	offset = 40,
 }: CalculateIndexPositionOptions): Vec3 => {
 	const centerIndex = Math.floor(total / 2);
 	const totalXOffset = (index - centerIndex) * offset;

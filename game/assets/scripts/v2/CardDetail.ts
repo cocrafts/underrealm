@@ -16,9 +16,6 @@ export class CardDetail extends Component {
 	@property({ type: Node, visible: false })
 	public cardNode: Node;
 
-	@property({ type: Node, visible: false })
-	public handNode: Node;
-
 	initialize() {
 		this.cardNode.on(MOUSE_ENTER, () => this.onMouseEnter());
 		this.cardNode.on(MOUSE_LEAVE, () => this.onMouseLeave());
@@ -53,10 +50,10 @@ export class CardDetail extends Component {
 
 	private showDetailInHand() {
 		safeCardInHandPosition(this.entityId, ({ position }) => {
-			position.y = this.handNode.position.y + 168;
+			const dest = position.clone().add3f(0, 168, 0);
 			const scale = detailedCardScale;
 			tween(this.cardNode)
-				.to(0.5, { position, scale }, { easing: 'expoInOut' })
+				.to(0.5, { position: dest, scale }, { easing: 'expoInOut' })
 				.start();
 		});
 	}

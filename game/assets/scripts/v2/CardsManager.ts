@@ -63,6 +63,7 @@ export class CardsManager extends Component {
 			this.node.addChild(cardNode);
 
 			card.addComponent(GCT.CardNode, { node: cardNode });
+			card.addComponent(GCT.CardUIState, { dragging: false });
 		});
 	}
 
@@ -116,7 +117,6 @@ export class CardsManager extends Component {
 				const cardDetail = node.addComponent(CardDetail);
 				cardDetail.entityId = card.id;
 				cardDetail.cardNode = node;
-				cardDetail.handNode = this.playerHandNode;
 				cardDetail.initialize();
 				const cardSummonable = node.addComponent(CardSummonable);
 				cardSummonable.entityId = card.id;
