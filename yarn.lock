@@ -9951,7 +9951,6 @@ __metadata:
     "@types/jest": "npm:^28.1.1"
     "@types/node": "npm:^17.0.43"
     "@types/react": "npm:^18.3.11"
-    "@underrealm/game": "npm:*"
     "@underrealm/murg": "npm:*"
     chalk: "npm:^5.2.0"
     chokidar: "npm:^3.5.3"
