@@ -120,7 +120,7 @@ export const playEffectSound = async (
 	volume = 1,
 ): Promise<void> => {
 	const { clip } = await getAudioSource(name);
-	system.audioSource.playOneShot(clip, volume);
+	system.audioSource?.playOneShot(clip, volume);
 };
 
 export const instantiatePrefab = (uri: string): Promise<Node> => {
