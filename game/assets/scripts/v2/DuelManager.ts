@@ -7,6 +7,7 @@ import {
 	skill,
 } from '../game';
 
+import { Card } from './Card';
 import { DeckCounter } from './DeckCounter';
 import { PlayerController } from './PlayerController';
 const { ccclass } = _decorator;
@@ -56,6 +57,7 @@ export class DuelManager extends Component {
 
 			.addSystem(DeckCounter.updateDeckCountersSystem())
 			.addSystem(PlayerController.updatePlayersAttributeSystem())
+			.addSystem(Card.updateCardUIComponents())
 
 			.addSystem(resetAllSkillActivatingSystem());
 	}

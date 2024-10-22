@@ -4,6 +4,9 @@ import { CardPlace, core, GCT, LCT, system } from '../game';
 import { queryCards, querySortedCards } from '../util/v2/queries';
 
 import { Card } from './Card';
+import { CardDetail } from './CardDetail';
+import { CardDrawable } from './CardDrawable';
+import { CardSummonable } from './CardSummonable';
 import { DeckCounter } from './DeckCounter';
 const { ccclass, property } = _decorator;
 
@@ -27,9 +30,10 @@ export class CardsManager extends Component {
 	@property({ type: Node, editorOnly: true })
 	private groundNode: Node;
 
-	start() {
+	async start() {
 		this.initCardNodes();
-		this.distributeCards();
+		await this.distributeCards();
+		await this.assignPlayerCardComponents();
 	}
 
 	/**
@@ -66,31 +70,56 @@ export class CardsManager extends Component {
 	 */
 	private async distributeCards() {
 		const { playerId, enemyId } = system;
+		await this.distributeCardsPerPlayer(playerId);
+		await this.distributeCardsPerPlayer(enemyId);
+	}
+
+	private async distributeCardsPerPlayer(owner: string) {
+		const isPlayer = owner === system.playerId;
+		const cardsInDeck = queryCards(core, owner, CardPlace.Deck);
+		const cardsInHand = querySortedCards(core, owner, CardPlace.Hand);
+		const deckNode = isPlayer ? this.playerDeckNode : this.enemyDeckNode;
+		const deckCounter = deckNode.getComponent(DeckCounter);
 
 		// adding in-hand cards to player's deck for initial distribution
-		const playerCardsInDeck = queryCards(core, playerId, CardPlace.Deck);
-		const playerCardsInHand = querySortedCards(core, playerId, CardPlace.Hand);
-		const playerDeckCounter = this.playerDeckNode.getComponent(DeckCounter);
-		let playerCardCount = playerCardsInDeck.length + playerCardsInHand.length;
-		playerDeckCounter.updateCount(playerCardCount);
+		let cardCount = cardsInDeck.length + cardsInHand.length;
+		deckCounter.updateCount(cardCount);
 
-		// adding in-hand cards to enemy's deck for initial distribution
-		const enemyCardsInDeck = queryCards(core, enemyId, CardPlace.Deck);
-		const enemyCardsInHand = querySortedCards(core, enemyId, CardPlace.Hand);
-		const enemyDeckCounter = this.enemyDeckNode.getComponent(DeckCounter);
-		let enemyCardCount = enemyCardsInDeck.length + enemyCardsInHand.length;
-		enemyDeckCounter.updateCount(enemyCardCount);
-
-		for (let i = 0; i < playerCardsInHand.length; i++) {
-			const { node } = playerCardsInHand[i].getComponent(GCT.CardNode);
-			await node.getComponent(Card).drawExpo();
-			playerDeckCounter.updateCount(--playerCardCount);
+		for (let i = 0; i < cardsInHand.length; i++) {
+			const card = cardsInHand[i];
+			const { node } = card.getComponent(GCT.CardNode);
+			/**
+			 * Temporarily add drawable for initial distribution, destroy after play drawing
+			 */
+			deckCounter.updateCount(--cardCount);
+			const cardDrawable = node.addComponent(CardDrawable);
+			cardDrawable.entityId = card.id;
+			cardDrawable.cardNode = node;
+			cardDrawable.deckNode = deckNode;
+			if (isPlayer) await node.getComponent(CardDrawable).drawExpo();
+			else await node.getComponent(CardDrawable).draw();
+			cardDrawable.destroy();
 		}
+	}
 
-		for (let i = 0; i < enemyCardsInHand.length; i++) {
-			const { node } = enemyCardsInHand[i].getComponent(GCT.CardNode);
-			await node.getComponent(Card).draw();
-			enemyDeckCounter.updateCount(--enemyCardCount);
+	/**
+	 * Only called once at starting
+	 */
+	private async assignPlayerCardComponents() {
+		const playerCards = queryCards(core, system.playerId);
+		for (let i = 0; i < playerCards.length; i++) {
+			const card = playerCards[i];
+			const { node } = card.getComponent(GCT.CardNode);
+			const { place } = card.getComponent(LCT.CardPlace);
+			if (place === CardPlace.Hand) {
+				const cardDetail = node.addComponent(CardDetail);
+				cardDetail.entityId = card.id;
+				cardDetail.cardNode = node;
+				cardDetail.handNode = this.playerHandNode;
+				const cardSummonable = node.addComponent(CardSummonable);
+				cardSummonable.entityId = card.id;
+				cardSummonable.cardNode = node;
+			}
 		}
 	}
 }

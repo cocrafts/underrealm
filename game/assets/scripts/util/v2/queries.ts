@@ -20,9 +20,9 @@ export const queryPlayerAttribute = (core: GameECS, owner: string) => {
 	return playerAttribute;
 };
 
-export const queryCards = (core: GameECS, owner: string, place: CardPlace) => {
+export const queryCards = (core: GameECS, owner: string, place?: CardPlace) => {
 	return core
-		.query(LCT.CardPlace, { place })
+		.query(LCT.CardPlace, place ? { place } : undefined)
 		.and(LCT.Ownership, { owner })
 		.exec();
 };
