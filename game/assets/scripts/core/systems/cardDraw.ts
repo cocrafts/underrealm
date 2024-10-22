@@ -81,7 +81,7 @@ export const turnCardDraw = () => {
 					place: CardPlace.Hand,
 					index: hand.length,
 				})
-				.addComponent(CT.CardOwnership, { owner: player.id });
+				.addComponent(CT.Ownership, { owner: player.id });
 		});
 
 		duelManagerComp.phase = DuelPhase.Setup;

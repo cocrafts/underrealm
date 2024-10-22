@@ -61,7 +61,7 @@ const fight = () => {
 				);
 				const enemyPlayer = players.find(
 					(player) =>
-						player.id !== card1.getComponent(ComponentType.CardOwnership).owner,
+						player.id !== card1.getComponent(ComponentType.Ownership).owner,
 				);
 				const { attack } = card1.getComponent(ComponentType.CardAttribute);
 				enemyPlayer.health -= attack;

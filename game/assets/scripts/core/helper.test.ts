@@ -25,7 +25,7 @@ describe('Test selectHand', () => {
 				index: cardIndex,
 				place: CardPlace.Hand,
 			})
-			.addComponent(CT.CardOwnership, { owner: 'A' });
+			.addComponent(CT.Ownership, { owner: 'A' });
 
 		duelECS
 			.createEntity()
@@ -40,7 +40,7 @@ describe('Test selectHand', () => {
 				index: cardIndex,
 				place: CardPlace.Hand,
 			})
-			.addComponent(CT.CardOwnership, { owner: 'B' });
+			.addComponent(CT.Ownership, { owner: 'B' });
 
 		const hand = selectHand(duelECS, 'A');
 		const output = hand.map((cardInHand) =>
