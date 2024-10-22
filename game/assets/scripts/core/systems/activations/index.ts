@@ -2,21 +2,10 @@ import {
 	ActivationType,
 	CardPlace,
 	ComponentType as CT,
+	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { selectFacingCard } from '../../helper';
-
-const summon = () => {
-	const update = (ecs: ECS) => {
-		const entities = ecs.query(CT.SummonActivation).exec();
-
-		entities.forEach((entity) => {
-			entity.addComponent(CT.SkillActivating, {});
-		});
-	};
-
-	return { update };
-};
+import { getDuelManager, selectFacingCard } from '../../helper';
 
 const passive = () => {
 	const update = (ecs: ECS) => {
@@ -48,6 +37,9 @@ const fight = () => {
 
 const preFight = () => {
 	const update = (ecs: ECS) => {
+		const duelManager = getDuelManager(ecs);
+		if (duelManager.phase !== DuelPhase.PreFight) return;
+
 		const entities = ecs.query(CT.PreFightActivation).exec();
 
 		entities.forEach((entity) => {
@@ -62,6 +54,9 @@ const preFight = () => {
 
 const postFight = () => {
 	const update = (ecs: ECS) => {
+		const duelManager = getDuelManager(ecs);
+		if (duelManager.phase !== DuelPhase.PostFight) return;
+
 		const entities = ecs.query(CT.PostFightActivation).exec();
 
 		entities.forEach((entity) => {
@@ -132,7 +127,6 @@ const glory = () => {
 };
 
 export const activation = {
-	summon,
 	passive,
 	fight,
 	preFight,
