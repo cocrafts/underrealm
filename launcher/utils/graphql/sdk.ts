@@ -148,7 +148,9 @@ export type Profile = {
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
   telegramId?: Maybe<Scalars['String']['output']>;
+  totalMatches?: Maybe<Scalars['Int']['output']>;
   twitterId?: Maybe<Scalars['String']['output']>;
+  winMatches?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Query = {
@@ -229,6 +231,12 @@ export type ReferralHistory = {
   referrerId?: Maybe<Scalars['String']['output']>;
 };
 
+export enum StakingPackage {
+  U_10 = 'U_10',
+  U_50 = 'U_50',
+  U_100 = 'U_100'
+}
+
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
@@ -237,6 +245,7 @@ export type Subscription = {
 
 
 export type SubscriptionFindMatchArgs = {
+  staking?: InputMaybe<StakingPackage>;
   userId: Scalars['String']['input'];
 };
 
