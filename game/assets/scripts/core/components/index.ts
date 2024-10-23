@@ -7,7 +7,6 @@ import type {
 	ClassType,
 	CommandType,
 	ComponentType,
-	DuelPhase,
 	ElementalType,
 	InspireSource,
 } from './types';
@@ -58,7 +57,6 @@ export type ComponentMap = {
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
 
-	[ComponentType.DuelManager]: DuelManager;
 	[ComponentType.Command]: Command;
 };
 
@@ -217,14 +215,6 @@ type MultiplyDamageAgainst = Component<ComponentType.MultiplyDamageAgainst> & {
 type DoubleAttack = Component<ComponentType.DoubleAttack>;
 
 type Transform = Component<ComponentType.Transform>;
-
-/**
- * Duel components
- */
-type DuelManager = Component<ComponentType.DuelManager> & {
-	phase: DuelPhase;
-	turnOf: string;
-};
 
 type Command = Component<ComponentType.Command> & {
 	index: number;

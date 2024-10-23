@@ -43,11 +43,10 @@ const mockCard: Omit<CM[CT.CardMetadata], 'type'>[] = [
 
 describe('Test cleanUp', () => {
 	test('cleanUp should correctly increase charge and reinforce card', () => {
-		const duelECS = new ECS();
+		const duelECS = new ECS({
+			state: { phase: DuelPhase.CleanUp, turnOf: 'A' },
+		});
 
-		duelECS
-			.createEntity()
-			.addComponent(CT.DuelManager, { phase: DuelPhase.CleanUp, turnOf: 'A' });
 		duelECS
 			.createEntity()
 			.addComponent(CT.PlayerAttribute, { id: 'A', health: 150 });

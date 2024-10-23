@@ -5,17 +5,11 @@ import {
 	DuelPhase,
 } from '../components';
 import type { ECS } from '../ecs';
-import {
-	cloneComponents,
-	getDuelManager,
-	selectDeck,
-	selectHand,
-} from '../helper';
+import { cloneComponents, selectDeck, selectHand } from '../helper';
 
 export const turnCardDraw = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.Draw) return;
+		if (ecs.state.phase !== DuelPhase.Draw) return;
 
 		const { perTurnDraw } = ecs.config;
 		const playerEntities = ecs.query(CT.PlayerAttribute).exec();
@@ -61,7 +55,7 @@ export const turnCardDraw = () => {
 				.addComponent(CT.Ownership, { owner: player.id });
 		});
 
-		duelManager.phase = DuelPhase.Setup;
+		ecs.state.phase = DuelPhase.Setup;
 	};
 
 	return { update };

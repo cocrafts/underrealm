@@ -26,11 +26,9 @@ export const initializeDuel = (
 	[firstPlayer, secondPlayer]: Array<{ id: string }>,
 ) => {
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
-	const duelECS = new ECS(config);
-
-	duelECS.createEntity().addComponent(ComponentType.DuelManager, {
-		phase: DuelPhase.InitialDistribution,
-		turnOf: firstPlayer.id,
+	const duelECS = new ECS({
+		config,
+		state: { phase: DuelPhase.InitialDistribution, turnOf: firstPlayer.id },
 	});
 
 	const troopTemplates = template

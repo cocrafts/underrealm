@@ -53,11 +53,3 @@ export const selectFacingCard = (
 
 	return facingCard;
 };
-
-export const getDuelManager = (ecs: ECS) => {
-	return ecs
-		.query(ComponentType.DuelManager)
-		.exec()
-		.first()
-		.getComponent(ComponentType.DuelManager);
-};

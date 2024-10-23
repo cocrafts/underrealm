@@ -5,7 +5,7 @@ import {
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { getDuelManager, selectFacingCard } from '../../helper';
+import { selectFacingCard } from '../../helper';
 
 const passive = () => {
 	const update = (ecs: ECS) => {
@@ -37,8 +37,7 @@ const fight = () => {
 
 const preFight = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.PreFight) return;
+		if (ecs.state.phase !== DuelPhase.PreFight) return;
 
 		const entities = ecs.query(CT.PreFightActivation).exec();
 
@@ -54,8 +53,7 @@ const preFight = () => {
 
 const postFight = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.PostFight) return;
+		if (ecs.state.phase !== DuelPhase.PostFight) return;
 
 		const entities = ecs.query(CT.PostFightActivation).exec();
 

@@ -1,4 +1,4 @@
-import type { ComponentMap } from '../components';
+import type { ComponentMap, DuelPhase } from '../components';
 import type { EventType } from '../events';
 
 export type InferComponent<T extends keyof CM, CM> = CM[T];
@@ -31,6 +31,8 @@ export interface Handler<CM, ET = EventType> {
 }
 
 export type ExportedECS = {
+	config: Config;
+	state: DuelState;
 	entities: never[];
 };
 
@@ -53,18 +55,23 @@ export type Config = {
 	perTurnTroop: number;
 };
 
+export type DuelState = {
+	phase: DuelPhase;
+	turnOf: string;
+};
+
 export class ECS<CM = ComponentMap, ET = EventType> {
+	public config: Config;
+	public state: DuelState;
 	private entities: Entity<CM>[] = [];
 	private systems: System<CM, ET>[] = [];
 	private eventHandlers: Record<string, Handler<CM, ET>> = {};
 	private nextEntityId = 0;
-	public config: Config;
 	public updateCount = 0;
 
-	constructor(config?: Config) {
-		if (config) {
-			this.config = config;
-		}
+	constructor(options?: { config?: Config; state?: DuelState }) {
+		if (options.config) this.config = options.config;
+		if (options.state) this.state = options.state;
 	}
 
 	createEntity(): Readonly<Entity<CM>> {
@@ -183,13 +190,18 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 	}
 
 	toJSON(): ExportedECS {
-		return {
-			entities: JSON.parse(JSON.stringify(this.entities)),
-		};
+		return JSON.parse(
+			JSON.stringify({
+				config: this.config,
+				state: this.state,
+				entities: this.entities,
+			}),
+		);
 	}
 
-	static fromJSON<CM, ET>(exported: ExportedECS, config?: Config): ECS<CM, ET> {
-		const ecs = new ECS<CM, ET>(config);
+	static fromJSON<CM, ET>(exported: ExportedECS): ECS<CM, ET> {
+		const { config, state } = exported;
+		const ecs = new ECS<CM, ET>({ config, state });
 
 		exported.entities.forEach(({ components }: Entity<CM>) => {
 			const entity = ecs.createEntity();

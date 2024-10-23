@@ -6,12 +6,11 @@ import {
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { getDuelManager, selectGround } from '../../helper';
+import { selectGround } from '../../helper';
 
 const summon = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.Setup) return;
+		if (ecs.state.phase !== DuelPhase.Setup) return;
 
 		const commands = ecs.query(CT.Command).exec();
 		const lastCommand = commands[commands.length - 1].getComponent(CT.Command);
@@ -40,8 +39,7 @@ const summon = () => {
 
 const fight = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.Fight) return;
+		if (ecs.state.phase !== DuelPhase.Fight) return;
 
 		const { groundSize } = ecs.config;
 		for (let i = 0; i < groundSize; i++) {
@@ -90,17 +88,18 @@ export const endTurn = () => {
 		const [endTurnCommand] = ecs
 			.query(CT.Command, { commandType: CommandType.EndTurn })
 			.exec();
-		const duelManager = getDuelManager(ecs);
 
-		if (!endTurnCommand || duelManager.phase !== DuelPhase.Setup) return;
+		if (!endTurnCommand || ecs.state.phase !== DuelPhase.Setup) return;
 
 		const [player1, player2] = ecs.query(CT.PlayerAttribute).exec();
+		const player1Id = player1.getComponent(CT.PlayerAttribute).id;
+		const player2Id = player2.getComponent(CT.PlayerAttribute).id;
 
-		if (duelManager.turnOf == player1.getComponent(CT.PlayerAttribute).id) {
-			duelManager.turnOf = player2.getComponent(CT.PlayerAttribute).id;
+		if (ecs.state.turnOf == player1Id) {
+			ecs.state.turnOf = player2Id;
 		} else {
-			duelManager.turnOf = player1.getComponent(CT.PlayerAttribute).id;
-			duelManager.phase = DuelPhase.PreFight;
+			ecs.state.turnOf = player1.getComponent(CT.PlayerAttribute).id;
+			ecs.state.phase = DuelPhase.PreFight;
 		}
 	};
 
@@ -109,8 +108,7 @@ export const endTurn = () => {
 
 export const changePhase = (phase: DuelPhase) => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		duelManager.phase = phase;
+		ecs.state.phase = phase;
 	};
 
 	return { update };
@@ -118,8 +116,7 @@ export const changePhase = (phase: DuelPhase) => {
 
 export const cleanUp = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.CleanUp) return;
+		if (ecs.state.phase !== DuelPhase.CleanUp) return;
 
 		// Increase charge
 		const chargeableCards = ecs.query(CT.CardChargeable).exec();
