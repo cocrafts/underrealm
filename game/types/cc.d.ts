@@ -1,3 +1,4 @@
+
 declare module "cc" {
     /**
      * @en
@@ -583,6 +584,7 @@ declare module "cc" {
          * @zh 精灵图集中的所有精灵。
          */
         spriteFrames: __private._cocos_2d_assets_sprite_atlas__ISpriteFrameList;
+        constructor();
         /**
          * @en Get the [[Texture2D]] asset of the atlas.
          * @zh 获取精灵图集的贴图。
@@ -621,6 +623,7 @@ declare module "cc" {
          * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
          */
         _fontFamily: string | null;
+        constructor();
         /**
          * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
          */
@@ -678,6 +681,7 @@ declare module "cc" {
          * @deprecated since v3.7.0, this is an engine private interface that will be removed in the future.
          */
         fontDefDictionary: __private._cocos_2d_assets_bitmap_font__FontAtlas;
+        constructor();
         onLoaded(): void;
     }
     /**
@@ -1252,6 +1256,7 @@ declare module "cc" {
      */
     export class UIComponent extends Component {
         protected _lastParent: Node | null;
+        constructor();
         __preload(): void;
         onEnable(): void;
         onDisable(): void;
@@ -1514,6 +1519,7 @@ declare module "cc" {
      * UI 变换组件。
      */
     export class UITransform extends Component {
+        constructor();
         /**
          * @en
          * Size of the UI node.
@@ -1784,6 +1790,7 @@ declare module "cc" {
      * @zh 2D 渲染基础组件，提供精灵渲染在 3D 空间中的能力。
      */
     export class SpriteRenderer extends ModelRenderer {
+        constructor();
         /**
          * @en The spriteFrame that the component should render.
          * @zh 该组件应渲染的 spriteFrame。
@@ -1828,6 +1835,7 @@ declare module "cc" {
          * @zh 遮罩组件类型。
          */
         static Type: typeof __private._cocos_2d_components_mask__MaskType;
+        constructor();
         /**
          * @en
          * The mask type.
@@ -2214,6 +2222,7 @@ declare module "cc" {
      * 渲染精灵组件。
      */
     export class Sprite extends UIRenderer {
+        constructor();
         /**
          * @en
          * The sprite atlas where the sprite is.
@@ -2845,6 +2854,7 @@ declare module "cc" {
      * so manual management with the UIStaticBatch component is no longer recommended and will be removed in the future
      */
     export class UIStaticBatch extends UIRenderer {
+        constructor();
         get color(): Readonly<math.Color>;
         set color(value: Readonly<math.Color>);
         get drawBatchList(): __private._cocos_2d_renderer_draw_batch__DrawBatch2D[];
@@ -2929,6 +2939,7 @@ declare module "cc" {
      * UI 透明度设置组件。可以通过该组件设置透明度来影响后续的渲染节点。已经带有渲染组件的节点可以直接修改 color 的 alpha 通道。
      */
     export class UIOpacity extends Component {
+        constructor();
         /**
          * @en
          * The transparency value of the impact.
@@ -2938,8 +2949,27 @@ declare module "cc" {
          */
         get opacity(): number;
         set opacity(value: number);
-        static setEntityLocalOpacityDirtyRecursively(node: Node, dirty: boolean, interruptParentOpacity: number, setByParent: boolean): void;
+        /**
+         * @en
+         * Recursively sets localopacity.
+         *
+         * @zh
+         * 递归设置localopacity。
+         *
+         * @param node @en recursive node.
+         *             @zh 递归的节点。
+         * @param dirty @en Is the color dirty.
+         *              @zh color是否dirty。
+         * @param parentOpacity @en The parent node's opacity.
+         *                      @zh 父节点的opacity。
+         * @param stopRecursiveIfHasOpacity @en Stop recursion if UiOpacity component exists.
+         *                                  @zh 如果存在UiOpacity组件则停止递归。
+         */
+        static setEntityLocalOpacityDirtyRecursively(node: Node, dirty: boolean, parentOpacity: number, stopRecursiveIfHasOpacity: boolean): void;
         protected _opacity: number;
+        protected _getParentOpacity(node: Node): number;
+        protected _parentChanged(): void;
+        protected _setEntityLocalOpacityRecursively(opacity: number): void;
         onEnable(): void;
         onDisable(): void;
     }
@@ -3256,7 +3286,7 @@ declare module "cc" {
          * 改变描边的颜色。
          */
         get outlineColor(): math.Color;
-        set outlineColor(value: math.Color);
+        set outlineColor(value: Readonly<math.Color>);
         /**
          * @en
          * Change the outline width.
@@ -3280,7 +3310,7 @@ declare module "cc" {
          * 阴影的颜色。
          */
         get shadowColor(): math.Color;
-        set shadowColor(value: math.Color);
+        set shadowColor(value: Readonly<math.Color>);
         /**
          * @en
          * Offset between font and shadow.
@@ -3429,7 +3459,7 @@ declare module "cc" {
      * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
      */
     export class RenderData extends BaseRenderData {
-        static add(vertexFormat?: gfx.Attribute[], accessor?: __private._cocos_2d_renderer_static_vb_accessor__StaticVBAccessor): RenderData;
+        static add(vertexFormat?: gfx.Attribute[], accessor?: __private._cocos_2d_renderer_static_vb_accessor__StaticVBAccessor | null): RenderData;
         static remove(data: RenderData): void;
         get dataLength(): number;
         set dataLength(length: number);
@@ -3452,7 +3482,7 @@ declare module "cc" {
         get accessor(): __private._cocos_2d_renderer_static_vb_accessor__StaticVBAccessor;
         vertexRow: number;
         vertexCol: number;
-        constructor(vertexFormat?: gfx.Attribute[], accessor?: __private._cocos_2d_renderer_static_vb_accessor__StaticVBAccessor);
+        constructor(vertexFormat?: gfx.Attribute[], accessor?: __private._cocos_2d_renderer_static_vb_accessor__StaticVBAccessor | null);
         resize(vertexCount: number, indexCount: number): void;
         protected setRenderDrawInfoAttributes(): void;
         /**
@@ -3507,7 +3537,7 @@ declare module "cc" {
         indexRange: number;
         lastFilledIndex: number;
         lastFilledVertex: number;
-        frame: any;
+        frame: SpriteFrame | null;
         constructor(vertexFormat?: gfx.Attribute[]);
         request(vertexCount: number, indexCount: number): boolean;
         reserve(vertexCount: number, indexCount: number): boolean;
@@ -3519,7 +3549,7 @@ declare module "cc" {
         reset(): void;
         clear(): void;
         protected _initIAInfo(device: gfx.Device): void;
-        protected _reallocBuffer(vCount: any, iCount: any): void;
+        protected _reallocBuffer(vCount: number, iCount: number): void;
         setRenderDrawInfoAttributes(): void;
         particleInitRenderDrawInfo(entity: __private._cocos_2d_renderer_render_entity__RenderEntity): void;
     }
@@ -3676,7 +3706,7 @@ declare module "cc" {
          * @param assembler - The assembler for the current component, could be null
          * @param transform - Node type transform, if passed, then batcher will consider it's using model matrix, could be null
          */
-        commitComp(comp: UIRenderer, renderData: BaseRenderData | null, frame: __private._cocos_asset_assets_texture_base__TextureBase | SpriteFrame | null, assembler: any, transform: Node | null): void;
+        commitComp(comp: UIRenderer, renderData: BaseRenderData | null, frame: __private._cocos_asset_assets_texture_base__TextureBase | SpriteFrame | null, assembler: IAssembler, transform: Node | null): void;
         /**
          * @en
          * Render component data submission process for individual [[gfx.InputAssembler]]
@@ -3781,7 +3811,67 @@ declare module "cc" {
     export class UIDrawBatch extends __private._cocos_2d_renderer_draw_batch__DrawBatch2D {
     }
     export class QuadRenderData extends MeshRenderData {
-        constructor(vertexFormat: any);
+        constructor(vertexFormat: gfx.Attribute[]);
+    }
+    export class Atlas {
+        constructor(width: number, height: number);
+        /**
+         * @en
+         * Append a sprite frame into the dynamic atlas.
+         *
+         * @zh
+         * 添加碎图进入动态图集。
+         *
+         * @method insertSpriteFrame
+         * @param spriteFrame  the sprite frame that will be inserted in the atlas.
+         */
+        insertSpriteFrame(spriteFrame: SpriteFrame): {
+            x: number;
+            y: number;
+            texture: __private._cocos_2d_utils_dynamic_atlas_atlas__DynamicAtlasTexture;
+        } | null;
+        removeSpriteFrame(spriteFrame: SpriteFrame): void;
+        /**
+         * @en
+         * Delete a texture from the atlas.
+         *
+         * @zh
+         * 从动态图集中删除某张纹理。
+         *
+         * @method deleteAtlasTexture
+         * @param texture  the texture that will be removed from the atlas.
+         */
+        deleteInnerTexture(texture: Texture2D): void;
+        /**
+         * @en
+         * Whether the atlas is empty.
+         *
+         * @zh
+         * 图集是否为空图集。
+         *
+         * @method isEmpty
+         */
+        isEmpty(): boolean;
+        /**
+         * @en
+         * Reset the dynamic atlas.
+         *
+         * @zh
+         * 重置该动态图集。
+         *
+         * @method reset
+         */
+        reset(): void;
+        /**
+         * @en
+         * Reset the dynamic atlas, and destroy the texture of the atlas.
+         *
+         * @zh
+         * 重置该动态图集，并销毁该图集的纹理。
+         *
+         * @method destroy
+         */
+        destroy(): void;
     }
     /**
      * @en A utils class for parsing HTML texts. The parsed results will be an object array.
@@ -3872,6 +3962,7 @@ declare module "cc" {
      */
     export class DynamicAtlasManager extends System {
         static instance: DynamicAtlasManager;
+        constructor();
         /**
          * @en
          * Enable or disable the dynamic atlas.
@@ -3939,7 +4030,7 @@ declare module "cc" {
          * @method insertSpriteFrame
          * @param spriteFrame  the sprite frame that will be inserted in the atlas.
          */
-        insertSpriteFrame(spriteFrame: any): {
+        insertSpriteFrame(spriteFrame: SpriteFrame): {
             x: number;
             y: number;
             texture: __private._cocos_2d_utils_dynamic_atlas_atlas__DynamicAtlasTexture;
@@ -3964,7 +4055,7 @@ declare module "cc" {
          * @method deleteAtlasSpriteFrame
          * @param spriteFrame  the sprite frame that will be removed from the atlas.
          */
-        deleteAtlasSpriteFrame(spriteFrame: any): void;
+        deleteAtlasSpriteFrame(spriteFrame: SpriteFrame): void;
         /**
          * @en
          * Delete a texture from the atlas.
@@ -3975,7 +4066,7 @@ declare module "cc" {
          * @method deleteAtlasTexture
          * @param texture  the texture that will be removed from the atlas.
          */
-        deleteAtlasTexture(texture: any): void;
+        deleteAtlasTexture(texture: __private._cocos_asset_assets_texture_base__TextureBase): void;
         /**
          * @en
          * Pack the sprite in the dynamic atlas and update the atlas information of the sprite frame.
@@ -3986,7 +4077,7 @@ declare module "cc" {
          * @method packToDynamicAtlas
          * @param frame  the sprite frame that will be packed in the dynamic atlas.
          */
-        packToDynamicAtlas(comp: any, frame: any): void;
+        packToDynamicAtlas(comp: any, frame: SpriteFrame | null): void;
     }
     /**
      * @en The singleton instance of [[DynamicAtlasManager]], please use [[DynamicAtlasManager.instance]] instead.
@@ -7647,25 +7738,25 @@ declare module "cc" {
          * @en The main window
          * @zh 主窗口
          */
-        get mainWindow(): __private._cocos_render_scene_core_render_window__RenderWindow | null;
+        get mainWindow(): renderer.RenderWindow | null;
         /**
          * @en The current active window
          * @zh 当前激活的窗口
          */
-        set curWindow(window: __private._cocos_render_scene_core_render_window__RenderWindow | null);
-        get curWindow(): __private._cocos_render_scene_core_render_window__RenderWindow | null;
+        set curWindow(window: renderer.RenderWindow | null);
+        get curWindow(): renderer.RenderWindow | null;
         /**
          * @e The temporary window for data transmission
          * @zh 临时窗口（用于数据传输）
          * @internal
          */
-        set tempWindow(window: __private._cocos_render_scene_core_render_window__RenderWindow | null);
-        get tempWindow(): __private._cocos_render_scene_core_render_window__RenderWindow | null;
+        set tempWindow(window: renderer.RenderWindow | null);
+        get tempWindow(): renderer.RenderWindow | null;
         /**
          * @en The windows list
          * @zh 窗口列表
          */
-        get windows(): __private._cocos_render_scene_core_render_window__RenderWindow[];
+        get windows(): renderer.RenderWindow[];
         /**
          * @zh
          * 启用自定义渲染管线
@@ -7744,7 +7835,7 @@ declare module "cc" {
         /**
          * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
          */
-        _createWindowFun: (root: Root) => __private._cocos_render_scene_core_render_window__RenderWindow;
+        _createWindowFun: (root: Root) => renderer.RenderWindow;
         /**
          * @en The constructor of the root, user shouldn't create the root instance, it's managed by the [[Director]].
          * @zh 构造函数，用户不应该自己创建任何 Root 对象，它是由 [[Director]] 管理的。
@@ -7776,7 +7867,7 @@ declare module "cc" {
          * @param rppl The render pipeline
          * @returns The setup is successful or not
          */
-        setRenderPipeline(rppl?: RenderPipeline): boolean;
+        setRenderPipeline(useCustomPipeline?: boolean): boolean;
         /**
          * @en Notify the pipeline and all scenes that the global pipeline state have been updated so that they can update their render data and states.
          * @zh 通知渲染管线和所有场景全局管线状态已更新，需要更新自身状态。
@@ -7787,7 +7878,7 @@ declare module "cc" {
          * @zh 激活指定窗口为当前窗口 [[curWindow]]
          * @param window The render window to be activated
          */
-        activeWindow(window: __private._cocos_render_scene_core_render_window__RenderWindow): void;
+        activeWindow(window: renderer.RenderWindow): void;
         /**
          * @en Reset the time cumulated
          * @zh 重置累计时间
@@ -7804,13 +7895,13 @@ declare module "cc" {
          * @zh 创建一个新的窗口
          * @param info @en The window creation information @zh 窗口描述信息
          */
-        createWindow(info: __private._cocos_render_scene_core_render_window__IRenderWindowInfo): __private._cocos_render_scene_core_render_window__RenderWindow | null;
+        createWindow(info: __private._cocos_render_scene_core_render_window__IRenderWindowInfo): renderer.RenderWindow | null;
         /**
          * @en Destroy a render window
          * @zh 销毁指定的窗口
          * @param window The render window to be destroyed
          */
-        destroyWindow(window: __private._cocos_render_scene_core_render_window__RenderWindow): void;
+        destroyWindow(window: renderer.RenderWindow): void;
         /**
          * @en Destroy all render windows
          * @zh 销毁全部窗口
@@ -7939,7 +8030,7 @@ declare module "cc" {
              * @param binding The target binding.
              * @param texture The texture to be bound.
              */
-            bindTexture(binding: number, texture: Texture, index?: number, flags?: AccessFlags): void;
+            bindTexture(binding: number, texture: Texture, index?: number, flags?: AccessFlagBit): void;
             /**
              * @en Get buffer from the specified binding location.
              * @zh 获取当前指定绑定位置上的缓冲。
@@ -9153,11 +9244,11 @@ declare module "cc" {
         }
         export class RenderPassInfo {
             colorAttachments: ColorAttachment[];
-            depthStencilAttachment: DepthStencilAttachment;
-            depthStencilResolveAttachment: DepthStencilAttachment;
+            depthStencilAttachment: DepthStencilAttachment | null;
+            depthStencilResolveAttachment: DepthStencilAttachment | null;
             subpasses: SubpassInfo[];
             dependencies: SubpassDependency[];
-            constructor(colorAttachments?: ColorAttachment[], depthStencilAttachment?: DepthStencilAttachment, depthStencilResolveAttachment?: DepthStencilAttachment, subpasses?: SubpassInfo[], dependencies?: SubpassDependency[]);
+            constructor(colorAttachments?: ColorAttachment[], depthStencilAttachment?: DepthStencilAttachment | null, depthStencilResolveAttachment?: DepthStencilAttachment | null, subpasses?: SubpassInfo[], dependencies?: SubpassDependency[]);
             copy(info: Readonly<RenderPassInfo>): RenderPassInfo;
         }
         export class GeneralBarrierInfo {
@@ -9346,6 +9437,7 @@ declare module "cc" {
             width: number;
             height: number;
         }
+        export type TextureHandle = __private._cocos_gfx_base_define__GPUTexture | number;
         /**
          * @en GFX Device.
          * @zh GFX 设备。
@@ -9366,6 +9458,11 @@ declare module "cc" {
              * @zh GFX 默认命令缓冲。
              */
             get commandBuffer(): CommandBuffer;
+            /**
+             * @en The current format of the swapchain being used.
+             * @zh 当前使用的swapchain的格式。
+             */
+            get swapchainFormat(): Format;
             /**
              * @en Renderer description.
              * @zh 渲染器描述。
@@ -9423,8 +9520,9 @@ declare module "cc" {
             protected _generalBarrierss: Map<number, GeneralBarrier>;
             protected _textureBarriers: Map<number, TextureBarrier>;
             protected _bufferBarriers: Map<number, __private._cocos_gfx_base_states_buffer_barrier__BufferBarrier>;
+            protected _swapchainFormat: Format;
             static canvas: HTMLCanvasElement;
-            abstract initialize(info: Readonly<DeviceInfo>): boolean;
+            abstract initialize(info: Readonly<DeviceInfo>): boolean | Promise<boolean>;
             abstract destroy(): void;
             /**
              * @en Acquire next swapchain image.
@@ -9655,6 +9753,7 @@ declare module "cc" {
             get depthStencilTexture(): Texture | null;
             get width(): number;
             get height(): number;
+            get needRebuild(): boolean;
             protected _renderPass: RenderPass | null;
             protected _colorTextures: (Texture | null)[];
             protected _depthStencilTexture: Texture | null;
@@ -10101,7 +10200,7 @@ declare module "cc" {
             constructor();
             abstract initialize(info: Readonly<TextureInfo> | Readonly<TextureViewInfo>): void;
             abstract destroy(): void;
-            abstract getGLTextureHandle(): number;
+            abstract getTextureHandle(): TextureHandle;
             /**
              * @en Resize texture.
              * @zh 重置纹理大小。
@@ -10172,7 +10271,14 @@ declare module "cc" {
              * @zh
              * 使用空渲染器，可以用于测试和服务器端环境，目前暂时用于 Cocos 内部测试使用。
              */
-            HEADLESS = 3
+            HEADLESS = 3,
+            /**
+             * @en
+             * Force WebGPU rendering, but this option will be ignored in some browsers.
+             * @zh
+             * 强制使用 WebGPU 渲染，但是在部分浏览器中这个选项会被忽略。
+             */
+            WEBGPU = 4
         }
         /**
          * @internal
@@ -10181,8 +10287,9 @@ declare module "cc" {
             UNKNOWN = "Bad expression <-1>",
             CANVAS = 0,
             WEBGL = 1,
-            OPENGL = 2,
-            HEADLESS = 3
+            WEBGPU = 2,
+            OPENGL = 3,
+            HEADLESS = 4
         }
         /**
          * @internal
@@ -10190,7 +10297,7 @@ declare module "cc" {
         export class DeviceManager {
             get gfxDevice(): Device;
             get swapchain(): Swapchain;
-            init(canvas: HTMLCanvasElement | null, bindingMappingInfo: BindingMappingInfo): void;
+            init(canvas: HTMLCanvasElement | null, bindingMappingInfo: BindingMappingInfo): boolean | Promise<boolean>;
         }
         /**
          * @internal
@@ -10218,6 +10325,121 @@ declare module "cc" {
         }
         export const programLib: __private._cocos_render_scene_core_program_lib__ProgramLib;
         export function getDeviceShaderVersion(device: gfx.Device): string;
+        /**
+         * @en The render window represents the render target, it could be an off screen frame buffer or the on screen buffer.
+         * @zh 渲染窗口代表了一个渲染目标，可以是离屏的帧缓冲，也可以是屏幕缓冲
+         */
+        export class RenderWindow {
+            /**
+             * @en Get window width. Pre-rotated (i.e. rotationally invariant, always in identity/portrait mode) if possible.
+             * If you want to get oriented size instead, you should use [[renderer.scene.Camera.width]] which corresponds to the current screen rotation.
+             * @zh 获取窗口宽度。如果支持交换链预变换，返回值将始终处于单位旋转（竖屏）坐标系下。如果需要获取旋转后的尺寸，请使用 [[renderer.scene.Camera.width]]。
+             */
+            get width(): number;
+            /**
+             * @en Get window height. Pre-rotated (i.e. rotationally invariant, always in identity/portrait mode) if possible.
+             * If you want to get oriented size instead, you should use [[renderer.scene.Camera.width]] which corresponds to the current screen rotation.
+             * @zh 获取窗口高度。如果支持交换链预变换，返回值将始终处于单位旋转（竖屏）坐标系下。如果需要获取旋转后的尺寸，请使用 [[renderer.scene.Camera.height]]。
+             */
+            get height(): number;
+            /**
+             * @en Get the swapchain for this window, if there is one
+             * @zh 如果存在的话，获取此窗口的交换链
+             */
+            get swapchain(): gfx.Swapchain;
+            /**
+             * @en Get window frame buffer.
+             * @zh 帧缓冲对象。
+             */
+            get framebuffer(): gfx.Framebuffer;
+            get cameras(): scene.Camera[];
+            /**
+             * @en Get render window Id.
+             * Render windowd Id is used to identify the render window in the render pipeline.
+             * @zh 获得渲染窗口Id。渲染窗口Id用于在渲染管线中标识渲染窗口。
+             */
+            get renderWindowId(): number;
+            /**
+             * @en Get the name of the color attachment.
+             * The name is used to identify the color attachment in the render pipeline.
+             * @zh 获取颜色附件的名称。用于自定义渲染管线中的资源注册。
+             */
+            get colorName(): string;
+            /**
+             * @en Get the name of the depth stencil attachment.
+             * The name is used to identify the depth stencil attachment in the render pipeline.
+             * @zh 获取深度模板附件的名称。用于自定义渲染管线中的资源注册。
+             */
+            get depthStencilName(): string;
+            /**
+             * @en The render pipeline should handle the resize event properly
+             * @zh 渲染管线应该正确处理窗口大小变化事件
+             */
+            isRenderWindowResized(): boolean;
+            /**
+             * @en The render pipeline should set this value to false after handling the resize event
+             * @zh 渲染管线应该在处理完窗口大小变化事件后将此值设置为 false
+             */
+            setRenderWindowResizeHandled(): void;
+            protected _title: string;
+            protected _width: number;
+            protected _height: number;
+            protected _swapchain: gfx.Swapchain;
+            protected _renderPass: gfx.RenderPass | null;
+            protected _colorTextures: gfx.Texture[];
+            protected _depthStencilTexture: gfx.Texture | null;
+            protected _cameras: scene.Camera[];
+            protected _hasOnScreenAttachments: boolean;
+            protected _hasOffScreenAttachments: boolean;
+            protected _framebuffer: gfx.Framebuffer | null;
+            protected _device: gfx.Device | null;
+            protected _renderWindowId: number;
+            protected _isResized: boolean;
+            protected _colorName: string;
+            protected _depthStencilName: string;
+            /**
+             * @private
+             */
+            static registerCreateFunc(root: Root): void;
+            initialize(device: gfx.Device, info: __private._cocos_render_scene_core_render_window__IRenderWindowInfo): boolean;
+            destroy(): void;
+            /**
+             * @en Resize window.
+             * @zh 重置窗口大小。
+             * @param width The new width.
+             * @param height The new height.
+             */
+            resize(width: number, height: number): void;
+            /**
+             * @en Extract all render cameras attached to the render window to the output cameras list
+             * @zh 将所有挂载到当前渲染窗口的摄像机存储到输出列表参数中
+             * @param cameras @en The output cameras list, should be empty before invoke this function
+             *                @zh 输出相机列表参数，传入时应该为空
+             */
+            extractRenderCameras(cameras: scene.Camera[]): void;
+            /**
+             * @en Attach a new camera to the render window
+             * @zh 添加渲染相机
+             * @param camera @en The camera to attach @zh 要挂载的相机
+             */
+            attachCamera(camera: scene.Camera): void;
+            /**
+             * @en Detach a camera from the render window
+             * @zh 移除场景中的渲染相机
+             * @param camera @en The camera to detach @zh 要移除的相机
+             */
+            detachCamera(camera: scene.Camera): void;
+            /**
+             * @en Clear all attached cameras
+             * @zh 清空全部渲染相机
+             */
+            clearCameras(): void;
+            /**
+             * @en Sort all attached cameras with priority
+             * @zh 按照优先级对所有挂载的相机排序
+             */
+            sortCameras(): void;
+        }
         export namespace scene {
             /**
              * @en The enumeration type for the fixed axis of the camera.
@@ -10534,7 +10756,7 @@ declare module "cc" {
                  * @en The target render window of the camera, is absent, the camera won't be rendered.
                  * @zh 相机的目标渲染窗口，如果缺省，该相机不会执行渲染流程。
                  */
-                window?: __private._cocos_render_scene_core_render_window__RenderWindow | null;
+                window?: RenderWindow | null;
                 /**
                  * @en Render priority of the camera. Cameras with higher depth are rendered after cameras with lower depth.
                  * @zh 相机的渲染优先级，值越小越优先渲染。
@@ -10600,8 +10822,8 @@ declare module "cc" {
                  * @en The render window of the camera
                  * @zh 相机关联的渲染窗口
                  */
-                set window(val: __private._cocos_render_scene_core_render_window__RenderWindow);
-                get window(): __private._cocos_render_scene_core_render_window__RenderWindow;
+                set window(val: RenderWindow);
+                get window(): RenderWindow;
                 /**
                  * @en Whether the camera is enabled, a disabled camera won't be processed in the render pipeline.
                  * @zh 相机是否启用，未启用的相机不会被渲染
@@ -10796,6 +11018,7 @@ declare module "cc" {
                 postProcess: postProcess.PostProcess | null;
                 usePostProcess: boolean;
                 pipeline: string;
+                pipelineSettings: object | null;
                 constructor(device: gfx.Device);
                 /**
                  * @en Initialize the camera, normally you shouldn't invoke this function, it's managed automatically.
@@ -10871,7 +11094,7 @@ declare module "cc" {
                  * @zh 修改相机的目标渲染窗口
                  * @param window The target render window, could be null
                  */
-                changeTargetWindow(window?: __private._cocos_render_scene_core_render_window__RenderWindow | null): void;
+                changeTargetWindow(window?: RenderWindow | null): void;
                 /**
                  * @en Detach camera from the render window
                  * @zh 将 camera 从渲染窗口移除
@@ -12094,7 +12317,7 @@ declare module "cc" {
                  * @zh 全局雾颜色
                  * @en Global fog color
                  */
-                set fogColor(val: math.Color);
+                set fogColor(val: Readonly<math.Color>);
                 get fogColor(): math.Color;
                 /**
                  * @zh 当前雾化类型。
@@ -14133,6 +14356,13 @@ declare module "cc" {
              * @param matrix matrix to transform with
              */
             transformMat4(matrix: Mat4): Vec2;
+            /**
+             * @en Converts the current Vec2 object to a Vec3 object by adding a z-component of 0.
+             * @zh 将当前的Vec2对象转换为一个z分量为0的Vec3对象。
+             * @returns Vec3 @en A new Vec3 object created from the current Vec2 object with z-component set to 0.
+             * @zh 从当前的Vec2对象创建一个新的Vec3对象，其中z分量设置为0。
+             */
+            toVec3(): Vec3;
         }
         export function v2(other: Vec2): Vec2;
         export function v2(x?: number, y?: number): Vec2;
@@ -14664,6 +14894,13 @@ declare module "cc" {
              * @param matrix matrix to transform with
              */
             transformMat4(matrix: Mat4): Vec3;
+            /**
+             * @en Converts the current Vec3 object to a Vec2 object by adding a z-component of 0.
+             * @zh 将当前的Vec3对象转换为一个z分量为0的Vec3对象。
+             * @returns Vec2 @en A new Vec2 object created from the current Vec3 object with z-component ignored.
+             * @zh 从当前的Vec3对象创建一个新的Vec2对象，丢弃z分量。
+             */
+            toVec2(): Vec2;
         }
         export function v3(other: Vec3): Vec3;
         export function v3(x?: number, y?: number, z?: number): Vec3;
@@ -16468,7 +16705,8 @@ declare module "cc" {
              * @param from Original Size.
              * @param to Target Size.
              * @param ratio The interpolation coefficient.The range is [0,1].
-             * @returns A vector consisting of linear interpolation of the width and height of the current size to the width and height of the target size at a specified interpolation ratio, respectively.
+             * @return A vector consisting of linear interpolation of the width and height of the current size
+             *         to the width and height of the target size at a specified interpolation ratio, respectively.
              */
             static lerp<Out extends ISizeLike>(out: Out, from: Out, to: Out, ratio: number): Out;
             /**
@@ -16797,7 +17035,7 @@ declare module "cc" {
          * @zh 通过 Red、Green、Blue 颜色通道表示颜色，并通过 Alpha 通道表示不透明度。<br/>
          * 每个通道都为取值范围 [0, 255] 的整数。<br/>
          */
-        export class Color extends ValueType {
+        export class Color extends ValueType implements misc.Modifiable {
             static WHITE: Readonly<Color>;
             static GRAY: Readonly<Color>;
             static BLACK: Readonly<Color>;
@@ -16963,15 +17201,11 @@ declare module "cc" {
             get w(): number;
             set w(value: number);
             /**
-             * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
-             */
-            _val: number;
-            /**
              * @en Construct a same color from the given color
              * @zh 构造与指定颜色相等的颜色。
              * @param other Specified color
              */
-            constructor(other: Color);
+            constructor(other: Readonly<Color>);
             /**
              * @en Construct a color form the hex color string
              * @zh 用十六进制颜色字符串中构造颜色。
@@ -16996,18 +17230,18 @@ declare module "cc" {
              * @en Check whether the current color is identical with the given color
              * @zh 判断当前颜色是否与指定颜色相等。
              * @param other Specified color
-             * @returns Returns `true` when all channels of both colours are equal; otherwise returns `false`.
+             * @returns Returns `true` when all channels of both colors are equal; otherwise returns `false`.
              */
-            equals(other: Color): boolean;
+            equals(other: Readonly<Color>): boolean;
             /**
              * @en Calculate linear interpolation result between this color and another one with given ratio。
              * @zh 根据指定的插值比率，从当前颜色到目标颜色之间做插值。
              * @param to Target color
              * @param ratio The interpolation coefficient.The range is [0,1].
              */
-            lerp(to: Color, ratio: number): Color;
+            lerp(to: Readonly<Color>, ratio: number): Color;
             /**
-             * @en Convert to string with color informations
+             * @en Convert to string with color information.
              * @zh 返回当前颜色的字符串表示。
              * @returns A string representation of the current color.
              */
@@ -17045,7 +17279,8 @@ declare module "cc" {
              * @en convert Color to HEX color string.
              * @zh 转换当前颜色为十六进制颜色字符串。
              * @param fmt "#rrggbb" or "#rrggbbaa".
-             * - `'#rrggbbaa'` obtains the hexadecimal value of the Red, Green, Blue, Alpha channels (**two**, high complement 0) and connects them sequentially.
+             * - `'#rrggbbaa'` obtains the hexadecimal value of the Red, Green, Blue,
+             *   Alpha channels (**two**, high complement 0) and connects them sequentially.
              * - `'#rrggbb'` is similar to `'#rrggbbaa'` but does not include the Alpha channel.
              * @returns the Hex color string
              * @example
@@ -17109,7 +17344,7 @@ declare module "cc" {
              * @param [a=255] alpha component of the color
              * @returns Current color.
              */
-            set(other: Color): Color;
+            set(other: Readonly<Color>): Color;
             set(r?: number, g?: number, b?: number, a?: number): Color;
             /**
              * @en Multiplies the current color by the specified color.
@@ -17118,21 +17353,11 @@ declare module "cc" {
              */
             multiply(other: Color): Color;
             /**
-             * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
+             * @en It is used in tween action. As can not modify this._data directly.
+             * @zn 被 tween action 使用。因为不能直接修改 this._data，所以返回用于修改的属性。
+             * @returns @en ['r', 'g', 'b', 'a'] @zh ['r', 'g', 'b', 'a']
              */
-            _set_r_unsafe(red: number): Color;
-            /**
-             * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
-             */
-            _set_g_unsafe(green: number): Color;
-            /**
-             * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
-             */
-            _set_b_unsafe(blue: number): Color;
-            /**
-             * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
-             */
-            _set_a_unsafe(alpha: number): Color;
+            getModifiableProperties(): string[];
         }
         export function color(other: Color | string): Color;
         export function color(r?: number, g?: number, b?: number, a?: number): Color;
@@ -17319,7 +17544,6 @@ declare module "cc" {
             g: number;
             b: number;
             a: number;
-            _val: number;
         }
         export interface IMat3Like {
             m00: number;
@@ -17420,8 +17644,12 @@ declare module "cc" {
              * @param dtor @en The finalizer of element, it's invoked when this Pool is destroyed or shrunk if
              * it is valid.
              * @zh 元素的析构器。如果存在的话，当对象池销毁或者缩容时，会使用该析构器。
+             * @param shrinkThreshold @en The container is shrink only if the size of the container exceeds the shrinkThreshold,
+             * and the size of the container after reduction is greater than or equal to the shrinkThreshold. The value equals elementsPerBatch
+             * if not value is passed.
+             * @zh 只有容器的数量大于 shrinkThreshold 时才缩容，缩减后的容器大小小于等于 shrinkThreshold。如果没有传入值，那么它的值和 elementsPerBatch 相同。
              */
-            constructor(ctor: () => T, elementsPerBatch: number, dtor?: (obj: T) => void);
+            constructor(ctor: () => T, elementsPerBatch: number, dtor?: (obj: T) => void, shrinkThreshold?: number);
             /**
              * @en Take an object out of the object pool.
              * @zh 从对象池中取出一个对象。
@@ -18126,16 +18354,16 @@ declare module "cc" {
              * Creates a new triangle instance.
              * @zh
              * 创建一个新的三角形。
-             * @param {number} ax @en The x component of point a @zh a 点的 x 部分。
-             * @param {number} ay @en The y component of point a @zh a 点的 y 部分。
-             * @param {number} az @en The z component of point a @zh a 点的 z 部分。
-             * @param {number} bx @en The x component of point b @zh b 点的 x 部分。
-             * @param {number} by @en The y component of point b @zh b 点的 y 部分。
-             * @param {number} bz @en The z component of point b @zh b 点的 z 部分。
-             * @param {number} cx @en The x component of point c @zh c 点的 x 部分。
-             * @param {number} cy @en The y component of point c @zh c 点的 y 部分。
-             * @param {number} cz @en The z component of point c @zh c 点的 z 部分。
-             * @returns {Triangle} @en The created Triangle instance. @zh 创建出的三角形实例。
+             * @param ax @en The x component of point a @zh a 点的 x 部分。
+             * @param ay @en The y component of point a @zh a 点的 y 部分。
+             * @param az @en The z component of point a @zh a 点的 z 部分。
+             * @param bx @en The x component of point b @zh b 点的 x 部分。
+             * @param by @en The y component of point b @zh b 点的 y 部分。
+             * @param bz @en The z component of point b @zh b 点的 z 部分。
+             * @param cx @en The x component of point c @zh c 点的 x 部分。
+             * @param cy @en The y component of point c @zh c 点的 y 部分。
+             * @param cz @en The z component of point c @zh c 点的 z 部分。
+             * @returns @en The created Triangle instance. @zh 创建出的三角形实例。
              */
             static create(ax?: number, ay?: number, az?: number, bx?: number, by?: number, bz?: number, cx?: number, cy?: number, cz?: number): Triangle;
             /**
@@ -18221,15 +18449,15 @@ declare module "cc" {
              * Constructs a triangle.
              * @zh
              * 构造一个三角形。
-             * @param {number} ax @en x component of point a. @zh a 点的 x 部分。
-             * @param {number} ay @en y component of point a. @zh a 点的 y 部分。
-             * @param {number} az @en z component of point a. @zh a 点的 z 部分。
-             * @param {number} bx @en x component of point b. @zh b 点的 x 部分。
-             * @param {number} by @en y component of point b. @zh b 点的 y 部分。
-             * @param {number} bz @en z component of point b. @zh b 点的 z 部分。
-             * @param {number} cx @en x component of point c. @zh c 点的 x 部分。
-             * @param {number} cy @en y component of point c. @zh c 点的 y 部分。
-             * @param {number} cz @en z component of point c. @zh c 点的 z 部分。
+             * @param ax @en x component of point a. @zh a 点的 x 部分。
+             * @param ay @en y component of point a. @zh a 点的 y 部分。
+             * @param az @en z component of point a. @zh a 点的 z 部分。
+             * @param bx @en x component of point b. @zh b 点的 x 部分。
+             * @param by @en y component of point b. @zh b 点的 y 部分。
+             * @param bz @en z component of point b. @zh b 点的 z 部分。
+             * @param cx @en x component of point c. @zh c 点的 x 部分。
+             * @param cy @en y component of point c. @zh c 点的 y 部分。
+             * @param cz @en z component of point c. @zh c 点的 z 部分。
              */
             constructor(ax?: number, ay?: number, az?: number, bx?: number, by?: number, bz?: number, cx?: number, cy?: number, cz?: number);
         }
@@ -18433,11 +18661,13 @@ declare module "cc" {
             static create(px?: number, py?: number, pz?: number, hw?: number, hh?: number, hl?: number): AABB;
             /**
              * @en
-             * Clones an AABB, which will create a new AABB instance with the same value as the input parameter `a`. Note that each time `clone` is invoked, a new AABB object will be created, so use `copy` method whenever it could to reduce GC pressure.
+             * Clones an AABB, which will create a new AABB instance with the same value as the input parameter `a`. Note that each time `clone` is invoked,
+             * a new AABB object will be created, so use `copy` method whenever it could to reduce GC pressure.
              * @zh
              * 克隆一个 AABB，其会创建出一个值跟输入参数`a`一样的 AABB 实例。注意，每次调用 `clone` 都会创建出新实例，尽可能使用 `copy` 方法以减小 GC 压力。
              * @param a @zh 克隆的目标。 @en The target object to be cloned.
              * @returns @zh 克隆出的 AABB 实例。@en The cloned AABB instance.
+             * @deprecated since v3.8.4. Please use the corresponding instance method instead.
              */
             static clone(a: AABB | Readonly<AABB>): AABB;
             /**
@@ -18448,6 +18678,7 @@ declare module "cc" {
              * @param out @zh 接受操作的 AABB。 @en The output AABB which is the copy destination.
              * @param a @zh 被复制的 AABB，此为只读参数。 @en The source object of the copy operation, it's readonly.
              * @returns @zh 接受操作的 AABB `out` 的引用。 @en The reference to the first parameter `out`.
+             * @deprecated since v3.8.4. Please use the corresponding instance method instead.
              */
             static copy(out: AABB, a: AABB | Readonly<AABB>): AABB;
             /**
@@ -18481,9 +18712,11 @@ declare module "cc" {
              * Merges two AABB instances into one.
              * @zh
              * 合并两个 AABB 到一个目标 AABB 中。
-             * @param out @zh 接受操作的目标 AABB。 @en The output AABB to storge the merge result.
-             * @param a @zh 第一个输入的 AABB，当其与 out 参数不同的时候，此函数内部不会修改其值。 @en The first AABB to be merged, its value will not be modified if `a` is not equal to the `out` paramater.
-             * @param b @zh 第二个输入的 AABB，当其与 out 参数不同的时候，此函数内部不会修改其值。 @en The second AABB to be merged, its value will not be modified if `b` is not equal to the `out` paramater.
+             * @param out @zh 接受操作的目标 AABB。 @en The output AABB to storage the merge result.
+             * @param a @zh 第一个输入的 AABB，当其与 out 参数不同的时候，此函数内部不会修改其值。
+             *          @en The first AABB to be merged, its value will not be modified if `a` is not equal to the `out` parameter.
+             * @param b @zh 第二个输入的 AABB，当其与 out 参数不同的时候，此函数内部不会修改其值。
+             *          @en The second AABB to be merged, its value will not be modified if `b` is not equal to the `out` parameter.
              * @returns @zh 接受操作的 AABB `out` 的引用。 @en The reference to the first parameter `out`.
              */
             static merge(out: AABB, a: AABB | Readonly<AABB>, b: AABB | Readonly<AABB>): AABB;
@@ -18503,7 +18736,8 @@ declare module "cc" {
              * @zh
              * 使用一个 4 乘 4 矩阵变换一个 AABB 并将结果存储于 out 参数中。
              * @param out @zh 接受操作的 AABB。 @en The output AABB to store the result.
-             * @param a @zh 输入的源 AABB，如果其与 out 参数不是同一个对象，那么 a 将不会被此函数修改。 @en The input AABB, if it's different with the `out` parameter, then `a` will not be changed by this function.
+             * @param a @zh 输入的源 AABB，如果其与 out 参数不是同一个对象，那么 a 将不会被此函数修改。
+             *          @en The input AABB, if it's different with the `out` parameter, then `a` will not be changed by this function.
              * @param matrix @zh 矩阵。 @en The transformation matrix.
              * @returns @zh 接受操作的 AABB `out` 的引用。 @en The reference of the first parameter `out`.
              */
@@ -18554,7 +18788,8 @@ declare module "cc" {
             transform(m: math.Mat4, pos: math.Vec3 | null, rot: math.Quat | null, scale: math.Vec3 | null, out: AABB): void;
             /**
              * @en
-             * Clones this AABB, which will create a new AABB instance with the same value as this AABB. Note that each time `clone` is invoked, a new AABB object will be created, so use `copy` method whenever it could to reduce GC pressure.
+             * Clones this AABB, which will create a new AABB instance with the same value as this AABB. Note that each time `clone` is invoked,
+             * a new AABB object will be created, so use `copy` method whenever it could to reduce GC pressure.
              * @zh
              * 克隆一个 AABB，其会创建出一个值跟当前 AABB 一样的实例。注意，每次调用 `clone` 都会创建出新实例，尽可能使用 `copy` 方法以减小 GC 压力。
              * @returns @zh 克隆出的 AABB 实例 @en The cloned AABB instance.
@@ -19520,7 +19755,7 @@ declare module "cc" {
             constructor();
         }
     }
-    export const VERSION = "3.8.3";
+    export const VERSION = "3.8.4";
     /**
      * @en
      * The main namespace of Cocos engine, all engine core classes, functions, properties and constants are defined in this namespace.
@@ -19561,7 +19796,7 @@ declare module "cc" {
      * BitMask(obj);
      * ```
      */
-    export function BitMask<T>(obj: T): T;
+    export function BitMask<T extends object>(obj: T): T;
     export namespace BitMask {
         export var isBitMask: (BitMaskType: any) => any;
         export var getList: (BitMaskDef: any) => any;
@@ -19582,12 +19817,12 @@ declare module "cc" {
      * @zh 包含枚举名和值的 JavaScript literal 对象，或者是一个 TypeScript enum 类型。
      * @return @en The defined enum type. @zh 定义的枚举类型。
      */
-    export function Enum<T>(obj: T): T;
+    export function Enum<T extends object>(obj: T): T;
     export namespace Enum {
-        export var update: <T>(obj: T) => T;
-        export var isEnum: <EnumT extends {}>(enumType: EnumT) => boolean;
-        export var getList: <EnumT extends {}>(enumType: EnumT) => readonly __private._cocos_core_value_types_enum__Enum.Enumerator<EnumT>[];
-        export var sortList: <EnumT extends {}>(enumType: EnumT, compareFn: (a: any, b: any) => number) => void;
+        export var update: <T extends object>(obj: T) => T;
+        export var isEnum: <EnumT extends object>(enumType: EnumT) => boolean;
+        export var getList: <EnumT extends object>(enumType: EnumT) => readonly __private._cocos_core_value_types_enum__Enum.Enumerator<EnumT>[];
+        export var sortList: <EnumT extends object>(enumType: EnumT, compareFn: (a: any, b: any) => number) => void;
     }
     /**
      * Make the enum type `enumType` as enumeration so that Creator may identify, operate on it.
@@ -19598,7 +19833,7 @@ declare module "cc" {
      * @en enumType An enum type, eg, a kind of type with similar semantic defined by TypeScript.
      * @zh 枚举类型，例如 TypeScript 中定义的类型。
      */
-    export function ccenum<EnumT extends {}>(enumType: EnumT): void;
+    export function ccenum<EnumT extends object>(enumType: EnumT): void;
     /**
      * @en The base class of all value types.
      * @zh 所有值类型的基类。
@@ -19903,6 +20138,30 @@ declare module "cc" {
              * @returns @zh 数组的副本。@en A new array has the same values as `array`.
              */
             export function copy<T>(array: T[]): T[];
+            /**
+             * @example
+             * ```
+             * import { js } from 'cc';
+             * var array = [0, 1, 2, 3, 4];
+             * var iterator = new js.array.MutableForwardIterator(array);
+             * for (iterator.i = 0; iterator.i < array.length; ++iterator.i) {
+             *     var item = array[iterator.i];
+             *     ...
+             * }
+             * ```
+             */
+            export class MutableForwardIterator<T> {
+                array: T[];
+                i: number;
+                constructor(array: T[]);
+                get length(): number;
+                set length(value: number);
+                remove(value: T): void;
+                removeAt(i: number): void;
+                fastRemove(value: T): void;
+                fastRemoveAt(i: number): void;
+                push(item: T): void;
+            }
         }
         /**
          * @deprecated since v3.7.0, `js.js` is deprecated, please access `js` directly instead.
@@ -20376,7 +20635,7 @@ declare module "cc" {
          * @param p1 @en The first parameter passed to `callback`. @zh 传给回调函数的第一个参数。
          * @param p2 @en The seconde parameter passed to `callback`. @zh 传给回调函数的第二个参数。
          */
-        export function callInNextTick(callback: any, p1?: any, p2?: any): void;
+        export function callInNextTick<T extends any[]>(callback: (...args: T) => void, ...args: T): void;
         /**
          * @en Create a new function that will invoke `functionName` with try catch.
          * @zh 创建一个新函数，该函数会使用 try catch 机制调用 `functionName`.
@@ -20428,6 +20687,9 @@ declare module "cc" {
          */
         export function radiansToDegrees(angle: any): number;
         export const BUILTIN_CLASSID_RE: RegExp;
+        export interface Modifiable {
+            getModifiableProperties(): string[];
+        }
         export const BASE64_VALUES: number[];
     }
     export namespace path {
@@ -21342,30 +21604,29 @@ declare module "cc" {
      */
     export function debug(...data: unknown[]): void;
     /**
-     * @en Outputs a log message to the console. The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
+     * @en Outputs a log message to the console.
+     *     The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
      * @zh 向控制台输出一条日志信息。这条信息可能是单个字符串（包括可选的替代字符串），也可能是一个或多个对象。
      */
     export function log(...data: unknown[]): void;
     /**
-     * @en
-     * Outputs an error message to the console. The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
-     * - In Cocos Creator, error is red.<br/>
-     * - In Chrome, error have a red icon along with red message text.<br/>
-     * @zh
-     * 向控制台输出一条错误信息。这条信息可能是单个字符串（包括可选的替代字符串），也可能是一个或多个对象。
-     * - 在 Cocos Creator 中，错误信息显示是红色的。<br/>
-     * - 在 Chrome 中，错误信息有红色的图标以及红色的消息文本。<br/>
+     * @en Outputs an error message to the console.
+     *     The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
+     *     - In Cocos Creator, error is red.<br/>
+     *     - In Chrome, error have a red icon along with red message text.<br/>
+     * @zh 向控制台输出一条错误信息。这条信息可能是单个字符串（包括可选的替代字符串），也可能是一个或多个对象。
+     *     - 在 Cocos Creator 中，错误信息显示是红色的。<br/>
+     *     - 在 Chrome 中，错误信息有红色的图标以及红色的消息文本。<br/>
      */
     export function error(...data: unknown[]): void;
     /**
-     * @en
-     * Outputs a warning message to the console. The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
-     * - In Cocos Creator, warning is yellow.
-     * - In Chrome, warning have a yellow warning icon with the message text.
-     * @zh
-     * 向控制台输出一条警告信息。这条信息可能是单个字符串（包括可选的替代字符串），也可能是一个或多个对象。
-     * - 在 Cocos Creator 中，警告信息显示是黄色的。<br/>
-     * - 在 Chrome 中，警告信息有着黄色的图标以及黄色的消息文本。<br/>
+     * @en Outputs a warning message to the console.
+     *     The message may be a single string (with optional substitution values), or it may be any one or more JavaScript objects.
+     *     - In Cocos Creator, warning is yellow.
+     *     - In Chrome, warning have a yellow warning icon with the message text.
+     * @zh 向控制台输出一条警告信息。这条信息可能是单个字符串（包括可选的替代字符串），也可能是一个或多个对象。
+     *     - 在 Cocos Creator 中，警告信息显示是黄色的。<br/>
+     *     - 在 Chrome 中，警告信息有着黄色的图标以及黄色的消息文本。<br/>
      */
     export function warn(...data: unknown[]): void;
     /**
@@ -21379,6 +21640,7 @@ declare module "cc" {
      * This gives you additional control over the format of the output.
      */
     export function assert(condition: boolean, message?: string, ...optionalParams: __private._cocos_core_platform_debug__StringSubstitution[]): asserts condition;
+    export function debugID(id: number, ...optionalParams: __private._cocos_core_platform_debug__StringSubstitution[]): void;
     export function logID(id: number, ...optionalParams: __private._cocos_core_platform_debug__StringSubstitution[]): void;
     export function errorID(id: number, ...optionalParams: __private._cocos_core_platform_debug__StringSubstitution[]): void;
     export function warnID(id: number, ...optionalParams: __private._cocos_core_platform_debug__StringSubstitution[]): void;
@@ -21773,9 +22035,10 @@ declare module "cc" {
          * 返回基于游戏视图坐标系的手机屏幕安全区域（设计分辨率为单位），如果不是异形屏将默认返回一个和 visibleSize 一样大的 Rect。
          * 目前支持安卓、iOS 原生平台和微信、字节小游戏平台。
          * @method getSafeAreaRect
+         * @param [symmetric=true] @zh 基于屏幕对称的 Rect。 @en Rect that is symmetric based on the screen.
          * @return {Rect}
          */
-        getSafeAreaRect(): math.Rect;
+        getSafeAreaRect(symmetric?: boolean): math.Rect;
     };
     export namespace sys {
         /**
@@ -22112,6 +22375,7 @@ declare module "cc" {
      * 无意义意味着这些值可能不会被存储或序列化。
      */
     export class RealCurve extends __private._cocos_core_curves_keyframe_curve__KeyframeCurve<RealKeyframeValue> {
+        constructor();
         /**
          * @en
          * Gets or sets the pre-extrapolation-mode of this curve.
@@ -22299,6 +22563,7 @@ declare module "cc" {
      * 注意，该视图可能因关键帧的添加、改变、移除而失效。
      */
     export class RealKeyframeValue extends __private._cocos_core_data_editor_extendable__EditorExtendable {
+        constructor();
         /**
          * @en
          * When perform interpolation, the interpolation method should be taken
@@ -22374,6 +22639,7 @@ declare module "cc" {
      * 四元数曲线
      */
     export class QuatCurve extends __private._cocos_core_curves_keyframe_curve__KeyframeCurve<QuatKeyframeValue> {
+        constructor();
         /**
          * @en
          * Gets or sets the pre-extrapolation-mode of this curve.
@@ -22970,6 +23236,7 @@ declare module "cc" {
          * @zh 当前设备是否支持单通道半浮点贴图？（颜色输出和采样）
          */
         export function supportsR16HalfFloatTexture(device: gfx.Device): boolean;
+        export function getDefaultShadowTexture(device: gfx.Device): gfx.Texture;
         /**
          * @en Does the device support single-channeled float texture? (for both color attachment and sampling)
          * @zh 当前设备是否支持单通道浮点贴图？（颜色输出和采样）
@@ -23333,350 +23600,6 @@ declare module "cc" {
         export const CAMERA_EDITOR_MASK: number;
         export const MODEL_ALWAYS_MASK: number;
     }
-    /**
-     * @en Render pipeline describes how we handle the rendering process for all render objects in the related render scene root.
-     * It contains some general pipeline configurations, necessary rendering resources and some [[RenderFlow]]s.
-     * The rendering process function [[render]] is invoked by [[Root]] for all [[Camera]]s.
-     * @zh 渲染管线对象决定了引擎对相关渲染场景下的所有渲染对象实施的完整渲染流程。
-     * 这个类主要包含一些通用的管线配置，必要的渲染资源和一些 [[RenderFlow]]。
-     * 渲染流程函数 [[render]] 会由 [[Root]] 发起调用并对所有 [[Camera]] 执行预设的渲染流程。
-     */
-    export abstract class RenderPipeline extends Asset implements __private._cocos_rendering_pipeline_event__IPipelineEvent, __private._cocos_rendering_custom_pipeline__PipelineRuntime {
-        /**
-         * @en The tag of pipeline.
-         * @zh 管线的标签。
-         * @readonly
-         */
-        get tag(): number;
-        /**
-         * @en The flows of pipeline.
-         * @zh 管线的渲染流程列表。
-         * @readonly
-         */
-        get flows(): RenderFlow[];
-        /**
-         * @en Tag
-         * @zh 标签
-         * @readonly
-         */
-        protected _tag: number;
-        /**
-         * @en Flows
-         * @zh 渲染流程列表
-         * @readonly
-         */
-        protected _flows: RenderFlow[];
-        protected _quadIB: gfx.Buffer | null;
-        protected _quadVBOnscreen: gfx.Buffer | null;
-        protected _quadVBOffscreen: gfx.Buffer | null;
-        protected _quadIAOnscreen: gfx.InputAssembler | null;
-        protected _quadIAOffscreen: gfx.InputAssembler | null;
-        protected _eventProcessor: PipelineEventProcessor;
-        /**
-         * @zh
-         * 四边形输入汇集器。
-         */
-        get quadIAOnscreen(): gfx.InputAssembler;
-        get quadIAOffscreen(): gfx.InputAssembler;
-        getPipelineRenderData(): __private._cocos_rendering_render_pipeline__PipelineRenderData;
-        /**
-         * @en
-         * Constant macro string, static throughout the whole runtime.
-         * Used to pass device-specific parameters to shader.
-         * @zh 常量宏定义字符串，运行时全程不会改变，用于给 shader 传一些只和平台相关的参数。
-         * @readonly
-         */
-        get constantMacros(): string;
-        /**
-         * @en
-         * The current global-scoped shader macros.
-         * Used to control effects like IBL, fog, etc.
-         * @zh 当前的全局宏定义，用于控制如 IBL、雾效等模块。
-         * @readonly
-         */
-        get macros(): renderer.MacroRecord;
-        get device(): gfx.Device;
-        get globalDSManager(): __private._cocos_rendering_global_descriptor_set_manager__GlobalDSManager;
-        get descriptorSetLayout(): gfx.DescriptorSetLayout;
-        get descriptorSet(): gfx.DescriptorSet;
-        get commandBuffers(): gfx.CommandBuffer[];
-        get pipelineUBO(): __private._cocos_rendering_pipeline_ubo__PipelineUBO;
-        get pipelineSceneData(): PipelineSceneData;
-        set profiler(value: renderer.scene.Model | null);
-        get profiler(): renderer.scene.Model | null;
-        /**
-         * @deprecated since v3.6, please use camera.geometryRenderer instead.
-         */
-        get geometryRenderer(): GeometryRenderer | null;
-        set clusterEnabled(value: boolean);
-        get clusterEnabled(): boolean;
-        set bloomEnabled(value: boolean);
-        get bloomEnabled(): boolean;
-        protected _device: gfx.Device;
-        protected _globalDSManager: __private._cocos_rendering_global_descriptor_set_manager__GlobalDSManager;
-        protected _descriptorSet: gfx.DescriptorSet;
-        protected _commandBuffers: gfx.CommandBuffer[];
-        protected _pipelineUBO: __private._cocos_rendering_pipeline_ubo__PipelineUBO;
-        protected _macros: renderer.MacroRecord;
-        protected _constantMacros: string;
-        protected _profiler: renderer.scene.Model | null;
-        protected _geometryRenderer: GeometryRenderer | null;
-        protected _pipelineSceneData: PipelineSceneData;
-        protected _pipelineRenderData: __private._cocos_rendering_render_pipeline__PipelineRenderData | null;
-        protected _renderPasses: Map<number, gfx.RenderPass>;
-        protected _width: number;
-        protected _height: number;
-        protected _lastUsedRenderArea: gfx.Rect;
-        protected _clusterEnabled: boolean;
-        protected _bloomEnabled: boolean;
-        /**
-         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
-         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
-         * @param info The render pipeline information
-         */
-        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
-        createRenderPass(clearFlags: gfx.ClearFlags, colorFmt: gfx.Format, depthFmt: gfx.Format): gfx.RenderPass;
-        getRenderPass(clearFlags: gfx.ClearFlags, fbo: gfx.Framebuffer): gfx.RenderPass;
-        newFramebufferByRatio(dyingFramebuffer: gfx.Framebuffer): gfx.Framebuffer;
-        /**
-         * @en generate renderArea by camera
-         * @zh 生成renderArea
-         * @param camera the camera
-         * @returns
-         */
-        generateRenderArea(camera: renderer.scene.Camera, out: gfx.Rect): void;
-        generateViewport(camera: renderer.scene.Camera, out?: gfx.Viewport): gfx.Viewport;
-        generateScissor(camera: renderer.scene.Camera, out?: gfx.Rect): gfx.Rect;
-        get shadingScale(): number;
-        set shadingScale(val: number);
-        getMacroString(name: string): string;
-        getMacroInt(name: string): number;
-        getMacroBool(name: string): boolean;
-        setMacroString(name: string, value: string): void;
-        setMacroInt(name: string, value: number): void;
-        setMacroBool(name: string, value: boolean): void;
-        /**
-         * @en Activate the render pipeline after loaded, it mainly activate the flows
-         * @zh 当渲染管线资源加载完成后，启用管线，主要是启用管线内的 flow
-         * TODO: remove swapchain dependency at this stage
-         * after deferred pipeline can handle multiple swapchains
-         */
-        activate(swapchain: gfx.Swapchain): boolean;
-        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
-        /**
-         * @en Render function, it basically run the render process of all flows in sequence for the given view.
-         * @zh 渲染函数，对指定的渲染视图按顺序执行所有渲染流程。
-         * @param view Render view。
-         */
-        render(cameras: renderer.scene.Camera[]): void;
-        /**
-         * @zh
-         * 销毁四边形输入汇集器。
-         */
-        protected _destroyQuadInputAssembler(): void;
-        protected _destroyBloomData(): void;
-        /**
-         * @zh
-         * 创建四边形输入汇集器。
-         */
-        protected _createQuadInputAssembler(): __private._cocos_rendering_render_pipeline__PipelineInputAssemblerData;
-        updateQuadVertexData(renderArea: gfx.Rect, window: __private._cocos_render_scene_core_render_window__RenderWindow): void;
-        /**
-         * @en Internal destroy function
-         * @zh 内部销毁函数。
-         */
-        destroy(): boolean;
-        onGlobalPipelineStateChanged(): void;
-        protected _generateConstantMacros(): void;
-        protected updateGeometryRenderer(cameras: renderer.scene.Camera[]): void;
-        generateBloomRenderData(): void;
-        /**
-         * @en
-         * Register an callback of the pipeline event type on the RenderPipeline.
-         * @zh
-         * 在渲染管线中注册管线事件类型的回调。
-         */
-        on(type: PipelineEventType, callback: any, target?: any, once?: boolean): typeof callback;
-        /**
-         * @en
-         * Register an callback of the pipeline event type on the RenderPipeline,
-         * the callback will remove itself after the first time it is triggered.
-         * @zh
-         * 在渲染管线中注册管线事件类型的回调, 回调后会在第一时间删除自身。
-         */
-        once(type: PipelineEventType, callback: any, target?: any): typeof callback;
-        /**
-         * @en
-         * Removes the listeners previously registered with the same type, callback, target and or useCapture,
-         * if only type is passed as parameter, all listeners registered with that type will be removed.
-         * @zh
-         * 删除之前用同类型、回调、目标或 useCapture 注册的事件监听器，如果只传递 type，将会删除 type 类型的所有事件监听器。
-         */
-        off(type: PipelineEventType, callback?: any, target?: any): void;
-        /**
-         * @zh 派发一个指定事件，并传递需要的参数
-         * @en Trigger an event directly with the event name and necessary arguments.
-         * @param type - event type
-         * @param args - Arguments when the event triggered
-         */
-        emit(type: PipelineEventType, arg0?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any): void;
-        /**
-         * @en Removes all callbacks previously registered with the same target (passed as parameter).
-         * This is not for removing all listeners in the current event target,
-         * and this is not for removing all listeners the target parameter have registered.
-         * It's only for removing all listeners (callback and target couple) registered on the current event target by the target parameter.
-         * @zh 在当前 EventTarget 上删除指定目标（target 参数）注册的所有事件监听器。
-         * 这个函数无法删除当前 EventTarget 的所有事件监听器，也无法删除 target 参数所注册的所有事件监听器。
-         * 这个函数只能删除 target 参数在当前 EventTarget 上注册的所有事件监听器。
-         * @param typeOrTarget - The target to be searched for all related listeners
-         */
-        targetOff(typeOrTarget: any): void;
-        /**
-         * @zh 移除在特定事件类型中注册的所有回调或在某个目标中注册的所有回调。
-         * @en Removes all callbacks registered in a certain event type or all callbacks registered with a certain target
-         * @param typeOrTarget - The event type or target with which the listeners will be removed
-         */
-        removeAll(typeOrTarget: any): void;
-        /**
-         * @zh 检查指定事件是否已注册回调。
-         * @en Checks whether there is correspond event listener registered on the given event.
-         * @param type - Event type.
-         * @param callback - Callback function when event triggered.
-         * @param target - Callback callee.
-         */
-        hasEventListener(type: PipelineEventType, callback?: any, target?: any): boolean;
-    }
-    /**
-     * @en Render flow is a sub process of the [[RenderPipeline]], it dispatch the render task to all the [[RenderStage]]s.
-     * @zh 渲染流程是渲染管线（[[RenderPipeline]]）的一个子过程，它将渲染任务派发到它的所有渲染阶段（[[RenderStage]]）中执行。
-     */
-    export abstract class RenderFlow {
-        /**
-         * @en The name of the render flow
-         * @zh 渲染流程的名字
-         */
-        get name(): string;
-        /**
-         * @en Priority of the current flow
-         * @zh 当前渲染流程的优先级。
-         */
-        get priority(): number;
-        /**
-         * @en Tag of the current flow
-         * @zh 当前渲染流程的标签。
-         */
-        get tag(): number;
-        /**
-         * @en The stages of flow.
-         * @zh 渲染流程 stage 列表。
-         * @readonly
-         */
-        get stages(): RenderStage[];
-        protected _name: string;
-        protected _priority: number;
-        protected _tag: number;
-        protected _stages: RenderStage[];
-        protected _pipeline: RenderPipeline;
-        /**
-         * @en Get pipeline
-         * @zh 获取pipeline
-         */
-        get pipeline(): RenderPipeline;
-        /**
-         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
-         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
-         * @param info The render flow information
-         */
-        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
-        /**
-         * @en Activate the current render flow in the given pipeline
-         * @zh 为指定的渲染管线开启当前渲染流程
-         * @param pipeline The render pipeline to activate this render flow
-         */
-        activate(pipeline: RenderPipeline): void;
-        /**
-         * @en Render function, it basically run all render stages in sequence for the given view.
-         * @zh 渲染函数，对指定的渲染视图按顺序执行所有渲染阶段。
-         * @param view Render view。
-         */
-        render(camera: renderer.scene.Camera): void;
-        /**
-         * @en Destroy function.
-         * @zh 销毁函数。
-         */
-        destroy(): void;
-    }
-    /**
-     * @en The render stage actually renders render objects to the output window or other GFX [[gfx.Framebuffer]].
-     * Typically, a render stage collects render objects it's responsible for, clear the camera,
-     * record and execute command buffer, and at last present the render result.
-     * @zh 渲染阶段是实质上的渲染执行者，它负责收集渲染数据并执行渲染将渲染结果输出到屏幕或其他 GFX [[gfx.Framebuffer]] 中。
-     * 典型的渲染阶段会收集它所管理的渲染对象，按照 [[Camera]] 的清除标记进行清屏，记录并执行渲染指令缓存，并最终呈现渲染结果。
-     */
-    export abstract class RenderStage {
-        /**
-         * @en Name of the current stage
-         * @zh 当前渲染阶段的名字。
-         */
-        get name(): string;
-        /**
-         * @en Priority of the current stage
-         * @zh 当前渲染阶段的优先级。
-         */
-        get priority(): number;
-        /**
-         * @en Tag of the current stage
-         * @zh 当前渲染阶段的标签。
-         */
-        get tag(): number;
-        /**
-         * @en Name
-         * @zh 名称。
-         */
-        protected _name: string;
-        /**
-         * @en Priority
-         * @zh 优先级。
-         */
-        protected _priority: number;
-        /**
-         * @en Whether to enable
-         * @zh 是否启用。
-         */
-        protected _enabled: boolean;
-        set enabled(val: boolean);
-        get enabled(): boolean;
-        /**
-         * @en Type
-         * @zh 类型。
-         */
-        protected _tag: number;
-        protected _pipeline: RenderPipeline;
-        protected _flow: RenderFlow;
-        /**
-         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
-         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
-         * @param info The render stage information
-         */
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        /**
-         * @en Activate the current render stage in the given render flow
-         * @zh 为指定的渲染流程开启当前渲染阶段
-         * @param flow The render flow to activate this render stage
-         */
-        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
-        /**
-         * @en Destroy function
-         * @zh 销毁函数。
-         */
-        abstract destroy(): void;
-        /**
-         * @en Render function
-         * @zh 渲染函数。
-         * @param view The render view
-         */
-        abstract render(camera: renderer.scene.Camera): void;
-    }
     export class PipelineSceneData {
         /**
          * @en Is open HDR.
@@ -23733,177 +23656,6 @@ declare module "cc" {
         updatePipelineSceneData(): void;
         destroy(): void;
     }
-    /**
-     * @en The forward render pipeline
-     * @zh 前向渲染管线。
-     */
-    export class ForwardPipeline extends RenderPipeline {
-        protected renderTextures: __private._cocos_rendering_pipeline_serialization__RenderTextureConfig[];
-        protected _postRenderPass: gfx.RenderPass | null;
-        get postRenderPass(): gfx.RenderPass | null;
-        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
-        activate(swapchain: gfx.Swapchain): boolean;
-        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
-        destroy(): boolean;
-    }
-    export function createDefaultPipeline(): ForwardPipeline;
-    /**
-     * @en The forward flow in forward render pipeline
-     * @zh 前向渲染流程。
-     */
-    export class ForwardFlow extends RenderFlow {
-        /**
-         * @en The shared initialization information of forward render flow
-         * @zh 共享的前向渲染流程初始化参数
-         */
-        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
-        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
-        activate(pipeline: RenderPipeline): void;
-        render(camera: renderer.scene.Camera): void;
-        destroy(): void;
-    }
-    /**
-     * @en The forward render stage
-     * @zh 前向渲染阶段。
-     */
-    export class ForwardStage extends RenderStage {
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        protected renderQueues: __private._cocos_rendering_pipeline_serialization__RenderQueueDesc[];
-        protected _renderQueues: __private._cocos_rendering_render_queue__RenderQueue[];
-        additiveInstanceQueues: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue[];
-        constructor();
-        addRenderInstancedQueue(queue: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue): void;
-        removeRenderInstancedQueue(queue: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue): void;
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        activate(pipeline: ForwardPipeline, flow: ForwardFlow): void;
-        destroy(): void;
-        render(camera: renderer.scene.Camera): void;
-    }
-    /**
-     * @en The deferred render pipeline
-     * @zh 延迟渲染管线。
-     */
-    export class DeferredPipeline extends RenderPipeline {
-        protected renderTextures: __private._cocos_rendering_pipeline_serialization__RenderTextureConfig[];
-        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
-        activate(swapchain: gfx.Swapchain): boolean;
-        destroy(): boolean;
-        onGlobalPipelineStateChanged(): void;
-        getPipelineRenderData(): __private._cocos_rendering_deferred_deferred_pipeline__DeferredRenderData;
-        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
-    }
-    /**
-     * @en The main flow in deferred render pipeline
-     * @zh 延迟渲染流程。
-     */
-    export class MainFlow extends RenderFlow {
-        /**
-         * @en The shared initialization information of main render flow
-         * @zh 共享的延迟渲染流程初始化参数
-         */
-        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
-        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
-        activate(pipeline: RenderPipeline): void;
-        render(camera: renderer.scene.Camera): void;
-        destroy(): void;
-    }
-    /**
-     * @en The gbuffer render stage
-     * @zh 前向渲染阶段。
-     */
-    export class GbufferStage extends RenderStage {
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        protected renderQueues: __private._cocos_rendering_pipeline_serialization__RenderQueueDesc[];
-        protected _renderQueues: __private._cocos_rendering_render_queue__RenderQueue[];
-        constructor();
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        activate(pipeline: DeferredPipeline, flow: MainFlow): void;
-        destroy(): void;
-        render(camera: renderer.scene.Camera): void;
-    }
-    /**
-     * @en The lighting render stage
-     * @zh 前向渲染阶段。
-     */
-    export class LightingStage extends RenderStage {
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        constructor();
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        gatherLights(camera: renderer.scene.Camera): void;
-        protected _createStageDescriptor(pass: renderer.Pass): void;
-        activate(pipeline: DeferredPipeline, flow: MainFlow): void;
-        destroy(): void;
-        render(camera: renderer.scene.Camera): void;
-    }
-    /**
-     * @en The bloom post-process stage
-     * @zh Bloom 后处理阶段。
-     */
-    export class BloomStage extends RenderStage {
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        threshold: number;
-        intensity: number;
-        iterations: number;
-        constructor();
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
-        destroy(): void;
-        render(camera: renderer.scene.Camera): void;
-    }
-    /**
-     * @en The postprocess render stage
-     * @zh 后处理渲染阶段。
-     */
-    export class PostProcessStage extends RenderStage {
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        constructor();
-        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
-        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
-        destroy(): void;
-        render(camera: renderer.scene.Camera): void;
-    }
-    /**
-     * @en Shadow map render flow
-     * @zh 阴影贴图绘制流程
-     */
-    export class ShadowFlow extends RenderFlow {
-        /**
-         * @en A common initialization info for shadow map render flow
-         * @zh 一个通用的 ShadowFlow 的初始化信息对象
-         */
-        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
-        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
-        activate(pipeline: RenderPipeline): void;
-        render(camera: renderer.scene.Camera): void;
-        destroy(): void;
-        /**
-         * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
-         */
-        _initShadowFrameBuffer(pipeline: RenderPipeline, light: renderer.scene.Light, swapchain: gfx.Swapchain): void;
-    }
-    /**
-     * @en Shadow map render stage
-     * @zh 阴影渲染阶段。
-     */
-    export class ShadowStage extends RenderStage {
-        /**
-         * @en A common initialization info for shadow map render stage
-         * @zh 一个通用的 ShadowStage 的初始化信息对象
-         */
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        /**
-         * @en Sets the render shadow map info
-         * @zh 设置阴影渲染信息
-         * @param light
-         * @param shadowFrameBuffer
-         * @param level 层级
-         */
-        setUsage(globalDS: gfx.DescriptorSet, light: renderer.scene.Light, shadowFrameBuffer: gfx.Framebuffer, level?: number): void;
-        destroy(): void;
-        clearFramebuffer(camera: renderer.scene.Camera): void;
-        render(camera: renderer.scene.Camera): void;
-        activate(pipeline: ForwardPipeline, flow: ShadowFlow): void;
-    }
     export class InstancedBuffer {
         instances: __private._cocos_rendering_instanced_buffer__IInstancedItem[];
         pass: renderer.Pass;
@@ -23918,11 +23670,12 @@ declare module "cc" {
     export class PipelineStateManager {
         static getOrCreatePipelineState(device: gfx.Device, pass: renderer.Pass, shader: gfx.Shader, renderPass: gfx.RenderPass, ia: gfx.InputAssembler): gfx.PipelineState;
     }
-    export class PipelineEventProcessor extends EventTarget {
-        eventTargetOn: <TFunction extends (...any: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any, once?: boolean | undefined) => TFunction;
-        eventTargetOnce: <TFunction extends (...any: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any) => TFunction;
-        on(type: PipelineEventType, callback: any, target?: any, once?: boolean): typeof callback;
-        once(type: PipelineEventType, callback: any, target?: any): typeof callback;
+    export class PipelineEventProcessor extends EventTarget implements __private._cocos_rendering_pipeline_event__IPipelineEvent {
+        eventTargetOn: <TFunction extends (...args: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any, once?: boolean | undefined) => TFunction;
+        eventTargetOnce: <TFunction extends (...args: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any) => TFunction;
+        constructor();
+        on<TFunction extends __private._cocos_rendering_pipeline_event__PipelineEventCallback>(type: PipelineEventType, callback: TFunction, target?: any, once?: boolean): typeof callback;
+        once<TFunction extends __private._cocos_rendering_pipeline_event__PipelineEventCallback>(type: PipelineEventType, callback: TFunction, target?: any): typeof callback;
     }
     export enum PipelineEventType {
         /**
@@ -24028,45 +23781,11 @@ declare module "cc" {
         protected _activate(): void;
         protected _updatePipeline(): void;
     }
-    /**
-     * @en reflection probe render flow
-     * @zh 反射探针rendertexture绘制流程
-     */
-    export class ReflectionProbeFlow extends RenderFlow {
-        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
-        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
-        activate(pipeline: RenderPipeline): void;
-        render(camera: renderer.scene.Camera): void;
-        destroy(): void;
-    }
-    /**
-     * @en reflection probe render stage
-     * @zh 反射探针渲染阶段。
-     */
-    export class ReflectionProbeStage extends RenderStage {
-        /**
-         * @en A common initialization info for reflection probe render stage
-         * @zh 一个通用的 reflection probe stage 的初始化信息对象
-         */
-        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
-        /**
-         * @en Sets the probe info
-         * @zh 设置probe信息
-         * @param probe
-         * @param frameBuffer
-         */
-        setUsageInfo(probe: renderer.scene.ReflectionProbe, frameBuffer: gfx.Framebuffer): void;
-        destroy(): void;
-        clearFramebuffer(camera: renderer.scene.Camera): void;
-        render(camera: renderer.scene.Camera): void;
-        activate(pipeline: ForwardPipeline, flow: ReflectionProbeFlow): void;
-    }
     export const getPhaseID: (phaseName: string | number) => number;
-    export class ForwardPipelineBuilder implements rendering.PipelineBuilder {
-        setup(cameras: renderer.scene.Camera[], ppl: rendering.BasicPipeline): void;
-    }
-    export class DeferredPipelineBuilder implements rendering.PipelineBuilder {
-        setup(cameras: renderer.scene.Camera[], ppl: rendering.BasicPipeline): void;
+    export class PipelineInputAssemblerData {
+        quadIB: gfx.Buffer | null;
+        quadVB: gfx.Buffer | null;
+        quadIA: gfx.InputAssembler | null;
     }
     /**
      * @zh
@@ -24184,7 +23903,7 @@ declare module "cc" {
         protected static _findComponent<T extends Component>(node: Node, constructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T | null;
         protected static _findComponents<T extends Component>(node: Node, constructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>, components: Component[]): void;
         protected static _findChildComponent<T extends Component>(children: Node[], constructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T | null;
-        protected static _findChildComponents(children: Node[], constructor: any, components: any): void;
+        protected static _findChildComponents<T extends Component>(children: Node[], constructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>, components: Component[]): void;
         protected _parent: this | null;
         protected _children: this[];
         protected _active: boolean;
@@ -24197,7 +23916,6 @@ declare module "cc" {
         protected _scene: Scene;
         protected _activeInHierarchy: boolean;
         protected _id: string;
-        protected _name: string;
         protected _eventProcessor: __private._cocos_scene_graph_node_event_processor__NodeEventProcessor;
         protected _eventMask: number;
         protected _siblingIndex: number;
@@ -24522,7 +24240,7 @@ declare module "cc" {
          * node.on(NodeEventType.TOUCH_END, callback, this);
          * ```
          */
-        on(type: string | NodeEventType, callback: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: any): void;
+        on(type: string | NodeEventType, callback: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: boolean): void;
         /**
          * @en
          * Removes the callback previously registered with the same type, callback, target and or useCapture.
@@ -24539,7 +24257,7 @@ declare module "cc" {
          * node.off(NodeEventType.TOUCH_START, callback, this.node);
          * ```
          */
-        off(type: string, callback?: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: any): void;
+        off(type: string, callback?: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: boolean): void;
         /**
          * @en
          * Register an callback of a specific event type on the Node,
@@ -24552,7 +24270,7 @@ declare module "cc" {
          *                              The callback is ignored if it is a duplicate (the callbacks are unique).
          * @param target - The target (this object) to invoke the callback, can be null
          */
-        once(type: string, callback: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: any): void;
+        once(type: string, callback: __private.__types_globals__AnyFunction, target?: unknown, useCapture?: boolean): void;
         /**
          * @en
          * Trigger an event directly with the event name and necessary arguments.
@@ -24593,7 +24311,7 @@ declare module "cc" {
          * @zh 移除目标上的所有注册事件。
          * @param target - The target to be searched for all related callbacks
          */
-        targetOff(target: string | unknown): void;
+        targetOff(target: unknown): void;
         destroy(): boolean;
         /**
          * @en
@@ -24613,7 +24331,7 @@ declare module "cc" {
          * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
          */
         _updateSiblingIndex(): void;
-        protected _instantiate(cloned: any, isSyncedNode: any): any;
+        protected _instantiate(cloned?: Node | null, isSyncedNode?: boolean): Node;
         protected _onHierarchyChangedBase(oldParent: this | null): void;
         protected _onPreDestroyBase(): boolean;
         protected _onSiblingIndexChanged?(siblingIndex: number): void;
@@ -24867,7 +24585,7 @@ declare module "cc" {
          * @zh 用欧拉角设置本地旋转
          * @param x X axis rotation
          * @param y Y axis rotation
-         * @param z Z axis rotation
+         * @param zOpt Z axis rotation
          */
         setRotationFromEuler(x: number, y: number, zOpt?: number): void;
         /**
@@ -25119,7 +24837,7 @@ declare module "cc" {
          * 参考 [[Node.updateWorldTransform]]
          */
         updateWorldTransform(): void;
-        protected _instantiate(): void;
+        protected _instantiate(cloned?: Node | null, isSyncedNode?: boolean): Node;
     }
     /**
      * @zh 节点层管理器，层数据是以掩码数据方式存储在 [[Node.layer]] 中，用于射线检测、物理碰撞和用户自定义脚本逻辑。
@@ -25318,6 +25036,7 @@ declare module "cc" {
      */
     export class Component extends CCObject {
         static EventHandler: typeof EventHandler;
+        constructor();
         get name(): string;
         set name(value: string);
         /**
@@ -25440,7 +25159,7 @@ declare module "cc" {
          * var sprite = node.getComponent(Sprite);
          * ```
          */
-        getComponent<T extends Component>(classConstructor: __private.__types_globals__Constructor<T>): T | null;
+        getComponent<T extends Component>(classConstructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T | null;
         /**
          * @en
          * Returns the component of supplied type if the node has one attached, null if it doesn't.<br/>
@@ -25466,7 +25185,7 @@ declare module "cc" {
          * const sprites = node.getComponents(Sprite);
          * ```
          */
-        getComponents<T extends Component>(classConstructor: __private.__types_globals__Constructor<T>): T[];
+        getComponents<T extends Component>(classConstructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T[];
         /**
          * @en Returns all components of supplied type in the node.
          * @zh 返回节点上指定类型的所有组件。
@@ -25487,7 +25206,7 @@ declare module "cc" {
          * const sprite = node.getComponentInChildren(Sprite);
          * ```
          */
-        getComponentInChildren<T extends Component>(classConstructor: __private.__types_globals__Constructor<T>): T | null;
+        getComponentInChildren<T extends Component>(classConstructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T | null;
         /**
          * @en Returns the component of supplied type in any of its children using depth first search.
          * @zh 递归查找所有子节点中第一个匹配指定类型的组件。
@@ -25508,7 +25227,7 @@ declare module "cc" {
          * const sprites = node.getComponentsInChildren(Sprite);
          * ```
          */
-        getComponentsInChildren<T extends Component>(classConstructor: __private.__types_globals__Constructor<T>): T[];
+        getComponentsInChildren<T extends Component>(classConstructor: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>): T[];
         /**
          * @en Returns all components of supplied type in self or any of its children.
          * @zh 递归查找自身或所有子节点中指定类型的组件。
@@ -26218,7 +25937,14 @@ declare module "cc" {
          * @zh
          * 当光照探针烘焙数据修改后触发的事件
          */
-        LIGHT_PROBE_BAKING_CHANGED = "light-probe-baking-changed"
+        LIGHT_PROBE_BAKING_CHANGED = "light-probe-baking-changed",
+        /**
+         * @en
+         * The event is fired if the active state is changed.
+         * @zh
+         * 当激活状态改变时将触发的事件。
+         */
+        ACTIVE_CHANGED = "active-changed"
     }
     /**
      * @en Environment lighting configuration in the Scene
@@ -26901,6 +26627,7 @@ declare module "cc" {
         protected _flows: string[] | undefined;
         protected _cameraType: renderer.scene.CameraType;
         protected _trackingType: renderer.scene.TrackingType;
+        constructor();
         /**
          * @en The render camera representation.
          * @zh 渲染场景中的相机对象。
@@ -27103,6 +26830,7 @@ declare module "cc" {
      * @zh 所有包含 model 的渲染组件基类。
      */
     export class ModelRenderer extends Renderer {
+        constructor();
         /**
          * @en The visibility which will be applied to the committed models.
          * @zh 应用于所有提交渲染的 Model 的可见性
@@ -27146,6 +26874,7 @@ declare module "cc" {
      * 默认情况下，渲染组件使用共享材质进行渲染，材质实例也不会被创建出来。仅在用户通过 [[material]]，[[materials]] 和 [[getMaterialInstance]] 接口获取材质时才会创建材质实例。
      */
     export class Renderer extends Component {
+        constructor();
         /**
          * @en Get the default shared material
          * @zh 获取默认的共享材质
@@ -27238,6 +26967,7 @@ declare module "cc" {
      */
     export class PrefabLink extends Component {
         prefab: Prefab | null;
+        constructor();
     }
     /**
      * @en
@@ -27363,12 +27093,6 @@ declare module "cc" {
          */
         _nodeActivator: NodeActivator;
         constructor();
-        /**
-         * @en Calculates delta time since last time it was called, the result is saved to an internal property.
-         * @zh 计算从上一帧到现在的时间间隔，结果保存在私有属性中
-         * @deprecated since v3.3.0 no need to use it anymore
-         */
-        calculateDeltaTime(now: any): void;
         /**
          * @en End the life of director in the next frame
          * @zh 执行完当前帧后停止 director 的执行
@@ -27654,15 +27378,17 @@ declare module "cc" {
          * - 1 - 强制使用 canvas 渲染。
          * - 2 - 强制使用 WebGL 渲染，但是在部分 Android 浏览器中这个选项会被忽略。
          * - 3 - 使用空渲染器，可以用于测试和服务器端环境，目前暂时用于 Cocos 内部测试使用
+         * - 4 - 强制使用 WebGPU 渲染，但是在部分浏览器中这个选项会被忽略
          * @en
          * Sets the renderer type, only useful on web:
          * - 0 - Automatically chosen by engine.
          * - 1 - Forced to use canvas renderer.
          * - 2 - Forced to use WebGL renderer, but this will be ignored on mobile browsers.
          * - 3 - Use Headless Renderer, which is useful in test or server env, only for internal use by cocos team for now
+         * - 4 - Force WebGPU rendering, but this option will be ignored in some browsers.
          * @deprecated Since v3.6, Please use ```overrideSettings: { Settings.Category.RENDERING: { "renderMode": 0 }}``` to set this.
          */
-        renderMode?: 0 | 1 | 2 | 3;
+        renderMode?: 0 | 1 | 2 | 3 | 4;
         /**
          * @en
          * Render pipeline resources
@@ -27889,8 +27615,8 @@ declare module "cc" {
          * @zh 游戏的渲染器类型。
          */
         renderType: number;
-        eventTargetOn: <TFunction extends (...any: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any, once?: boolean | undefined) => TFunction;
-        eventTargetOnce: <TFunction extends (...any: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any) => TFunction;
+        eventTargetOn: <TFunction extends (...args: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any, once?: boolean | undefined) => TFunction;
+        eventTargetOnce: <TFunction extends (...args: any[]) => void>(type: string | number, callback: TFunction, thisArg?: any) => TFunction;
         /**
          * @en
          * The current game configuration,
@@ -27906,6 +27632,7 @@ declare module "cc" {
          * @method onStart
          */
         onStart: Game.OnStart | null;
+        constructor();
         /**
          * @en Indicates whether the engine and the renderer has been initialized
          * @zh 引擎和渲染器是否以完成初始化
@@ -28598,6 +28325,7 @@ declare module "cc" {
      * `BufferAsset` 是一类资产，其内部数据是一段内存缓冲，你可以通过 [[BufferAsset.buffer]] 函数获取其内部数据。
      */
     export class BufferAsset extends Asset {
+        constructor();
         /**
          * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
          */
@@ -28730,6 +28458,7 @@ declare module "cc" {
          * @zh 场景节点。
          */
         scene: Scene | null;
+        constructor();
         initDefault(uuid?: string): void;
         validate(): boolean;
     }
@@ -28744,6 +28473,7 @@ declare module "cc" {
          */
         text: string;
         toString(): string;
+        constructor();
     }
     /**
      * @en Json asset, it will automatically parse the json to a JS object.
@@ -28756,6 +28486,7 @@ declare module "cc" {
          * @zh 解析后的对象。
          */
         json: Record<string, any> | null;
+        constructor();
     }
     /**
      * @en Image Asset. The image resource stores the raw data of the image and you can use this resource to create any Texture resource.
@@ -28840,6 +28571,7 @@ declare module "cc" {
      * @zh 二维贴图资源。二维贴图资源的每个 Mipmap 层级都为一张 [[ImageAsset]]。
      */
     export class Texture2D extends __private._cocos_asset_assets_simple_texture__SimpleTexture {
+        constructor();
         /**
          * @en All levels of mipmap images, be noted, automatically generated mipmaps are not included.
          * When setup mipmap, the size of the texture and pixel format could be modified.
@@ -28886,7 +28618,7 @@ declare module "cc" {
          */
         create(width: number, height: number, format?: __private._cocos_asset_assets_asset_enum__PixelFormat, mipmapLevel?: number, baseLevel?: number, maxLevel?: number): void;
         toString(): string;
-        updateMipmaps(firstLevel?: number, count?: number): void;
+        updateMipmaps(firstLevel?: number, count?: number | undefined): void;
         /**
          * @en If the level 0 mipmap image is a HTML element, then return it, otherwise return null.
          * @zh 若此贴图 0 级 Mipmap 的图像资源的实际源存在并为 HTML 元素则返回它，否则返回 `null`。
@@ -28936,6 +28668,7 @@ declare module "cc" {
         isRGBE: boolean;
         _mipmapAtlas: __private._cocos_asset_assets_texture_cube__ITextureCubeMipmapAtlas | null;
         _mipmapMode: __private._cocos_asset_assets_texture_cube__MipmapMode;
+        constructor();
         /**
          * @en All levels of mipmap images, be noted, automatically generated mipmaps are not included.
          * When setup mipmap, the size of the texture and pixel format could be modified.
@@ -29008,7 +28741,7 @@ declare module "cc" {
          * @param firstLevel @en First level to be updated. @zh 更新指定层的 mipmap。
          * @param count @en Mipmap level count to be updated。 @zh 指定要更新层的数量。
          */
-        updateMipmaps(firstLevel?: number, count?: number): void;
+        updateMipmaps(firstLevel?: number, count?: number | undefined): void;
         /**
          * @en Destroys this texture, clear all mipmaps and release GPU resources
          * @zh 销毁此贴图，清空所有 Mipmap 并释放占用的 GPU 资源。
@@ -29089,6 +28822,7 @@ declare module "cc" {
          * @zh 是否在编辑器内隐藏。
          */
         hideInEditor: boolean;
+        constructor();
         /**
          * @en The loaded callback which should be invoked by the [[AssetManager]], will automatically register the effect.
          * @zh 通过 [[AssetManager]] 加载完成时的回调，将自动注册 effect 资源。
@@ -29466,11 +29200,12 @@ declare module "cc" {
      * @zh 渲染贴图是 [[Camera]] 或 [[Canvas]] 组件的渲染目标对象，渲染管线会使用它的 `RenderWindow` 作为渲染的目标窗口。
      */
     export class RenderTexture extends __private._cocos_asset_assets_texture_base__TextureBase {
+        constructor();
         /**
          * @en The render window for the render pipeline, it's created internally and cannot be modified.
          * @zh 渲染管线所使用的渲染窗口，内部逻辑创建，无法被修改。
          */
-        get window(): __private._cocos_render_scene_core_render_window__RenderWindow | null;
+        get window(): renderer.RenderWindow | null;
         /**
          * @en Initialize the render texture. Using IRenderTextureCreateInfo.
          * @zh 初始化渲染贴图。设置渲染贴图的名称、尺寸、渲染通道信息。
@@ -31549,8 +31284,8 @@ declare module "cc" {
              *                  '.ext': (file, options, onComplete) => onComplete(null, null)});
              *
              */
-            register(type: string, handler: (file: any, options: Record<string, any>, onComplete: ((err: Error | null, data?: any | null) => void)) => void): void;
-            register(map: Record<string, (file: any, options: Record<string, any>, onComplete: ((err: Error | null, data?: any | null) => void)) => void>): void;
+            register(type: string, handler: (file: any, options: Record<string, any>, onComplete: ((err: Error | null, data?: any) => void)) => void): void;
+            register(map: Record<string, (file: any, options: Record<string, any>, onComplete: ((err: Error | null, data?: any) => void)) => void>): void;
             /**
              * @en
              * Use corresponding handler to parse file.
@@ -31572,7 +31307,7 @@ declare module "cc" {
              * });
              *
              */
-            parse(id: string, file: any, type: string, options: Record<string, any>, onComplete: ((err: Error | null, data?: any | null) => void)): void;
+            parse(id: string, file: any, type: string, options: Record<string, any>, onComplete: ((err: Error | null, data?: any) => void)): void;
         }
     }
     /**
@@ -34776,6 +34511,27 @@ declare module "cc" {
              */
             function getStringFromFile(filename: string): string;
             /**
+             * @en Read utf-8 text file asynchronously.
+             * @zh 异步读取 utf-8 编码的文本文件
+             * @param filepath @en The file path. @zh 文件路径
+             * @param onComplete @en The complete callback. @zh 读取完成回调
+             */
+            function readTextFile(filepath: string, onComplete: (err: string | null, content: string) => void): void;
+            /**
+             * @en Read utf-8 json file asynchronously.
+             * @zh 异步读取 utf-8 编码的 json 文件
+             * @param filepath @en The file path. @zh 文件路径
+             * @param onComplete @en The complete callback. @zh 读取完成回调
+             */
+            function readJsonFile(filepath: string, onComplete: (err: string | null, content: object) => void): void;
+            /**
+             * @en Read binary file asynchronously.
+             * @zh 异步读取二进制文件
+             * @param filepath @en The file path. @zh 文件路径
+             * @param onComplete @en The complete callback. @zh 读取完成回调
+             */
+            function readDataFile(filepath: string, onComplete: (err: string | null, content: ArrayBuffer) => void): void;
+            /**
              *  @en
              *  Removes a file.
              *
@@ -35367,1537 +35123,6 @@ declare module "cc" {
             onThermalStatusChanged?: (previousStatus: number, newStatus: number, statusMin: number, statusMax: number) => void;
         } | undefined;
     }
-    export namespace rendering {
-        export function getUpdateFrequencyName(e: UpdateFrequency): string;
-        export function getParameterTypeName(e: ParameterType): string;
-        export function getResourceResidencyName(e: ResourceResidency): string;
-        export function getQueueHintName(e: QueueHint): string;
-        export function getResourceDimensionName(e: ResourceDimension): string;
-        export function getTaskTypeName(e: TaskType): string;
-        export function getLightingModeName(e: LightingMode): string;
-        export function getAttachmentTypeName(e: AttachmentType): string;
-        export function getAccessTypeName(e: AccessType): string;
-        export function getClearValueTypeName(e: ClearValueType): string;
-        export function getDescriptorTypeOrderName(e: DescriptorTypeOrder): string;
-        export function saveLightInfo(ar: OutputArchive, v: LightInfo): void;
-        export function loadLightInfo(ar: InputArchive, v: LightInfo): void;
-        export function saveDescriptor(ar: OutputArchive, v: Descriptor): void;
-        export function loadDescriptor(ar: InputArchive, v: Descriptor): void;
-        export function saveDescriptorBlock(ar: OutputArchive, v: DescriptorBlock): void;
-        export function loadDescriptorBlock(ar: InputArchive, v: DescriptorBlock): void;
-        export function saveDescriptorBlockFlattened(ar: OutputArchive, v: DescriptorBlockFlattened): void;
-        export function loadDescriptorBlockFlattened(ar: InputArchive, v: DescriptorBlockFlattened): void;
-        export function saveDescriptorBlockIndex(ar: OutputArchive, v: DescriptorBlockIndex): void;
-        export function loadDescriptorBlockIndex(ar: InputArchive, v: DescriptorBlockIndex): void;
-        export function saveResolvePair(ar: OutputArchive, v: ResolvePair): void;
-        export function loadResolvePair(ar: InputArchive, v: ResolvePair): void;
-        export function saveCopyPair(ar: OutputArchive, v: CopyPair): void;
-        export function loadCopyPair(ar: InputArchive, v: CopyPair): void;
-        export function saveMovePair(ar: OutputArchive, v: MovePair): void;
-        export function loadMovePair(ar: InputArchive, v: MovePair): void;
-        export function savePipelineStatistics(ar: OutputArchive, v: PipelineStatistics): void;
-        export function loadPipelineStatistics(ar: InputArchive, v: PipelineStatistics): void;
-        export enum UpdateFrequency {
-            PER_INSTANCE = 0,
-            PER_BATCH = 1,
-            PER_PHASE = 2,
-            PER_PASS = 3,
-            COUNT = 4
-        }
-        export enum ParameterType {
-            CONSTANTS = 0,
-            CBV = 1,
-            UAV = 2,
-            SRV = 3,
-            TABLE = 4,
-            SSV = 5
-        }
-        export enum ResourceResidency {
-            MANAGED = 0,
-            MEMORYLESS = 1,
-            PERSISTENT = 2,
-            EXTERNAL = 3,
-            BACKBUFFER = 4
-        }
-        export enum QueueHint {
-            NONE = 0,
-            OPAQUE = 1,
-            MASK = 2,
-            BLEND = 3,
-            RENDER_OPAQUE = 1,
-            RENDER_CUTOUT = 2,
-            RENDER_TRANSPARENT = 3
-        }
-        export enum ResourceDimension {
-            BUFFER = 0,
-            TEXTURE1D = 1,
-            TEXTURE2D = 2,
-            TEXTURE3D = 3
-        }
-        export enum ResourceFlags {
-            NONE = 0,
-            UNIFORM = 1,
-            INDIRECT = 2,
-            STORAGE = 4,
-            SAMPLED = 8,
-            COLOR_ATTACHMENT = 16,
-            DEPTH_STENCIL_ATTACHMENT = 32,
-            INPUT_ATTACHMENT = 64,
-            SHADING_RATE = 128,
-            TRANSFER_SRC = 256,
-            TRANSFER_DST = 512
-        }
-        export enum TaskType {
-            SYNC = 0,
-            ASYNC = 1
-        }
-        export enum SceneFlags {
-            NONE = 0,
-            OPAQUE = 1,
-            MASK = 2,
-            BLEND = 4,
-            OPAQUE_OBJECT = 1,
-            CUTOUT_OBJECT = 2,
-            TRANSPARENT_OBJECT = 4,
-            SHADOW_CASTER = 8,
-            UI = 16,
-            DEFAULT_LIGHTING = 32,
-            VOLUMETRIC_LIGHTING = 64,
-            CLUSTERED_LIGHTING = 128,
-            PLANAR_SHADOW = 256,
-            GEOMETRY = 512,
-            PROFILER = 1024,
-            DRAW_INSTANCING = 2048,
-            DRAW_NON_INSTANCING = 4096,
-            REFLECTION_PROBE = 8192,
-            GPU_DRIVEN = 16384,
-            NON_BUILTIN = 32768,
-            ALL = 4294967295
-        }
-        export enum LightingMode {
-            NONE = 0,
-            DEFAULT = 1,
-            CLUSTERED = 2
-        }
-        export enum AttachmentType {
-            RENDER_TARGET = 0,
-            DEPTH_STENCIL = 1,
-            SHADING_RATE = 2
-        }
-        export enum AccessType {
-            READ = 0,
-            READ_WRITE = 1,
-            WRITE = 2
-        }
-        export enum ClearValueType {
-            NONE = 0,
-            FLOAT_TYPE = 1,
-            INT_TYPE = 2
-        }
-        export class LightInfo {
-            constructor(light?: renderer.scene.Light | null, level?: number, culledByLight?: boolean, probe?: renderer.scene.ReflectionProbe | null);
-            reset(light?: renderer.scene.Light | null, level?: number, culledByLight?: boolean, probe?: renderer.scene.ReflectionProbe | null): void;
-            light: renderer.scene.Light | null;
-            probe: renderer.scene.ReflectionProbe | null;
-            level: number;
-            culledByLight: boolean;
-        }
-        export enum DescriptorTypeOrder {
-            UNIFORM_BUFFER = 0,
-            DYNAMIC_UNIFORM_BUFFER = 1,
-            SAMPLER_TEXTURE = 2,
-            SAMPLER = 3,
-            TEXTURE = 4,
-            STORAGE_BUFFER = 5,
-            DYNAMIC_STORAGE_BUFFER = 6,
-            STORAGE_IMAGE = 7,
-            INPUT_ATTACHMENT = 8
-        }
-        export class Descriptor {
-            constructor(type?: gfx.Type);
-            reset(type?: gfx.Type): void;
-            type: gfx.Type;
-            count: number;
-        }
-        export class DescriptorBlock {
-            reset(): void;
-            readonly descriptors: Map<string, Descriptor>;
-            readonly uniformBlocks: Map<string, gfx.UniformBlock>;
-            capacity: number;
-            count: number;
-        }
-        export class DescriptorBlockFlattened {
-            reset(): void;
-            readonly descriptorNames: string[];
-            readonly uniformBlockNames: string[];
-            readonly descriptors: Descriptor[];
-            readonly uniformBlocks: gfx.UniformBlock[];
-            capacity: number;
-            count: number;
-        }
-        export class DescriptorBlockIndex {
-            constructor(updateFrequency?: UpdateFrequency, parameterType?: ParameterType, descriptorType?: DescriptorTypeOrder, visibility?: gfx.ShaderStageFlagBit);
-            updateFrequency: UpdateFrequency;
-            parameterType: ParameterType;
-            descriptorType: DescriptorTypeOrder;
-            visibility: gfx.ShaderStageFlagBit;
-        }
-        export enum ResolveFlags {
-            NONE = 0,
-            COLOR = 1,
-            DEPTH = 2,
-            STENCIL = 4
-        }
-        export class ResolvePair {
-            constructor(source?: string, target?: string, resolveFlags?: ResolveFlags, mode?: gfx.ResolveMode, mode1?: gfx.ResolveMode);
-            reset(source?: string, target?: string, resolveFlags?: ResolveFlags, mode?: gfx.ResolveMode, mode1?: gfx.ResolveMode): void;
-            source: string;
-            target: string;
-            resolveFlags: ResolveFlags;
-            mode: gfx.ResolveMode;
-            mode1: gfx.ResolveMode;
-        }
-        export class CopyPair {
-            constructor(source?: string, target?: string, mipLevels?: number, numSlices?: number, sourceMostDetailedMip?: number, sourceFirstSlice?: number, sourcePlaneSlice?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
-            reset(source?: string, target?: string, mipLevels?: number, numSlices?: number, sourceMostDetailedMip?: number, sourceFirstSlice?: number, sourcePlaneSlice?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): void;
-            source: string;
-            target: string;
-            mipLevels: number;
-            numSlices: number;
-            sourceMostDetailedMip: number;
-            sourceFirstSlice: number;
-            sourcePlaneSlice: number;
-            targetMostDetailedMip: number;
-            targetFirstSlice: number;
-            targetPlaneSlice: number;
-        }
-        export class UploadPair {
-            constructor(source?: Uint8Array, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
-            reset(target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): void;
-            readonly source: Uint8Array;
-            target: string;
-            mipLevels: number;
-            numSlices: number;
-            targetMostDetailedMip: number;
-            targetFirstSlice: number;
-            targetPlaneSlice: number;
-        }
-        export class MovePair {
-            constructor(source?: string, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
-            reset(source?: string, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): void;
-            source: string;
-            target: string;
-            mipLevels: number;
-            numSlices: number;
-            targetMostDetailedMip: number;
-            targetFirstSlice: number;
-            targetPlaneSlice: number;
-        }
-        export class PipelineStatistics {
-            reset(): void;
-            numRenderPasses: number;
-            numManagedTextures: number;
-            totalManagedTextures: number;
-            numUploadBuffers: number;
-            numUploadBufferViews: number;
-            numFreeUploadBuffers: number;
-            numFreeUploadBufferViews: number;
-            numDescriptorSets: number;
-            numFreeDescriptorSets: number;
-            numInstancingBuffers: number;
-            numInstancingUniformBlocks: number;
-        }
-        export class RenderCommonObjectPoolSettings {
-            constructor(batchSize: number);
-            lightInfoBatchSize: number;
-            descriptorBatchSize: number;
-            descriptorBlockBatchSize: number;
-            descriptorBlockFlattenedBatchSize: number;
-            descriptorBlockIndexBatchSize: number;
-            resolvePairBatchSize: number;
-            copyPairBatchSize: number;
-            uploadPairBatchSize: number;
-            movePairBatchSize: number;
-            pipelineStatisticsBatchSize: number;
-        }
-        export class RenderCommonObjectPool {
-            constructor(settings: RenderCommonObjectPoolSettings);
-            reset(): void;
-            createLightInfo(light?: renderer.scene.Light | null, level?: number, culledByLight?: boolean, probe?: renderer.scene.ReflectionProbe | null): LightInfo;
-            createDescriptor(type?: gfx.Type): Descriptor;
-            createDescriptorBlock(): DescriptorBlock;
-            createDescriptorBlockFlattened(): DescriptorBlockFlattened;
-            createDescriptorBlockIndex(updateFrequency?: UpdateFrequency, parameterType?: ParameterType, descriptorType?: DescriptorTypeOrder, visibility?: gfx.ShaderStageFlagBit): DescriptorBlockIndex;
-            createResolvePair(source?: string, target?: string, resolveFlags?: ResolveFlags, mode?: gfx.ResolveMode, mode1?: gfx.ResolveMode): ResolvePair;
-            createCopyPair(source?: string, target?: string, mipLevels?: number, numSlices?: number, sourceMostDetailedMip?: number, sourceFirstSlice?: number, sourcePlaneSlice?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): CopyPair;
-            createUploadPair(target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): UploadPair;
-            createMovePair(source?: string, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): MovePair;
-            createPipelineStatistics(): PipelineStatistics;
-        }
-        /****************************************************************************
-         Copyright (c) 2021-2023 Xiamen Yaji Software Co., Ltd.
-        
-         http://www.cocos.com
-        
-         Permission is hereby granted, free of charge, to any person obtaining a copy
-         of this software and associated documentation files (the "Software"), to deal
-         in the Software without restriction, including without limitation the rights to
-         use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-         of the Software, and to permit persons to whom the Software is furnished to do so,
-         subject to the following conditions:
-        
-         The above copyright notice and this permission notice shall be included in
-         all copies or substantial portions of the Software.
-        
-         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-         THE SOFTWARE.
-         ****************************************************************************/
-        /**
-         * ========================= !DO NOT CHANGE THE FOLLOWING SECTION MANUALLY! =========================
-         * The following section is auto-generated.
-         * ========================= !DO NOT CHANGE THE FOLLOWING SECTION MANUALLY! =========================
-         */
-        export interface OutputArchive {
-            writeBool(value: boolean): void;
-            writeNumber(value: number): void;
-            writeString(value: string): void;
-        }
-        export interface InputArchive {
-            readBool(): boolean;
-            readNumber(): number;
-            readString(): string;
-        }
-        export function createCustomPipeline(): BasicPipeline;
-        export function setCustomPipeline(name: string, builder: PipelineBuilder): void;
-        export function getCustomPipeline(name: string): PipelineBuilder;
-        export function init(device: gfx.Device, arrayBuffer: ArrayBuffer | null): void;
-        export function destroy(): void;
-        export function getPassID(name: string | undefined): number;
-        export function getSubpassID(passID: number, name: string): number;
-        export function getPhaseID(passID: number, name: string | number | undefined): number;
-        export function completePhaseName(name: string | number | undefined): string;
-        export const INVALID_ID = 4294967295;
-        export const enableEffectImport = true;
-        export const programLib: __private._cocos_rendering_custom_private__ProgramLibrary;
-        export const customPipelineBuilderMap: Map<string, PipelineBuilder>;
-        export function getPipelineTypeName(e: PipelineType): string;
-        /**
-         * @en Type of render pipeline.
-         * Different types of pipeline have different hardward capabilities and interfaces.
-         * @zh 管线类型，不同类型的管线具有不同的硬件能力与接口
-         */
-        export enum PipelineType {
-            /**
-             * @en Basic render pipeline.
-             * Basic render pipeline is available on all platforms.
-             * The corresponding interface is {@link BasicPipeline}
-             * @zh 基础渲染管线，全平台支持。对应接口为 {@link BasicPipeline}
-             */
-            BASIC = 0,
-            /**
-             * @en Standard render pipeline.
-             * Standard render pipeline supports compute shader and subpass rendering.
-             * It works well on Tile-based GPUs and is available on all native platforms.
-             * Vulkan, GLES3 and Metal backends are supported.
-             * The corresponding interface is {@link Pipeline}
-             * @zh 标准渲染管线.
-             * 标准渲染管线支持计算着色器(Compute Shader)与次通道渲染(Subpass rendering)。
-             * 能充分利用Tile-based GPU，支持所有原生平台并对移动平台特别优化。
-             * 支持Vulkan、GLES3、Metal图形后端。
-             * 对应接口为{@link Pipeline}
-             */
-            STANDARD = 1
-        }
-        /**
-         * @en Render subpass capabilities.
-         * Tile-based GPUs support reading color or depth_stencil attachment in pixel shader.
-         * Our implementation is based-on Vulkan abstraction (aka input attachment),
-         * and it is emulated on other graphics backends.
-         * For example, in GLES3 we have used various framebuffer fetch (FBF) extensions.
-         * As a result, different backends and hardwares support different input attachment features.
-         * User should inspect pipeline capabilities when implementing tile-based rendering algorithms.
-         * Using unsupported feature is undefined behaviour.
-         * @zh 次通道渲染能力
-         * Tile-based GPU可以在像素着色器读取当前像素的值。
-         * 我们的抽象方式基于Vulkan的input attachment，并在其他图形后端模拟了这个功能。
-         * 比如在GLES3上，我们使用了多种framebuffer fetch (FBF) 扩展来实现这个功能。
-         * 所以对于不同的硬件以及图形API，支持的能力是略有不同的。
-         * 在编写渲染算法时，应该查询当前设备的能力，来选择合适的tile-based算法。
-         * 使用硬件不支持的特性，会导致未定义行为。
-         */
-        export enum SubpassCapabilities {
-            NONE = 0,
-            /**
-             * @en Supports read depth/stencil value at current pixel.
-             * @zh 支持读取当前像素的depth/stencil值
-             */
-            INPUT_DEPTH_STENCIL = 1,
-            /**
-             * @en Supports read color value 0 at current pixel.
-             * @zh 支持读取当前像素第0个颜色值
-             */
-            INPUT_COLOR = 2,
-            /**
-             * @en Supports read color values at current pixel.
-             * @zh 支持读取当前像素任意颜色值
-             */
-            INPUT_COLOR_MRT = 4,
-            /**
-             * @en Each subpass has its own sample count.
-             * @zh 每个Subpass拥有不同的采样数
-             */
-            HETEROGENEOUS_SAMPLE_COUNT = 8
-        }
-        /**
-         * @en Pipeline capabilities.
-         * The following capabilities are partially supported on different hardware and graphics backends.
-         * @zh 管线能力。根据硬件与后端，支持的特性会有所不同
-         */
-        export class PipelineCapabilities {
-            subpass: SubpassCapabilities;
-        }
-        /**
-         * @en Base class of render graph node.
-         * A node of render graph represents a specific type of rendering operation.
-         * A render graph consists of these nodes and form a forest(which is a set of trees).
-         * @zh RenderGraph中节点的基类，每个RenderGraph节点代表一种渲染操作，并构成一个森林(一组树)
-         */
-        export interface RenderNode {
-            /**
-             * @en Get debug name of current node.
-             * @zh 获得当前节点调试用的名字
-             */
-            name: string;
-            /**
-             * @experimental
-             */
-            setCustomBehavior(name: string): void;
-        }
-        /**
-         * @en Render node which supports setting uniforms and descriptors.
-         * @zh 节点支持设置常量值(uniform/constant)与描述符
-         */
-        export interface Setter extends RenderNode {
-            /**
-             * @en Set matrix4x4 常量(uniform) which consists of 16 floats (64 bytes).
-             * @zh 设置4x4矩阵，常量(uniform)有16个float (64 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setMat4(name: string, mat: math.Mat4): void;
-            /**
-             * @en Set quaternion uniform which consists of 4 floats (16 bytes).
-             * @zh 设置四元数向量，常量(uniform)有4个float (16 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setQuaternion(name: string, quat: math.Quat): void;
-            /**
-             * @en Set color uniform which consists of 4 floats (16 bytes).
-             * @zh 设置颜色值，常量(uniform)有4个float (16 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setColor(name: string, color: gfx.Color): void;
-            /**
-             * @en Set vector4 uniform which consists of 4 floats (16 bytes).
-             * @zh 设置vector4向量，常量(uniform)有4个float (16 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setVec4(name: string, vec: math.Vec4): void;
-            /**
-             * @en Set vector2 uniform which consists of 2 floats (8 bytes).
-             * @zh 设置vector2向量，常量(uniform)有2个float (8 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setVec2(name: string, vec: math.Vec2): void;
-            /**
-             * @en Set float uniform (4 bytes).
-             * @zh 设置浮点值 (4 bytes)
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             */
-            setFloat(name: string, v: number): void;
-            /**
-             * @en Set uniform array.
-             * Size and type of the data should match the corresponding uniforms in the shader.
-             * Mismatches will cause undefined behaviour.
-             * Memory alignment is not required.
-             * @zh 设置数组。类型与大小需要与着色器中的常量(uniform)相匹配，不匹配会引起未定义行为。
-             * 内存地址不需要对齐。
-             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
-             * @param arrayBuffer @en array of bytes @zh byte数组
-             */
-            setArrayBuffer(name: string, arrayBuffer: ArrayBuffer): void;
-            /**
-             * @en Set buffer descriptor.
-             * Size and type of the buffer should match the one in shader.
-             * Buffer should be in read states and satisfy shader stage visibilities.
-             * Mismatches will cause undefined behaviour.
-             * @zh 设置缓冲(buffer)描述符。大小与类型需要与着色器中的一致，处于只读状态且着色阶段可见。
-             * 不匹配会引起未定义行为。
-             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
-             * @param buffer @en readonly buffer @zh 只读的缓冲
-             */
-            setBuffer(name: string, buffer: gfx.Buffer): void;
-            /**
-             * @en Set texture descriptor.
-             * Type of the texture should match the one in shader.
-             * Texture should be in read states and satisfy shader stage visibilities.
-             * Mismatches will cause undefined behaviour.
-             * @zh 设置贴图描述符。类型需要与着色器中的一致，处于只读状态且着色阶段可见。
-             * 不匹配会引起未定义行为。
-             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
-             * @param texture @en readonly texture @zh 只读的贴图
-             */
-            setTexture(name: string, texture: gfx.Texture): void;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             */
-            setReadWriteBuffer(name: string, buffer: gfx.Buffer): void;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             */
-            setReadWriteTexture(name: string, texture: gfx.Texture): void;
-            /**
-             * @en Set sampler descriptor.
-             * Type of the sampler should match the one in shader.
-             * @zh 设置采样器描述符。类型需要与着色器中的一致。
-             * 不匹配会引起未定义行为。
-             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
-             */
-            setSampler(name: string, sampler: gfx.Sampler): void;
-            /**
-             * @en Set builtin camera constants of CCCamera, such as cc_matView.
-             * For list of constants, please check CCCamera in cc-global.chunk.
-             * @zh 设置内置相机常量，例如cc_matView。
-             * 具体常量见cc-global.chunk中的CCCamera.
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinCameraConstants(camera: renderer.scene.Camera): void;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Same as setBuiltinDirectionalLightConstants
-             * @zh 同setBuiltinDirectionalLightConstants
-             * @param light @en The main light. @zh 主光
-             */
-            setBuiltinShadowMapConstants(light: renderer.scene.DirectionalLight): void;
-            /**
-             * @en Set builtin directional light and shadow constants.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCCamera in cc-global.chunk.
-             * @zh 设置内置方向光与阴影常量。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-global.chunk中的CCCamera。
-             * @param light @en The main light. @zh 主光
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinDirectionalLightConstants(light: renderer.scene.DirectionalLight, camera: renderer.scene.Camera): void;
-            /**
-             * @en Set builtin sphere light and shadow constants.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
-             * @zh 设置内置球形光与阴影常量。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
-             * @param light @en The sphere light. @zh 球形光源
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinSphereLightConstants(light: renderer.scene.SphereLight, camera: renderer.scene.Camera): void;
-            /**
-             * @en Set builtin spot light and shadow constants.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
-             * @zh 设置内置探照光与阴影常量。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
-             * @param light @en The spot light. @zh 探照光源
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinSpotLightConstants(light: renderer.scene.SpotLight, camera: renderer.scene.Camera): void;
-            /**
-             * @en Set builtin point light and shadow constants.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
-             * @zh 设置内置点光与阴影常量。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
-             * @param light @en The point light. @zh 点光源
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinPointLightConstants(light: renderer.scene.PointLight, camera: renderer.scene.Camera): void;
-            /**
-             * @en Set builtin ranged directional light and shadow constants.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
-             * @zh 设置内置区间平行光与阴影常量。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
-             * @param light @en The ranged directional light. @zh 区间平行光源
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             */
-            setBuiltinRangedDirectionalLightConstants(light: renderer.scene.RangedDirectionalLight, camera: renderer.scene.Camera): void;
-            /**
-             * @en Set builtin directional light frustum and shadow constants.
-             * These constants are used in builtin shadow map, cascaded shadow map and planar shadow.
-             * For list of constants, please check CCShadow in cc-shadow.chunk and CCCSM in cc-csm.chunk.
-             * @zh 设置内置平行光视锥与阴影常量。
-             * 这些常量用于内置的阴影、级联阴影与平面阴影。
-             * 具体常量见cc-shadow.chunk中的CCShadow与cc-csm.chunk中的CCCSM。
-             * @param light @en The directional light. @zh 平行光源
-             * @param camera @en The camera instance to be set. @zh 当前相机
-             * @param csmLevel @en Curent level of cascaded shadow map @zh 级联阴影等级
-             */
-            setBuiltinDirectionalLightFrustumConstants(camera: renderer.scene.Camera, light: renderer.scene.DirectionalLight, csmLevel?: number): void;
-            /**
-             * @en Set builtin spot light frustum and shadow constants.
-             * These constants are used in builtin shadow map.
-             * For list of constants, please check CCShadow in cc-shadow.chunk.
-             * @zh 设置内置探照光视锥与阴影常量。
-             * 这些常量用于内置的阴影。
-             * 具体常量见cc-shadow.chunk中的CCShadow。
-             * @param light @en The spot light. @zh 探照光源
-             */
-            setBuiltinSpotLightFrustumConstants(light: renderer.scene.SpotLight): void;
-        }
-        /**
-         * @en Scene
-         * A scene is an abstraction of content for rendering.
-         * @zh 场景。需要绘制的场景内容。
-         */
-        export interface SceneBuilder extends Setter {
-            /**
-             * @en Use the frustum information of light instead of camera.
-             * Often used in building shadow map.
-             * @zh 使用光源视锥进行投影，而不是用相机。常用于shadow map的生成。
-             * @param light @en The light used for projection @zh 用于投影的光源
-             * @param csmLevel @en Curent level of cascaded shadow map @zh 级联阴影等级
-             * @param optCamera @en Additional scene culling camera. @zh 额外的场景裁切相机
-             */
-            useLightFrustum(light: renderer.scene.Light, csmLevel?: number, optCamera?: renderer.scene.Camera): void;
-        }
-        /**
-         * @en Render queue
-         * A render queue is an abstraction of graphics commands submission.
-         * Only when the graphics commands in a render queue are all submitted,
-         * the next render queue will start submitting.
-         * @zh 渲染队列。渲染队列是图形命令提交的抽象。
-         * 只有一个渲染队列中的渲染命令全部提交完，才会开始提交下一个渲染队列中的命令。
-         */
-        export interface RenderQueueBuilder extends Setter {
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Render the scene the camera is looking at.
-             * @zh 渲染当前相机指向的场景。
-             * @param camera @en Required camera @zh 所需相机
-             * @param light @en Lighting information of the scene @zh 场景光照信息
-             * @param sceneFlags @en Rendering flags of the scene @zh 场景渲染标志位
-             */
-            addSceneOfCamera(camera: renderer.scene.Camera, light: LightInfo, sceneFlags?: SceneFlags): void;
-            /**
-             * @en Add the scene to be rendered.
-             * If SceneFlags.NON_BUILTIN is specified, no builtin constants will be set.
-             * Otherwise, related builtin constants will be set automatically.
-             * @zh 添加需要绘制的场景。
-             * 如果设置了SceneFlags.NON_BUILTIN，那么不会自动设置内置常量。
-             * @param camera @en Camera used for projection @zh 用于投影的相机
-             * @param sceneFlags @en Rendering flags of the scene @zh 场景渲染标志位
-             * @param light @en Light used for lighting computation @zh 用于光照的光源
-             */
-            addScene(camera: renderer.scene.Camera, sceneFlags: SceneFlags, light?: renderer.scene.Light): SceneBuilder;
-            /**
-             * @en Render a full-screen quad.
-             * @zh 渲染全屏四边形
-             * @param material @en The material used for shading @zh 着色所需材质
-             * @param passID @en Material pass ID @zh 材质通道ID
-             * @param sceneFlags @en Rendering flags of the quad @zh Quad所需场景渲染标志位
-             */
-            addFullscreenQuad(material: Material, passID: number, sceneFlags?: SceneFlags): void;
-            /**
-             * @en Render a full-screen quad from the camera view.
-             * @zh 从相机视角渲染全屏四边形
-             * @param camera @en The required camera @zh 所需相机
-             * @param material @en The material used for shading @zh 着色所需材质
-             * @param passID @en Material pass ID @zh 材质通道ID
-             * @param sceneFlags @en Rendering flags of the quad @zh Quad所需场景渲染标志位
-             */
-            addCameraQuad(camera: renderer.scene.Camera, material: Material, passID: number, sceneFlags?: SceneFlags): void;
-            /**
-             * @en Clear current render target.
-             * @zh 清除当前渲染目标
-             * @param name @en The name of the render target @zh 渲染目标的名字
-             * @param color @en The clearing color @zh 用来清除与填充的颜色
-             */
-            clearRenderTarget(name: string, color?: gfx.Color): void;
-            /**
-             * @en Set rendering viewport.
-             * @zh 设置渲染视口
-             * @param viewport @en The required viewport @zh 所需视口
-             */
-            setViewport(viewport: gfx.Viewport): void;
-            /**
-             * @experimental
-             */
-            addCustomCommand(customBehavior: string): void;
-        }
-        /**
-         * @en Basic render pass.
-         * @zh 基础光栅通道
-         */
-        export interface BasicRenderPassBuilder extends Setter {
-            /**
-             * @en Add render target for rasterization
-             * The render target must have registered in pipeline.
-             * @zh 添加光栅化渲染目标，渲染目标必须已注册。
-             * @param name @en name of the render target @zh 渲染目标的名字
-             * @param loadOp @en Type of load operation @zh 读取操作的类型
-             * @param storeOp @en Type of store operation @zh 写入操作的类型
-             * @param color @en The clear color to use when loadOp is Clear @zh 读取操作为清除时，所用颜色
-             */
-            addRenderTarget(name: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, color?: gfx.Color): void;
-            /**
-             * @en Add depth stencil for rasterization
-             * The depth stencil must have registered in pipeline.
-             * @zh 添加光栅化深度模板缓冲，深度模板缓冲必须已注册。
-             * @param name @en name of the depth stencil @zh 渲染目标的名字
-             * @param loadOp @en Type of load operation @zh 读取操作的类型
-             * @param storeOp @en Type of store operation @zh 写入操作的类型
-             * @param depth @en Depth value used to clear @zh 用于清除的深度值
-             * @param stencil @en Stencil value used to clear @zh 用于清除的模板值
-             * @param clearFlags @en To clear depth, stencil or both @zh 清除分量：深度、模板、两者。
-             */
-            addDepthStencil(name: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, depth?: number, stencil?: number, clearFlags?: gfx.ClearFlagBit): void;
-            /**
-             * @en Add texture for sampling
-             * The texture must have registered in pipeline.
-             * @zh 添加采样用的贴图，贴图必须已注册。
-             * @param name @en name of the texture @zh 贴图的注册名
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             * @param sampler @en the sampler to use @zh 采样器名字
-             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
-             */
-            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
-            /**
-             * @en Add render queue.
-             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
-             * User should only add objects of this hint type to the render queue.
-             * Objects of mixed types might cause downgrading of performance.
-             * The order of render queues should be adjusted according to the hardward and algorithms,
-             * in order to reach peak performance.
-             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
-             * This hint is for validation only and has no effect on rendering.
-             *
-             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
-             *
-             * @zh 添加渲染队列
-             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
-             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
-             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
-             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
-             * 用途提示只用于问题检测，对渲染流程没有任何影响。
-             *
-             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
-             *
-             * @param hint @en Usage hint of the queue @zh 用途的提示
-             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
-             * @returns @en render queue builder @zh 渲染队列
-             */
-            addQueue(hint?: QueueHint, phaseName?: string): RenderQueueBuilder;
-            /**
-             * @en Set rendering viewport.
-             * @zh 设置渲染视口
-             * @param viewport @en The required viewport @zh 所需视口
-             */
-            setViewport(viewport: gfx.Viewport): void;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             */
-            setVersion(name: string, version: number): void;
-            /**
-             * @en Show statistics on screen
-             * @zh 在屏幕上渲染统计数据
-             */
-            showStatistics: boolean;
-        }
-        /**
-         * @en Basic multisample render pass builder
-         * Support resolve render targets and depth stencil.
-         * This render pass only contains one render subpass.
-         * If resolve targets are specified, they will be resolved at the end of the render pass.
-         * After resolving, the contents of multisample render targets and depth stencils are unspecified.
-         * @zh 基础的多重采样渲染通道。支持决算(Resolve)渲染目标与深度缓冲。
-         * 此渲染通道只包含一个渲染子通道。
-         * 如果添加了决算对象，那么在渲染通道结束时，会进行决算。
-         * 决算后多重采样渲染目标与深度缓冲的内容是未定义的。
-         */
-        export interface BasicMultisampleRenderPassBuilder extends BasicRenderPassBuilder {
-            /**
-             * @en Set resolve render target
-             * @zh 设置决算渲染目标
-             */
-            resolveRenderTarget(source: string, target: string): void;
-            /**
-             * @en Set resolve depth stencil
-             * @zh 设置决算深度模板缓冲
-             */
-            resolveDepthStencil(source: string, target: string, depthMode?: gfx.ResolveMode, stencilMode?: gfx.ResolveMode): void;
-        }
-        /**
-         * @en BasicPipeline
-         * Basic pipeline provides basic rendering features which are supported on all platforms.
-         * User can register resources which will be used in the render graph.
-         * Theses resources are generally read and write, and will be managed by the pipeline.
-         * The residency information of resource should not be changed after registration.
-         * In each frame, user can create a render graph to be executed by the pipeline.
-         * @zh 基础渲染管线。
-         * 基础渲染管线提供基础的渲染能力，能在全平台使用。
-         * 用户可以在渲染管线中注册资源，这些资源将由管线托管，用于render graph。
-         * 这些资源一般是可读写的资源。
-         * 资源在注册后，不能更改驻留属性。
-         * 用户可以每帧构建一个render graph，然后交由管线执行。
-         */
-        export interface BasicPipeline extends __private._cocos_rendering_custom_pipeline__PipelineRuntime {
-            readonly type: PipelineType;
-            readonly capabilities: PipelineCapabilities;
-            /**
-             * @en Enable cpu culling of objects affected by the light. Enabled by default.
-             * @zh 光照计算时，裁切受光源影响的物件。默认开启。
-             */
-            enableCpuLightCulling: boolean;
-            /**
-             * @en Check whether the resource has been registered in the pipeline.
-             * @zh 检查资源是否在管线中已注册
-             * @param name @en Resource name @zh 资源名字
-             * @returns Exist or not
-             */
-            containsResource(name: string): boolean;
-            /**
-             * @en Add or update render window to the pipeline.
-             * @zh 注册或更新渲染窗口(RenderWindow)
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Expected format of the render window @zh 期望的渲染窗口格式
-             * @param width @en Expected width of the render window @zh 期望的渲染窗口宽度
-             * @param height @en Expected height of the render window @zh 期望的渲染窗口高度
-             * @param renderWindow @en The render window to add. @zh 需要注册的渲染窗口
-             * @returns Resource ID
-             */
-            addRenderWindow(name: string, format: gfx.Format, width: number, height: number, renderWindow: __private._cocos_render_scene_core_render_window__RenderWindow): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update render window information.
-             * When render window information is updated, such as resized, user should notify the pipeline.
-             * @zh 更新渲染窗口信息。当渲染窗口发生更新时，用户应通知管线。
-             * @param renderWindow @en The render window to update. @zh 渲染窗口
-             */
-            updateRenderWindow(name: string, renderWindow: __private._cocos_render_scene_core_render_window__RenderWindow): void;
-            /**
-             * @en Add or update 2D render target.
-             * @zh 添加或更新2D渲染目标
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the resource @zh 资源的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             * @returns Resource ID
-             */
-            addRenderTarget(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
-            /**
-             * @en Add or update 2D depth stencil.
-             * @zh 添加或更新2D深度模板缓冲
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the resource @zh 资源的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             * @returns Resource ID
-             */
-            addDepthStencil(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update render target information.
-             * @zh 更新渲染目标的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param format @en Format of the resource @zh 资源的格式
-             */
-            updateRenderTarget(name: string, width: number, height: number, format?: gfx.Format): void;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update depth stencil information.
-             * @zh 更新深度模板缓冲的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param format @en Format of the resource @zh 资源的格式
-             */
-            updateDepthStencil(name: string, width: number, height: number, format?: gfx.Format): void;
-            /**
-             * @en Add or update buffer.
-             * @zh 添加或更新缓冲
-             * @param name @en Resource name @zh 资源名字
-             * @param size @en Size of the resource in bytes @zh 资源的大小
-             * @param flags @en Flags of the resource @zh 资源的标志位
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             * @returns Resource ID
-             */
-            addBuffer(name: string, size: number, flags: ResourceFlags, residency: ResourceResidency): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update buffer information.
-             * @zh 更新缓冲的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param size @en Size of the resource in bytes @zh 资源的大小
-             */
-            updateBuffer(name: string, size: number): void;
-            /**
-             * @en Add or update external texture.
-             * Must be readonly.
-             * @zh 添加或更新外部的贴图。贴图必须是只读的。
-             * @param name @en Resource name @zh 资源名字
-             * @param texture @en External unmanaged texture @zh 外部不受管理的贴图
-             * @param flags @en Flags of the resource @zh 资源的标志位
-             * @returns Resource ID
-             */
-            addExternalTexture(name: string, texture: gfx.Texture, flags: ResourceFlags): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update external texture information.
-             * @zh 更新外部的贴图信息
-             * @param name @en Resource name @zh 资源名字
-             * @param texture @en External unmanaged texture @zh 外部不受管理的贴图
-             */
-            updateExternalTexture(name: string, texture: gfx.Texture): void;
-            /**
-             * @en Add or update texture.
-             * @zh 添加或更新外部的贴图。
-             * @param name @en Resource name @zh 资源名字
-             * @param type @en Type of the texture @zh 贴图的类型
-             * @param format @en Format of the texture @zh 贴图的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param depth @en Depth of the resource @zh 资源的深度
-             * @param arraySize @en Size of the array @zh 资源数组的大小
-             * @param mipLevels @en Mip levels of the texture @zh 贴图的Mipmap数目
-             * @param sampleCount @en Sample count of the texture @zh 贴图的采样数目
-             * @param flags @en Flags of the resource @zh 资源的标志位
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             * @returns Resource ID
-             */
-            addTexture(name: string, type: gfx.TextureType, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount, flags: ResourceFlags, residency: ResourceResidency): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update texture information.
-             * @zh 更新贴图信息
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the texture @zh 贴图的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param depth @en Depth of the resource @zh 资源的深度
-             * @param arraySize @en Size of the array @zh 资源数组的大小
-             * @param mipLevels @en Mip levels of the texture @zh 贴图的Mipmap数目
-             * @param sampleCount @en Sample count of the texture @zh 贴图的采样数目
-             */
-            updateTexture(name: string, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount): void;
-            /**
-             * @en Add or update resource.
-             * @zh 添加或更新资源
-             * @param name @en Resource name @zh 资源名字
-             * @param dimension @en Dimension of the resource @zh 资源的维度
-             * @param format @en Format of the texture @zh 资源的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param depth @en Depth of the resource @zh 资源的深度
-             * @param arraySize @en Size of the array @zh 资源数组的大小
-             * @param mipLevels @en Mip levels of the texture @zh 资源的Mipmap数目
-             * @param sampleCount @en Sample count of the texture @zh 资源的采样数目
-             * @param flags @en Flags of the resource @zh 资源的标志位
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             * @returns Resource ID
-             */
-            addResource(name: string, dimension: ResourceDimension, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount, flags: ResourceFlags, residency: ResourceResidency): number;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             * @en Update resource information.
-             * @zh 更新资源信息
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the texture @zh 资源的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param depth @en Depth of the resource @zh 资源的深度
-             * @param arraySize @en Size of the array @zh 资源数组的大小
-             * @param mipLevels @en Mip levels of the texture @zh 资源的Mipmap数目
-             * @param sampleCount @en Sample count of the texture @zh 资源的采样数目
-             */
-            updateResource(name: string, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount): void;
-            /**
-             * @en Add render pass
-             * @zh 添加渲染通道
-             * @param width @en Width of the render pass @zh 渲染通道的宽度
-             * @param height @en Height of the render pass @zh 渲染通道的高度
-             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
-             * @returns Basic render pass builder
-             */
-            addRenderPass(width: number, height: number, passName?: string): BasicRenderPassBuilder;
-            /**
-             * @beta Feature is under development
-             * @en Add multisample render pass
-             * @zh 添加多重采样渲染通道
-             * @param width @en Width of the render pass @zh 渲染通道的宽度
-             * @param height @en Height of the render pass @zh 渲染通道的高度
-             * @param count @en Sample count @zh 采样数
-             * @param quality @en Sample quality. Default value is 0 @zh 采样质量，默认值是0
-             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
-             * @returns Multisample basic render pass builder
-             */
-            addMultisampleRenderPass(width: number, height: number, count: number, quality: number, passName?: string): BasicMultisampleRenderPassBuilder;
-            /**
-             * @deprecated Method will be removed in 3.9.0
-             */
-            addResolvePass(resolvePairs: ResolvePair[]): void;
-            /**
-             * @en Add copy pass.
-             * The source and target resources:
-             * Must be different resources(have different resource names).
-             * Must have compatible formats.
-             * Must have identical dimensions(width, height, depth), sample count and sample quality.
-             * Can't be currently mapped.
-             *
-             * Reinterpret copy is not supported.
-             *
-             * @zh 添加拷贝通道，来源与目标必须满足：
-             * 是不同的注册资源。
-             * 资源格式兼容。
-             * 具有相同的尺寸、采样数、采样质量。
-             * 不能被Map。
-             *
-             * 暂不支持转义拷贝。
-             *
-             * @param copyPairs @en Array of copy source and target @zh 拷贝来源与目标的数组
-             */
-            addCopyPass(copyPairs: CopyPair[]): void;
-            /**
-             * @en Builtin reflection probe pass
-             * @zh 添加内置环境光反射通道
-             * @param camera @en Capturing camera @zh 用于捕捉的相机
-             */
-            addBuiltinReflectionProbePass(camera: renderer.scene.Camera): void;
-        }
-        /**
-         * @beta Feature is under development
-         * @en Render subpass
-         * @zh 渲染次通道
-         */
-        export interface RenderSubpassBuilder extends Setter {
-            /**
-             * @en Add render target for rasterization
-             * The render target must have registered in pipeline.
-             * @zh 添加光栅化渲染目标，渲染目标必须已注册。
-             * @param name @en name of the render target @zh 渲染目标的名字
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
-             * @param loadOp @en Type of load operation @zh 读取操作的类型
-             * @param storeOp @en Type of store operation @zh 写入操作的类型
-             * @param color @en The clear color to use when loadOp is Clear @zh 读取操作为清除时，所用颜色
-             */
-            addRenderTarget(name: string, accessType: AccessType, slotName?: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, color?: gfx.Color): void;
-            /**
-             * @en Add depth stencil for rasterization
-             * The depth stencil must have registered in pipeline.
-             * @zh 添加光栅化深度模板缓冲，深度模板缓冲必须已注册。
-             * @param name @en name of the depth stencil @zh 渲染目标的名字
-             * @param accessType @en Access type @zh 读写状态
-             * @param depthSlotName @en name of the depth descriptor in shader @zh 着色器中深度描述符的名字
-             * @param stencilSlotName @en name of the stencil descriptor in shader @zh 着色器中模板描述符的名字
-             * @param loadOp @en Type of load operation @zh 读取操作的类型
-             * @param storeOp @en Type of store operation @zh 写入操作的类型
-             * @param depth @en Depth value used to clear @zh 用于清除的深度值
-             * @param stencil @en Stencil value used to clear @zh 用于清除的模板值
-             * @param clearFlags @en To clear depth, stencil or both @zh 清除分量：深度、模板、两者。
-             */
-            addDepthStencil(name: string, accessType: AccessType, depthSlotName?: string, stencilSlotName?: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, depth?: number, stencil?: number, clearFlags?: gfx.ClearFlagBit): void;
-            /**
-             * @en Add texture for sampling
-             * The texture must have registered in pipeline.
-             * @zh 添加采样用的贴图，贴图必须已注册。
-             * @param name @en name of the texture @zh 贴图的注册名
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             * @param sampler @en the sampler to use @zh 采样器名字
-             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
-             */
-            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
-            /**
-             * @en Add storage buffer.
-             * The buffer must have registered in pipeline.
-             * @zh 添加存储缓冲，缓冲必须已注册。
-             * @param name @en Name of the buffer @zh 缓冲的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add storage texture.
-             * The texture must have registered in pipeline.
-             * @zh 添加存储贴图，贴图必须已注册。
-             * @param name @en Name of the buffer @zh 贴图的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Set rendering viewport.
-             * @zh 设置渲染视口
-             * @param viewport @en The required viewport @zh 所需视口
-             */
-            setViewport(viewport: gfx.Viewport): void;
-            /**
-             * @en Add render queue.
-             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
-             * User should only add objects of this hint type to the render queue.
-             * Objects of mixed types might cause downgrading of performance.
-             * The order of render queues should be adjusted according to the hardward and algorithms,
-             * in order to reach peak performance.
-             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
-             * This hint is for validation only and has no effect on rendering.
-             *
-             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
-             *
-             * @zh 添加渲染队列
-             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
-             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
-             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
-             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
-             * 用途提示只用于问题检测，对渲染流程没有任何影响。
-             *
-             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
-             *
-             * @param hint @en Usage hint of the queue @zh 用途的提示
-             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
-             * @returns @en render queue builder @zh 渲染队列
-             */
-            addQueue(hint?: QueueHint, phaseName?: string): RenderQueueBuilder;
-            /**
-             * @en Show statistics on screen
-             * @zh 在屏幕上渲染统计数据
-             */
-            showStatistics: boolean;
-            /**
-             * @experimental
-             */
-            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
-        }
-        /**
-         * @beta Feature is under development
-         * @en Multisample render subpass
-         * @zh 多重采样渲染次通道
-         */
-        export interface MultisampleRenderSubpassBuilder extends RenderSubpassBuilder {
-            /**
-             * @en Resolve render target
-             * @zh 汇总渲染目标
-             * @param source @en Multisample source @zh 多重采样来源
-             * @param target @en Resolve target @zh 汇总目标
-             */
-            resolveRenderTarget(source: string, target: string): void;
-            /**
-             * @en Resolve depth stencil
-             * @zh 汇总深度模板缓冲
-             * @param source @en Multisample source @zh 多重采样来源
-             * @param target @en Resolve target @zh 汇总目标
-             * @param depthMode @en Resolve mode of depth component @zh 深度分量汇总模式
-             * @param stencilMode @en Resolve mode of stencil component @zh 模板分量汇总模式
-             */
-            resolveDepthStencil(source: string, target: string, depthMode?: gfx.ResolveMode, stencilMode?: gfx.ResolveMode): void;
-        }
-        /**
-         * @en Compute queue
-         * @zh 计算队列
-         */
-        export interface ComputeQueueBuilder extends Setter {
-            /**
-             * @en Dispatch compute task
-             * @zh 发送计算任务
-             * @param threadGroupCountX @en Thread group count X  @zh 线程组的X分量的数目
-             * @param threadGroupCountY @en Thread group count Y  @zh 线程组的Y分量的数目
-             * @param threadGroupCountZ @en Thread group count Z  @zh 线程组的Z分量的数目
-             * @param material @en The material to use @zh 计算任务用的材质
-             * @param passID @en The name of the pass declared in the effect. @zh effect中的通道名字
-             */
-            addDispatch(threadGroupCountX: number, threadGroupCountY: number, threadGroupCountZ: number, material?: Material, passID?: number): void;
-        }
-        /**
-         * @beta Feature is under development
-         * @en Compute subpass
-         * @zh 计算次通道
-         */
-        export interface ComputeSubpassBuilder extends Setter {
-            /**
-             * @en Add input render target.
-             * @zh 添加输入渲染目标
-             * @param name @en name of the render target @zh 渲染目标的名字
-             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
-             */
-            addRenderTarget(name: string, slotName: string): void;
-            /**
-             * @en Add texture for sampling
-             * The texture must have registered in pipeline.
-             * @zh 添加采样用的贴图，贴图必须已注册。
-             * @param name @en name of the texture @zh 贴图的注册名
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             * @param sampler @en the sampler to use @zh 采样器名字
-             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
-             */
-            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
-            /**
-             * @en Add storage buffer.
-             * The buffer must have registered in pipeline.
-             * @zh 添加存储缓冲，缓冲必须已注册。
-             * @param name @en Name of the buffer @zh 缓冲的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add storage texture.
-             * The texture must have registered in pipeline.
-             * @zh 添加存储贴图，贴图必须已注册。
-             * @param name @en Name of the buffer @zh 贴图的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add render queue.
-             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
-             * User should only add objects of this hint type to the render queue.
-             * Objects of mixed types might cause downgrading of performance.
-             * The order of render queues should be adjusted according to the hardward and algorithms,
-             * in order to reach peak performance.
-             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
-             * This hint is for validation only and has no effect on rendering.
-             *
-             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
-             *
-             * @zh 添加渲染队列
-             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
-             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
-             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
-             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
-             * 用途提示只用于问题检测，对渲染流程没有任何影响。
-             *
-             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
-             *
-             * @param hint @en Usage hint of the queue @zh 用途的提示
-             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
-             * @returns @en compute queue builder @zh 计算队列
-             */
-            addQueue(phaseName?: string): ComputeQueueBuilder;
-            /**
-             * @experimental
-             */
-            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
-        }
-        /**
-         * @beta Feature is under development
-         * @en Render pass
-         * @zh 渲染通道
-         */
-        export interface RenderPassBuilder extends BasicRenderPassBuilder {
-            /**
-             * @en Add storage buffer.
-             * The buffer must have registered in pipeline.
-             * @zh 添加存储缓冲，缓冲必须已注册。
-             * @param name @en Name of the buffer @zh 缓冲的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add storage texture.
-             * The texture must have registered in pipeline.
-             * @zh 添加存储贴图，贴图必须已注册。
-             * @param name @en Name of the buffer @zh 贴图的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @beta Feature is under development
-             */
-            addMaterialTexture(resourceName: string, flags?: gfx.ShaderStageFlagBit): void;
-            /**
-             * @beta Feature is under development
-             * @en Add render subpass.
-             * @zh 添加渲染次通道
-             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
-             * @returns Render subpass builder
-             */
-            addRenderSubpass(subpassName: string): RenderSubpassBuilder;
-            /**
-             * @beta Feature is under development
-             * @en Add multisample render subpass.
-             * Sample count and quality should match those of the resources.
-             * @zh 添加多重采样渲染次通道，采样数与质量需要与资源一致。
-             * @param count @en Sample count @zh 采样数
-             * @param quality @en Sample quality @zh 采样质量
-             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
-             * @returns Multisample render subpass builder
-             */
-            addMultisampleRenderSubpass(count: number, quality: number, subpassName: string): MultisampleRenderSubpassBuilder;
-            /**
-             * @experimental
-             * @en Add compute subpass.
-             * @zh 添加计算次通道
-             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
-             * @returns Compute subpass builder
-             */
-            addComputeSubpass(subpassName?: string): ComputeSubpassBuilder;
-            /**
-             * @experimental
-             */
-            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
-        }
-        /**
-         * @en Multisample render pass builder
-         * @zh 多重采样渲染通道。
-         */
-        export interface MultisampleRenderPassBuilder extends BasicMultisampleRenderPassBuilder {
-            /**
-             * @en Add storage buffer
-             * @zh 添加存储缓冲
-             * @param name @en Name of the storage buffer @zh 存储缓冲的名字
-             * @param accessType @en Access type of the buffer in the render pass @zh 渲染通道中缓冲的读写状态
-             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
-             */
-            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add storage image
-             * @zh 添加存储贴图
-             * @param name @en Name of the storage texture @zh 存储贴图的名字
-             * @param accessType @en Access type of the texture in the render pass @zh 渲染通道中贴图的读写状态
-             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
-             */
-            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
-        }
-        /**
-         * @en Compute pass
-         * @zh 计算通道
-         */
-        export interface ComputePassBuilder extends Setter {
-            /**
-             * @en Add texture for sampling
-             * The texture must have registered in pipeline.
-             * @zh 添加采样用的贴图，贴图必须已注册。
-             * @param name @en name of the texture @zh 贴图的注册名
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             * @param sampler @en the sampler to use @zh 采样器名字
-             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
-             */
-            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
-            /**
-             * @en Add storage buffer.
-             * The buffer must have registered in pipeline.
-             * @zh 添加存储缓冲，缓冲必须已注册。
-             * @param name @en Name of the buffer @zh 缓冲的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @en Add storage texture.
-             * The texture must have registered in pipeline.
-             * @zh 添加存储贴图，贴图必须已注册。
-             * @param name @en Name of the buffer @zh 贴图的注册名
-             * @param accessType @en Access type @zh 读写状态
-             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
-             */
-            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
-            /**
-             * @beta Feature is under development
-             */
-            addMaterialTexture(resourceName: string, flags?: gfx.ShaderStageFlagBit): void;
-            /**
-             * @en Add render queue.
-             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
-             * User should only add objects of this hint type to the render queue.
-             * Objects of mixed types might cause downgrading of performance.
-             * The order of render queues should be adjusted according to the hardward and algorithms,
-             * in order to reach peak performance.
-             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
-             * This hint is for validation only and has no effect on rendering.
-             *
-             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
-             *
-             * @zh 添加渲染队列
-             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
-             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
-             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
-             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
-             * 用途提示只用于问题检测，对渲染流程没有任何影响。
-             *
-             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
-             *
-             * @param hint @en Usage hint of the queue @zh 用途的提示
-             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
-             * @returns @en compute queue builder @zh 计算队列
-             */
-            addQueue(phaseName?: string): ComputeQueueBuilder;
-            /**
-             * @experimental
-             */
-            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
-        }
-        /**
-         * @en Render pipeline.
-         * @zh 渲染管线
-         */
-        export interface Pipeline extends BasicPipeline {
-            /**
-             * @en Add or update storage buffer.
-             * @zh 添加或更新存储缓冲
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the resource @zh 资源的格式
-             * @param size @en Size of the resource in bytes @zh 资源的大小
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             */
-            addStorageBuffer(name: string, format: gfx.Format, size: number, residency?: ResourceResidency): number;
-            /**
-             * @en Add or update 2D storage texture
-             * @zh 添加或更新2D存储贴图
-             * @param name @en Resource name @zh 资源名字
-             * @param format @en Format of the resource @zh 资源的格式
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             */
-            addStorageTexture(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
-            /**
-             * @experimental
-             * @en Add or update 2D shading rate texture
-             * @zh 添加或更新2D着色率贴图
-             * @param name @en Resource name @zh 资源名字
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param residency @en Residency of the resource. @zh 资源的驻留性
-             */
-            addShadingRateTexture(name: string, width: number, height: number, residency?: ResourceResidency): number;
-            /**
-             * @en Update storage buffer information.
-             * @zh 更新存储缓冲的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param size @en Size of the resource in bytes @zh 资源的大小
-             * @param format @en Format of the resource @zh 资源的格式
-             */
-            updateStorageBuffer(name: string, size: number, format?: gfx.Format): void;
-            /**
-             * @en Update storage texture information.
-             * @zh 更新2D存储贴图的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             * @param format @en Format of the resource @zh 资源的格式
-             */
-            updateStorageTexture(name: string, width: number, height: number, format?: gfx.Format): void;
-            /**
-             * @en Update shading rate texture information.
-             * @zh 更新2D着色率贴图的信息
-             * @param name @en Resource name @zh 资源名字
-             * @param width @en Width of the resource @zh 资源的宽度
-             * @param height @en Height of the resource @zh 资源的高度
-             */
-            updateShadingRateTexture(name: string, width: number, height: number): void;
-            /**
-             * @en Add render pass
-             * @zh 添加渲染通道
-             * @param width @en Width of the render pass @zh 渲染通道的宽度
-             * @param height @en Height of the render pass @zh 渲染通道的高度
-             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
-             * @returns Render pass builder
-             */
-            addRenderPass(width: number, height: number, passName: string): RenderPassBuilder;
-            /**
-             * @en Add multisample render pass
-             * @zh 添加多重采样渲染通道
-             * @param width @en Width of the render pass @zh 渲染通道的宽度
-             * @param height @en Height of the render pass @zh 渲染通道的高度
-             * @param count @en Sample count @zh 采样数目
-             * @param quality @en Sample quality (default is 0) @zh 采样质量（默认为0）
-             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
-             * @returns Multisample render pass builder
-             */
-            addMultisampleRenderPass(width: number, height: number, count: number, quality: number, passName: string): MultisampleRenderPassBuilder;
-            /**
-             * @en Add compute pass
-             * @zh 添加计算通道
-             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
-             * @returns Compute pass builder
-             */
-            addComputePass(passName: string): ComputePassBuilder;
-            /**
-             * @beta Feature is under development
-             * @en Add upload pass.
-             * The source and target resources:
-             * Must be different resources(have different resource names).
-             * Must have compatible formats.
-             * Must have identical dimensions(width, height, depth), sample count and sample quality.
-             * Can't be currently mapped.
-             *
-             * @zh 添加上传通道，来源与目标必须满足：
-             * 是不同的注册资源。
-             * 资源格式兼容。
-             * 具有相同的尺寸、采样数、采样质量。
-             * 不能被Map。
-             *
-             * @param uploadPairs @en Array of upload source and target @zh 上传来源与目标的数组
-             */
-            addUploadPass(uploadPairs: UploadPair[]): void;
-            /**
-             * @en Add move pass.
-             * Move-construct target resource, by moving source resources into subresources of target.
-             * After the move, the target resource must be completely initialized.
-             * Target write conflicts will result in undefined behaviour.
-             * The source and target resources:
-             * Must be different resources(have different resource names).
-             * Must have compatible formats.
-             * Must have identical dimensions(width, height, depth), sample count and sample quality.
-             * Can't be currently mapped.
-             *
-             * @zh 添加移动通道。
-             * 移动构造目标资源，将来源移入目标的次级资源。
-             * 移动后，目标资源必须完全初始化。
-             * 目标写入冲突是未定义行为。
-             * 来源与目标必须满足：
-             * 是不同的注册资源。
-             * 资源格式兼容。
-             * 具有相同的尺寸、采样数、采样质量。
-             * 不能被Map。
-             *
-             * @param movePairs @en Array of move source and target @zh 移动来源与目标的数组
-             */
-            addMovePass(movePairs: MovePair[]): void;
-            /**
-             * @experimental
-             */
-            addCustomBuffer(name: string, info: gfx.BufferInfo, type: string): number;
-            /**
-             * @experimental
-             */
-            addCustomTexture(name: string, info: gfx.TextureInfo, type: string): number;
-        }
-        /**
-         * @en Pipeline builder.
-         * User can implement this interface and setup render graph.
-         * Call setCustomPipeline to register the pipeline builder
-         * @zh 管线构造器
-         * 用户可以实现这个接口，来构建自己想要的render graph。
-         * 调用setCustomPipeline注册管线
-         */
-        export interface PipelineBuilder {
-            /**
-             * @en Setup render graph
-             * @zh 构建渲染管线
-             * @param cameras @en Camera list to render @zh 需要渲染的相机列表
-             * @param pipeline @en Current render pipeline @zh 当前管线
-             */
-            setup(cameras: renderer.scene.Camera[], pipeline: BasicPipeline): void;
-            /**
-             * @en Callback of pipeline state changed
-             * @zh 渲染管线状态更新的回调
-             */
-            onGlobalPipelineStateChanged?(): void;
-        }
-    }
     export namespace postProcess {
         export class PostProcessSetting extends Component {
             onEnable(): void;
@@ -36907,6 +35132,7 @@ declare module "cc" {
             static all: PostProcess[];
             global: boolean;
             protected _shadingScale: number;
+            constructor();
             get shadingScale(): number;
             set shadingScale(v: number);
             enableShadingScaleInEditor: boolean;
@@ -37179,6 +35405,1512 @@ declare module "cc" {
             getCameraPasses(camera: renderer.scene.Camera): BasePass[];
             renderCamera(camera: renderer.scene.Camera, ppl: rendering.Pipeline): void;
         }
+    }
+    export namespace rendering {
+        export function saveLightInfo(a: OutputArchive, v: LightInfo): void;
+        export function loadLightInfo(a: InputArchive, v: LightInfo): void;
+        export function saveDescriptor(a: OutputArchive, v: Descriptor): void;
+        export function loadDescriptor(a: InputArchive, v: Descriptor): void;
+        export function saveDescriptorBlock(a: OutputArchive, v: DescriptorBlock): void;
+        export function loadDescriptorBlock(a: InputArchive, v: DescriptorBlock): void;
+        export function saveDescriptorBlockFlattened(a: OutputArchive, v: DescriptorBlockFlattened): void;
+        export function loadDescriptorBlockFlattened(a: InputArchive, v: DescriptorBlockFlattened): void;
+        export function saveDescriptorBlockIndex(a: OutputArchive, v: DescriptorBlockIndex): void;
+        export function loadDescriptorBlockIndex(a: InputArchive, v: DescriptorBlockIndex): void;
+        export function saveResolvePair(a: OutputArchive, v: ResolvePair): void;
+        export function loadResolvePair(a: InputArchive, v: ResolvePair): void;
+        export function saveCopyPair(a: OutputArchive, v: CopyPair): void;
+        export function loadCopyPair(a: InputArchive, v: CopyPair): void;
+        export function saveMovePair(a: OutputArchive, v: MovePair): void;
+        export function loadMovePair(a: InputArchive, v: MovePair): void;
+        export function savePipelineStatistics(a: OutputArchive, v: PipelineStatistics): void;
+        export function loadPipelineStatistics(a: InputArchive, v: PipelineStatistics): void;
+        export enum UpdateFrequency {
+            PER_INSTANCE = 0,
+            PER_BATCH = 1,
+            PER_PHASE = 2,
+            PER_PASS = 3,
+            COUNT = 4
+        }
+        export const enum ParameterType {
+            CONSTANTS = 0,
+            CBV = 1,
+            UAV = 2,
+            SRV = 3,
+            TABLE = 4,
+            SSV = 5
+        }
+        export enum ResourceResidency {
+            MANAGED = 0,
+            MEMORYLESS = 1,
+            PERSISTENT = 2,
+            EXTERNAL = 3,
+            BACKBUFFER = 4
+        }
+        export enum QueueHint {
+            NONE = 0,
+            OPAQUE = 1,
+            MASK = 2,
+            BLEND = 3,
+            RENDER_OPAQUE = 1,
+            RENDER_CUTOUT = 2,
+            RENDER_TRANSPARENT = 3
+        }
+        export enum ResourceDimension {
+            BUFFER = 0,
+            TEXTURE1D = 1,
+            TEXTURE2D = 2,
+            TEXTURE3D = 3
+        }
+        export enum ResourceFlags {
+            NONE = 0,
+            UNIFORM = 1,
+            INDIRECT = 2,
+            STORAGE = 4,
+            SAMPLED = 8,
+            COLOR_ATTACHMENT = 16,
+            DEPTH_STENCIL_ATTACHMENT = 32,
+            INPUT_ATTACHMENT = 64,
+            SHADING_RATE = 128,
+            TRANSFER_SRC = 256,
+            TRANSFER_DST = 512
+        }
+        export const enum TaskType {
+            SYNC = 0,
+            ASYNC = 1
+        }
+        export enum SceneFlags {
+            NONE = 0,
+            OPAQUE = 1,
+            MASK = 2,
+            BLEND = 4,
+            OPAQUE_OBJECT = 1,
+            CUTOUT_OBJECT = 2,
+            TRANSPARENT_OBJECT = 4,
+            SHADOW_CASTER = 8,
+            UI = 16,
+            DEFAULT_LIGHTING = 32,
+            VOLUMETRIC_LIGHTING = 64,
+            CLUSTERED_LIGHTING = 128,
+            PLANAR_SHADOW = 256,
+            GEOMETRY = 512,
+            PROFILER = 1024,
+            DRAW_INSTANCING = 2048,
+            DRAW_NON_INSTANCING = 4096,
+            REFLECTION_PROBE = 8192,
+            GPU_DRIVEN = 16384,
+            NON_BUILTIN = 32768,
+            ALL = 4294967295
+        }
+        export const enum LightingMode {
+            NONE = 0,
+            DEFAULT = 1,
+            CLUSTERED = 2
+        }
+        export const enum AttachmentType {
+            RENDER_TARGET = 0,
+            DEPTH_STENCIL = 1,
+            SHADING_RATE = 2
+        }
+        export enum AccessType {
+            READ = 0,
+            READ_WRITE = 1,
+            WRITE = 2
+        }
+        export const enum ClearValueType {
+            NONE = 0,
+            FLOAT_TYPE = 1,
+            INT_TYPE = 2
+        }
+        export class LightInfo {
+            constructor(light?: renderer.scene.Light | null, level?: number, culledByLight?: boolean, probe?: renderer.scene.ReflectionProbe | null);
+            reset(light: renderer.scene.Light | null, level: number, culledByLight: boolean, probe: renderer.scene.ReflectionProbe | null): void;
+            light: renderer.scene.Light | null;
+            probe: renderer.scene.ReflectionProbe | null;
+            level: number;
+            culledByLight: boolean;
+        }
+        export const enum DescriptorTypeOrder {
+            UNIFORM_BUFFER = 0,
+            DYNAMIC_UNIFORM_BUFFER = 1,
+            SAMPLER_TEXTURE = 2,
+            SAMPLER = 3,
+            TEXTURE = 4,
+            STORAGE_BUFFER = 5,
+            DYNAMIC_STORAGE_BUFFER = 6,
+            STORAGE_IMAGE = 7,
+            INPUT_ATTACHMENT = 8
+        }
+        export class Descriptor {
+            constructor(type?: gfx.Type);
+            reset(type: gfx.Type): void;
+            type: gfx.Type;
+            count: number;
+        }
+        export class DescriptorBlock {
+            reset(): void;
+            readonly descriptors: Map<string, Descriptor>;
+            readonly uniformBlocks: Map<string, gfx.UniformBlock>;
+            capacity: number;
+            count: number;
+        }
+        export class DescriptorBlockFlattened {
+            reset(): void;
+            readonly descriptorNames: string[];
+            readonly uniformBlockNames: string[];
+            readonly descriptors: Descriptor[];
+            readonly uniformBlocks: gfx.UniformBlock[];
+            capacity: number;
+            count: number;
+        }
+        export class DescriptorBlockIndex {
+            constructor(updateFrequency?: UpdateFrequency, parameterType?: ParameterType, descriptorType?: DescriptorTypeOrder, visibility?: gfx.ShaderStageFlagBit);
+            updateFrequency: UpdateFrequency;
+            parameterType: ParameterType;
+            descriptorType: DescriptorTypeOrder;
+            visibility: gfx.ShaderStageFlagBit;
+        }
+        export const enum ResolveFlags {
+            NONE = 0,
+            COLOR = 1,
+            DEPTH = 2,
+            STENCIL = 4
+        }
+        export class ResolvePair {
+            constructor(source?: string, target?: string, resolveFlags?: ResolveFlags, mode?: gfx.ResolveMode, mode1?: gfx.ResolveMode);
+            reset(source: string, target: string, resolveFlags: ResolveFlags, mode: gfx.ResolveMode, mode1: gfx.ResolveMode): void;
+            source: string;
+            target: string;
+            resolveFlags: ResolveFlags;
+            mode: gfx.ResolveMode;
+            mode1: gfx.ResolveMode;
+        }
+        export class CopyPair {
+            constructor(source?: string, target?: string, mipLevels?: number, numSlices?: number, sourceMostDetailedMip?: number, sourceFirstSlice?: number, sourcePlaneSlice?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
+            reset(source: string, target: string, mipLevels: number, numSlices: number, sourceMostDetailedMip: number, sourceFirstSlice: number, sourcePlaneSlice: number, targetMostDetailedMip: number, targetFirstSlice: number, targetPlaneSlice: number): void;
+            source: string;
+            target: string;
+            mipLevels: number;
+            numSlices: number;
+            sourceMostDetailedMip: number;
+            sourceFirstSlice: number;
+            sourcePlaneSlice: number;
+            targetMostDetailedMip: number;
+            targetFirstSlice: number;
+            targetPlaneSlice: number;
+        }
+        export class UploadPair {
+            constructor(source?: Uint8Array, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
+            reset(target: string, mipLevels: number, numSlices: number, targetMostDetailedMip: number, targetFirstSlice: number, targetPlaneSlice: number): void;
+            readonly source: Uint8Array;
+            target: string;
+            mipLevels: number;
+            numSlices: number;
+            targetMostDetailedMip: number;
+            targetFirstSlice: number;
+            targetPlaneSlice: number;
+        }
+        export class MovePair {
+            constructor(source?: string, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number);
+            reset(source: string, target: string, mipLevels: number, numSlices: number, targetMostDetailedMip: number, targetFirstSlice: number, targetPlaneSlice: number): void;
+            source: string;
+            target: string;
+            mipLevels: number;
+            numSlices: number;
+            targetMostDetailedMip: number;
+            targetFirstSlice: number;
+            targetPlaneSlice: number;
+        }
+        export class PipelineStatistics {
+            reset(): void;
+            numRenderPasses: number;
+            numManagedTextures: number;
+            totalManagedTextures: number;
+            numUploadBuffers: number;
+            numUploadBufferViews: number;
+            numFreeUploadBuffers: number;
+            numFreeUploadBufferViews: number;
+            numDescriptorSets: number;
+            numFreeDescriptorSets: number;
+            numInstancingBuffers: number;
+            numInstancingUniformBlocks: number;
+        }
+        export class RenderCommonObjectPool {
+            constructor();
+            reset(): void;
+            createLightInfo(light?: renderer.scene.Light | null, level?: number, culledByLight?: boolean, probe?: renderer.scene.ReflectionProbe | null): LightInfo;
+            createDescriptor(type?: gfx.Type): Descriptor;
+            createDescriptorBlock(): DescriptorBlock;
+            createDescriptorBlockFlattened(): DescriptorBlockFlattened;
+            createDescriptorBlockIndex(updateFrequency?: UpdateFrequency, parameterType?: ParameterType, descriptorType?: DescriptorTypeOrder, visibility?: gfx.ShaderStageFlagBit): DescriptorBlockIndex;
+            createResolvePair(source?: string, target?: string, resolveFlags?: ResolveFlags, mode?: gfx.ResolveMode, mode1?: gfx.ResolveMode): ResolvePair;
+            createCopyPair(source?: string, target?: string, mipLevels?: number, numSlices?: number, sourceMostDetailedMip?: number, sourceFirstSlice?: number, sourcePlaneSlice?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): CopyPair;
+            createUploadPair(target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): UploadPair;
+            createMovePair(source?: string, target?: string, mipLevels?: number, numSlices?: number, targetMostDetailedMip?: number, targetFirstSlice?: number, targetPlaneSlice?: number): MovePair;
+            createPipelineStatistics(): PipelineStatistics;
+        }
+        /**
+         * ========================= !DO NOT CHANGE THE FOLLOWING SECTION MANUALLY! =========================
+         * The following section is auto-generated.
+         * ========================= !DO NOT CHANGE THE FOLLOWING SECTION MANUALLY! =========================
+         */
+        export interface OutputArchive {
+            b(value: boolean): void;
+            n(value: number): void;
+            s(value: string): void;
+        }
+        export interface InputArchive {
+            b(): boolean;
+            n(): number;
+            s(): string;
+        }
+        export function createCustomPipeline(): BasicPipeline;
+        export function setCustomPipeline(name: string, builder: PipelineBuilder): void;
+        export function getCustomPipeline(name: string): PipelineBuilder;
+        export function init(device: gfx.Device, arrayBuffer: ArrayBuffer | null): void;
+        export function destroy(): void;
+        export function getPassID(name: string | undefined): number;
+        export function getSubpassID(passID: number, name: string): number;
+        export function getPhaseID(passID: number, name: string | number | undefined): number;
+        export function completePhaseName(name: string | number | undefined): string;
+        export const INVALID_ID = 4294967295;
+        export const enableEffectImport = true;
+        export const programLib: __private._cocos_rendering_custom_private__ProgramLibrary;
+        export const customPipelineBuilderMap: Map<string, PipelineBuilder>;
+        /**
+         * @en Type of render pipeline.
+         * Different types of pipeline have different hardward capabilities and interfaces.
+         * @zh 管线类型，不同类型的管线具有不同的硬件能力与接口
+         */
+        export enum PipelineType {
+            /**
+             * @en Basic render pipeline.
+             * Basic render pipeline is available on all platforms.
+             * The corresponding interface is {@link BasicPipeline}
+             * @zh 基础渲染管线，全平台支持。对应接口为 {@link BasicPipeline}
+             */
+            BASIC = 0,
+            /**
+             * @en Standard render pipeline.
+             * Standard render pipeline supports compute shader and subpass rendering.
+             * It works well on Tile-based GPUs and is available on all native platforms.
+             * Vulkan, GLES3 and Metal backends are supported.
+             * The corresponding interface is {@link Pipeline}
+             * @zh 标准渲染管线.
+             * 标准渲染管线支持计算着色器(Compute Shader)与次通道渲染(Subpass rendering)。
+             * 能充分利用Tile-based GPU，支持所有原生平台并对移动平台特别优化。
+             * 支持Vulkan、GLES3、Metal图形后端。
+             * 对应接口为{@link Pipeline}
+             */
+            STANDARD = 1
+        }
+        /**
+         * @en Render subpass capabilities.
+         * Tile-based GPUs support reading color or depth_stencil attachment in pixel shader.
+         * Our implementation is based-on Vulkan abstraction (aka input attachment),
+         * and it is emulated on other graphics backends.
+         * For example, in GLES3 we have used various framebuffer fetch (FBF) extensions.
+         * As a result, different backends and hardwares support different input attachment features.
+         * User should inspect pipeline capabilities when implementing tile-based rendering algorithms.
+         * Using unsupported feature is undefined behaviour.
+         * @zh 次通道渲染能力
+         * Tile-based GPU可以在像素着色器读取当前像素的值。
+         * 我们的抽象方式基于Vulkan的input attachment，并在其他图形后端模拟了这个功能。
+         * 比如在GLES3上，我们使用了多种framebuffer fetch (FBF) 扩展来实现这个功能。
+         * 所以对于不同的硬件以及图形API，支持的能力是略有不同的。
+         * 在编写渲染算法时，应该查询当前设备的能力，来选择合适的tile-based算法。
+         * 使用硬件不支持的特性，会导致未定义行为。
+         */
+        export enum SubpassCapabilities {
+            NONE = 0,
+            /**
+             * @en Supports read depth/stencil value at current pixel.
+             * @zh 支持读取当前像素的depth/stencil值
+             */
+            INPUT_DEPTH_STENCIL = 1,
+            /**
+             * @en Supports read color value 0 at current pixel.
+             * @zh 支持读取当前像素第0个颜色值
+             */
+            INPUT_COLOR = 2,
+            /**
+             * @en Supports read color values at current pixel.
+             * @zh 支持读取当前像素任意颜色值
+             */
+            INPUT_COLOR_MRT = 4,
+            /**
+             * @en Each subpass has its own sample count.
+             * @zh 每个Subpass拥有不同的采样数
+             */
+            HETEROGENEOUS_SAMPLE_COUNT = 8
+        }
+        /**
+         * @en Pipeline capabilities.
+         * The following capabilities are partially supported on different hardware and graphics backends.
+         * @zh 管线能力。根据硬件与后端，支持的特性会有所不同
+         */
+        export class PipelineCapabilities {
+            subpass: SubpassCapabilities;
+        }
+        /**
+         * @en Base class of render graph node.
+         * A node of render graph represents a specific type of rendering operation.
+         * A render graph consists of these nodes and form a forest(which is a set of trees).
+         * @zh RenderGraph中节点的基类，每个RenderGraph节点代表一种渲染操作，并构成一个森林(一组树)
+         */
+        export interface RenderNode {
+            /**
+             * @en Get debug name of current node.
+             * @zh 获得当前节点调试用的名字
+             */
+            name: string;
+            /**
+             * @experimental
+             */
+            setCustomBehavior(name: string): void;
+        }
+        /**
+         * @en Render node which supports setting uniforms and descriptors.
+         * @zh 节点支持设置常量值(uniform/constant)与描述符
+         */
+        export interface Setter extends RenderNode {
+            /**
+             * @en Set matrix4x4 常量(uniform) which consists of 16 floats (64 bytes).
+             * @zh 设置4x4矩阵，常量(uniform)有16个float (64 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setMat4(name: string, mat: math.Mat4): void;
+            /**
+             * @en Set quaternion uniform which consists of 4 floats (16 bytes).
+             * @zh 设置四元数向量，常量(uniform)有4个float (16 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setQuaternion(name: string, quat: math.Quat): void;
+            /**
+             * @en Set color uniform which consists of 4 floats (16 bytes).
+             * @zh 设置颜色值，常量(uniform)有4个float (16 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setColor(name: string, color: gfx.Color): void;
+            /**
+             * @en Set vector4 uniform which consists of 4 floats (16 bytes).
+             * @zh 设置vector4向量，常量(uniform)有4个float (16 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setVec4(name: string, vec: math.Vec4): void;
+            /**
+             * @en Set vector2 uniform which consists of 2 floats (8 bytes).
+             * @zh 设置vector2向量，常量(uniform)有2个float (8 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setVec2(name: string, vec: math.Vec2): void;
+            /**
+             * @en Set float uniform (4 bytes).
+             * @zh 设置浮点值 (4 bytes)
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             */
+            setFloat(name: string, v: number): void;
+            /**
+             * @en Set uniform array.
+             * Size and type of the data should match the corresponding uniforms in the shader.
+             * Mismatches will cause undefined behaviour.
+             * Memory alignment is not required.
+             * @zh 设置数组。类型与大小需要与着色器中的常量(uniform)相匹配，不匹配会引起未定义行为。
+             * 内存地址不需要对齐。
+             * @param name @en uniform name in shader. @zh 填写着色器中的常量(uniform)名字
+             * @param arrayBuffer @en array of bytes @zh byte数组
+             */
+            setArrayBuffer(name: string, arrayBuffer: ArrayBuffer): void;
+            /**
+             * @en Set buffer descriptor.
+             * Size and type of the buffer should match the one in shader.
+             * Buffer should be in read states and satisfy shader stage visibilities.
+             * Mismatches will cause undefined behaviour.
+             * @zh 设置缓冲(buffer)描述符。大小与类型需要与着色器中的一致，处于只读状态且着色阶段可见。
+             * 不匹配会引起未定义行为。
+             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
+             * @param buffer @en readonly buffer @zh 只读的缓冲
+             */
+            setBuffer(name: string, buffer: gfx.Buffer): void;
+            /**
+             * @en Set texture descriptor.
+             * Type of the texture should match the one in shader.
+             * Texture should be in read states and satisfy shader stage visibilities.
+             * Mismatches will cause undefined behaviour.
+             * @zh 设置贴图描述符。类型需要与着色器中的一致，处于只读状态且着色阶段可见。
+             * 不匹配会引起未定义行为。
+             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
+             * @param texture @en readonly texture @zh 只读的贴图
+             */
+            setTexture(name: string, texture: gfx.Texture): void;
+            /**
+             * @deprecated Method will be removed in the future
+             */
+            setReadWriteBuffer(name: string, buffer: gfx.Buffer): void;
+            /**
+             * @deprecated Method will be removed in the future
+             */
+            setReadWriteTexture(name: string, texture: gfx.Texture): void;
+            /**
+             * @en Set sampler descriptor.
+             * Type of the sampler should match the one in shader.
+             * @zh 设置采样器描述符。类型需要与着色器中的一致。
+             * 不匹配会引起未定义行为。
+             * @param name @en descriptor name in shader. @zh 填写着色器中的描述符(descriptor)名字
+             */
+            setSampler(name: string, sampler: gfx.Sampler): void;
+            /**
+             * @en Set builtin camera constants of CCCamera, such as cc_matView.
+             * For list of constants, please check CCCamera in cc-global.chunk.
+             * @zh 设置内置相机常量，例如cc_matView。
+             * 具体常量见cc-global.chunk中的CCCamera.
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinCameraConstants(camera: renderer.scene.Camera): void;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Same as setBuiltinDirectionalLightConstants
+             * @zh 同setBuiltinDirectionalLightConstants
+             * @param light @en The main light. @zh 主光
+             */
+            setBuiltinShadowMapConstants(light: renderer.scene.DirectionalLight): void;
+            /**
+             * @en Set builtin directional light and shadow constants.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCCamera in cc-global.chunk.
+             * @zh 设置内置方向光与阴影常量。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-global.chunk中的CCCamera。
+             * @param light @en The main light. @zh 主光
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinDirectionalLightConstants(light: renderer.scene.DirectionalLight, camera: renderer.scene.Camera): void;
+            /**
+             * @en Set builtin sphere light and shadow constants.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
+             * @zh 设置内置球形光与阴影常量。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
+             * @param light @en The sphere light. @zh 球形光源
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinSphereLightConstants(light: renderer.scene.SphereLight, camera: renderer.scene.Camera): void;
+            /**
+             * @en Set builtin spot light and shadow constants.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
+             * @zh 设置内置探照光与阴影常量。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
+             * @param light @en The spot light. @zh 探照光源
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinSpotLightConstants(light: renderer.scene.SpotLight, camera: renderer.scene.Camera): void;
+            /**
+             * @en Set builtin point light and shadow constants.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
+             * @zh 设置内置点光与阴影常量。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
+             * @param light @en The point light. @zh 点光源
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinPointLightConstants(light: renderer.scene.PointLight, camera: renderer.scene.Camera): void;
+            /**
+             * @en Set builtin ranged directional light and shadow constants.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCForwardLight in cc-forward-light.chunk.
+             * @zh 设置内置区间平行光与阴影常量。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-forward-light.chunk中的CCForwardLight。
+             * @param light @en The ranged directional light. @zh 区间平行光源
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             */
+            setBuiltinRangedDirectionalLightConstants(light: renderer.scene.RangedDirectionalLight, camera: renderer.scene.Camera): void;
+            /**
+             * @en Set builtin directional light frustum and shadow constants.
+             * These constants are used in builtin shadow map, cascaded shadow map and planar shadow.
+             * For list of constants, please check CCShadow in cc-shadow.chunk and CCCSM in cc-csm.chunk.
+             * @zh 设置内置平行光视锥与阴影常量。
+             * 这些常量用于内置的阴影、级联阴影与平面阴影。
+             * 具体常量见cc-shadow.chunk中的CCShadow与cc-csm.chunk中的CCCSM。
+             * @param light @en The directional light. @zh 平行光源
+             * @param camera @en The camera instance to be set. @zh 当前相机
+             * @param csmLevel @en Curent level of cascaded shadow map @zh 级联阴影等级
+             */
+            setBuiltinDirectionalLightFrustumConstants(camera: renderer.scene.Camera, light: renderer.scene.DirectionalLight, csmLevel?: number): void;
+            /**
+             * @en Set builtin spot light frustum and shadow constants.
+             * These constants are used in builtin shadow map.
+             * For list of constants, please check CCShadow in cc-shadow.chunk.
+             * @zh 设置内置探照光视锥与阴影常量。
+             * 这些常量用于内置的阴影。
+             * 具体常量见cc-shadow.chunk中的CCShadow。
+             * @param light @en The spot light. @zh 探照光源
+             */
+            setBuiltinSpotLightFrustumConstants(light: renderer.scene.SpotLight): void;
+        }
+        /**
+         * @en Scene
+         * A scene is an abstraction of content for rendering.
+         * @zh 场景。需要绘制的场景内容。
+         */
+        export interface SceneBuilder extends Setter {
+            /**
+             * @en Use the frustum information of light instead of camera.
+             * Often used in building shadow map.
+             * @zh 使用光源视锥进行投影，而不是用相机。常用于shadow map的生成。
+             * @param light @en The light used for projection @zh 用于投影的光源
+             * @param csmLevel @en Curent level of cascaded shadow map @zh 级联阴影等级
+             * @param optCamera @en Additional scene culling camera. @zh 额外的场景裁切相机
+             */
+            useLightFrustum(light: renderer.scene.Light, csmLevel?: number, optCamera?: renderer.scene.Camera): void;
+        }
+        /**
+         * @en Render queue
+         * A render queue is an abstraction of graphics commands submission.
+         * Only when the graphics commands in a render queue are all submitted,
+         * the next render queue will start submitting.
+         * @zh 渲染队列。渲染队列是图形命令提交的抽象。
+         * 只有一个渲染队列中的渲染命令全部提交完，才会开始提交下一个渲染队列中的命令。
+         */
+        export interface RenderQueueBuilder extends Setter {
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Render the scene the camera is looking at.
+             * @zh 渲染当前相机指向的场景。
+             * @param camera @en Required camera @zh 所需相机
+             * @param light @en Lighting information of the scene @zh 场景光照信息
+             * @param sceneFlags @en Rendering flags of the scene @zh 场景渲染标志位
+             */
+            addSceneOfCamera(camera: renderer.scene.Camera, light: LightInfo, sceneFlags?: SceneFlags): void;
+            /**
+             * @en Add the scene to be rendered.
+             * If SceneFlags.NON_BUILTIN is specified, no builtin constants will be set.
+             * Otherwise, related builtin constants will be set automatically.
+             * @zh 添加需要绘制的场景。
+             * 如果设置了SceneFlags.NON_BUILTIN，那么不会自动设置内置常量。
+             * @param camera @en Camera used for projection @zh 用于投影的相机
+             * @param sceneFlags @en Rendering flags of the scene @zh 场景渲染标志位
+             * @param light @en Light used for lighting computation @zh 用于光照的光源
+             */
+            addScene(camera: renderer.scene.Camera, sceneFlags: SceneFlags, light?: renderer.scene.Light, scene?: renderer.RenderScene): SceneBuilder;
+            /**
+             * @en Render a full-screen quad.
+             * @zh 渲染全屏四边形
+             * @param material @en The material used for shading @zh 着色所需材质
+             * @param passID @en Material pass ID @zh 材质通道ID
+             * @param sceneFlags @en Rendering flags of the quad @zh Quad所需场景渲染标志位
+             */
+            addFullscreenQuad(material: Material, passID: number, sceneFlags?: SceneFlags): void;
+            /**
+             * @en Render a full-screen quad from the camera view.
+             * @zh 从相机视角渲染全屏四边形
+             * @param camera @en The required camera @zh 所需相机
+             * @param material @en The material used for shading @zh 着色所需材质
+             * @param passID @en Material pass ID @zh 材质通道ID
+             * @param sceneFlags @en Rendering flags of the quad @zh Quad所需场景渲染标志位
+             */
+            addCameraQuad(camera: renderer.scene.Camera, material: Material, passID: number, sceneFlags?: SceneFlags): void;
+            /**
+             * @en Clear current render target.
+             * @zh 清除当前渲染目标
+             * @param name @en The name of the render target @zh 渲染目标的名字
+             * @param color @en The clearing color @zh 用来清除与填充的颜色
+             */
+            clearRenderTarget(name: string, color?: gfx.Color): void;
+            /**
+             * @en Set rendering viewport.
+             * @zh 设置渲染视口
+             * @param viewport @en The required viewport @zh 所需视口
+             */
+            setViewport(viewport: gfx.Viewport): void;
+            /**
+             * @experimental
+             */
+            addCustomCommand(customBehavior: string): void;
+        }
+        /**
+         * @en Basic render pass.
+         * @zh 基础光栅通道
+         */
+        export interface BasicRenderPassBuilder extends Setter {
+            /**
+             * @en Add render target for rasterization
+             * The render target must have registered in pipeline.
+             * @zh 添加光栅化渲染目标，渲染目标必须已注册。
+             * @param name @en name of the render target @zh 渲染目标的名字
+             * @param loadOp @en Type of load operation @zh 读取操作的类型
+             * @param storeOp @en Type of store operation @zh 写入操作的类型
+             * @param color @en The clear color to use when loadOp is Clear @zh 读取操作为清除时，所用颜色
+             */
+            addRenderTarget(name: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, color?: gfx.Color): void;
+            /**
+             * @en Add depth stencil for rasterization
+             * The depth stencil must have registered in pipeline.
+             * @zh 添加光栅化深度模板缓冲，深度模板缓冲必须已注册。
+             * @param name @en name of the depth stencil @zh 渲染目标的名字
+             * @param loadOp @en Type of load operation @zh 读取操作的类型
+             * @param storeOp @en Type of store operation @zh 写入操作的类型
+             * @param depth @en Depth value used to clear @zh 用于清除的深度值
+             * @param stencil @en Stencil value used to clear @zh 用于清除的模板值
+             * @param clearFlags @en To clear depth, stencil or both @zh 清除分量：深度、模板、两者。
+             */
+            addDepthStencil(name: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, depth?: number, stencil?: number, clearFlags?: gfx.ClearFlagBit): void;
+            /**
+             * @en Add texture for sampling
+             * The texture must have registered in pipeline.
+             * @zh 添加采样用的贴图，贴图必须已注册。
+             * @param name @en name of the texture @zh 贴图的注册名
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             * @param sampler @en the sampler to use @zh 采样器名字
+             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
+             */
+            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
+            /**
+             * @en Add render queue.
+             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
+             * User should only add objects of this hint type to the render queue.
+             * Objects of mixed types might cause downgrading of performance.
+             * The order of render queues should be adjusted according to the hardward and algorithms,
+             * in order to reach peak performance.
+             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
+             * This hint is for validation only and has no effect on rendering.
+             *
+             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
+             *
+             * @zh 添加渲染队列
+             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
+             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
+             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
+             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
+             * 用途提示只用于问题检测，对渲染流程没有任何影响。
+             *
+             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
+             *
+             * @param hint @en Usage hint of the queue @zh 用途的提示
+             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
+             * @param passName @en The name of the pass declared in the effect. It is used to override the pass name in the parent pass/subpass. @zh effect中通道(pass)的名字，会覆盖(override)父(通道/子通道)中已设置的pass名字。
+             * @returns @en render queue builder @zh 渲染队列
+             */
+            addQueue(hint?: QueueHint, phaseName?: string, passName?: string): RenderQueueBuilder;
+            /**
+             * @en Set rendering viewport.
+             * @zh 设置渲染视口
+             * @param viewport @en The required viewport @zh 所需视口
+             */
+            setViewport(viewport: gfx.Viewport): void;
+            /**
+             * @deprecated Method will be removed in the future
+             */
+            setVersion(name: string, version: number): void;
+            /**
+             * @en Show statistics on screen
+             * @zh 在屏幕上渲染统计数据
+             */
+            showStatistics: boolean;
+        }
+        /**
+         * @en Basic multisample render pass builder
+         * Support resolve render targets and depth stencil.
+         * This render pass only contains one render subpass.
+         * If resolve targets are specified, they will be resolved at the end of the render pass.
+         * After resolving, the contents of multisample render targets and depth stencils are unspecified.
+         * @zh 基础的多重采样渲染通道。支持决算(Resolve)渲染目标与深度缓冲。
+         * 此渲染通道只包含一个渲染子通道。
+         * 如果添加了决算对象，那么在渲染通道结束时，会进行决算。
+         * 决算后多重采样渲染目标与深度缓冲的内容是未定义的。
+         */
+        export interface BasicMultisampleRenderPassBuilder extends BasicRenderPassBuilder {
+            /**
+             * @en Set resolve render target
+             * @zh 设置决算渲染目标
+             */
+            resolveRenderTarget(source: string, target: string): void;
+            /**
+             * @en Set resolve depth stencil
+             * @zh 设置决算深度模板缓冲
+             */
+            resolveDepthStencil(source: string, target: string, depthMode?: gfx.ResolveMode, stencilMode?: gfx.ResolveMode): void;
+        }
+        /**
+         * @en BasicPipeline
+         * Basic pipeline provides basic rendering features which are supported on all platforms.
+         * User can register resources which will be used in the render graph.
+         * Theses resources are generally read and write, and will be managed by the pipeline.
+         * The residency information of resource should not be changed after registration.
+         * In each frame, user can create a render graph to be executed by the pipeline.
+         * @zh 基础渲染管线。
+         * 基础渲染管线提供基础的渲染能力，能在全平台使用。
+         * 用户可以在渲染管线中注册资源，这些资源将由管线托管，用于render graph。
+         * 这些资源一般是可读写的资源。
+         * 资源在注册后，不能更改驻留属性。
+         * 用户可以每帧构建一个render graph，然后交由管线执行。
+         */
+        export interface BasicPipeline extends __private._cocos_rendering_custom_pipeline__PipelineRuntime {
+            readonly type: PipelineType;
+            readonly capabilities: PipelineCapabilities;
+            /**
+             * @en Enable cpu culling of objects affected by the light. Enabled by default.
+             * @zh 光照计算时，裁切受光源影响的物件。默认开启。
+             */
+            enableCpuLightCulling: boolean;
+            /**
+             * @en Check whether the resource has been registered in the pipeline.
+             * @zh 检查资源是否在管线中已注册
+             * @param name @en Resource name @zh 资源名字
+             * @returns Exist or not
+             */
+            containsResource(name: string): boolean;
+            /**
+             * @en Add or update render window to the pipeline.
+             * If the render window is a swapchain and its default framebuffer contains depth stencil buffer,
+             * user should specify the name of the depth stencil buffer.
+             * If the depth stencil name is specified but the depth stencil buffer does not exist, a managed one will be created.
+             * @zh 注册或更新渲染窗口(RenderWindow)。
+             * 如果渲染窗口是交换链并且默认Framebuffer包含深度模板缓冲。用户需要指定深度模板缓冲的名字。
+             * 如果指定了深度模板缓冲的名字，但深度模板缓冲不存在，会创建一个托管的深度模板缓冲。
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Expected format of the render window @zh 期望的渲染窗口格式
+             * @param width @en Expected width of the render window @zh 期望的渲染窗口宽度
+             * @param height @en Expected height of the render window @zh 期望的渲染窗口高度
+             * @param renderWindow @en The render window to add. @zh 需要注册的渲染窗口
+             * @param depthStencilName @en The name of the depth stencil buffer of the default framebuffer. @zh 默认Framebuffer的深度模板缓冲的名字
+             * @returns Resource ID
+             */
+            addRenderWindow(name: string, format: gfx.Format, width: number, height: number, renderWindow: renderer.RenderWindow, depthStencilName?: string): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update render window information.
+             * When render window information is updated, such as resized, user should notify the pipeline.
+             * @zh 更新渲染窗口信息。当渲染窗口发生更新时，用户应通知管线。
+             * @param renderWindow @en The render window to update. @zh 渲染窗口
+             */
+            updateRenderWindow(name: string, renderWindow: renderer.RenderWindow, depthStencilName?: string): void;
+            /**
+             * @en Add or update 2D render target.
+             * @zh 添加或更新2D渲染目标
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the resource @zh 资源的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             * @returns Resource ID
+             */
+            addRenderTarget(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
+            /**
+             * @en Add or update 2D depth stencil.
+             * @zh 添加或更新2D深度模板缓冲
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the resource @zh 资源的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             * @returns Resource ID
+             */
+            addDepthStencil(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update render target information.
+             * @zh 更新渲染目标的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param format @en Format of the resource @zh 资源的格式
+             */
+            updateRenderTarget(name: string, width: number, height: number, format?: gfx.Format): void;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update depth stencil information.
+             * @zh 更新深度模板缓冲的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param format @en Format of the resource @zh 资源的格式
+             */
+            updateDepthStencil(name: string, width: number, height: number, format?: gfx.Format): void;
+            /**
+             * @en Add or update buffer.
+             * @zh 添加或更新缓冲
+             * @param name @en Resource name @zh 资源名字
+             * @param size @en Size of the resource in bytes @zh 资源的大小
+             * @param flags @en Flags of the resource @zh 资源的标志位
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             * @returns Resource ID
+             */
+            addBuffer(name: string, size: number, flags: ResourceFlags, residency: ResourceResidency): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update buffer information.
+             * @zh 更新缓冲的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param size @en Size of the resource in bytes @zh 资源的大小
+             */
+            updateBuffer(name: string, size: number): void;
+            /**
+             * @en Add or update external texture.
+             * Must be readonly.
+             * @zh 添加或更新外部的贴图。贴图必须是只读的。
+             * @param name @en Resource name @zh 资源名字
+             * @param texture @en External unmanaged texture @zh 外部不受管理的贴图
+             * @param flags @en Flags of the resource @zh 资源的标志位
+             * @returns Resource ID
+             */
+            addExternalTexture(name: string, texture: gfx.Texture, flags: ResourceFlags): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update external texture information.
+             * @zh 更新外部的贴图信息
+             * @param name @en Resource name @zh 资源名字
+             * @param texture @en External unmanaged texture @zh 外部不受管理的贴图
+             */
+            updateExternalTexture(name: string, texture: gfx.Texture): void;
+            /**
+             * @en Add or update texture.
+             * @zh 添加或更新外部的贴图。
+             * @param name @en Resource name @zh 资源名字
+             * @param type @en Type of the texture @zh 贴图的类型
+             * @param format @en Format of the texture @zh 贴图的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param depth @en Depth of the resource @zh 资源的深度
+             * @param arraySize @en Size of the array @zh 资源数组的大小
+             * @param mipLevels @en Mip levels of the texture @zh 贴图的Mipmap数目
+             * @param sampleCount @en Sample count of the texture @zh 贴图的采样数目
+             * @param flags @en Flags of the resource @zh 资源的标志位
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             * @returns Resource ID
+             */
+            addTexture(name: string, type: gfx.TextureType, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount, flags: ResourceFlags, residency: ResourceResidency): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update texture information.
+             * @zh 更新贴图信息
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the texture @zh 贴图的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param depth @en Depth of the resource @zh 资源的深度
+             * @param arraySize @en Size of the array @zh 资源数组的大小
+             * @param mipLevels @en Mip levels of the texture @zh 贴图的Mipmap数目
+             * @param sampleCount @en Sample count of the texture @zh 贴图的采样数目
+             */
+            updateTexture(name: string, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount): void;
+            /**
+             * @en Add or update resource.
+             * @zh 添加或更新资源
+             * @param name @en Resource name @zh 资源名字
+             * @param dimension @en Dimension of the resource @zh 资源的维度
+             * @param format @en Format of the texture @zh 资源的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param depth @en Depth of the resource @zh 资源的深度
+             * @param arraySize @en Size of the array @zh 资源数组的大小
+             * @param mipLevels @en Mip levels of the texture @zh 资源的Mipmap数目
+             * @param sampleCount @en Sample count of the texture @zh 资源的采样数目
+             * @param flags @en Flags of the resource @zh 资源的标志位
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             * @returns Resource ID
+             */
+            addResource(name: string, dimension: ResourceDimension, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount, flags: ResourceFlags, residency: ResourceResidency): number;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Update resource information.
+             * @zh 更新资源信息
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the texture @zh 资源的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param depth @en Depth of the resource @zh 资源的深度
+             * @param arraySize @en Size of the array @zh 资源数组的大小
+             * @param mipLevels @en Mip levels of the texture @zh 资源的Mipmap数目
+             * @param sampleCount @en Sample count of the texture @zh 资源的采样数目
+             */
+            updateResource(name: string, format: gfx.Format, width: number, height: number, depth: number, arraySize: number, mipLevels: number, sampleCount: gfx.SampleCount): void;
+            /**
+             * @en Add render pass
+             * @zh 添加渲染通道
+             * @param width @en Width of the render pass @zh 渲染通道的宽度
+             * @param height @en Height of the render pass @zh 渲染通道的高度
+             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
+             * @returns Basic render pass builder
+             */
+            addRenderPass(width: number, height: number, passName?: string): BasicRenderPassBuilder;
+            /**
+             * @beta Feature is under development
+             * @en Add multisample render pass
+             * @zh 添加多重采样渲染通道
+             * @param width @en Width of the render pass @zh 渲染通道的宽度
+             * @param height @en Height of the render pass @zh 渲染通道的高度
+             * @param count @en Sample count @zh 采样数
+             * @param quality @en Sample quality. Default value is 0 @zh 采样质量，默认值是0
+             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
+             * @returns Multisample basic render pass builder
+             */
+            addMultisampleRenderPass(width: number, height: number, count: number, quality: number, passName?: string): BasicMultisampleRenderPassBuilder;
+            /**
+             * @deprecated Method will be removed in the future
+             */
+            addResolvePass(resolvePairs: ResolvePair[]): void;
+            /**
+             * @en Add copy pass.
+             * The source and target resources:
+             * Must be different resources(have different resource names).
+             * Must have compatible formats.
+             * Must have identical dimensions(width, height, depth), sample count and sample quality.
+             * Can't be currently mapped.
+             *
+             * Reinterpret copy is not supported.
+             *
+             * @zh 添加拷贝通道，来源与目标必须满足：
+             * 是不同的注册资源。
+             * 资源格式兼容。
+             * 具有相同的尺寸、采样数、采样质量。
+             * 不能被Map。
+             *
+             * 暂不支持转义拷贝。
+             *
+             * @param copyPairs @en Array of copy source and target @zh 拷贝来源与目标的数组
+             */
+            addCopyPass(copyPairs: CopyPair[]): void;
+            /**
+             * @deprecated Method will be removed in the future
+             * @en Builtin reflection probe pass
+             * @zh 添加内置环境光反射通道
+             * @param camera @en Capturing camera @zh 用于捕捉的相机
+             */
+            addBuiltinReflectionProbePass(camera: renderer.scene.Camera): void;
+        }
+        /**
+         * @beta Feature is under development
+         * @en Render subpass
+         * @zh 渲染次通道
+         */
+        export interface RenderSubpassBuilder extends Setter {
+            /**
+             * @en Add render target for rasterization
+             * The render target must have registered in pipeline.
+             * @zh 添加光栅化渲染目标，渲染目标必须已注册。
+             * @param name @en name of the render target @zh 渲染目标的名字
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
+             * @param loadOp @en Type of load operation @zh 读取操作的类型
+             * @param storeOp @en Type of store operation @zh 写入操作的类型
+             * @param color @en The clear color to use when loadOp is Clear @zh 读取操作为清除时，所用颜色
+             */
+            addRenderTarget(name: string, accessType: AccessType, slotName?: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, color?: gfx.Color): void;
+            /**
+             * @en Add depth stencil for rasterization
+             * The depth stencil must have registered in pipeline.
+             * @zh 添加光栅化深度模板缓冲，深度模板缓冲必须已注册。
+             * @param name @en name of the depth stencil @zh 渲染目标的名字
+             * @param accessType @en Access type @zh 读写状态
+             * @param depthSlotName @en name of the depth descriptor in shader @zh 着色器中深度描述符的名字
+             * @param stencilSlotName @en name of the stencil descriptor in shader @zh 着色器中模板描述符的名字
+             * @param loadOp @en Type of load operation @zh 读取操作的类型
+             * @param storeOp @en Type of store operation @zh 写入操作的类型
+             * @param depth @en Depth value used to clear @zh 用于清除的深度值
+             * @param stencil @en Stencil value used to clear @zh 用于清除的模板值
+             * @param clearFlags @en To clear depth, stencil or both @zh 清除分量：深度、模板、两者。
+             */
+            addDepthStencil(name: string, accessType: AccessType, depthSlotName?: string, stencilSlotName?: string, loadOp?: gfx.LoadOp, storeOp?: gfx.StoreOp, depth?: number, stencil?: number, clearFlags?: gfx.ClearFlagBit): void;
+            /**
+             * @en Add texture for sampling
+             * The texture must have registered in pipeline.
+             * @zh 添加采样用的贴图，贴图必须已注册。
+             * @param name @en name of the texture @zh 贴图的注册名
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             * @param sampler @en the sampler to use @zh 采样器名字
+             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
+             */
+            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
+            /**
+             * @en Add storage buffer.
+             * The buffer must have registered in pipeline.
+             * @zh 添加存储缓冲，缓冲必须已注册。
+             * @param name @en Name of the buffer @zh 缓冲的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add storage texture.
+             * The texture must have registered in pipeline.
+             * @zh 添加存储贴图，贴图必须已注册。
+             * @param name @en Name of the buffer @zh 贴图的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Set rendering viewport.
+             * @zh 设置渲染视口
+             * @param viewport @en The required viewport @zh 所需视口
+             */
+            setViewport(viewport: gfx.Viewport): void;
+            /**
+             * @en Add render queue.
+             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
+             * User should only add objects of this hint type to the render queue.
+             * Objects of mixed types might cause downgrading of performance.
+             * The order of render queues should be adjusted according to the hardward and algorithms,
+             * in order to reach peak performance.
+             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
+             * This hint is for validation only and has no effect on rendering.
+             *
+             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
+             *
+             * @zh 添加渲染队列
+             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
+             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
+             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
+             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
+             * 用途提示只用于问题检测，对渲染流程没有任何影响。
+             *
+             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
+             *
+             * @param hint @en Usage hint of the queue @zh 用途的提示
+             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
+             * @param passName @en The name of the pass declared in the effect. It is used to override the pass name in the parent pass/subpass. @zh effect中通道(pass)的名字，会覆盖(override)父(通道/子通道)中已设置的pass名字。
+             * @returns @en render queue builder @zh 渲染队列
+             */
+            addQueue(hint?: QueueHint, phaseName?: string, passName?: string): RenderQueueBuilder;
+            /**
+             * @en Show statistics on screen
+             * @zh 在屏幕上渲染统计数据
+             */
+            showStatistics: boolean;
+            /**
+             * @experimental
+             */
+            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
+        }
+        /**
+         * @beta Feature is under development
+         * @en Multisample render subpass
+         * @zh 多重采样渲染次通道
+         */
+        export interface MultisampleRenderSubpassBuilder extends RenderSubpassBuilder {
+            /**
+             * @en Resolve render target
+             * @zh 汇总渲染目标
+             * @param source @en Multisample source @zh 多重采样来源
+             * @param target @en Resolve target @zh 汇总目标
+             */
+            resolveRenderTarget(source: string, target: string): void;
+            /**
+             * @en Resolve depth stencil
+             * @zh 汇总深度模板缓冲
+             * @param source @en Multisample source @zh 多重采样来源
+             * @param target @en Resolve target @zh 汇总目标
+             * @param depthMode @en Resolve mode of depth component @zh 深度分量汇总模式
+             * @param stencilMode @en Resolve mode of stencil component @zh 模板分量汇总模式
+             */
+            resolveDepthStencil(source: string, target: string, depthMode?: gfx.ResolveMode, stencilMode?: gfx.ResolveMode): void;
+        }
+        /**
+         * @en Compute queue
+         * @zh 计算队列
+         */
+        export interface ComputeQueueBuilder extends Setter {
+            /**
+             * @en Dispatch compute task
+             * @zh 发送计算任务
+             * @param threadGroupCountX @en Thread group count X  @zh 线程组的X分量的数目
+             * @param threadGroupCountY @en Thread group count Y  @zh 线程组的Y分量的数目
+             * @param threadGroupCountZ @en Thread group count Z  @zh 线程组的Z分量的数目
+             * @param material @en The material to use @zh 计算任务用的材质
+             * @param passID @en The name of the pass declared in the effect. @zh effect中的通道名字
+             */
+            addDispatch(threadGroupCountX: number, threadGroupCountY: number, threadGroupCountZ: number, material?: Material, passID?: number): void;
+        }
+        /**
+         * @beta Feature is under development
+         * @en Compute subpass
+         * @zh 计算次通道
+         */
+        export interface ComputeSubpassBuilder extends Setter {
+            /**
+             * @en Add input render target.
+             * @zh 添加输入渲染目标
+             * @param name @en name of the render target @zh 渲染目标的名字
+             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
+             */
+            addRenderTarget(name: string, slotName: string): void;
+            /**
+             * @en Add texture for sampling
+             * The texture must have registered in pipeline.
+             * @zh 添加采样用的贴图，贴图必须已注册。
+             * @param name @en name of the texture @zh 贴图的注册名
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             * @param sampler @en the sampler to use @zh 采样器名字
+             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
+             */
+            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
+            /**
+             * @en Add storage buffer.
+             * The buffer must have registered in pipeline.
+             * @zh 添加存储缓冲，缓冲必须已注册。
+             * @param name @en Name of the buffer @zh 缓冲的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add storage texture.
+             * The texture must have registered in pipeline.
+             * @zh 添加存储贴图，贴图必须已注册。
+             * @param name @en Name of the buffer @zh 贴图的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add render queue.
+             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
+             * User should only add objects of this hint type to the render queue.
+             * Objects of mixed types might cause downgrading of performance.
+             * The order of render queues should be adjusted according to the hardward and algorithms,
+             * in order to reach peak performance.
+             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
+             * This hint is for validation only and has no effect on rendering.
+             *
+             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
+             *
+             * @zh 添加渲染队列
+             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
+             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
+             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
+             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
+             * 用途提示只用于问题检测，对渲染流程没有任何影响。
+             *
+             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
+             *
+             * @param hint @en Usage hint of the queue @zh 用途的提示
+             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
+             * @param passName @en The name of the pass declared in the effect. It is used to override the pass name in the parent pass/subpass. @zh effect中通道(pass)的名字，会覆盖(override)父(通道/子通道)中已设置的pass名字。
+             * @returns @en compute queue builder @zh 计算队列
+             */
+            addQueue(phaseName?: string, passName?: string): ComputeQueueBuilder;
+            /**
+             * @experimental
+             */
+            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
+        }
+        /**
+         * @beta Feature is under development
+         * @en Render pass
+         * @zh 渲染通道
+         */
+        export interface RenderPassBuilder extends BasicRenderPassBuilder {
+            /**
+             * @en Add storage buffer.
+             * The buffer must have registered in pipeline.
+             * @zh 添加存储缓冲，缓冲必须已注册。
+             * @param name @en Name of the buffer @zh 缓冲的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add storage texture.
+             * The texture must have registered in pipeline.
+             * @zh 添加存储贴图，贴图必须已注册。
+             * @param name @en Name of the buffer @zh 贴图的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @beta Feature is under development
+             */
+            addMaterialTexture(resourceName: string, flags?: gfx.ShaderStageFlagBit): void;
+            /**
+             * @beta Feature is under development
+             * @en Add render subpass.
+             * @zh 添加渲染次通道
+             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
+             * @returns Render subpass builder
+             */
+            addRenderSubpass(subpassName: string): RenderSubpassBuilder;
+            /**
+             * @beta Feature is under development
+             * @en Add multisample render subpass.
+             * Sample count and quality should match those of the resources.
+             * @zh 添加多重采样渲染次通道，采样数与质量需要与资源一致。
+             * @param count @en Sample count @zh 采样数
+             * @param quality @en Sample quality @zh 采样质量
+             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
+             * @returns Multisample render subpass builder
+             */
+            addMultisampleRenderSubpass(count: number, quality: number, subpassName: string): MultisampleRenderSubpassBuilder;
+            /**
+             * @experimental
+             * @en Add compute subpass.
+             * @zh 添加计算次通道
+             * @param subpassName @en Subpass name declared in the effect @zh effect中的subpass name
+             * @returns Compute subpass builder
+             */
+            addComputeSubpass(subpassName?: string): ComputeSubpassBuilder;
+            /**
+             * @experimental
+             */
+            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
+        }
+        /**
+         * @en Multisample render pass builder
+         * @zh 多重采样渲染通道。
+         */
+        export interface MultisampleRenderPassBuilder extends BasicMultisampleRenderPassBuilder {
+            /**
+             * @en Add storage buffer
+             * @zh 添加存储缓冲
+             * @param name @en Name of the storage buffer @zh 存储缓冲的名字
+             * @param accessType @en Access type of the buffer in the render pass @zh 渲染通道中缓冲的读写状态
+             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
+             */
+            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add storage image
+             * @zh 添加存储贴图
+             * @param name @en Name of the storage texture @zh 存储贴图的名字
+             * @param accessType @en Access type of the texture in the render pass @zh 渲染通道中贴图的读写状态
+             * @param slotName @en name of the descriptor in shader @zh 着色器中描述符的名字
+             */
+            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
+        }
+        /**
+         * @en Compute pass
+         * @zh 计算通道
+         */
+        export interface ComputePassBuilder extends Setter {
+            /**
+             * @en Add texture for sampling
+             * The texture must have registered in pipeline.
+             * @zh 添加采样用的贴图，贴图必须已注册。
+             * @param name @en name of the texture @zh 贴图的注册名
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             * @param sampler @en the sampler to use @zh 采样器名字
+             * @param plane @en the image plane ID to sample (color|depth|stencil|video) @zh 需要采样的贴图平面(颜色|深度|模板|视频)
+             */
+            addTexture(name: string, slotName: string, sampler?: gfx.Sampler, plane?: number): void;
+            /**
+             * @en Add storage buffer.
+             * The buffer must have registered in pipeline.
+             * @zh 添加存储缓冲，缓冲必须已注册。
+             * @param name @en Name of the buffer @zh 缓冲的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageBuffer(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @en Add storage texture.
+             * The texture must have registered in pipeline.
+             * @zh 添加存储贴图，贴图必须已注册。
+             * @param name @en Name of the buffer @zh 贴图的注册名
+             * @param accessType @en Access type @zh 读写状态
+             * @param slotName @en name of descriptor in the shader @zh 着色器中描述符的名字
+             */
+            addStorageImage(name: string, accessType: AccessType, slotName: string): void;
+            /**
+             * @beta Feature is under development
+             */
+            addMaterialTexture(resourceName: string, flags?: gfx.ShaderStageFlagBit): void;
+            /**
+             * @en Add render queue.
+             * Every render queue has a hint type, such as NONE, OPAQUE, MASK or BLEND.
+             * User should only add objects of this hint type to the render queue.
+             * Objects of mixed types might cause downgrading of performance.
+             * The order of render queues should be adjusted according to the hardward and algorithms,
+             * in order to reach peak performance.
+             * For example, [1.opaque, 2.mask, 3.blend] might result in best performance on mobile platforms.
+             * This hint is for validation only and has no effect on rendering.
+             *
+             * Every render queue has a phase name. Only objects of the same phase name will be rendered.
+             *
+             * @zh 添加渲染队列
+             * 每个渲染队列有一个用途提示，例如无提示(NONE)、不透明(OPAQUE)、遮罩(MASK)和混合(BLEND)。
+             * 每个队列最好只渲染相匹配的对象，混合不同类型的对象，会造成性能下降。
+             * 不同类型队列的渲染顺序，需要根据硬件类型与渲染算法进行调整，以到达最高性能。
+             * 比如在移动平台上，先渲染OPAQUE，再渲染MASK、最后渲染BLEND可能会有最好的性能。
+             * 用途提示只用于问题检测，对渲染流程没有任何影响。
+             *
+             * 每个队列有一个相位(phase)名字，具有相同相位名字的物件才会被渲染。
+             *
+             * @param hint @en Usage hint of the queue @zh 用途的提示
+             * @param phaseName @en The name of the phase declared in the effect. Default value is 'default' @zh effect中相位(phase)的名字，缺省为'default'。
+             * @param passName @en The name of the pass declared in the effect. It is used to override the pass name in the parent pass/subpass. @zh effect中通道(pass)的名字，会覆盖(override)父(通道/子通道)中已设置的pass名字。
+             * @returns @en compute queue builder @zh 计算队列
+             */
+            addQueue(phaseName?: string, passName?: string): ComputeQueueBuilder;
+            /**
+             * @experimental
+             */
+            setCustomShaderStages(name: string, stageFlags: gfx.ShaderStageFlagBit): void;
+        }
+        /**
+         * @en Render pipeline.
+         * @zh 渲染管线
+         */
+        export interface Pipeline extends BasicPipeline {
+            /**
+             * @en Add or update storage buffer.
+             * @zh 添加或更新存储缓冲
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the resource @zh 资源的格式
+             * @param size @en Size of the resource in bytes @zh 资源的大小
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             */
+            addStorageBuffer(name: string, format: gfx.Format, size: number, residency?: ResourceResidency): number;
+            /**
+             * @en Add or update 2D storage texture
+             * @zh 添加或更新2D存储贴图
+             * @param name @en Resource name @zh 资源名字
+             * @param format @en Format of the resource @zh 资源的格式
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             */
+            addStorageTexture(name: string, format: gfx.Format, width: number, height: number, residency?: ResourceResidency): number;
+            /**
+             * @experimental
+             * @en Add or update 2D shading rate texture
+             * @zh 添加或更新2D着色率贴图
+             * @param name @en Resource name @zh 资源名字
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param residency @en Residency of the resource. @zh 资源的驻留性
+             */
+            addShadingRateTexture(name: string, width: number, height: number, residency?: ResourceResidency): number;
+            /**
+             * @en Update storage buffer information.
+             * @zh 更新存储缓冲的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param size @en Size of the resource in bytes @zh 资源的大小
+             * @param format @en Format of the resource @zh 资源的格式
+             */
+            updateStorageBuffer(name: string, size: number, format?: gfx.Format): void;
+            /**
+             * @en Update storage texture information.
+             * @zh 更新2D存储贴图的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             * @param format @en Format of the resource @zh 资源的格式
+             */
+            updateStorageTexture(name: string, width: number, height: number, format?: gfx.Format): void;
+            /**
+             * @en Update shading rate texture information.
+             * @zh 更新2D着色率贴图的信息
+             * @param name @en Resource name @zh 资源名字
+             * @param width @en Width of the resource @zh 资源的宽度
+             * @param height @en Height of the resource @zh 资源的高度
+             */
+            updateShadingRateTexture(name: string, width: number, height: number): void;
+            /**
+             * @en Add render pass
+             * @zh 添加渲染通道
+             * @param width @en Width of the render pass @zh 渲染通道的宽度
+             * @param height @en Height of the render pass @zh 渲染通道的高度
+             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
+             * @returns Render pass builder
+             */
+            addRenderPass(width: number, height: number, passName: string): RenderPassBuilder;
+            /**
+             * @en Add multisample render pass
+             * @zh 添加多重采样渲染通道
+             * @param width @en Width of the render pass @zh 渲染通道的宽度
+             * @param height @en Height of the render pass @zh 渲染通道的高度
+             * @param count @en Sample count @zh 采样数目
+             * @param quality @en Sample quality (default is 0) @zh 采样质量（默认为0）
+             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
+             * @returns Multisample render pass builder
+             */
+            addMultisampleRenderPass(width: number, height: number, count: number, quality: number, passName: string): MultisampleRenderPassBuilder;
+            /**
+             * @en Add compute pass
+             * @zh 添加计算通道
+             * @param passName @en Pass name declared in the effect. Default value is 'default' @zh effect中的pass name，缺省为'default'
+             * @returns Compute pass builder
+             */
+            addComputePass(passName: string): ComputePassBuilder;
+            /**
+             * @beta Feature is under development
+             * @en Add upload pass.
+             * The source and target resources:
+             * Must be different resources(have different resource names).
+             * Must have compatible formats.
+             * Must have identical dimensions(width, height, depth), sample count and sample quality.
+             * Can't be currently mapped.
+             *
+             * @zh 添加上传通道，来源与目标必须满足：
+             * 是不同的注册资源。
+             * 资源格式兼容。
+             * 具有相同的尺寸、采样数、采样质量。
+             * 不能被Map。
+             *
+             * @param uploadPairs @en Array of upload source and target @zh 上传来源与目标的数组
+             */
+            addUploadPass(uploadPairs: UploadPair[]): void;
+            /**
+             * @en Add move pass.
+             * Move-construct target resource, by moving source resources into subresources of target.
+             * After the move, the target resource must be completely initialized.
+             * Target write conflicts will result in undefined behaviour.
+             * The source and target resources:
+             * Must be different resources(have different resource names).
+             * Must have compatible formats.
+             * Must have identical dimensions(width, height, depth), sample count and sample quality.
+             * Can't be currently mapped.
+             *
+             * @zh 添加移动通道。
+             * 移动构造目标资源，将来源移入目标的次级资源。
+             * 移动后，目标资源必须完全初始化。
+             * 目标写入冲突是未定义行为。
+             * 来源与目标必须满足：
+             * 是不同的注册资源。
+             * 资源格式兼容。
+             * 具有相同的尺寸、采样数、采样质量。
+             * 不能被Map。
+             *
+             * @param movePairs @en Array of move source and target @zh 移动来源与目标的数组
+             */
+            addMovePass(movePairs: MovePair[]): void;
+            /**
+             * @experimental
+             */
+            addCustomBuffer(name: string, info: gfx.BufferInfo, type: string): number;
+            /**
+             * @experimental
+             */
+            addCustomTexture(name: string, info: gfx.TextureInfo, type: string): number;
+        }
+        /**
+         * @en Pipeline builder.
+         * User can implement this interface and setup render graph.
+         * Call setCustomPipeline to register the pipeline builder
+         * @zh 管线构造器
+         * 用户可以实现这个接口，来构建自己想要的render graph。
+         * 调用setCustomPipeline注册管线
+         */
+        export interface PipelineBuilder {
+            windowResize?(pipeline: BasicPipeline, window: renderer.RenderWindow, camera: renderer.scene.Camera, width: number, height: number): void;
+            /**
+             * @en Setup render graph
+             * @zh 构建渲染管线
+             * @param cameras @en Camera list to render @zh 需要渲染的相机列表
+             * @param pipeline @en Current render pipeline @zh 当前管线
+             */
+            setup(cameras: renderer.scene.Camera[], pipeline: BasicPipeline): void;
+            /**
+             * @en Callback of pipeline state changed
+             * @zh 渲染管线状态更新的回调
+             */
+            onGlobalPipelineStateChanged?(): void;
+        }
+        export function setEditorPipelineSettings(settings: object | null): void;
+        export function getEditorPipelineSettings(): object | null;
+        export function forceResizeAllWindows(): void;
+        export function defaultWindowResize(ppl: BasicPipeline, window: renderer.RenderWindow, width: number, height: number): void;
+        export function dispatchResizeEvents(cameras: renderer.scene.Camera[], builder: PipelineBuilder, ppl: BasicPipeline): void;
+        /**
+         * @en Three channel rgb color pack into four channel rbge format.
+         * @zh 三通道rgb颜色pack成四通道rbge格式
+         * @param rgb Vec3
+         */
+        export function packRGBE(rgb: math.Vec3): math.Vec4;
     }
     export namespace dragonBones {
         /**
@@ -44727,21 +44459,21 @@ declare module "cc" {
         addBoundingBox(aabb: geometry.AABB, color: math.Color, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
         addCross(position: math.Vec3, size: number, color: math.Color, depthTest?: boolean): void;
         addFrustum(frustum: geometry.Frustum, color: math.Color, depthTest?: boolean): void;
-        addCapsule(center: math.Vec3, radius: number, height: number, color: math.Color, segmentsU?: number, hemiSegmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addCylinder(center: math.Vec3, radius: number, height: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addCone(center: math.Vec3, radius: number, height: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addCircle(center: math.Vec3, radius: number, color: math.Color, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addArc(center: math.Vec3, radius: number, color: math.Color, startAngle: number, endAngle: number, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addPolygon(center: math.Vec3, radius: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addDisc(center: math.Vec3, radius: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addSector(center: math.Vec3, radius: number, color: math.Color, startAngle: number, endAngle: number, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addSphere(center: math.Vec3, radius: number, color: math.Color, segmentsU?: number, segmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addTorus(center: math.Vec3, bigRadius: number, radius: number, color: math.Color, segmentsU?: number, segmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addOctahedron(center: math.Vec3, radius: number, color: math.Color, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addBezier(v0: math.Vec3, v1: math.Vec3, v2: math.Vec3, v3: math.Vec3, color: math.Color, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addSpline(spline: geometry.Spline, color: math.Color, index?: number, knotSize?: number, segments?: number, depthTest?: boolean): void;
-        addMesh(center: math.Vec3, vertices: Array<math.Vec3>, color: math.Color, depthTest?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
-        addIndexedMesh(center: math.Vec3, vertices: Array<math.Vec3>, indices: Array<number>, color: math.Color, depthTest?: boolean, useTransform?: boolean, transform?: math.Mat4): void;
+        addCapsule(center: math.Vec3, radius: number, height: number, color: math.Color, segmentsU?: number, hemiSegmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addCylinder(center: math.Vec3, radius: number, height: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addCone(center: math.Vec3, radius: number, height: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addCircle(center: math.Vec3, radius: number, color: math.Color, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addArc(center: math.Vec3, radius: number, color: math.Color, startAngle: number, endAngle: number, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addPolygon(center: math.Vec3, radius: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addDisc(center: math.Vec3, radius: number, color: math.Color, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addSector(center: math.Vec3, radius: number, color: math.Color, startAngle: number, endAngle: number, segments?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addSphere(center: math.Vec3, radius: number, color: math.Color, segmentsU?: number, segmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addTorus(center: math.Vec3, bigRadius: number, radius: number, color: math.Color, segmentsU?: number, segmentsV?: number, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addOctahedron(center: math.Vec3, radius: number, color: math.Color, wireframe?: boolean, depthTest?: boolean, unlit?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addBezier(v0: math.Vec3, v1: math.Vec3, v2: math.Vec3, v3: math.Vec3, color: math.Color, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addSpline(spline: geometry.Spline, color: math.Color, index?: number, knotSize?: number, segments?: number, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addMesh(center: math.Vec3, vertices: Array<math.Vec3>, color: math.Color, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
+        addIndexedMesh(center: math.Vec3, vertices: Array<math.Vec3>, indices: Array<number>, color: math.Color, depthTest?: boolean, useTransform?: boolean, transform?: Readonly<math.Mat4>): void;
     }
     export class EmptyDevice extends gfx.Device {
         initialize(info: gfx.DeviceInfo): boolean;
@@ -44772,6 +44504,7 @@ declare module "cc" {
         copyTexImagesToTexture(texImages: Readonly<TexImageSource[]>, texture: gfx.Texture, regions: Readonly<gfx.BufferTextureCopy[]>): void;
     }
     export class WebGLDevice extends gfx.Device {
+        constructor();
         get gl(): WebGLRenderingContext;
         get extensions(): __private._cocos_gfx_webgl_webgl_define__IWebGLExtensions;
         get stateCache(): __private._cocos_gfx_webgl_webgl_state_cache__WebGLStateCache;
@@ -44847,6 +44580,54 @@ declare module "cc" {
         copyTextureToBuffers(texture: Readonly<gfx.Texture>, buffers: ArrayBufferView[], regions: Readonly<gfx.BufferTextureCopy[]>): void;
         copyTexImagesToTexture(texImages: Readonly<TexImageSource[]>, texture: gfx.Texture, regions: Readonly<gfx.BufferTextureCopy[]>): void;
     }
+    export class WebGPUDevice extends gfx.Device {
+        createSwapchain(info: Readonly<gfx.SwapchainInfo>): gfx.Swapchain;
+        getSampler(info: Readonly<gfx.SamplerInfo>): gfx.Sampler;
+        getSwapchains(): readonly gfx.Swapchain[];
+        getGeneralBarrier(info: Readonly<gfx.GeneralBarrierInfo>): gfx.GeneralBarrier;
+        getTextureBarrier(info: Readonly<gfx.TextureBarrierInfo>): gfx.TextureBarrier;
+        getBufferBarrier(info: Readonly<gfx.BufferBarrierInfo>): __private._cocos_gfx_base_states_buffer_barrier__BufferBarrier;
+        copyTextureToBuffers(texture: Readonly<gfx.Texture>, buffers: ArrayBufferView[], regions: readonly gfx.BufferTextureCopy[]): Promise<void>;
+        flushCommands(cmdBuffs: gfx.CommandBuffer[]): void;
+        get isPremultipliedAlpha(): boolean;
+        get multiDrawIndirectSupport(): boolean;
+        get bindingMappings(): __private._cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUBindingMapping;
+        get context(): GPUCanvasContext;
+        stateCache: __private._cocos_gfx_webgpu_webgpu_state_cache__WebGPUStateCache;
+        cmdAllocator: __private._cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandAllocator;
+        nullTex2D: __private._cocos_gfx_webgpu_webgpu_texture__WebGPUTexture | null;
+        nullTexCube: __private._cocos_gfx_webgpu_webgpu_texture__WebGPUTexture | null;
+        defaultResource: __private._cocos_gfx_webgpu_define__DefaultResources;
+        protected _textureExclusive: boolean[];
+        initialize(info: Readonly<gfx.DeviceInfo>): Promise<boolean>;
+        set gpuConfig(config: __private.__types_webGPU__GPUCanvasConfiguration);
+        get gpuConfig(): __private.__types_webGPU__GPUCanvasConfiguration;
+        protected initFormatFeatures(exts: __private.__types_webGPU__GPUSupportedFeatures): void;
+        getDefaultDescResources(entry: __private.__types_webGPU__GPUBindGroupLayoutEntry, resourceInfo: __private._cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer | __private._cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture | __private._cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUSampler): __private._cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer | __private._cocos_gfx_webgpu_webgpu_texture__WebGPUTexture | __private._cocos_gfx_webgpu_webgpu_sampler__WebGPUSampler | undefined;
+        destroy(): void;
+        resize(width: number, height: number): void;
+        acquire(): void;
+        get nativeDevice(): GPUDevice | null | undefined;
+        get glslang(): any;
+        get twgsl(): any;
+        present(): void;
+        createCommandBuffer(info: gfx.CommandBufferInfo): gfx.CommandBuffer;
+        createBuffer(info: Readonly<gfx.BufferInfo> | Readonly<gfx.BufferViewInfo>): gfx.Buffer;
+        createTexture(info: Readonly<gfx.TextureInfo> | Readonly<gfx.TextureViewInfo>): gfx.Texture;
+        createDescriptorSet(info: Readonly<gfx.DescriptorSetInfo>): gfx.DescriptorSet;
+        createShader(info: Readonly<gfx.ShaderInfo>): gfx.Shader;
+        createInputAssembler(info: Readonly<gfx.InputAssemblerInfo>): gfx.InputAssembler;
+        createRenderPass(info: Readonly<gfx.RenderPassInfo>): gfx.RenderPass;
+        createFramebuffer(info: Readonly<gfx.FramebufferInfo>): gfx.Framebuffer;
+        createDescriptorSetLayout(info: Readonly<gfx.DescriptorSetLayoutInfo>): gfx.DescriptorSetLayout;
+        createPipelineLayout(info: gfx.PipelineLayoutInfo): gfx.PipelineLayout;
+        createPipelineState(info: Readonly<gfx.PipelineStateInfo>): gfx.PipelineState;
+        createQueue(info: gfx.QueueInfo): gfx.Queue;
+        copyBuffersToTexture(buffers: ArrayBufferView[], texture: gfx.Texture, regions: gfx.BufferTextureCopy[]): void;
+        copyTexImagesToTexture(texImages: TexImageSource[], texture: gfx.Texture, regions: gfx.BufferTextureCopy[]): void;
+        copyFramebufferToBuffer(srcFramebuffer: gfx.Framebuffer, dstBuffer: ArrayBuffer, regions: gfx.BufferTextureCopy[]): void;
+        blitFramebuffer(src: gfx.Framebuffer, dst: gfx.Framebuffer, srcRect: gfx.Rect, dstRect: gfx.Rect, filter: gfx.Filter): void;
+    }
     /**
      * @en Intersection2D helper class
      * @zh 辅助类，用于测试形状与形状是否相交
@@ -44864,6 +44645,560 @@ declare module "cc" {
         static polygonCircle: typeof __private._cocos_physics_2d_builtin_intersection_2d__polygonCircle;
         static pointInPolygon: typeof __private._cocos_physics_2d_builtin_intersection_2d__pointInPolygon;
         static pointLineDistance: typeof __private._cocos_physics_2d_builtin_intersection_2d__pointLineDistance;
+    }
+    /**
+     * @en The forward render pipeline
+     * @zh 前向渲染管线。
+     */
+    export class ForwardPipeline extends RenderPipeline {
+        protected renderTextures: __private._cocos_rendering_pipeline_serialization__RenderTextureConfig[];
+        protected _postRenderPass: gfx.RenderPass | null;
+        constructor();
+        get postRenderPass(): gfx.RenderPass | null;
+        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
+        activate(swapchain: gfx.Swapchain): boolean;
+        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
+        destroy(): boolean;
+    }
+    export function createDefaultPipeline(): ForwardPipeline;
+    /**
+     * @en The forward flow in forward render pipeline
+     * @zh 前向渲染流程。
+     */
+    export class ForwardFlow extends RenderFlow {
+        /**
+         * @en The shared initialization information of forward render flow
+         * @zh 共享的前向渲染流程初始化参数
+         */
+        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
+        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
+        activate(pipeline: RenderPipeline): void;
+        render(camera: renderer.scene.Camera): void;
+        destroy(): void;
+    }
+    /**
+     * @en The forward render stage
+     * @zh 前向渲染阶段。
+     */
+    export class ForwardStage extends RenderStage {
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        protected renderQueues: __private._cocos_rendering_pipeline_serialization__RenderQueueDesc[];
+        protected _renderQueues: __private._cocos_rendering_render_queue__RenderQueue[];
+        additiveInstanceQueues: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue[];
+        constructor();
+        addRenderInstancedQueue(queue: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue): void;
+        removeRenderInstancedQueue(queue: __private._cocos_rendering_render_instanced_queue__RenderInstancedQueue): void;
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        activate(pipeline: ForwardPipeline, flow: ForwardFlow): void;
+        destroy(): void;
+        render(camera: renderer.scene.Camera): void;
+    }
+    /**
+     * @en The deferred render pipeline
+     * @zh 延迟渲染管线。
+     */
+    export class DeferredPipeline extends RenderPipeline {
+        protected renderTextures: __private._cocos_rendering_pipeline_serialization__RenderTextureConfig[];
+        constructor();
+        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
+        activate(swapchain: gfx.Swapchain): boolean;
+        destroy(): boolean;
+        onGlobalPipelineStateChanged(): void;
+        getPipelineRenderData(): __private._cocos_rendering_deferred_deferred_pipeline__DeferredRenderData;
+        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
+    }
+    /**
+     * @en The main flow in deferred render pipeline
+     * @zh 延迟渲染流程。
+     */
+    export class MainFlow extends RenderFlow {
+        /**
+         * @en The shared initialization information of main render flow
+         * @zh 共享的延迟渲染流程初始化参数
+         */
+        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
+        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
+        activate(pipeline: RenderPipeline): void;
+        render(camera: renderer.scene.Camera): void;
+        destroy(): void;
+    }
+    /**
+     * @en The gbuffer render stage
+     * @zh 前向渲染阶段。
+     */
+    export class GbufferStage extends RenderStage {
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        protected renderQueues: __private._cocos_rendering_pipeline_serialization__RenderQueueDesc[];
+        protected _renderQueues: __private._cocos_rendering_render_queue__RenderQueue[];
+        constructor();
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        activate(pipeline: DeferredPipeline, flow: MainFlow): void;
+        destroy(): void;
+        render(camera: renderer.scene.Camera): void;
+    }
+    /**
+     * @en The lighting render stage
+     * @zh 前向渲染阶段。
+     */
+    export class LightingStage extends RenderStage {
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        constructor();
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        gatherLights(camera: renderer.scene.Camera): void;
+        protected _createStageDescriptor(pass: renderer.Pass): void;
+        activate(pipeline: DeferredPipeline, flow: MainFlow): void;
+        destroy(): void;
+        render(camera: renderer.scene.Camera): void;
+    }
+    /**
+     * @en The bloom post-process stage
+     * @zh Bloom 后处理阶段。
+     */
+    export class BloomStage extends RenderStage {
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        threshold: number;
+        intensity: number;
+        iterations: number;
+        constructor();
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
+        destroy(): void;
+        render(camera: renderer.scene.Camera): void;
+    }
+    /**
+     * @en The postprocess render stage
+     * @zh 后处理渲染阶段。
+     */
+    export class PostProcessStage extends RenderStage {
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        constructor();
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
+        destroy(): void;
+        render(camera: renderer.scene.Camera): void;
+    }
+    /**
+     * @en Shadow map render flow
+     * @zh 阴影贴图绘制流程
+     */
+    export class ShadowFlow extends RenderFlow {
+        /**
+         * @en A common initialization info for shadow map render flow
+         * @zh 一个通用的 ShadowFlow 的初始化信息对象
+         */
+        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
+        constructor();
+        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
+        activate(pipeline: RenderPipeline): void;
+        render(camera: renderer.scene.Camera): void;
+        destroy(): void;
+        /**
+         * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
+         */
+        _initShadowFrameBuffer(pipeline: RenderPipeline, light: renderer.scene.Light, swapchain: gfx.Swapchain): void;
+    }
+    /**
+     * @en Shadow map render stage
+     * @zh 阴影渲染阶段。
+     */
+    export class ShadowStage extends RenderStage {
+        constructor();
+        /**
+         * @en A common initialization info for shadow map render stage
+         * @zh 一个通用的 ShadowStage 的初始化信息对象
+         */
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        /**
+         * @en Sets the render shadow map info
+         * @zh 设置阴影渲染信息
+         * @param light
+         * @param shadowFrameBuffer
+         * @param level 层级
+         */
+        setUsage(globalDS: gfx.DescriptorSet, light: renderer.scene.Light, shadowFrameBuffer: gfx.Framebuffer, level?: number): void;
+        destroy(): void;
+        clearFramebuffer(camera: renderer.scene.Camera): void;
+        render(camera: renderer.scene.Camera): void;
+        activate(pipeline: ForwardPipeline, flow: ShadowFlow): void;
+    }
+    /**
+     * @en reflection probe render flow
+     * @zh 反射探针rendertexture绘制流程
+     */
+    export class ReflectionProbeFlow extends RenderFlow {
+        static initInfo: __private._cocos_rendering_render_flow__IRenderFlowInfo;
+        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
+        activate(pipeline: RenderPipeline): void;
+        render(camera: renderer.scene.Camera): void;
+        destroy(): void;
+    }
+    /**
+     * @en reflection probe render stage
+     * @zh 反射探针渲染阶段。
+     */
+    export class ReflectionProbeStage extends RenderStage {
+        /**
+         * @en A common initialization info for reflection probe render stage
+         * @zh 一个通用的 reflection probe stage 的初始化信息对象
+         */
+        static initInfo: __private._cocos_rendering_render_stage__IRenderStageInfo;
+        constructor();
+        /**
+         * @en Sets the probe info
+         * @zh 设置probe信息
+         * @param probe
+         * @param frameBuffer
+         */
+        setUsageInfo(probe: renderer.scene.ReflectionProbe, frameBuffer: gfx.Framebuffer): void;
+        destroy(): void;
+        clearFramebuffer(camera: renderer.scene.Camera): void;
+        render(camera: renderer.scene.Camera): void;
+        activate(pipeline: ForwardPipeline, flow: ReflectionProbeFlow): void;
+    }
+    /**
+     * @en Render pipeline describes how we handle the rendering process for all render objects in the related render scene root.
+     * It contains some general pipeline configurations, necessary rendering resources and some [[RenderFlow]]s.
+     * The rendering process function [[render]] is invoked by [[Root]] for all [[Camera]]s.
+     * @zh 渲染管线对象决定了引擎对相关渲染场景下的所有渲染对象实施的完整渲染流程。
+     * 这个类主要包含一些通用的管线配置，必要的渲染资源和一些 [[RenderFlow]]。
+     * 渲染流程函数 [[render]] 会由 [[Root]] 发起调用并对所有 [[Camera]] 执行预设的渲染流程。
+     */
+    export abstract class RenderPipeline extends Asset implements __private._cocos_rendering_pipeline_event__IPipelineEvent, __private._cocos_rendering_custom_pipeline__PipelineRuntime {
+        /**
+         * @en The tag of pipeline.
+         * @zh 管线的标签。
+         * @readonly
+         */
+        get tag(): number;
+        /**
+         * @en The flows of pipeline.
+         * @zh 管线的渲染流程列表。
+         * @readonly
+         */
+        get flows(): RenderFlow[];
+        /**
+         * @en Tag
+         * @zh 标签
+         * @readonly
+         */
+        protected _tag: number;
+        /**
+         * @en Flows
+         * @zh 渲染流程列表
+         * @readonly
+         */
+        protected _flows: RenderFlow[];
+        protected _quadIB: gfx.Buffer | null;
+        protected _quadVBOnscreen: gfx.Buffer | null;
+        protected _quadVBOffscreen: gfx.Buffer | null;
+        protected _quadIAOnscreen: gfx.InputAssembler | null;
+        protected _quadIAOffscreen: gfx.InputAssembler | null;
+        protected _eventProcessor: PipelineEventProcessor;
+        constructor();
+        /**
+         * @zh
+         * 四边形输入汇集器。
+         */
+        get quadIAOnscreen(): gfx.InputAssembler;
+        get quadIAOffscreen(): gfx.InputAssembler;
+        getPipelineRenderData(): __private._cocos_rendering_render_pipeline__PipelineRenderData;
+        /**
+         * @en
+         * Constant macro string, static throughout the whole runtime.
+         * Used to pass device-specific parameters to shader.
+         * @zh 常量宏定义字符串，运行时全程不会改变，用于给 shader 传一些只和平台相关的参数。
+         * @readonly
+         */
+        get constantMacros(): string;
+        /**
+         * @en
+         * The current global-scoped shader macros.
+         * Used to control effects like IBL, fog, etc.
+         * @zh 当前的全局宏定义，用于控制如 IBL、雾效等模块。
+         * @readonly
+         */
+        get macros(): renderer.MacroRecord;
+        get device(): gfx.Device;
+        get globalDSManager(): __private._cocos_rendering_global_descriptor_set_manager__GlobalDSManager;
+        get descriptorSetLayout(): gfx.DescriptorSetLayout;
+        get descriptorSet(): gfx.DescriptorSet;
+        get commandBuffers(): gfx.CommandBuffer[];
+        get pipelineUBO(): __private._cocos_rendering_pipeline_ubo__PipelineUBO;
+        get pipelineSceneData(): PipelineSceneData;
+        set profiler(value: renderer.scene.Model | null);
+        get profiler(): renderer.scene.Model | null;
+        /**
+         * @deprecated since v3.6, please use camera.geometryRenderer instead.
+         */
+        get geometryRenderer(): GeometryRenderer | null;
+        set clusterEnabled(value: boolean);
+        get clusterEnabled(): boolean;
+        set bloomEnabled(value: boolean);
+        get bloomEnabled(): boolean;
+        protected _device: gfx.Device;
+        protected _globalDSManager: __private._cocos_rendering_global_descriptor_set_manager__GlobalDSManager;
+        protected _descriptorSet: gfx.DescriptorSet;
+        protected _commandBuffers: gfx.CommandBuffer[];
+        protected _pipelineUBO: __private._cocos_rendering_pipeline_ubo__PipelineUBO;
+        protected _macros: renderer.MacroRecord;
+        protected _constantMacros: string;
+        protected _profiler: renderer.scene.Model | null;
+        protected _geometryRenderer: GeometryRenderer | null;
+        protected _pipelineSceneData: PipelineSceneData;
+        protected _pipelineRenderData: __private._cocos_rendering_render_pipeline__PipelineRenderData | null;
+        protected _renderPasses: Map<number, gfx.RenderPass>;
+        protected _width: number;
+        protected _height: number;
+        protected _lastUsedRenderArea: gfx.Rect;
+        protected _clusterEnabled: boolean;
+        protected _bloomEnabled: boolean;
+        /**
+         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
+         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
+         * @param info The render pipeline information
+         */
+        initialize(info: __private._cocos_rendering_render_pipeline__IRenderPipelineInfo): boolean;
+        createRenderPass(clearFlags: gfx.ClearFlags, colorFmt: gfx.Format, depthFmt: gfx.Format): gfx.RenderPass;
+        getRenderPass(clearFlags: gfx.ClearFlags, fbo: gfx.Framebuffer): gfx.RenderPass;
+        newFramebufferByRatio(dyingFramebuffer: gfx.Framebuffer): gfx.Framebuffer;
+        /**
+         * @en generate renderArea by camera
+         * @zh 生成renderArea
+         * @param camera the camera
+         * @returns
+         */
+        generateRenderArea(camera: renderer.scene.Camera, out: gfx.Rect): void;
+        generateViewport(camera: renderer.scene.Camera, out?: gfx.Viewport): gfx.Viewport;
+        generateScissor(camera: renderer.scene.Camera, out?: gfx.Rect): gfx.Rect;
+        get shadingScale(): number;
+        set shadingScale(val: number);
+        getMacroString(name: string): string;
+        getMacroInt(name: string): number;
+        getMacroBool(name: string): boolean;
+        setMacroString(name: string, value: string): void;
+        setMacroInt(name: string, value: number): void;
+        setMacroBool(name: string, value: boolean): void;
+        /**
+         * @en Activate the render pipeline after loaded, it mainly activate the flows
+         * @zh 当渲染管线资源加载完成后，启用管线，主要是启用管线内的 flow
+         * TODO: remove swapchain dependency at this stage
+         * after deferred pipeline can handle multiple swapchains
+         */
+        activate(swapchain: gfx.Swapchain): boolean;
+        protected _ensureEnoughSize(cameras: renderer.scene.Camera[]): void;
+        /**
+         * @en Render function, it basically run the render process of all flows in sequence for the given view.
+         * @zh 渲染函数，对指定的渲染视图按顺序执行所有渲染流程。
+         * @param view Render view。
+         */
+        render(cameras: renderer.scene.Camera[]): void;
+        /**
+         * @zh
+         * 销毁四边形输入汇集器。
+         */
+        protected _destroyQuadInputAssembler(): void;
+        protected _destroyBloomData(): void;
+        /**
+         * @zh
+         * 创建四边形输入汇集器。
+         */
+        protected _createQuadInputAssembler(): PipelineInputAssemblerData;
+        updateQuadVertexData(renderArea: gfx.Rect, window: renderer.RenderWindow): void;
+        /**
+         * @en Internal destroy function
+         * @zh 内部销毁函数。
+         */
+        destroy(): boolean;
+        onGlobalPipelineStateChanged(): void;
+        protected _generateConstantMacros(): void;
+        protected updateGeometryRenderer(cameras: renderer.scene.Camera[]): void;
+        generateBloomRenderData(): void;
+        /**
+         * @en
+         * Register an callback of the pipeline event type on the RenderPipeline.
+         * @zh
+         * 在渲染管线中注册管线事件类型的回调。
+         */
+        on<TFunction extends __private._cocos_rendering_pipeline_event__PipelineEventCallback>(type: PipelineEventType, callback: TFunction, target?: any, once?: boolean): typeof callback;
+        /**
+         * @en
+         * Register an callback of the pipeline event type on the RenderPipeline,
+         * the callback will remove itself after the first time it is triggered.
+         * @zh
+         * 在渲染管线中注册管线事件类型的回调, 回调后会在第一时间删除自身。
+         */
+        once<TFunction extends __private._cocos_rendering_pipeline_event__PipelineEventCallback>(type: PipelineEventType, callback: TFunction, target?: any): typeof callback;
+        /**
+         * @en
+         * Removes the listeners previously registered with the same type, callback, target and or useCapture,
+         * if only type is passed as parameter, all listeners registered with that type will be removed.
+         * @zh
+         * 删除之前用同类型、回调、目标或 useCapture 注册的事件监听器，如果只传递 type，将会删除 type 类型的所有事件监听器。
+         */
+        off<TFunction extends __private._cocos_rendering_pipeline_event__PipelineEventCallback>(type: PipelineEventType, callback?: TFunction, target?: any): void;
+        /**
+         * @zh 派发一个指定事件，并传递需要的参数
+         * @en Trigger an event directly with the event name and necessary arguments.
+         * @param type - event type
+         * @param args - Arguments when the event triggered
+         */
+        emit(type: PipelineEventType, arg0?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any): void;
+        /**
+         * @en Removes all callbacks previously registered with the same target (passed as parameter).
+         * This is not for removing all listeners in the current event target,
+         * and this is not for removing all listeners the target parameter have registered.
+         * It's only for removing all listeners (callback and target couple) registered on the current event target by the target parameter.
+         * @zh 在当前 EventTarget 上删除指定目标（target 参数）注册的所有事件监听器。
+         * 这个函数无法删除当前 EventTarget 的所有事件监听器，也无法删除 target 参数所注册的所有事件监听器。
+         * 这个函数只能删除 target 参数在当前 EventTarget 上注册的所有事件监听器。
+         * @param typeOrTarget - The target to be searched for all related listeners
+         */
+        targetOff(typeOrTarget: any): void;
+        /**
+         * @zh 移除在特定事件类型中注册的所有回调或在某个目标中注册的所有回调。
+         * @en Removes all callbacks registered in a certain event type or all callbacks registered with a certain target
+         * @param typeOrTarget - The event type or target with which the listeners will be removed
+         */
+        removeAll(typeOrTarget: any): void;
+        /**
+         * @zh 检查指定事件是否已注册回调。
+         * @en Checks whether there is correspond event listener registered on the given event.
+         * @param type - Event type.
+         * @param callback - Callback function when event triggered.
+         * @param target - Callback callee.
+         */
+        hasEventListener(type: PipelineEventType, callback?: __private._cocos_rendering_pipeline_event__PipelineEventCallback, target?: any): boolean;
+    }
+    /**
+     * @en Render flow is a sub process of the [[RenderPipeline]], it dispatch the render task to all the [[RenderStage]]s.
+     * @zh 渲染流程是渲染管线（[[RenderPipeline]]）的一个子过程，它将渲染任务派发到它的所有渲染阶段（[[RenderStage]]）中执行。
+     */
+    export abstract class RenderFlow {
+        /**
+         * @en The name of the render flow
+         * @zh 渲染流程的名字
+         */
+        get name(): string;
+        /**
+         * @en Priority of the current flow
+         * @zh 当前渲染流程的优先级。
+         */
+        get priority(): number;
+        /**
+         * @en Tag of the current flow
+         * @zh 当前渲染流程的标签。
+         */
+        get tag(): number;
+        /**
+         * @en The stages of flow.
+         * @zh 渲染流程 stage 列表。
+         * @readonly
+         */
+        get stages(): RenderStage[];
+        protected _name: string;
+        protected _priority: number;
+        protected _tag: number;
+        protected _stages: RenderStage[];
+        protected _pipeline: RenderPipeline;
+        /**
+         * @en Get pipeline
+         * @zh 获取pipeline
+         */
+        get pipeline(): RenderPipeline;
+        /**
+         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
+         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
+         * @param info The render flow information
+         */
+        initialize(info: __private._cocos_rendering_render_flow__IRenderFlowInfo): boolean;
+        /**
+         * @en Activate the current render flow in the given pipeline
+         * @zh 为指定的渲染管线开启当前渲染流程
+         * @param pipeline The render pipeline to activate this render flow
+         */
+        activate(pipeline: RenderPipeline): void;
+        /**
+         * @en Render function, it basically run all render stages in sequence for the given view.
+         * @zh 渲染函数，对指定的渲染视图按顺序执行所有渲染阶段。
+         * @param view Render view。
+         */
+        render(camera: renderer.scene.Camera): void;
+        /**
+         * @en Destroy function.
+         * @zh 销毁函数。
+         */
+        destroy(): void;
+    }
+    /**
+     * @en The render stage actually renders render objects to the output window or other GFX [[gfx.Framebuffer]].
+     * Typically, a render stage collects render objects it's responsible for, clear the camera,
+     * record and execute command buffer, and at last present the render result.
+     * @zh 渲染阶段是实质上的渲染执行者，它负责收集渲染数据并执行渲染将渲染结果输出到屏幕或其他 GFX [[gfx.Framebuffer]] 中。
+     * 典型的渲染阶段会收集它所管理的渲染对象，按照 [[Camera]] 的清除标记进行清屏，记录并执行渲染指令缓存，并最终呈现渲染结果。
+     */
+    export abstract class RenderStage {
+        /**
+         * @en Name of the current stage
+         * @zh 当前渲染阶段的名字。
+         */
+        get name(): string;
+        /**
+         * @en Priority of the current stage
+         * @zh 当前渲染阶段的优先级。
+         */
+        get priority(): number;
+        /**
+         * @en Tag of the current stage
+         * @zh 当前渲染阶段的标签。
+         */
+        get tag(): number;
+        /**
+         * @en Name
+         * @zh 名称。
+         */
+        protected _name: string;
+        /**
+         * @en Priority
+         * @zh 优先级。
+         */
+        protected _priority: number;
+        /**
+         * @en Whether to enable
+         * @zh 是否启用。
+         */
+        protected _enabled: boolean;
+        set enabled(val: boolean);
+        get enabled(): boolean;
+        /**
+         * @en Type
+         * @zh 类型。
+         */
+        protected _tag: number;
+        protected _pipeline: RenderPipeline;
+        protected _flow: RenderFlow;
+        /**
+         * @en The initialization process, user shouldn't use it in most case, only useful when need to generate render pipeline programmatically.
+         * @zh 初始化函数，正常情况下不会用到，仅用于程序化生成渲染管线的情况。
+         * @param info The render stage information
+         */
+        initialize(info: __private._cocos_rendering_render_stage__IRenderStageInfo): boolean;
+        /**
+         * @en Activate the current render stage in the given render flow
+         * @zh 为指定的渲染流程开启当前渲染阶段
+         * @param flow The render flow to activate this render stage
+         */
+        activate(pipeline: RenderPipeline, flow: RenderFlow): void;
+        /**
+         * @en Destroy function
+         * @zh 销毁函数。
+         */
+        abstract destroy(): void;
+        /**
+         * @en Render function
+         * @zh 渲染函数。
+         * @param view The render view
+         */
+        abstract render(camera: renderer.scene.Camera): void;
     }
     export const PlaceMethod: {
         UNIFORM: number;
@@ -45930,11 +46265,11 @@ declare module "cc" {
         /**
          * @ignore
          */
-        setCustomData1(x: any, y: any): void;
+        setCustomData1(x: number, y: number): void;
         /**
          * @ignore
          */
-        setCustomData2(x: any, y: any): void;
+        setCustomData2(x: number, y: number): void;
         protected onDestroy(): void;
         protected onEnable(): void;
         protected onDisable(): void;
@@ -45993,7 +46328,7 @@ declare module "cc" {
          * @zh 销毁创建出来的粒子系统prefab。
          * @param prefab @en Particle system prefab to destroy. @zh 要销毁的粒子系统prefab。
          */
-        static destroy(prefab: any): void;
+        static destroy(prefab: Node): void;
         /**
          * @en Play particle system.
          * @zh 播放粒子系统。
@@ -46240,7 +46575,7 @@ declare module "cc" {
          * @param dt @en Update interval time. @zh 粒子系统更新的间隔时间。
          * @internal
          */
-        update(psys: any, dt: number): void;
+        update(psys: ParticleSystem, dt: number): void;
         /**
          * @en Reset remaining burst count and burst time to zero.
          * @zh 重置触发时间和留存的触发次数为零。
@@ -50918,6 +51253,7 @@ declare module "cc" {
      * 渲染排序组件。该组件必须放置在带有 [[MeshRenderer]] 或者 [[SpriteRenderer]] 组件的节点上。
      */
     export class Sorting extends Component {
+        constructor();
         /**
          * @zh 组件所属排序层 id，影响组件的渲染排序。
          * @en The sorting layer id of the component, which affects the rendering order of the component.
@@ -50962,6 +51298,8 @@ declare module "cc" {
         /* eslint @typescript-eslint/no-explicit-any: "off" */
         export namespace spine {
             export class String {
+                constructor(name: string, own: boolean);
+                constructor(val: spine.String);
                 length: number;
                 isEmpty: boolean;
                 strPtr: number;
@@ -51257,7 +51595,7 @@ declare module "cc" {
             }
             export class AnimationStateData {
                 skeletonData: SkeletonData;
-                animationToMixTime: Map<number>;
+                animationToMixTime: Map<string, number>;
                 defaultMix: number;
                 constructor(skeletonData: SkeletonData);
                 setMix(fromName: string, toName: string, duration: number): void;
@@ -51279,7 +51617,7 @@ declare module "cc" {
                 getLoaded(): number;
                 dispose(): void;
                 hasErrors(): boolean;
-                getErrors(): Map<string>;
+                getErrors(): Map<string, string>;
             }
             export class AtlasAttachmentLoader implements AttachmentLoader {
                 atlas: TextureAtlas;
@@ -51478,7 +51816,7 @@ declare module "cc" {
                 isLoadingComplete(clientId: string): boolean;
                 dispose(): void;
                 hasErrors(): boolean;
-                getErrors(): Map<string>;
+                getErrors(): Map<string, string>;
             }
             export class Skeleton {
                 data: SkeletonData;
@@ -51603,7 +51941,7 @@ declare module "cc" {
                 attachmentLoader: AttachmentLoader;
                 scale: number;
                 constructor(attachmentLoader: AttachmentLoader);
-                readSkeletonData(json: any): SkeletonData;
+                readSkeletonData(json: string): SkeletonData;
                 readAttachment(map: any, skin: Skin, slotIndex: number, name: string, skeletonData: SkeletonData): Attachment;
                 readVertices(map: any, attachment: VertexAttachment, verticesLength: number): void;
                 readAnimation(map: any, name: string, skeletonData: SkeletonData): void;
@@ -51623,7 +51961,7 @@ declare module "cc" {
             }
             export class Skin {
                 name: string;
-                attachments: Map<Attachment>[];
+                attachments: Map<string, Attachment>[];
                 bones: BoneData[];
                 constraints: ConstraintData[];
                 constructor(name: string);
@@ -51772,9 +52110,6 @@ declare module "cc" {
             export abstract class Updatable {
                 update(): void;
                 isActive(): boolean;
-            }
-            export interface Map<T> {
-                [key: string]: T;
             }
             export class IntSet {
                 array: number[];
@@ -52087,7 +52422,7 @@ declare module "cc" {
                 setJitterEffect(jitter: spine.VertexEffect);
                 setSwirlEffect(swirl: spine.VertexEffect);
                 updateRenderData();
-                setListener(id: number, type: number);
+                setListener(id: number);
                 setDebugMode(debug: boolean);
                 getDebugShapes();
                 resizeSlotRegion(slotName: string, width: number, height: number, createNew: boolean);
@@ -52422,7 +52757,7 @@ declare module "cc" {
             /**
              * @en Clear animation and set to setup pose, default value of track index is 0.
              * @zh 清除指定动画并还原到初始姿势, 默认清除 track索引 为0的动画。
-             * @param {NUmber} [trackIndex] @en track index. @zh track 的索引。
+             * @param {Number} [trackIndex] @en track index. @zh track 的索引。
              */
             clearAnimation(trackIndex?: number): void;
             /**
@@ -54443,6 +54778,7 @@ declare module "cc" {
          * 获取动作管理器。
          */
         get ActionManager(): __private._cocos_tween_actions_action_manager__ActionManager;
+        constructor();
         /**
          * @en
          * The update will auto execute after all components update.
@@ -54451,6 +54787,21 @@ declare module "cc" {
          * @param dt @en The delta time @zh 间隔时间
          */
         update(dt: number): void;
+    }
+    export class TweenAction<T extends object> extends __private._cocos_tween_actions_action_interval__ActionInterval {
+        constructor(duration: number, props: any, opts?: __private._cocos_tween_tween_action__IInternalTweenOption<T>);
+        get relative(): boolean;
+        clone(): TweenAction<T>;
+        reverse(): TweenAction<T>;
+        startWithTarget<U>(target: U | null): void;
+        stop(): void;
+        update(t: number): void;
+        progress(start: number, end: number, current: number, t: number): number;
+        isUnknownDuration(): boolean;
+    }
+    export namespace tweenProgress {
+        export function bezier(...knots: ReadonlyArray<math.Vec3>): ITweenCustomProperty<math.Vec3>;
+        export function catmullRom(...knots: ReadonlyArray<math.Vec3>): ITweenCustomProperty<math.Vec3>;
     }
     /**
      * @en
@@ -54466,7 +54817,7 @@ declare module "cc" {
      *   .by(1, {scale: new Vec3(-1, -1, -1)}, {easing: 'sineOutIn'})
      *   .start()
      */
-    export function tween<T>(target?: T): Tween<T>;
+    export function tween<T extends object = any>(target?: T): Tween<T>;
     /**
      * @en
      * tweenUtil is a utility function that helps instantiate Tween instances.
@@ -54474,7 +54825,31 @@ declare module "cc" {
      * tweenUtil 是一个工具函数，帮助实例化 Tween 实例。
      * @deprecated please use `tween` instead.
      */
-    export function tweenUtil<T>(target?: T): Tween<T>;
+    export function tweenUtil<T extends object = any>(target?: T): Tween<T>;
+    export type TweenCustomProgress = (start: any, end: any, current: any, ratio: number) => any;
+    export type TweenCustomEasing = ITweenOption["easing"];
+    export interface ITweenCustomPropertyStartParameter<Value> {
+        relative: boolean;
+        reversed: boolean;
+        start: Value;
+        end: Value;
+    }
+    export interface ITweenCustomProperty<Value> {
+        value: __private._cocos_tween_tween__MaybeUnionStringNumber<Value> | (() => __private._cocos_tween_tween__MaybeUnionStringNumber<Value>);
+        progress?: TweenCustomProgress;
+        easing?: TweenCustomEasing;
+        convert?: __private._cocos_tween_tween__ExtendsReturnResultOrNever<Value, string, (v: string) => number | string>;
+        clone?: __private._cocos_tween_tween__ExtendsReturnResultOrNever<Value, object, (v: Value) => Value>;
+        add?: (a: Value, b: Value) => Value;
+        sub?: (a: Value, b: Value) => Value;
+        legacyProgress?: __private._cocos_tween_tween__ExtendsReturnResultOrNever<Value, object, boolean>;
+        toFixed?: __private._cocos_tween_tween__ExtendsReturnResultOrNever<Value, string, number>;
+        onStart?: (param: ITweenCustomPropertyStartParameter<Value>) => void;
+        onStop?: () => void;
+        onComplete?: () => void;
+    }
+    export type TweenUpdateCallback<T extends object, Args extends any[]> = (target: T, ratio: number, ...args: Args) => void;
+    export type TweenUpdateUntilCallback<T extends object, Args extends any[]> = (target: T, dt: number, ...args: Args) => boolean;
     /**
      * @en
      * Tween provide a simple and flexible way to action, It's transplanted from cocos creator。
@@ -54489,24 +54864,57 @@ declare module "cc" {
      *   .by(1, {scale: new Vec3(-1, -1, -1), position: new Vec3(-5, -5, -5)}, {easing: 'sineOutIn'})
      *   .start()
      */
-    export class Tween<T> {
+    export class Tween<T extends object = any> {
         constructor(target?: T | null);
         /**
          * @en Sets tween tag
          * @zh 设置缓动的标签
          * @method tag
          * @param tag @en The tag set for this tween @zh 为当前缓动设置的标签
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         tag(tag: number): Tween<T>;
         /**
+         * @en Set the id for previous action
+         * @zh 设置前一个动作的 id
+         * @param id @en The internal action id to set @zh 内部动作的 id 标识，
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        id(id: number): Tween<T>;
+        /**
          * @en
-         * Insert an action or tween to this sequence.
+         * Insert a tween to this sequence.
          * @zh
          * 插入一个 tween 到队列中。
          * @method then
          * @param other @en The rear tween of this tween @zh 当前缓动的后置缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        then(other: Tween<T>): Tween<T>;
+        then<U extends object = any>(other: Tween<U>): Tween<T>;
+        /**
+         * @en Return a new Tween instance which reverses all actions in the current tween.
+         * @zh 返回新的缓动实例，其会翻转当前缓动中的所有动作。
+         * @return @en The new tween instance which reverses all actions in the current tween. @zh 新的缓动实例，其会翻转当前缓动中的所有动作。
+         * @note @en The returned tween instance is a new instance which is not the current tween instance.
+         *       @zh 返回的缓动实例是新的生成的实例，并不是当前缓动实例。
+         */
+        reverse(): Tween<T>;
+        /**
+         * @en Reverse an action by ID in the current tween.
+         * @zh 翻转当前缓动中特定标识的动作。
+         * @param id @en The ID of the internal action in the current tween to reverse. @zh 要翻转的当前缓动中的动作标识。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        reverse(id: number): Tween<T>;
+        /**
+         * @en Reverse an action by ID in a specific tween
+         * @zh 翻转特定缓动中特定标识的动作
+         * @param otherTween @en The tween in which to find the action by ID
+         *                   @zh 根据标识在关联的缓动中查找动作
+         * @param id @en The ID of the action to reverse @zh 要翻转的动画标识
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        reverse<U extends object = any>(otherTween: Tween<U>, id?: number): Tween<T>;
         /**
          * @en
          * Sets tween target.
@@ -54514,22 +54922,48 @@ declare module "cc" {
          * 设置 tween 的 target。
          * @method target
          * @param target @en The target of this tween @zh 当前缓动的目标对象
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        target(target: T): Tween<T | undefined>;
+        target<U extends object = any>(target: U): Tween<U>;
         /**
-         * @en
-         * Start this tween.
-         * @zh
-         * 运行当前 tween。
+         * @en Gets the target of the current tween instance.
+         * @zh 获取当前缓动的目标对象。
+         * @return @en the target of the current tween instance. @zh 当前缓动的目标对象。
          */
-        start(): Tween<T>;
+        getTarget(): T | null;
+        /**
+         * @en Start tween from a specific time, all actions before the time will be executed and finished immediately.
+         * @zh 从指定时间开始执行当前缓动，此时间前的所有缓动将被立马执行完毕。
+         * @param time @en The time (unit: seconds) to start to execute the current tween. Default value: 0.
+         *             @zh 要执行当前缓动的开始时间，单位为秒。默认值为 0。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        start(time?: number): Tween<T>;
         /**
          * @en
          * Stop this tween.
          * @zh
          * 停止当前 tween。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         stop(): Tween<T>;
+        /**
+         * @en Pause the tween instance.
+         * @zh 暂停此缓动实例。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        pause(): Tween<T>;
+        /**
+         * @en Resume the tween instance.
+         * @zh 恢复此缓动实例。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        resume(): Tween<T>;
+        /**
+         * @en Checking whether the current tween instance is running.
+         * @zh 检查当前缓动实例是否在运行。
+         */
+        get running(): boolean;
         /**
          * @en
          * Clone a tween.
@@ -54537,15 +54971,20 @@ declare module "cc" {
          * 克隆当前 tween。
          * @method clone
          * @param target @en The target of clone tween @zh 克隆缓动的目标对象
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        clone(target: T): Tween<T>;
+        clone(): Tween<T>;
+        clone<U extends object = any>(target: U): Tween<U>;
         /**
          * @en
-         * Integrate all previous actions to an action.
+         * Integrate to an action by all previous actions or a range from the specific id to the last one.
          * @zh
-         * 将之前所有的 action 整合为一个 action。
+         * 将之前所有的动作或者从指定标识的动作开始的所有动作整合为一个顺序动作。
+         * @method union
+         * @param fromId @en The action with the specific ID to start integrating @zh 指定开始整合的动作标识
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        union(): Tween<T>;
+        union(fromId?: number): Tween<T>;
         /**
          * @en
          * Add an action which calculates with absolute value.
@@ -54557,8 +54996,9 @@ declare module "cc" {
          * @param opts @en Optional functions of tween @zh 可选的缓动功能
          * @param opts.progress @en Interpolation function @zh 缓动的速度插值函数
          * @param opts.easing @en Tween function or a lambda @zh 缓动的曲线函数或lambda表达式
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        to(duration: number, props: __private._cocos_tween_tween__ConstructorType<T>, opts?: ITweenOption): Tween<T>;
+        to(duration: number, props: __private._cocos_tween_tween__ConstructorType<T>, opts?: ITweenOption<T>): Tween<T>;
         /**
          * @en
          * Add an action which calculates with relative value.
@@ -54570,9 +55010,26 @@ declare module "cc" {
          * @param opts @en Optional functions of tween @zh 可选的缓动功能
          * @param [opts.progress]
          * @param [opts.easing]
-         * @return {Tween}
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        by(duration: number, props: __private._cocos_tween_tween__ConstructorType<T>, opts?: ITweenOption): Tween<T>;
+        by(duration: number, props: __private._cocos_tween_tween__ConstructorType<T>, opts?: ITweenOption<T>): Tween<T>;
+        /**
+         * @en Add a custom action with constant duration.
+         * @zh 添加一个固定时长的自定义动作。
+         * @param duration @en The tween time in seconds. @zh 缓动时间，单位为秒。
+         * @param cb @en The callback of the current action. @zh 动作回调函数。
+         * @param args @en The arguments passed to the callback function. @zh 传递给动作回调函数的参数。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        update<Args extends any[]>(duration: number, cb: TweenUpdateCallback<T, Args>, ...args: Args): Tween<T>;
+        /**
+         * @en Add a custom action with unknown duration. If the callback returns true means this action is finished.
+         * @zh 添加一个不确定时长的自定义动作。如果回调函数返回 true，表示当前动作结束。
+         * @param cb @en The callback of the current action. @zh 动作回调函数。如果回调函数返回 true，表示当前动作结束。
+         * @param args @en The arguments passed to the callback function. @zh 传递给动作回调函数的参数。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        updateUntil<Args extends any[]>(cb: TweenUpdateUntilCallback<T, Args>, ...args: Args): Tween<T>;
         /**
          * @en
          * Directly set target properties.
@@ -54580,7 +55037,7 @@ declare module "cc" {
          * 直接设置 target 的属性。
          * @method set
          * @param props @en List of properties of tween @zh 缓动的属性列表
-         * @return {Tween}
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         set(props: __private._cocos_tween_tween__ConstructorType<T>): Tween<T>;
         /**
@@ -54590,7 +55047,7 @@ declare module "cc" {
          * 添加一个延时 action。
          * @method delay
          * @param duration @en Delay time of this tween @zh 当前缓动的延迟时间
-         * @return {Tween}
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         delay(duration: number): Tween<T>;
         /**
@@ -54600,9 +55057,11 @@ declare module "cc" {
          * 添加一个回调 action。
          * @method call
          * @param callback @en Callback function at the end of this tween @zh 当前缓动结束时的回调函数
-         * @return {Tween}
+         * @param callbackThis @en The this object in callback function @zh 回调函数中的 this 对象
+         * @param data @en The Custom data that will be passed to callback @zh 要传递给回调函数的自定义数据
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        call(callback: Function): Tween<T>;
+        call<TCallbackThis, TData>(callback: __private._cocos_tween_actions_action_instant__CallFuncCallback<T, TData>, callbackThis?: TCallbackThis, data?: TData): Tween<T>;
         /**
          * @en
          * Add a sequence action.
@@ -54610,8 +55069,9 @@ declare module "cc" {
          * 添加一个队列 action。
          * @method sequence
          * @param args @en All tween that make up the sequence @zh 组成队列的所有缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        sequence(...args: Tween<T>[]): Tween<T>;
+        sequence(...args: Tween<any>[]): Tween<T>;
         /**
          * @en
          * Add a parallel action.
@@ -54619,8 +55079,31 @@ declare module "cc" {
          * 添加一个并行 action。
          * @method parallel
          * @param args @en The tween parallel to this tween @zh 与当前缓动并行的缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        parallel(...args: Tween<T>[]): Tween<T>;
+        parallel(...args: Tween<any>[]): Tween<T>;
+        /**
+         * @en Set the factor that's used to scale time in the animation where 1 = normal speed (the default), 0.5 = half speed, 2 = double speed, etc.
+         * @zh 设置动画中使用的缩放时间因子，其中 1 表示正常速度（默认值），0.5 表示减速一半，2 表示加速一倍，等等。
+         * @param scale @en The scale factor to set. @zh 要设置的缩放因子。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
+         */
+        timeScale(scale: number): Tween<T>;
+        /**
+         * @en Return the scale time factor of the current tween.
+         * @zh 返回当前缓动的时间缩放因子。
+         * @return @en The scale time factor of the current tween. @zh 当前缓动的时间缩放因子。
+         */
+        getTimeScale(): number;
+        /**
+         * @en Return the duration of the current tween, its value is constant which means it's determinted at tween's design time
+         *     and is not affected by the timeScale of the current tween.
+         * @zh 返回当前缓动的总时长，此总时长为缓动的设计总时长，不受当前缓动的 timeScale 值影响。
+         * @return @en The duration of the current tween, unit is seconds. @zh 当中缓动的总时长，单位为秒。
+         * @note @en Return a valid duration value only after tween was started, otherwise, it returns 0.
+         *       @zh 只有在缓动开始后才能返回有效值，否则返回 0。
+         */
+        get duration(): number;
         /**
          * @en
          * Add a repeat action.
@@ -54629,6 +55112,7 @@ declare module "cc" {
          * 添加一个重复 action，这个 action 会将前一个动作作为他的参数。
          * @param repeatTimes @en The repeat times of this tween @zh 重复次数
          * @param embedTween @en Optional, embedded tween of this tween @zh 可选，嵌入缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         repeat(repeatTimes: number, embedTween?: Tween<T>): Tween<T>;
         /**
@@ -54639,6 +55123,7 @@ declare module "cc" {
          * 添加一个永久重复 action，这个 action 会将前一个动作作为他的参数。
          * @method repeatForever
          * @param embedTween @en Optional, embedded tween of this tween @zh 可选，嵌入缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         repeatForever(embedTween?: Tween<T>): Tween<T>;
         /**
@@ -54649,6 +55134,7 @@ declare module "cc" {
          * 添加一个倒置时间 action，这个 action 会将前一个动作作为他的参数。
          * @method reverseTime
          * @param embedTween @en Optional, embedded tween of this tween @zh 可选，嵌入缓动
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
         reverseTime(embedTween?: Tween<T>): Tween<T>;
         /**
@@ -54656,57 +55142,74 @@ declare module "cc" {
          * Add a hide action, only for node target.
          * @zh
          * 添加一个隐藏 action，只适用于 target 是节点类型的。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        hide(): Tween<T>;
+        hide(): __private._cocos_tween_tween__TweenWithNodeTargetOrUnknown<T>;
         /**
          * @en
          * Add a show action, only for node target.
          * @zh
          * 添加一个显示 action，只适用于 target 是节点类型的。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        show(): Tween<T>;
+        show(): __private._cocos_tween_tween__TweenWithNodeTargetOrUnknown<T>;
         /**
          * @en
          * Add a removeSelf action, only for node target.
          * @zh
          * 添加一个移除自己 action，只适用于 target 是节点类型的。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        removeSelf(): Tween<T>;
+        removeSelf(): __private._cocos_tween_tween__TweenWithNodeTargetOrUnknown<T>;
         /**
          * @en
          * Add a destroySelf action, only for node target.
          * @zh
          * 添加一个移除并销毁自己 action，只适用于 target 是节点类型的。
+         * @return @en The instance itself for easier chaining. @zh 返回该实例本身，以便于链式调用。
          */
-        destroySelf(): Tween<T>;
+        destroySelf(): __private._cocos_tween_tween__TweenWithNodeTargetOrUnknown<T>;
+        /**
+         * @en Get the count of running tween instances those associate with the target.
+         * @zh 获取目标对象关联的正在运行的缓动实例的个数。
+         * @param target @en The target to check. @zh 要检查的目标对象。
+         * @return @en The count of running tween instances those associate with the target.
+         *         @zh 目标对象关联的正在运行的缓动实例的个数。
+         */
+        static getRunningCount<U extends object = any>(target: U): number;
         /**
          * @en
-         * Stop all tweens
+         * Stop all tween instances.
          * @zh
-         * 停止所有缓动
+         * 停止所有缓动实例
          */
         static stopAll(): void;
         /**
          * @en
-         * Stop all tweens by tag
+         * Stop all tween instances by tag.
          * @zh
-         * 停止所有指定标签的缓动
+         * 停止指定标签关联的所有缓动实例。
          */
-        static stopAllByTag(tag: number, target?: object): void;
+        static stopAllByTag<U extends object = any>(tag: number, target?: U): void;
         /**
          * @en
-         * Stop all tweens by target
+         * Stop all tween instances associated with the target object.
          * @zh
-         * 停止所有指定对象的缓动
+         * 停止指定对象的关联的所有缓动实例。
          */
-        static stopAllByTarget(target?: object): void;
-    }
-    export class TweenAction extends __private._cocos_tween_actions_action_interval__ActionInterval {
-        constructor(duration: number, props: any, opts?: ITweenOption);
-        clone(): TweenAction;
-        startWithTarget(target: Record<string, unknown>): void;
-        update(t: number): void;
-        progress(start: number, end: number, current: number, t: number): number;
+        static stopAllByTarget<U extends object = any>(target?: U): void;
+        /**
+         * @en Pause all tween instances associated with the target object.
+         * @zh 暂停目标对象关联的所有缓动实例。
+         * @param target @en The target object whose tweens should be paused. @zh 要暂停缓动的目标对象。
+         */
+        static pauseAllByTarget<U extends object = any>(target: U): void;
+        /**
+         * @en Resume all tween instances associated with the target object.
+         * @zh 恢复目标对象关联的所有缓动实例。
+         * @param target @en The target object whose tweens should be resumed. @zh 要恢复缓动的目标对象。
+         */
+        static resumeAllByTarget<U extends object = any>(target: U): void;
     }
     /**
      * @en
@@ -54721,7 +55224,7 @@ declare module "cc" {
      * @zh
      * 缓动的可选属性的接口定义。
      */
-    export interface ITweenOption {
+    export interface ITweenOption<T extends object = any> {
         /**
          * @en
          * Easing function, you can pass in a string or custom function.
@@ -54742,21 +55245,21 @@ declare module "cc" {
          * @zh
          * 回调，当缓动动作启动时触发。
          */
-        onStart?: (target?: object) => void;
+        onStart?: (target?: T) => void;
         /**
          * @en
          * A callback that is triggered when a tween action is update.
          * @zh
          * 回调，当缓动动作更新时触发。
          */
-        onUpdate?: (target?: object, ratio?: number) => void;
+        onUpdate?: (target?: T, ratio?: number) => void;
         /**
          * @en
          * A callback that is triggered when a tween action is completed.
          * @zh
          * 回调，当缓动动作完成时触发。
          */
-        onComplete?: (target?: object) => void;
+        onComplete?: (target?: T) => void;
     }
     /**
      * @en
@@ -54997,6 +55500,7 @@ declare module "cc" {
         protected _duration: number;
         protected _zoomScale: number;
         protected _target: Node | null;
+        constructor();
         __preload(): void;
         onEnable(): void;
         onDisable(): void;
@@ -55017,13 +55521,13 @@ declare module "cc" {
         protected _onMouseMoveIn(event?: EventMouse): void;
         protected _onMouseMoveOut(event?: EventMouse): void;
         protected _updateState(): void;
-        protected _getButtonState(): string;
-        protected _updateColorTransition(state: string): void;
-        protected _updateSpriteTransition(state: string): void;
-        protected _updateScaleTransition(state: string): void;
+        protected _getButtonState(): __private._cocos_ui_button__State;
+        protected _updateColorTransition(state: __private._cocos_ui_button__State): void;
+        protected _updateSpriteTransition(state: __private._cocos_ui_button__State): void;
+        protected _updateScaleTransition(state: __private._cocos_ui_button__State): void;
         protected _zoomUp(): void;
         protected _zoomBack(): void;
-        protected _applyTransition(state: string): void;
+        protected _applyTransition(state: __private._cocos_ui_button__State): void;
     }
     /**
      * @en
@@ -55203,6 +55707,7 @@ declare module "cc" {
         protected _inputFlag: __private._cocos_ui_editbox_types__InputFlag;
         protected _inputMode: __private._cocos_ui_editbox_types__InputMode;
         protected _maxLength: number;
+        constructor();
         __preload(): void;
         onEnable(): void;
         onDisable(): void;
@@ -55290,6 +55795,7 @@ declare module "cc" {
      * 2.对 Layout 设置后结果需要到下一帧才会更新，除非你设置完以后手动调用。[[updateLayout]]
      */
     export class Layout extends Component {
+        constructor();
         /**
          * @en
          * Alignment horizontal. Fixed starting position in the same direction when Type is Horizontal.
@@ -55574,6 +56080,7 @@ declare module "cc" {
      * ```
      */
     export class ProgressBar extends Component {
+        constructor();
         /**
          * @en
          * The targeted Sprite which will be changed progressively.
@@ -55637,6 +56144,7 @@ declare module "cc" {
      * 滚动条组件。
      */
     export class ScrollBar extends Component {
+        constructor();
         /**
          * @en
          * The "handle" part of the ScrollBar.
@@ -55724,7 +56232,7 @@ declare module "cc" {
         onTouchEnded(): void;
         protected onEnable(): void;
         protected start(): void;
-        protected update(dt: any): void;
+        protected update(dt: number): void;
         protected _convertToScrollViewSpace(out: math.Vec2, content: Node): void;
         protected _setOpacity(opacity: number): void;
         protected _updateHandlerPosition(position: math.Vec2): void;
@@ -55875,6 +56383,7 @@ declare module "cc" {
         protected _deltaPos: math.Vec3;
         protected _deltaAmount: math.Vec3;
         protected _hoverIn: __private._cocos_ui_scroll_view__XrhoverType;
+        constructor();
         /**
          * @en
          * Scroll the content to the bottom boundary of ScrollView.
@@ -56267,6 +56776,7 @@ declare module "cc" {
          * 滑动器组件滑动事件回调函数数组。
          */
         slideEvents: EventHandler[];
+        constructor();
         __preload(): void;
         onEnable(): void;
         onDisable(): void;
@@ -56335,6 +56845,7 @@ declare module "cc" {
         checkEvents: EventHandler[];
         protected _isChecked: boolean;
         protected _checkMark: Sprite | null;
+        constructor();
         protected _internalToggle(): void;
         protected _set(value: boolean, emitEvent?: boolean): void;
         /**
@@ -56386,6 +56897,7 @@ declare module "cc" {
          * Toggle 按钮的点击事件列表。
          */
         checkEvents: EventHandler[];
+        constructor();
         /**
          * @en
          * Read only property, return the toggle items array reference managed by ToggleContainer.
@@ -56428,6 +56940,7 @@ declare module "cc" {
      * Widget 会自动调整当前节点的坐标和宽高，不过目前调整后的结果要到下一帧才能在脚本里获取到，除非你先手动调用 [[updateAlignment]]。
      */
     export class Widget extends Component {
+        constructor();
         /**
          * @en
          * Specifies an alignment target that can only be one of the parent nodes of the current node.
@@ -56900,6 +57413,7 @@ declare module "cc" {
         protected _scrollCenterOffsetY: number[];
         protected _touchBeganPosition: math.Vec2;
         protected _touchEndPosition: math.Vec2;
+        constructor();
         onEnable(): void;
         onDisable(): void;
         onLoad(): void;
@@ -56996,10 +57510,10 @@ declare module "cc" {
         protected _updatePageView(): void;
         protected _updateAllPagesSize(): void;
         protected _handleReleaseLogic(): void;
-        protected _onTouchBegan(event: EventTouch, captureListeners: any): void;
-        protected _onTouchMoved(event: EventTouch, captureListeners: any): void;
-        protected _onTouchEnded(event: EventTouch, captureListeners: any): void;
-        protected _onTouchCancelled(event: EventTouch, captureListeners: any): void;
+        protected _onTouchBegan(event: EventTouch, captureListeners: Node[]): void;
+        protected _onTouchMoved(event: EventTouch, captureListeners: Node[]): void;
+        protected _onTouchEnded(event: EventTouch, captureListeners: Node[]): void;
+        protected _onTouchCancelled(event: EventTouch, captureListeners: Node[]): void;
         protected _onMouseWheel(): void;
         protected _syncScrollDirection(): void;
         protected _syncSizeMode(): void;
@@ -57068,6 +57582,7 @@ declare module "cc" {
         protected _layout: Layout | null;
         protected _pageView: PageView | null;
         protected _indicators: Node[];
+        constructor();
         onLoad(): void;
         /**
          * @en
@@ -57099,7 +57614,8 @@ declare module "cc" {
     /**
      * @en
      * This component is used to adjust the layout of current node to respect the safe area of a notched mobile device such as the iPhone X.
-     * It is typically used for the top node of the UI interaction area. For specific usage, refer to the official [test-cases-3d/assets/cases/ui/20.safe-area/safe-area.scene](https://github.com/cocos-creator/test-cases-3d).
+     * It is typically used for the top node of the UI interaction area. For specific usage,
+     * refer to the official [test-cases-3d/assets/cases/ui/20.safe-area/safe-area.scene](https://github.com/cocos-creator/test-cases-3d).
      *
      * The concept of safe area is to give you a fixed inner rectangle in which you can safely display content that will be drawn on screen.
      * You are strongly discouraged from providing controls outside of this area. But your screen background could embellish edges.
@@ -57108,12 +57624,16 @@ declare module "cc" {
      * and implements the adaptation by using the Widget component and set anchor.
      *
      * @zh
-     * 该组件会将所在节点的布局适配到 iPhone X 等异形屏手机的安全区域内，通常用于 UI 交互区域的顶层节点，具体用法可参考官方范例 [test-cases-3d/assets/cases/ui/20.safe-area/safe-area.scene](https://github.com/cocos-creator/test-cases-3d)。
+     * 该组件会将所在节点的布局适配到 iPhone X 等异形屏手机的安全区域内，通常用于 UI 交互区域的顶层节点，
+     * 具体用法可参考官方范例 [test-cases-3d/assets/cases/ui/20.safe-area/safe-area.scene](https://github.com/cocos-creator/test-cases-3d)。
      *
      * 该组件内部通过 API `sys.getSafeAreaRect();` 获取到当前 iOS 或 Android 设备的安全区域，并通过 Widget 组件实现适配。
      *
      */
     export class SafeArea extends Component {
+        get symmetric(): boolean;
+        set symmetric(value: boolean);
+        constructor();
         onEnable(): void;
         onDisable(): void;
         /**
@@ -57188,6 +57708,7 @@ declare module "cc" {
         protected _canMove: boolean;
         protected _lastWPos: math.Vec3;
         protected _lastCameraPos: math.Vec3;
+        constructor();
         onEnable(): void;
         update(): void;
         protected _checkCanMove(): void;
@@ -57619,7 +58140,7 @@ declare module "cc" {
          */
         apply(_view: View, designedResolution: math.Size): __private._cocos_ui_view__AdaptResult;
         /**
-         * @en Manipulation after appyling the strategy
+         * @en Manipulation after applying the strategy
          * @zh 策略应用之后的操作
          * @param _view - The target view
          */
@@ -57636,6 +58157,12 @@ declare module "cc" {
          * @param contentStg The content strategy
          */
         setContentStrategy(contentStg: __private._cocos_ui_view__ContentStrategy): void;
+        /**
+         * @en Get the content's scale strategy.
+         * @zh 获取内容的适配策略
+         * @returns ContentStrategy instance.
+         */
+        getContentStrategy(): __private._cocos_ui_view__ContentStrategy;
     }
     /**
      * @en view is the singleton view object.
@@ -59527,6 +60054,13 @@ declare module "cc" {
             RGBA8888 = 35,
             /**
              * @en
+             * 32-bit pixel format containing blue, green, red, and alpha channels: BGRA8888
+             * @zh
+             * 包含 BGRA 四通道的 32 位整形像素格式：BGRA8888。
+             */
+            BGRA8888 = 36,
+            /**
+             * @en
              * 32-bit float pixel format containing red, green, blue and alpha channels: RGBA32F
              * @zh
              * 32位浮点数像素格式：RGBA32F。
@@ -59871,22 +60405,84 @@ declare module "cc" {
             h: number;
             offsetX: number;
             offsetY: number;
-            textureID: number;
             valid: boolean;
             xAdvance: number;
         }
         export interface _cocos_2d_assets_bitmap_font__ILetterDefinition {
             [key: string]: _cocos_2d_assets_bitmap_font__FontLetterDefinition;
         }
-        export class _cocos_2d_assets_bitmap_font__FontAtlas {
-            letterDefinitions: any;
-            texture: any;
-            constructor(texture: any);
-            addLetterDefinitions(letter: any, letterDefinition: any): void;
-            cloneLetterDefinition(): _cocos_2d_assets_bitmap_font__ILetterDefinition;
+        export interface _cocos_2d_assembler_label_font_utils__ILabelInfo {
+            fontSize: number;
+            lineHeight: number;
+            hash: string;
+            fontFamily: string;
+            fontDesc: string;
+            hAlign: number;
+            vAlign: number;
+            color: math.Color;
+            isOutlined: boolean;
+            out: math.Color;
+            margin: number;
+            fontScale: number;
+        }
+        export interface _cocos_2d_assembler_label_font_utils__ISharedLabelData {
+            canvas: HTMLCanvasElement;
+            context: CanvasRenderingContext2D | null;
+        }
+        export class _cocos_2d_assembler_label_font_utils__LetterTexture {
+            image: ImageAsset | null;
+            labelInfo: _cocos_2d_assembler_label_font_utils__ILabelInfo;
+            char: string;
+            data: _cocos_2d_assembler_label_font_utils__ISharedLabelData | null;
+            canvas: HTMLCanvasElement | null;
+            context: CanvasRenderingContext2D | null;
+            width: number;
+            height: number;
+            offsetY: number;
+            hash: string;
+            constructor(char: string, labelInfo: _cocos_2d_assembler_label_font_utils__ILabelInfo);
+            updateRenderData(): void;
+            destroy(): void;
+        }
+        export class _cocos_2d_assembler_label_font_utils__LetterAtlas {
+            get width(): number;
+            get height(): number;
+            fontDefDictionary: _cocos_2d_assets_bitmap_font__FontAtlas;
+            constructor(width: number, height: number);
+            insertLetterTexture(letterTexture: _cocos_2d_assembler_label_font_utils__LetterTexture): _cocos_2d_assets_bitmap_font__FontLetterDefinition | null;
+            update(): void;
+            reset(): void;
+            destroy(): void;
             getTexture(): any;
-            getLetter(key: any): any;
-            getLetterDefinitionForChar(char: any, labelInfo?: any): any;
+            beforeSceneLoad(): void;
+            clearAllCache(): void;
+            getLetter(key: string): _cocos_2d_assets_bitmap_font__FontLetterDefinition;
+            getLetterDefinitionForChar(char: string, labelInfo: _cocos_2d_assembler_label_font_utils__ILabelInfo): _cocos_2d_assets_bitmap_font__FontLetterDefinition | null;
+        }
+        export interface _cocos_2d_assembler_label_font_utils__IShareLabelInfo {
+            fontAtlas: _cocos_2d_assets_bitmap_font__FontAtlas | _cocos_2d_assembler_label_font_utils__LetterAtlas | null;
+            fontSize: number;
+            lineHeight: number;
+            hAlign: number;
+            vAlign: number;
+            hash: string;
+            fontFamily: string;
+            fontDesc: string;
+            color: math.Color;
+            isOutlined: boolean;
+            out: math.Color;
+            margin: number;
+            fontScale: number;
+        }
+        export class _cocos_2d_assets_bitmap_font__FontAtlas {
+            letterDefinitions: _cocos_2d_assets_bitmap_font__ILetterDefinition;
+            texture: _cocos_asset_assets_texture_base__TextureBase | null;
+            constructor(texture: _cocos_asset_assets_texture_base__TextureBase | null);
+            addLetterDefinitions(letter: string, letterDefinition: _cocos_2d_assets_bitmap_font__FontLetterDefinition): void;
+            cloneLetterDefinition(): _cocos_2d_assets_bitmap_font__ILetterDefinition;
+            getTexture(): _cocos_asset_assets_texture_base__TextureBase | null;
+            getLetter(key: string): _cocos_2d_assets_bitmap_font__FontLetterDefinition;
+            getLetterDefinitionForChar(char: string, labelInfo?: _cocos_2d_assembler_label_font_utils__IShareLabelInfo): _cocos_2d_assets_bitmap_font__FontLetterDefinition | null;
             clear(): void;
         }
         /**
@@ -59984,7 +60580,7 @@ declare module "cc" {
             samplerHash: number;
             destroy(ui: _cocos_2d_renderer_i_batcher__IBatcher): void;
             clear(): void;
-            fillPasses(mat: Material | null, dss: any, dssHash: any, patches: any): void;
+            fillPasses(mat: Material | null, dss: gfx.DepthStencilState | null, dssHash: number, patches: Readonly<renderer.IMacroPatch[] | null>): void;
         }
         export interface _cocos_2d_renderer_i_batcher__IBatcher {
             currBufferAccessor: _cocos_2d_renderer_static_vb_accessor__StaticVBAccessor;
@@ -60377,6 +60973,7 @@ declare module "cc" {
             dmy: number;
             flags: number;
             len: number;
+            constructor(x: number, y: number);
             reset(): void;
         }
         export class _cocos_2d_assembler_graphics_webgl_impl__Path {
@@ -60433,10 +61030,6 @@ declare module "cc" {
             attachDrawInfo(): any;
             attachNode(node: any): any;
             clearModels(): any;
-        }
-        export interface _cocos_2d_assembler_label_font_utils__ISharedLabelData {
-            canvas: HTMLCanvasElement;
-            context: CanvasRenderingContext2D | null;
         }
         export class _cocos_2d_assembler_label_font_utils__CanvasPool {
             static getInstance(): _cocos_2d_assembler_label_font_utils__CanvasPool;
@@ -60636,6 +61229,7 @@ declare module "cc" {
             probeCubemap: TextureCube | null;
             probeBlendCubemap: TextureCube | null;
             probePlanarmap: gfx.Texture | null;
+            constructor();
             /**
              * @en Whether the model is static and bake-able with light map.
              * Notice: the model's vertex data must have the second UV attribute to enable light map baking.
@@ -60762,6 +61356,7 @@ declare module "cc" {
          * 支持渲染蒙皮形变的模型。
          */
         export class _cocos_3d_models_morph_model__MorphModel extends renderer.scene.Model {
+            constructor();
             /**
              * @en Acquire the material's macro patches for the given sub model.
              * @zh 获取指定子模型的材质宏组合。
@@ -61170,7 +61765,7 @@ declare module "cc" {
              * @param callback - Callback function when event triggered.
              * @param target - Callback callee.
              */
-            hasEventListener(type: string, callback?: (...any: any[]) => void, target?: any): boolean;
+            hasEventListener(type: string, callback?: (...args: any[]) => void, target?: any): boolean;
             /**
              * @en
              * Register an callback of a specific event type on the EventTarget.
@@ -61189,7 +61784,7 @@ declare module "cc" {
              *     log("fire in the hole");
              * }, node);
              */
-            on<TFunction extends (...any: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback: TFunction, thisArg?: any, once?: boolean): typeof callback;
+            on<TFunction extends (...args: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback: TFunction, thisArg?: any, once?: boolean): typeof callback;
             /**
              * @en
              * Register an callback of a specific event type on the EventTarget,
@@ -61207,7 +61802,7 @@ declare module "cc" {
              *     log("this is the callback and will be invoked only once");
              * }, node);
              */
-            once<TFunction extends (...any: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback: TFunction, thisArg?: any): typeof callback;
+            once<TFunction extends (...args: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback: TFunction, thisArg?: any): typeof callback;
             /**
              * @en
              * Removes the listeners previously registered with the same type, callback, target and or useCapture,
@@ -61229,7 +61824,7 @@ declare module "cc" {
              * // remove all fire event listeners
              * eventTarget.off('fire');
              */
-            off<TFunction extends (...any: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback?: TFunction, thisArg?: any): void;
+            off<TFunction extends (...args: any[]) => void>(type: _cocos_core_event_eventify__EventType, callback?: TFunction, thisArg?: any): void;
             /**
              * @en Removes all callbacks previously registered with the same target (passed as parameter).
              * This is not for removing all listeners in the current event target,
@@ -61518,99 +62113,6 @@ declare module "cc" {
             ENDED = "ended"
         }
         export type _pal_audio_type__AudioBufferView = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array;
-        export interface _cocos_render_scene_core_render_window__IRenderWindowInfo {
-            title?: string;
-            width: number;
-            height: number;
-            renderPassInfo: gfx.RenderPassInfo;
-            swapchain?: gfx.Swapchain;
-            externalResLow?: number;
-            externalResHigh?: number;
-            externalFlag?: gfx.TextureFlags;
-        }
-        /**
-         * @en The render window represents the render target, it could be an off screen frame buffer or the on screen buffer.
-         * @zh 渲染窗口代表了一个渲染目标，可以是离屏的帧缓冲，也可以是屏幕缓冲
-         */
-        export class _cocos_render_scene_core_render_window__RenderWindow {
-            /**
-             * @en Get window width. Pre-rotated (i.e. rotationally invariant, always in identity/portrait mode) if possible.
-             * If you want to get oriented size instead, you should use [[renderer.scene.Camera.width]] which corresponds to the current screen rotation.
-             * @zh 获取窗口宽度。如果支持交换链预变换，返回值将始终处于单位旋转（竖屏）坐标系下。如果需要获取旋转后的尺寸，请使用 [[renderer.scene.Camera.width]]。
-             */
-            get width(): number;
-            /**
-             * @en Get window height. Pre-rotated (i.e. rotationally invariant, always in identity/portrait mode) if possible.
-             * If you want to get oriented size instead, you should use [[renderer.scene.Camera.width]] which corresponds to the current screen rotation.
-             * @zh 获取窗口高度。如果支持交换链预变换，返回值将始终处于单位旋转（竖屏）坐标系下。如果需要获取旋转后的尺寸，请使用 [[renderer.scene.Camera.height]]。
-             */
-            get height(): number;
-            /**
-             * @en Get the swapchain for this window, if there is one
-             * @zh 如果存在的话，获取此窗口的交换链
-             */
-            get swapchain(): gfx.Swapchain;
-            /**
-             * @en Get window frame buffer.
-             * @zh 帧缓冲对象。
-             */
-            get framebuffer(): gfx.Framebuffer;
-            get cameras(): renderer.scene.Camera[];
-            protected _title: string;
-            protected _width: number;
-            protected _height: number;
-            protected _swapchain: gfx.Swapchain;
-            protected _renderPass: gfx.RenderPass | null;
-            protected _colorTextures: gfx.Texture[];
-            protected _depthStencilTexture: gfx.Texture | null;
-            protected _cameras: renderer.scene.Camera[];
-            protected _hasOnScreenAttachments: boolean;
-            protected _hasOffScreenAttachments: boolean;
-            protected _framebuffer: gfx.Framebuffer | null;
-            protected _device: gfx.Device | null;
-            /**
-             * @private
-             */
-            static registerCreateFunc(root: Root): void;
-            initialize(device: gfx.Device, info: _cocos_render_scene_core_render_window__IRenderWindowInfo): boolean;
-            destroy(): void;
-            /**
-             * @en Resize window.
-             * @zh 重置窗口大小。
-             * @param width The new width.
-             * @param height The new height.
-             */
-            resize(width: number, height: number): void;
-            /**
-             * @en Extract all render cameras attached to the render window to the output cameras list
-             * @zh 将所有挂载到当前渲染窗口的摄像机存储到输出列表参数中
-             * @param cameras @en The output cameras list, should be empty before invoke this function
-             *                @zh 输出相机列表参数，传入时应该为空
-             */
-            extractRenderCameras(cameras: renderer.scene.Camera[]): void;
-            /**
-             * @en Attach a new camera to the render window
-             * @zh 添加渲染相机
-             * @param camera @en The camera to attach @zh 要挂载的相机
-             */
-            attachCamera(camera: renderer.scene.Camera): void;
-            /**
-             * @en Detach a camera from the render window
-             * @zh 移除场景中的渲染相机
-             * @param camera @en The camera to detach @zh 要移除的相机
-             */
-            detachCamera(camera: renderer.scene.Camera): void;
-            /**
-             * @en Clear all attached cameras
-             * @zh 清空全部渲染相机
-             */
-            clearCameras(): void;
-            /**
-             * @en Sort all attached cameras with priority
-             * @zh 按照优先级对所有挂载的相机排序
-             */
-            sortCameras(): void;
-        }
         export class _cocos_rendering_global_descriptor_set_manager__GlobalDSManager {
             get descriptorSetMap(): Map<renderer.scene.Light, gfx.DescriptorSet>;
             get linearSampler(): gfx.Sampler;
@@ -61797,14 +62299,15 @@ declare module "cc" {
              */
             onGlobalPipelineStateChanged(): void;
         }
+        export type _cocos_rendering_pipeline_event__PipelineEventCallback = (...args: any[]) => void;
         export interface _cocos_rendering_pipeline_event__IPipelineEvent {
-            on(type: PipelineEventType, callback: any, target?: any, once?: boolean): typeof callback;
-            once(type: PipelineEventType, callback: any, target?: any): typeof callback;
-            off(type: PipelineEventType, callback?: any, target?: any): any;
-            emit(type: PipelineEventType, arg0?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any): any;
+            on(type: PipelineEventType, callback: _cocos_rendering_pipeline_event__PipelineEventCallback, target?: any, once?: boolean): typeof callback;
+            once(type: PipelineEventType, callback: _cocos_rendering_pipeline_event__PipelineEventCallback, target?: any): typeof callback;
+            off(type: PipelineEventType, callback?: _cocos_rendering_pipeline_event__PipelineEventCallback, target?: any): void;
+            emit(type: PipelineEventType, arg0?: any, arg1?: any, arg2?: any, arg3?: any, arg4?: any): void;
             targetOff(typeOrTarget: any): void;
             removeAll(typeOrTarget: any): void;
-            hasEventListener(type: PipelineEventType, callback?: any, target?: any): boolean;
+            hasEventListener(type: PipelineEventType, callback?: _cocos_rendering_pipeline_event__PipelineEventCallback, target?: any): boolean;
         }
         export interface _cocos_3d_skeletal_animation_skeletal_animation_utils__IChunkContent {
             skeleton: number;
@@ -61870,6 +62373,16 @@ declare module "cc" {
         export interface _cocos_root__IRootInfo {
             enableHDR?: boolean;
         }
+        export interface _cocos_render_scene_core_render_window__IRenderWindowInfo {
+            title?: string;
+            width: number;
+            height: number;
+            renderPassInfo: gfx.RenderPassInfo;
+            swapchain?: gfx.Swapchain;
+            externalResLow?: number;
+            externalResHigh?: number;
+            externalFlag?: gfx.TextureFlags;
+        }
         /**
          * @en GFX buffer barrier.
          * @zh GFX buffer内存屏障。
@@ -61889,6 +62402,8 @@ declare module "cc" {
         export class _cocos_core_data_gc_object__GCObject {
             constructor();
             destroy(): void;
+        }
+        export interface _cocos_gfx_base_define__GPUTexture {
         }
         export interface _cocos_render_scene_core_program_lib__IDefineRecord extends EffectAsset.IDefineInfo {
             _map: (value: any) => number;
@@ -61969,10 +62484,10 @@ declare module "cc" {
         export interface _cocos_render_scene_core_memory_pools__IHandle<P extends renderer.PoolType> extends Number {
             _: P;
         }
-        export type _cocos_render_scene_core_memory_pools__BufferManifest = {
+        export interface _cocos_render_scene_core_memory_pools__BufferManifest {
             [key: string]: number | string;
             COUNT: number;
-        };
+        }
         export enum _cocos_render_scene_core_memory_pools__BufferDataType {
             UINT32 = 0,
             FLOAT32 = 1,
@@ -62076,12 +62591,12 @@ declare module "cc" {
          * @zh 包含枚举名和值的 JavaScript literal 对象，或者是一个 TypeScript enum 类型。
          * @return @en The defined enum type. @zh 定义的枚举类型。
          */
-        export function _cocos_core_value_types_enum__Enum<T>(obj: T): T;
+        export function _cocos_core_value_types_enum__Enum<T extends object>(obj: T): T;
         export namespace _cocos_core_value_types_enum__Enum {
-            var update: <T>(obj: T) => T;
-            var isEnum: <EnumT extends {}>(enumType: EnumT) => boolean;
-            var getList: <EnumT extends {}>(enumType: EnumT) => readonly _cocos_core_value_types_enum__Enum.Enumerator<EnumT>[];
-            var sortList: <EnumT extends {}>(enumType: EnumT, compareFn: (a: any, b: any) => number) => void;
+            var update: <T extends object>(obj: T) => T;
+            var isEnum: <EnumT extends object>(enumType: EnumT) => boolean;
+            var getList: <EnumT extends object>(enumType: EnumT) => readonly _cocos_core_value_types_enum__Enum.Enumerator<EnumT>[];
+            var sortList: <EnumT extends object>(enumType: EnumT, compareFn: (a: any, b: any) => number) => void;
         }
         export namespace _cocos_core_value_types_enum__Enum {
             interface Enumerator<EnumT> {
@@ -62143,6 +62658,8 @@ declare module "cc" {
             displayOrder: number;
             style: string;
         }>;
+        export interface _cocos_core_data_utils_attribute_defines__IExposedAttributesUserData extends Record<string, any> {
+        }
         export interface _cocos_core_data_utils_attribute_defines__IExposedAttributes {
             /**
              * 指定属性的类型。
@@ -62191,11 +62708,11 @@ declare module "cc" {
             /**
              * 当该属性为数值类型时，指定了该属性允许的最小值。
              */
-            min?: number;
+            min?: number | (() => number);
             /**
              * 当该属性为数值类型时，指定了该属性允许的最大值。
              */
-            max?: number;
+            max?: number | (() => number);
             /**
              * 当该属性为数值类型时并在编辑器中提供了滑动条时，指定了滑动条的步长。
              */
@@ -62240,7 +62757,7 @@ declare module "cc" {
              * @en User custom data, which can be obtained through the `CCClass.attr()` interface.
              * @zh 用户自定义数据，可以通过 `CCClass.attr()` 接口获取自定义数据。
              */
-            userData?: Record<string, any>;
+            userData?: _cocos_core_data_utils_attribute_defines__IExposedAttributesUserData;
             /**
              * 在允许的情况下，在编辑器中显示为一组单选按钮
              */
@@ -63091,118 +63608,6 @@ declare module "cc" {
             XR = "xr"
         }
         export type _cocos_core_value_types_enum__EnumType = Record<string, string | number>;
-        export class _cocos_rendering_render_pipeline__BloomRenderData {
-            renderPass: gfx.RenderPass;
-            sampler: gfx.Sampler;
-            prefiterTex: gfx.Texture;
-            downsampleTexs: gfx.Texture[];
-            upsampleTexs: gfx.Texture[];
-            combineTex: gfx.Texture;
-            prefilterFramebuffer: gfx.Framebuffer;
-            downsampleFramebuffers: gfx.Framebuffer[];
-            upsampleFramebuffers: gfx.Framebuffer[];
-            combineFramebuffer: gfx.Framebuffer;
-        }
-        export class _cocos_rendering_render_pipeline__PipelineRenderData {
-            outputFrameBuffer: gfx.Framebuffer;
-            outputRenderTargets: gfx.Texture[];
-            outputDepth: gfx.Texture;
-            sampler: gfx.Sampler;
-            bloom: _cocos_rendering_render_pipeline__BloomRenderData | null;
-        }
-        export class _cocos_rendering_pipeline_ubo__PipelineUBO {
-            static updateGlobalUBOView(window: _cocos_render_scene_core_render_window__RenderWindow, bufferView: Float32Array): void;
-            static updateCameraUBOView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, bufferView: Float32Array, camera: renderer.scene.Camera): void;
-            static getPCFRadius(shadowInfo: renderer.scene.Shadows, mainLight: renderer.scene.DirectionalLight): number;
-            static updatePlanarNormalAndDistance(shadowInfo: renderer.scene.Shadows, shadowUBO: Float32Array): void;
-            static updateShadowUBOView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, shadowBufferView: Float32Array, csmBufferView: Float32Array, camera: renderer.scene.Camera): void;
-            static updateShadowUBOLightView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, shadowBufferView: Float32Array, light: renderer.scene.Light, level: number): void;
-            protected _globalUBO: Float32Array;
-            protected _cameraUBO: Float32Array;
-            protected _shadowUBO: Float32Array;
-            protected _csmUBO: Float32Array;
-            static _combineSignY: number;
-            protected _device: gfx.Device;
-            protected _pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime;
-            /**
-             *|combinedSignY|clipSpaceSignY|screenSpaceSignY| Backends |
-             *|    :--:     |    :--:      |      :--:      |   :--:   |
-             *|      0      |      -1      |      -1        |  Vulkan  |
-             *|      1      |       1      |      -1        |  Metal   |
-             *|      2      |      -1      |       1        |          |
-             *|      3      |       1      |       1        |  GL-like |
-             */
-            static getCombineSignY(): number;
-            activate(device: gfx.Device, pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime): void;
-            /**
-             * @en Update all UBOs
-             * @zh 更新全部 UBO。
-             */
-            updateGlobalUBO(window: _cocos_render_scene_core_render_window__RenderWindow): void;
-            updateCameraUBO(camera: renderer.scene.Camera): void;
-            updateShadowUBO(camera: renderer.scene.Camera): void;
-            updateShadowUBOLight(globalDS: gfx.DescriptorSet, light: renderer.scene.Light, level?: number): void;
-            updateShadowUBORange(offset: number, data: math.Mat4 | math.Color): void;
-            destroy(): void;
-        }
-        /**
-         * @en Render pipeline information descriptor
-         * @zh 渲染管线描述信息。
-         */
-        export interface _cocos_rendering_render_pipeline__IRenderPipelineInfo {
-            flows: RenderFlow[];
-            tag?: number;
-        }
-        export class _cocos_rendering_render_pipeline__PipelineInputAssemblerData {
-            quadIB: gfx.Buffer | null;
-            quadVB: gfx.Buffer | null;
-            quadIA: gfx.InputAssembler | null;
-        }
-        /**
-         * @en Render flow information descriptor
-         * @zh 渲染流程描述信息。
-         */
-        export interface _cocos_rendering_render_flow__IRenderFlowInfo {
-            name: string;
-            priority: number;
-            stages: RenderStage[];
-            tag?: number;
-        }
-        export enum _cocos_rendering_pipeline_serialization__RenderQueueSortMode {
-            FRONT_TO_BACK = 0,
-            BACK_TO_FRONT = 1
-        }
-        /**
-         * @en The render queue descriptor
-         * @zh 渲染队列描述信息
-         */
-        export class _cocos_rendering_pipeline_serialization__RenderQueueDesc {
-            /**
-             * @en Whether the render queue is a transparent queue
-             * @zh 当前队列是否是半透明队列
-             */
-            isTransparent: boolean;
-            /**
-             * @en The sort mode of the render queue
-             * @zh 渲染队列的排序模式
-             */
-            sortMode: _cocos_rendering_pipeline_serialization__RenderQueueSortMode;
-            /**
-             * @en The stages using this queue
-             * @zh 使用当前渲染队列的阶段列表
-             */
-            stages: string[];
-        }
-        /**
-         * @en The render stage information descriptor
-         * @zh 渲染阶段描述信息。
-         */
-        export interface _cocos_rendering_render_stage__IRenderStageInfo {
-            name: string;
-            priority: number;
-            tag?: number;
-            renderQueues?: _cocos_rendering_pipeline_serialization__RenderQueueDesc[];
-        }
         export class _cocos_rendering_shadow_csm_layers__ShadowLayerVolume {
             protected _shadowObjects: pipeline.IRenderObject[];
             protected _shadowCameraFar: number;
@@ -63266,75 +63671,6 @@ declare module "cc" {
             constructor();
             update(sceneData: PipelineSceneData, camera: renderer.scene.Camera): void;
             destroy(): void;
-        }
-        export class _cocos_rendering_pipeline_serialization__RenderTextureConfig {
-            name: string;
-            texture: RenderTexture | null;
-        }
-        /**
-         * @en The render queue. It manages a GFX [[RenderPass]] queue which will be executed by the [[RenderStage]].
-         * @zh 渲染队列。它管理一个 GFX [[RenderPass]] 队列，队列中的渲染过程会被 [[RenderStage]] 所执行。
-         */
-        export class _cocos_rendering_render_queue__RenderQueue {
-            /**
-             * @en A cached array of render passes
-             * @zh 基于缓存数组的渲染过程队列。
-             */
-            queue: memop.CachedArray<pipeline.IRenderPass>;
-            /**
-             * @en Construct a RenderQueue with render queue descriptor
-             * @zh 利用渲染队列描述来构造一个 RenderQueue。
-             * @param desc Render queue descriptor
-             */
-            constructor(desc: pipeline.IRenderQueueDesc);
-            /**
-             * @en Clear the render queue
-             * @zh 清空渲染队列。
-             */
-            clear(): void;
-            /**
-             * @en Insert a render pass into the queue
-             * @zh 插入渲染过程。
-             * @param renderObj The render object of the pass
-             * @param modelIdx The model id
-             * @param passIdx The pass id
-             * @returns Whether the new render pass is successfully added
-             */
-            insertRenderPass(renderObj: pipeline.IRenderObject, subModelIdx: number, passIdx: number): boolean;
-            /**
-             * @en Sort the current queue
-             * @zh 排序渲染队列。
-             */
-            sort(): void;
-            recordCommandBuffer(device: gfx.Device, renderPass: gfx.RenderPass, cmdBuff: gfx.CommandBuffer): void;
-        }
-        /**
-         * @en Render queue for instanced batching
-         * @zh 渲染合批队列。
-         */
-        export class _cocos_rendering_render_instanced_queue__RenderInstancedQueue {
-            /**
-             * @en A set of instanced buffer
-             * @zh Instance 合批缓存集合。
-             */
-            queue: Set<InstancedBuffer>;
-            /**
-             * @en Clear the render queue
-             * @zh 清空渲染队列。
-             */
-            clear(): void;
-            sort(): void;
-            uploadBuffers(cmdBuff: gfx.CommandBuffer): void;
-            /**
-             * @en Record command buffer for the current queue
-             * @zh 记录命令缓冲。
-             * @param cmdBuff The command buffer to store the result
-             */
-            recordCommandBuffer(device: gfx.Device, renderPass: gfx.RenderPass, cmdBuff: gfx.CommandBuffer, descriptorSet?: gfx.DescriptorSet | null, dynamicOffsets?: Readonly<number[]>): void;
-        }
-        export class _cocos_rendering_deferred_deferred_pipeline__DeferredRenderData extends _cocos_rendering_render_pipeline__PipelineRenderData {
-            gbufferFrameBuffer: gfx.Framebuffer;
-            gbufferRenderTargets: gfx.Texture[];
         }
         export interface _cocos_rendering_instanced_buffer__IInstancedItem {
             count: number;
@@ -63443,7 +63779,7 @@ declare module "cc" {
         /// <reference types="./@types/globals" />
         export class _cocos_core_event_callbacks_invoker__CallbackInfo {
             callback: __types_globals__AnyFunction;
-            target: unknown | undefined;
+            target: unknown;
             once: boolean;
             set(callback: __types_globals__AnyFunction, target?: unknown, once?: boolean): void;
             reset(): void;
@@ -63530,7 +63866,7 @@ declare module "cc" {
              * @en Removes all callbacks registered in a certain event type or all callbacks registered with a certain target
              * @param keyOrTarget - The event type or target with which the listeners will be removed
              */
-            removeAll(keyOrTarget: EventTypeClass | unknown): void;
+            removeAll(keyOrTarget: unknown): void;
             /**
              * @zh 删除以指定事件，回调函数，目标注册的回调。
              * @en Remove event listeners registered with the given event key, callback and target
@@ -63620,6 +63956,18 @@ declare module "cc" {
              * 当鼠标从按下状态松开时触发一次。
              */
             MOUSE_UP = "mouse-up",
+            /**
+             * @en The event type indicates mouse leaves the window or canvas. Only Windows, macOS or web PC can
+             * trigger this event.
+             * @zh 当鼠标离开窗口或者 canvas 时发出该消息。只有 Windows、macOS 或者 PC web 会触发该事件。
+             */
+            MOUSE_LEAVE = "mouse-leave-window",
+            /**
+             * @en The event type indicates mouse enters the window or canvas. Only Windows, macOS or web PC can
+             * trigger this event.
+             * @zh 当鼠标进入窗口或者 canvas 时发出该消息。只有 Windows、macOS 或者 PC web 会触发该事件。
+             */
+            MOUSE_ENTER = "mouse-enter-window",
             /**
              * @en
              * The event type for mouse wheel events
@@ -63774,7 +64122,7 @@ declare module "cc" {
             getBubblingTargets(type: string, targets: Node[]): void;
             onUpdatingSiblingIndex(): void;
         }
-        export type __types_globals__AbstractedConstructor<T = unknown> = new (...args: any[]) => T;
+        export type __types_globals__AbstractedConstructor<T = unknown> = abstract new (...args: any[]) => T;
         /**
          * @en Node's UI properties abstraction
          * @zh 节点上 UI 相关的属性抽象类
@@ -63797,11 +64145,11 @@ declare module "cc" {
             set localOpacity(val: number);
             colorDirty: boolean;
             protected _uiTransformComp: UITransform | null;
-            constructor(node: any);
+            constructor(node: Node);
             /**
              * @deprecated since v3.4
              */
-            applyOpacity(effectOpacity: any): void;
+            applyOpacity(effectOpacity: number): void;
             /**
              * @en Make the opacity state of node tree is dirty, not effect anymore
              * @zh 为结点树的透明度状态设置脏标签，不再有效果
@@ -64347,6 +64695,7 @@ declare module "cc" {
          * 简单贴图允许指定不同的 Mipmap 层级。
          */
         export class _cocos_asset_assets_simple_texture__SimpleTexture extends _cocos_asset_assets_texture_base__TextureBase {
+            constructor();
             /**
              * @en The mipmap level of the texture.
              * @zh 贴图中的 Mipmap 层级数量。
@@ -64371,7 +64720,7 @@ declare module "cc" {
              * @param firstLevel @en First level to be updated. @zh 更新指定层的 mipmap。
              * @param count @en Mipmap level count to be updated。 @zh 指定要更新层的数量。
              */
-            updateMipmaps(firstLevel?: number, count?: number): void;
+            updateMipmaps(firstLevel?: number, count?: number | undefined): void;
             /**
              * @en Upload data to the given mipmap level.
              * The size of the image will affect how the mipmap is updated.
@@ -65289,26 +65638,6 @@ declare module "cc" {
             [SystemEvent.EventType.KEY_UP]: (event: EventKeyboard) => void;
             [SystemEvent.EventType.DEVICEMOTION]: (event: EventAcceleration) => void;
         }
-        export interface _cocos_rendering_custom_private__ProgramProxy {
-            readonly name: string;
-            readonly shader: gfx.Shader;
-        }
-        export interface _cocos_rendering_custom_private__ProgramLibrary {
-            addEffect(effectAsset: EffectAsset): void;
-            precompileEffect(device: gfx.Device, effectAsset: EffectAsset): void;
-            getKey(phaseID: number, programName: string, defines: renderer.MacroRecord): string;
-            getPipelineLayout(device: gfx.Device, phaseID: number, programName: string): gfx.PipelineLayout;
-            getMaterialDescriptorSetLayout(device: gfx.Device, phaseID: number, programName: string): gfx.DescriptorSetLayout;
-            getLocalDescriptorSetLayout(device: gfx.Device, phaseID: number, programName: string): gfx.DescriptorSetLayout;
-            getProgramInfo(phaseID: number, programName: string): renderer.IProgramInfo;
-            getShaderInfo(phaseID: number, programName: string): gfx.ShaderInfo;
-            getProgramVariant(device: gfx.Device, phaseID: number, name: string, defines: renderer.MacroRecord, key?: string): _cocos_rendering_custom_private__ProgramProxy | null;
-            getBlockSizes(phaseID: number, programName: string): number[];
-            getHandleMap(phaseID: number, programName: string): Record<string, number>;
-            getProgramID(phaseID: number, programName: string): number;
-            getDescriptorNameID(name: string): number;
-            getDescriptorName(nameID: number): string;
-        }
         export class _cocos_rendering_post_process_components_blit_screen__BlitScreenMaterial {
             protected _material: Material | undefined;
             get material(): Material | undefined;
@@ -65357,6 +65686,26 @@ declare module "cc" {
         }
         export function _cocos_rendering_custom_define__getCameraUniqueID(camera: renderer.scene.Camera): number;
         export class _cocos_rendering_post_process_components_fxaa__FXAA extends postProcess.PostProcessSetting {
+        }
+        export interface _cocos_rendering_custom_private__ProgramProxy {
+            readonly name: string;
+            readonly shader: gfx.Shader;
+        }
+        export interface _cocos_rendering_custom_private__ProgramLibrary {
+            addEffect(effectAsset: EffectAsset): void;
+            precompileEffect(device: gfx.Device, effectAsset: EffectAsset): void;
+            getKey(phaseID: number, programName: string, defines: renderer.MacroRecord): string;
+            getPipelineLayout(device: gfx.Device, phaseID: number, programName: string): gfx.PipelineLayout;
+            getMaterialDescriptorSetLayout(device: gfx.Device, phaseID: number, programName: string): gfx.DescriptorSetLayout;
+            getLocalDescriptorSetLayout(device: gfx.Device, phaseID: number, programName: string): gfx.DescriptorSetLayout;
+            getProgramInfo(phaseID: number, programName: string): renderer.IProgramInfo;
+            getShaderInfo(phaseID: number, programName: string): gfx.ShaderInfo;
+            getProgramVariant(device: gfx.Device, phaseID: number, name: string, defines: renderer.MacroRecord, key?: string): _cocos_rendering_custom_private__ProgramProxy | null;
+            getBlockSizes(phaseID: number, programName: string): number[];
+            getHandleMap(phaseID: number, programName: string): Record<string, number>;
+            getProgramID(phaseID: number, programName: string): number;
+            getDescriptorNameID(name: string): number;
+            getDescriptorName(nameID: number): string;
         }
         /**
          * @engineInternal Since v3.7.2 this is an engine private interface.
@@ -65560,38 +65909,38 @@ declare module "cc" {
              */
             Single = 5
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_half_float {
+        export interface __node_modules_typescript_lib_libdom__EXT_color_buffer_half_float {
             readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
             readonly RGB16F_EXT: GLenum;
             readonly RGBA16F_EXT: GLenum;
             readonly UNSIGNED_NORMALIZED_EXT: GLenum;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_half_float {
+        export interface __node_modules_typescript_lib_libdom__EXT_color_buffer_half_float {
             readonly RGBA16F_EXT: GLenum;
             readonly RGB16F_EXT: GLenum;
             readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
             readonly UNSIGNED_NORMALIZED_EXT: GLenum;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_multi_draw {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_multi_draw {
             multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
             multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, drawcount: GLsizei): void;
             multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
             multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, drawcount: GLsizei): void;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_multi_draw {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_multi_draw {
             multiDrawArraysWEBGL(mode: GLenum, firstsList: GLint[] | Int32Array, firstsOffset: GLuint, countsList: GLsizei[] | Int32Array, countsOffset: GLuint, drawCount: GLsizei): void;
             multiDrawElementsWEBGL(mode: GLenum, countsList: GLint[] | Int32Array, countsOffset: GLuint, type: GLenum, offsetsList: GLsizei[] | Int32Array, OffsetsOffset: GLuint, drawCount: GLsizei): void;
             multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: GLint[] | Int32Array, firstsOffset: GLuint, countsList: GLsizei[] | Int32Array, countsOffset: GLuint, instanceCountsList: GLsizei[] | Int32Array, instanceCountsOffset: GLuint, drawCount: GLsizei): void;
             multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: GLint[] | Int32Array, countsOffset: GLuint, type: GLenum, offsetsList: GLsizei[] | Int32Array, OffsetsOffset: GLuint, instanceCountsList: GLsizei[] | Int32Array, instanceCountsOffset: GLuint, drawCount: GLsizei): void;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 {
             readonly COMPRESSED_RGB_ETC1_WEBGL: GLenum;
         }
         // note that ETC1 is not supported with the compressedTexSubImage2D() method
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 {
             readonly COMPRESSED_RGB_ETC1_WEBGL: GLenum;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc {
             readonly COMPRESSED_R11_EAC: GLenum;
             readonly COMPRESSED_RG11_EAC: GLenum;
             readonly COMPRESSED_RGB8_ETC2: GLenum;
@@ -65603,7 +65952,7 @@ declare module "cc" {
             readonly COMPRESSED_SRGB8_ETC2: GLenum;
             readonly COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc {
+        export interface __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc {
             readonly COMPRESSED_R11_EAC: GLenum;
             readonly COMPRESSED_SIGNED_R11_EAC: GLenum;
             readonly COMPRESSED_RG11_EAC: GLenum;
@@ -65628,11 +65977,11 @@ declare module "cc" {
             EXT_shader_texture_lod: EXT_shader_texture_lod | null;
             EXT_sRGB: EXT_sRGB | null;
             OES_vertex_array_object: OES_vertex_array_object | null;
-            EXT_color_buffer_half_float: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_half_float | null;
-            WEBGL_multi_draw: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_multi_draw | null;
+            EXT_color_buffer_half_float: __node_modules_typescript_lib_libdom__EXT_color_buffer_half_float | null;
+            WEBGL_multi_draw: __node_modules_typescript_lib_libdom__WEBGL_multi_draw | null;
             WEBGL_color_buffer_float: WEBGL_color_buffer_float | null;
-            WEBGL_compressed_texture_etc1: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 | null;
-            WEBGL_compressed_texture_etc: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc | null;
+            WEBGL_compressed_texture_etc1: __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 | null;
+            WEBGL_compressed_texture_etc: __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc | null;
             WEBGL_compressed_texture_pvrtc: __types_webGLextras__WEBGL_compressed_texture_pvrtc | null;
             WEBGL_compressed_texture_astc: WEBGL_compressed_texture_astc | null;
             WEBGL_compressed_texture_s3tc: WEBGL_compressed_texture_s3tc | null;
@@ -65705,9 +66054,10 @@ declare module "cc" {
         export class _cocos_gfx_webgl_webgl_texture__WebGLTexture extends gfx.Texture {
             get gpuTexture(): _cocos_gfx_webgl_webgl_gpu_objects__IWebGLGPUTexture;
             get lodLevel(): number;
+            constructor();
             initialize(info: Readonly<gfx.TextureInfo> | Readonly<gfx.TextureViewInfo>, isSwapchainTexture?: boolean): void;
             destroy(): void;
-            getGLTextureHandle(): number;
+            getTextureHandle(): number;
             resize(width: number, height: number): void;
         }
         export interface _cocos_gfx_webgl_webgl_gpu_objects__IWebGLBindingMapping {
@@ -65720,17 +66070,17 @@ declare module "cc" {
             destroy(): void;
             draw(gpuTextureSrc: _cocos_gfx_webgl_webgl_gpu_objects__IWebGLGPUTexture, gpuTextureDst: _cocos_gfx_webgl_webgl_gpu_objects__IWebGLGPUTexture, regions: gfx.TextureBlit[], filter: gfx.Filter): void;
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_float {
+        export interface __node_modules_typescript_lib_libdom__EXT_color_buffer_float {
         }
-        export interface __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_float {
+        export interface __node_modules_typescript_lib_libdom__EXT_color_buffer_float {
         }
         export interface _cocos_gfx_webgl2_webgl2_define__IWebGL2Extensions {
             EXT_texture_filter_anisotropic: EXT_texture_filter_anisotropic | null;
-            EXT_color_buffer_half_float: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_half_float | null;
-            EXT_color_buffer_float: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__EXT_color_buffer_float | null;
-            WEBGL_multi_draw: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_multi_draw | null;
-            WEBGL_compressed_texture_etc1: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 | null;
-            WEBGL_compressed_texture_etc: __node_modules_cocos_ccbuild_node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc | null;
+            EXT_color_buffer_half_float: __node_modules_typescript_lib_libdom__EXT_color_buffer_half_float | null;
+            EXT_color_buffer_float: __node_modules_typescript_lib_libdom__EXT_color_buffer_float | null;
+            WEBGL_multi_draw: __node_modules_typescript_lib_libdom__WEBGL_multi_draw | null;
+            WEBGL_compressed_texture_etc1: __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc1 | null;
+            WEBGL_compressed_texture_etc: __node_modules_typescript_lib_libdom__WEBGL_compressed_texture_etc | null;
             WEBGL_compressed_texture_pvrtc: __types_webGLextras__WEBGL_compressed_texture_pvrtc | null;
             WEBGL_compressed_texture_astc: WEBGL_compressed_texture_astc | null;
             WEBGL_compressed_texture_s3tc: WEBGL_compressed_texture_s3tc | null;
@@ -65807,7 +66157,7 @@ declare module "cc" {
             get gpuTextureView(): _cocos_gfx_webgl2_webgl2_gpu_objects__IWebGL2GPUTextureView;
             initialize(info: Readonly<gfx.TextureInfo> | Readonly<gfx.TextureViewInfo>, isSwapchainTexture?: boolean): void;
             destroy(): void;
-            getGLTextureHandle(): number;
+            getTextureHandle(): number;
             resize(width: number, height: number): void;
         }
         export interface _cocos_gfx_webgl2_webgl2_gpu_objects__IWebGL2BindingMapping {
@@ -65820,6 +66170,997 @@ declare module "cc" {
             get dstFramebuffer(): WebGLFramebuffer | null;
             constructor();
             destroy(): void;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUBindingMapping {
+            blockOffsets: number[];
+            samplerTextureOffsets: number[];
+            flexibleSet: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer {
+            usage: gfx.BufferUsage;
+            memUsage: gfx.MemoryUsage;
+            size: number;
+            stride: number;
+            gpuTarget: number;
+            gpuBuffer: GPUBuffer | null;
+            gpuOffset: number;
+            flags: gfx.BufferFlags | null;
+            buffer: ArrayBufferView | null;
+            indirects: gfx.DrawInfo[];
+            drawIndirectByIndex: boolean;
+        }
+        export class _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer extends gfx.Buffer {
+            get gpuBuffer(): _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer;
+            get hasChange(): boolean;
+            resetChange(): void;
+            initialize(info: Readonly<gfx.BufferInfo> | Readonly<gfx.BufferViewInfo>): void;
+            destroy(): void;
+            resize(size: number): void;
+            update(buffer: gfx.BufferSource, size?: number): void;
+        }
+        export type __types_webGPU__GPUTextureViewDimension = "1d" | "2d" | "2d-array" | "cube" | "cube-array" | "3d";
+        export type __types_webGPU__GPUTextureFormat = "r8unorm" | "r8snorm" | "r8uint" | "r8sint" | "r16uint" | "r16sint" | "r16float" | "rg8unorm" | "rg8snorm" | "rg8uint" | "rg8sint" | "r32uint" | "r32sint" | "r32float" | "rg16uint" | "rg16sint" | "rg16float" | "rgba8unorm" | "rgba8unorm-srgb" | "rgba8snorm" | "rgba8uint" | "rgba8sint" | "bgra8unorm" | "bgra8unorm-srgb" | "rgb9e5ufloat" | "rgb10a2uint" | "rgb10a2unorm" | "rg11b10ufloat" | "rg32uint" | "rg32sint" | "rg32float" | "rgba16uint" | "rgba16sint" | "rgba16float" | "rgba32uint" | "rgba32sint" | "rgba32float" | "stencil8" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-unorm" | "bc4-r-snorm" | "bc5-rg-unorm" | "bc5-rg-snorm" | "bc6h-rgb-ufloat" | "bc6h-rgb-float" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "eac-r11unorm" | "eac-r11snorm" | "eac-rg11unorm" | "eac-rg11snorm" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb";
+        export type __types_webGPU__GPUTextureUsageFlags = number;
+        export type __types_webGPU__GPUAddressMode = "clamp-to-edge" | "repeat" | "mirror-repeat";
+        export type __types_webGPU__GPUFilterMode = "nearest" | "linear";
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture {
+            type: gfx.TextureType;
+            format: gfx.Format;
+            usage: gfx.TextureUsage;
+            width: number;
+            height: number;
+            depth: number;
+            size: number;
+            arrayLayer: number;
+            mipLevel: number;
+            samples: gfx.SampleCount;
+            flags: gfx.TextureFlags;
+            isPowerOf2: boolean;
+            gpuTarget: __types_webGPU__GPUTextureViewDimension;
+            gpuInternalFmt: __types_webGPU__GPUTextureFormat;
+            gpuFormat: __types_webGPU__GPUTextureFormat;
+            gpuType: number;
+            gpuUsage: __types_webGPU__GPUTextureUsageFlags;
+            gpuTexture: GPUTexture | undefined;
+            gpuRenderbuffer: null;
+            gpuWrapS: __types_webGPU__GPUAddressMode;
+            gpuWrapT: __types_webGPU__GPUAddressMode;
+            gpuMinFilter: __types_webGPU__GPUFilterMode;
+            gpuMagFilter: __types_webGPU__GPUFilterMode;
+            isSwapchainTexture: boolean;
+            getTextureView: () => GPUTextureView | null;
+        }
+        export class _cocos_gfx_webgpu_webgpu_texture__WebGPUTexture extends gfx.Texture {
+            getTextureHandle(): gfx.TextureHandle;
+            initAsSwapchainTexture(info: Readonly<gfx.ISwapchainTextureInfo>): void;
+            get gpuTexture(): _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture;
+            get lodLevel(): number;
+            get hasChange(): boolean;
+            resetChange(): void;
+            initialize(info: Readonly<gfx.TextureInfo> | Readonly<gfx.TextureViewInfo>, isSwapchainTexture?: boolean): void;
+            set gpuFormat(val: __types_webGPU__GPUTextureFormat);
+            getNativeTextureView(): GPUTextureView | null;
+            destroy(): void;
+            resize(width: number, height: number): void;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_state_cache__IWebGPUTexUnit {
+            gpuTexture: _cocos_gfx_webgpu_webgpu_texture__WebGPUTexture | null;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUSampler {
+            gpuSampler: GPUSampler | null;
+            compare: gfx.ComparisonFunc;
+            minFilter: gfx.Filter;
+            magFilter: gfx.Filter;
+            mipFilter: gfx.Filter;
+            addressU: gfx.Address;
+            addressV: gfx.Address;
+            addressW: gfx.Address;
+            mipLevel: number;
+            maxAnisotropy: number;
+            gpuMinFilter: __types_webGPU__GPUFilterMode;
+            gpuMagFilter: __types_webGPU__GPUFilterMode;
+            gpuMipFilter: __types_webGPU__GPUFilterMode;
+            gpuWrapS: __types_webGPU__GPUAddressMode;
+            gpuWrapT: __types_webGPU__GPUAddressMode;
+            gpuWrapR: __types_webGPU__GPUAddressMode;
+        }
+        export class _cocos_gfx_webgpu_webgpu_sampler__WebGPUSampler extends gfx.Sampler {
+            get gpuSampler(): _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUSampler;
+            get samplerInfo(): gfx.SamplerInfo;
+            get hasChange(): boolean;
+            resetChange(): void;
+            constructor(info: Readonly<gfx.SamplerInfo>, hash: number);
+            createGPUSampler(mipLevel?: number): GPUSampler | null;
+            destroy(): void;
+        }
+        export interface __types_webGPU__GPUObjectDescriptorBase {
+            /**
+             * The initial value of {@link GPUObjectBase#label|GPUObjectBase.label}.
+             */
+            label?: string;
+        }
+        export type __types_webGPU__GPUIntegerCoordinate = number;
+        export interface __types_webGPU__GPUColorDict {
+            /**
+             * The red channel value.
+             */
+            r: number;
+            /**
+             * The green channel value.
+             */
+            g: number;
+            /**
+             * The blue channel value.
+             */
+            b: number;
+            /**
+             * The alpha channel value.
+             */
+            a: number;
+        }
+        export type __types_webGPU__GPUColor = Iterable<number> | __types_webGPU__GPUColorDict;
+        export type __types_webGPU__GPULoadOp = "load" | "clear";
+        export type __types_webGPU__GPUStoreOp = "store" | "discard";
+        export interface __types_webGPU__GPURenderPassColorAttachment {
+            /**
+             * A {@link GPUTextureView} describing the texture subresource that will be output to for this
+             * color attachment.
+             */
+            view: GPUTextureView;
+            /**
+             * Indicates the depth slice index of {@link GPUTextureViewDimension#"3d"} {@link GPURenderPassColorAttachment#view}
+             * that will be output to for this color attachment.
+             */
+            depthSlice?: __types_webGPU__GPUIntegerCoordinate;
+            /**
+             * A {@link GPUTextureView} describing the texture subresource that will receive the resolved
+             * output for this color attachment if {@link GPURenderPassColorAttachment#view} is
+             * multisampled.
+             */
+            resolveTarget?: GPUTextureView;
+            /**
+             * Indicates the value to clear {@link GPURenderPassColorAttachment#view} to prior to executing the
+             * render pass. If not map/exist|provided, defaults to `{r: 0, g: 0, b: 0, a: 0}`. Ignored
+             * if {@link GPURenderPassColorAttachment#loadOp} is not {@link GPULoadOp#"clear"}.
+             * The components of {@link GPURenderPassColorAttachment#clearValue} are all double values.
+             * They are converted [$to a texel value of texture format$] matching the render attachment.
+             * If conversion fails, a validation error is generated.
+             */
+            clearValue?: __types_webGPU__GPUColor;
+            /**
+             * Indicates the load operation to perform on {@link GPURenderPassColorAttachment#view} prior to
+             * executing the render pass.
+             * Note: It is recommended to prefer clearing; see {@link GPULoadOp#"clear"} for details.
+             */
+            loadOp: __types_webGPU__GPULoadOp;
+            /**
+             * The store operation to perform on {@link GPURenderPassColorAttachment#view}
+             * after executing the render pass.
+             */
+            storeOp: __types_webGPU__GPUStoreOp;
+        }
+        export type __types_webGPU__GPUStencilValue = number;
+        export interface __types_webGPU__GPURenderPassDepthStencilAttachment {
+            /**
+             * A {@link GPUTextureView} describing the texture subresource that will be output to
+             * and read from for this depth/stencil attachment.
+             */
+            view: GPUTextureView;
+            /**
+             * Indicates the value to clear {@link GPURenderPassDepthStencilAttachment#view}'s depth component
+             * to prior to executing the render pass. Ignored if {@link GPURenderPassDepthStencilAttachment#depthLoadOp}
+             * is not {@link GPULoadOp#"clear"}. Must be between 0.0 and 1.0, inclusive.
+             * <!-- POSTV1(unrestricted-depth): unless unrestricted depth is enabled -->
+             */
+            depthClearValue?: number;
+            /**
+             * Indicates the load operation to perform on {@link GPURenderPassDepthStencilAttachment#view}'s
+             * depth component prior to executing the render pass.
+             * Note: It is recommended to prefer clearing; see {@link GPULoadOp#"clear"} for details.
+             */
+            depthLoadOp?: __types_webGPU__GPULoadOp;
+            /**
+             * The store operation to perform on {@link GPURenderPassDepthStencilAttachment#view}'s
+             * depth component after executing the render pass.
+             */
+            depthStoreOp?: __types_webGPU__GPUStoreOp;
+            /**
+             * Indicates that the depth component of {@link GPURenderPassDepthStencilAttachment#view}
+             * is read only.
+             */
+            depthReadOnly?: boolean;
+            /**
+             * Indicates the value to clear {@link GPURenderPassDepthStencilAttachment#view}'s stencil component
+             * to prior to executing the render pass. Ignored if {@link GPURenderPassDepthStencilAttachment#stencilLoadOp}
+             * is not {@link GPULoadOp#"clear"}.
+             * The value will be converted to the type of the stencil aspect of `view` by taking the same
+             * number of LSBs as the number of bits in the stencil aspect of one texel block of `view`.
+             */
+            stencilClearValue?: __types_webGPU__GPUStencilValue;
+            /**
+             * Indicates the load operation to perform on {@link GPURenderPassDepthStencilAttachment#view}'s
+             * stencil component prior to executing the render pass.
+             * Note: It is recommended to prefer clearing; see {@link GPULoadOp#"clear"} for details.
+             */
+            stencilLoadOp?: __types_webGPU__GPULoadOp;
+            /**
+             * The store operation to perform on {@link GPURenderPassDepthStencilAttachment#view}'s
+             * stencil component after executing the render pass.
+             */
+            stencilStoreOp?: __types_webGPU__GPUStoreOp;
+            /**
+             * Indicates that the stencil component of {@link GPURenderPassDepthStencilAttachment#view}
+             * is read only.
+             */
+            stencilReadOnly?: boolean;
+        }
+        export type __types_webGPU__GPUSize32 = number;
+        export interface __types_webGPU__GPURenderPassTimestampWrites {
+            /**
+             * The {@link GPUQuerySet}, of type {@link GPUQueryType#"timestamp"}, that the query results will be
+             * written to.
+             */
+            querySet: GPUQuerySet;
+            /**
+             * If defined, indicates the query index in {@link GPURenderPassTimestampWrites#querySet} into
+             * which the timestamp at the beginning of the render pass will be written.
+             */
+            beginningOfPassWriteIndex?: __types_webGPU__GPUSize32;
+            /**
+             * If defined, indicates the query index in {@link GPURenderPassTimestampWrites#querySet} into
+             * which the timestamp at the end of the render pass will be written.
+             */
+            endOfPassWriteIndex?: __types_webGPU__GPUSize32;
+        }
+        export type __types_webGPU__GPUSize64 = number;
+        export interface __types_webGPU__GPURenderPassDescriptor extends __types_webGPU__GPUObjectDescriptorBase {
+            /**
+             * The set of {@link GPURenderPassColorAttachment} values in this sequence defines which
+             * color attachments will be output to when executing this render pass.
+             * Due to compatible usage list|usage compatibility, no color attachment
+             * may alias another attachment or any resource used inside the render pass.
+             */
+            colorAttachments: Iterable<__types_webGPU__GPURenderPassColorAttachment | null>;
+            /**
+             * The {@link GPURenderPassDepthStencilAttachment} value that defines the depth/stencil
+             * attachment that will be output to and tested against when executing this render pass.
+             * Due to compatible usage list|usage compatibility, no writable depth/stencil attachment
+             * may alias another attachment or any resource used inside the render pass.
+             */
+            depthStencilAttachment?: __types_webGPU__GPURenderPassDepthStencilAttachment;
+            /**
+             * The {@link GPUQuerySet} value defines where the occlusion query results will be stored for this pass.
+             */
+            occlusionQuerySet?: GPUQuerySet;
+            /**
+             * Defines which timestamp values will be written for this pass, and where to write them to.
+             */
+            timestampWrites?: __types_webGPU__GPURenderPassTimestampWrites;
+            /**
+             * The maximum number of draw calls that will be done in the render pass. Used by some
+             * implementations to size work injected before the render pass. Keeping the default value
+             * is a good default, unless it is known that more draw calls will be done.
+             */
+            maxDrawCount?: __types_webGPU__GPUSize64;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPURenderPass {
+            colorAttachments: gfx.ColorAttachment[];
+            depthStencilAttachment: gfx.DepthStencilAttachment | null;
+            nativeRenderPass: __types_webGPU__GPURenderPassDescriptor | null;
+            originalRP: __types_webGPU__GPURenderPassDescriptor | null;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUFramebuffer {
+            gpuRenderPass: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPURenderPass;
+            gpuColorTextures: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture[];
+            gpuDepthStencilTexture: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture | null;
+            isOffscreen?: boolean;
+            gpuFramebuffer: _cocos_gfx_webgpu_webgpu_framebuffer__WebGPUFramebuffer | null;
+            width: number;
+            height: number;
+        }
+        export class _cocos_gfx_webgpu_webgpu_framebuffer__WebGPUFramebuffer extends gfx.Framebuffer {
+            get gpuFramebuffer(): _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUFramebuffer;
+            initialize(info: Readonly<gfx.FramebufferInfo>): void;
+            destroy(): void;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUAttrib {
+            name: string;
+            gpuBuffer: GPUBuffer | null;
+            gpuType: number;
+            size: number;
+            count: number;
+            stride: number;
+            componentCount: number;
+            isNormalized: boolean;
+            isInstanced: boolean;
+            offset: number;
+        }
+        export type __types_webGPU__GPUIndexFormat = "uint16" | "uint32";
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUInputAssembler {
+            attributes: gfx.Attribute[];
+            gpuVertexBuffers: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer[];
+            gpuIndexBuffer: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer | null;
+            gpuIndirectBuffer: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer | null;
+            gpuAttribs: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUAttrib[];
+            gpuIndexType: __types_webGPU__GPUIndexFormat;
+        }
+        export class _cocos_gfx_webgpu_webgpu_input_assembler__WebGPUInputAssembler extends gfx.InputAssembler {
+            get gpuInputAssembler(): _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUInputAssembler;
+            initialize(info: Readonly<gfx.InputAssemblerInfo>): void;
+            destroy(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_state_cache__WebGPUStateCache {
+            gpuArrayBuffer: _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer | null;
+            gpuElementArrayBuffer: _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer | null;
+            gpuUniformBuffer: _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer | null;
+            gpuBindUBOs: (_cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer | null)[];
+            gpuBindUBOOffsets: number[];
+            texUnit: number;
+            gpuTexUnits: _cocos_gfx_webgpu_webgpu_state_cache__IWebGPUTexUnit[];
+            gpuSamplerUnits: (_cocos_gfx_webgpu_webgpu_sampler__WebGPUSampler | null)[];
+            gpuFramebuffer: _cocos_gfx_webgpu_webgpu_framebuffer__WebGPUFramebuffer | null;
+            gpuReadFramebuffer: _cocos_gfx_webgpu_webgpu_framebuffer__WebGPUFramebuffer | null;
+            gpuInputAssembler: _cocos_gfx_webgpu_webgpu_input_assembler__WebGPUInputAssembler | null;
+            viewport: gfx.Viewport;
+            scissorRect: gfx.Rect;
+            rs: gfx.RasterizerState;
+            dss: gfx.DepthStencilState;
+            bs: gfx.BlendState;
+            gpuEnabledAttribLocs: boolean[];
+            gpuCurrentAttribLocs: boolean[];
+            texUnitCacheMap: Record<string, number>;
+            initialize(texUnit: number, bufferBindings: number, vertexAttributes: number): void;
+        }
+        export enum _cocos_gfx_webgpu_webgpu_commands__WebGPUCmd {
+            BEGIN_RENDER_PASS = 0,
+            END_RENDER_PASS = 1,
+            BIND_STATES = 2,
+            DRAW = 3,
+            UPDATE_BUFFER = 4,
+            COPY_BUFFER_TO_TEXTURE = 5,
+            COUNT = 6
+        }
+        export abstract class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            cmdType: _cocos_gfx_webgpu_webgpu_commands__WebGPUCmd;
+            refCount: number;
+            constructor(type: _cocos_gfx_webgpu_webgpu_commands__WebGPUCmd);
+            abstract clear(): any;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBeginRenderPass extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            gpuRenderPass: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPURenderPass | null;
+            gpuFramebuffer: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUFramebuffer | null;
+            renderArea: gfx.Rect;
+            clearColors: gfx.Color[];
+            clearDepth: number;
+            clearStencil: number;
+            constructor();
+            clear(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<T extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject> {
+            constructor(Clazz: new () => T, count: number);
+            alloc(Clazz: new () => T): T;
+            free(cmd: T): void;
+            freeCmds(cmds: memop.CachedArray<T>): void;
+            release(): void;
+        }
+        export type __types_webGPU__GPUPrimitiveTopology = "point-list" | "line-list" | "line-strip" | "triangle-list" | "triangle-strip";
+        export type __types_webGPU__GPUPipelineConstantValue = number;
+        export interface __types_webGPU__GPUProgrammableStage {
+            /**
+             * The {@link GPUShaderModule} containing the code that this programmable stage will execute.
+             */
+            module: GPUShaderModule;
+            /**
+             * The name of the function in {@link GPUProgrammableStage#module} that this stage will use to
+             * perform its work.
+             */
+            entryPoint?: string;
+            /**
+             * Specifies the values of pipeline-overridable constants in the shader module
+             * {@link GPUProgrammableStage#module}.
+             * Each such pipeline-overridable constant is uniquely identified by a single
+             * pipeline-overridable constant identifier string (representing the numeric ID of the
+             * constant, if one is specified, and otherwise the constant's identifier name).
+             * WGSL names (identifiers) in source maps follow the rules defined in WGSL identifier comparison.
+             * The key of each key-value pair must equal the identifier string of one such constant.
+             * When the pipeline is executed, that constant will have the specified value.
+             * Values are specified as <dfn typedef for="">GPUPipelineConstantValue</dfn>, which is a {@link double}.
+             * They are converted [$to WGSL type$] of the pipeline-overridable constant (`bool`/`i32`/`u32`/`f32`/`f16`).
+             * If conversion fails, a validation error is generated.
+             */
+            constants?: Record<string, __types_webGPU__GPUPipelineConstantValue>;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUShaderStage {
+            type: gfx.ShaderStageFlagBit;
+            source: string;
+            gpuShader: __types_webGPU__GPUProgrammableStage | null;
+            bindings: number[][];
+            attrs: Map<number, string>;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUInput {
+            name: string;
+            type: gfx.Type;
+            stride: number;
+            count: number;
+            size: number;
+            gpuType: number;
+            gpuLoc: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniform {
+            binding: number;
+            name: string;
+            type: gfx.Type;
+            stride: number;
+            count: number;
+            size: number;
+            offset: number;
+            gpuType: number;
+            gpuLoc: number;
+            array: number[];
+            begin: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniformBlock {
+            set: number;
+            binding: number;
+            idx: number;
+            name: string;
+            size: number;
+            gpuBinding: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniformSampler {
+            set: number;
+            binding: number;
+            name: string;
+            type: gfx.Type;
+            count: number;
+            units: number[];
+            gpuUnits: Int32Array;
+            gpuType: number;
+            gpuLoc: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUShader {
+            name: string;
+            blocks: gfx.UniformBlock[];
+            samplers: gfx.UniformSampler[];
+            gpuStages: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUShaderStage[];
+            gpuProgram: number | null;
+            gpuInputs: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUInput[];
+            gpuUniforms: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniform[];
+            gpuBlocks: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniformBlock[];
+            gpuSamplers: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUUniformSampler[];
+            bindings: Map<number, number[]>;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptorSetLayout {
+            bindings: gfx.DescriptorSetLayoutBinding[];
+            dynamicBindings: number[];
+            descriptorIndices: number[];
+            descriptorCount: number;
+            bindGroupLayout: GPUBindGroupLayout | null;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUPipelineLayout {
+            setLayouts: gfx.DescriptorSetLayout[];
+            gpuSetLayouts: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptorSetLayout[];
+            gpuBindGroupLayouts: GPUBindGroupLayout[];
+            dynamicOffsetCount: number;
+            dynamicOffsetIndices: number[][];
+            nativePipelineLayout: GPUPipelineLayout;
+        }
+        export type __types_webGPU__GPUAutoLayoutMode = "auto";
+        export interface __types_webGPU__GPUPipelineDescriptorBase extends __types_webGPU__GPUObjectDescriptorBase {
+            /**
+             * The {@link GPUPipelineLayout} for this pipeline, or {@link GPUAutoLayoutMode#"auto"} to generate
+             * the pipeline layout automatically.
+             * Note: If {@link GPUAutoLayoutMode#"auto"} is used the pipeline cannot share {@link GPUBindGroup}s
+             * with any other pipelines.
+             */
+            layout: GPUPipelineLayout | __types_webGPU__GPUAutoLayoutMode;
+        }
+        export type __types_webGPU__GPUVertexStepMode = "vertex" | "instance";
+        export type __types_webGPU__GPUVertexFormat = "uint8x2" | "uint8x4" | "sint8x2" | "sint8x4" | "unorm8x2" | "unorm8x4" | "snorm8x2" | "snorm8x4" | "uint16x2" | "uint16x4" | "sint16x2" | "sint16x4" | "unorm16x2" | "unorm16x4" | "snorm16x2" | "snorm16x4" | "float16x2" | "float16x4" | "float32" | "float32x2" | "float32x3" | "float32x4" | "uint32" | "uint32x2" | "uint32x3" | "uint32x4" | "sint32" | "sint32x2" | "sint32x3" | "sint32x4" | "unorm10-10-10-2";
+        export type __types_webGPU__GPUIndex32 = number;
+        export interface __types_webGPU__GPUVertexAttribute {
+            /**
+             * The {@link GPUVertexFormat} of the attribute.
+             */
+            format: __types_webGPU__GPUVertexFormat;
+            /**
+             * The offset, in bytes, from the beginning of the element to the data for the attribute.
+             */
+            offset: __types_webGPU__GPUSize64;
+            /**
+             * The numeric location associated with this attribute, which will correspond with a
+             * <a href="https://gpuweb.github.io/gpuweb/wgsl/#input-output-locations">"@location" attribute</a>
+             * declared in the {@link GPURenderPipelineDescriptor#vertex}.{@link GPUProgrammableStage#module|module}.
+             */
+            shaderLocation: __types_webGPU__GPUIndex32;
+        }
+        export interface __types_webGPU__GPUVertexBufferLayout {
+            /**
+             * The stride, in bytes, between elements of this array.
+             */
+            arrayStride: __types_webGPU__GPUSize64;
+            /**
+             * Whether each element of this array represents per-vertex data or per-instance data
+             */
+            stepMode?: __types_webGPU__GPUVertexStepMode;
+            /**
+             * An array defining the layout of the vertex attributes within each element.
+             */
+            attributes: Iterable<__types_webGPU__GPUVertexAttribute>;
+        }
+        export interface __types_webGPU__GPUVertexState extends __types_webGPU__GPUProgrammableStage {
+            /**
+             * A list of {@link GPUVertexBufferLayout}s defining the layout of the vertex attribute data in the
+             * vertex buffers used by this pipeline.
+             */
+            buffers?: Iterable<__types_webGPU__GPUVertexBufferLayout | null>;
+        }
+        export type __types_webGPU__GPUFrontFace = "ccw" | "cw";
+        export type __types_webGPU__GPUCullMode = "none" | "front" | "back";
+        export interface __types_webGPU__GPUPrimitiveState {
+            /**
+             * The type of primitive to be constructed from the vertex inputs.
+             */
+            topology?: __types_webGPU__GPUPrimitiveTopology;
+            /**
+             * For pipelines with strip topologies
+             * ({@link GPUPrimitiveTopology#"line-strip"} or {@link GPUPrimitiveTopology#"triangle-strip"}),
+             * this determines the index buffer format and primitive restart value
+             * ({@link GPUIndexFormat#"uint16"}/`0xFFFF` or {@link GPUIndexFormat#"uint32"}/`0xFFFFFFFF`).
+             * It is not allowed on pipelines with non-strip topologies.
+             * Note: Some implementations require knowledge of the primitive restart value to compile
+             * pipeline state objects.
+             * To use a strip-topology pipeline with an indexed draw call
+             * ({@link GPURenderCommandsMixin#drawIndexed()} or {@link GPURenderCommandsMixin#drawIndexedIndirect}),
+             * this must be set, and it must match the index buffer format used with the draw call
+             * (set in {@link GPURenderCommandsMixin#setIndexBuffer}).
+             * See [[#primitive-assembly]] for additional details.
+             */
+            stripIndexFormat?: __types_webGPU__GPUIndexFormat;
+            /**
+             * Defines which polygons are considered front-facing.
+             */
+            frontFace?: __types_webGPU__GPUFrontFace;
+            /**
+             * Defines which polygon orientation will be culled, if any.
+             */
+            cullMode?: __types_webGPU__GPUCullMode;
+            /**
+             * If true, indicates that depth clipping is disabled.
+             * Requires the {@link GPUFeatureName#"depth-clip-control"} feature to be enabled.
+             */
+            unclippedDepth?: boolean;
+        }
+        export type __types_webGPU__GPUCompareFunction = "never" | "less" | "equal" | "less-equal" | "greater" | "not-equal" | "greater-equal" | "always";
+        export type __types_webGPU__GPUStencilOperation = "keep" | "zero" | "replace" | "invert" | "increment-clamp" | "decrement-clamp" | "increment-wrap" | "decrement-wrap";
+        export interface __types_webGPU__GPUStencilFaceState {
+            /**
+             * The {@link GPUCompareFunction} used when testing fragments against
+             * {@link GPURenderPassDescriptor#depthStencilAttachment} stencil values.
+             */
+            compare?: __types_webGPU__GPUCompareFunction;
+            /**
+             * The {@link GPUStencilOperation} performed if the fragment stencil comparison test described by
+             * {@link GPUStencilFaceState#compare} fails.
+             */
+            failOp?: __types_webGPU__GPUStencilOperation;
+            /**
+             * The {@link GPUStencilOperation} performed if the fragment depth comparison described by
+             * {@link GPUDepthStencilState#depthCompare} fails.
+             */
+            depthFailOp?: __types_webGPU__GPUStencilOperation;
+            /**
+             * The {@link GPUStencilOperation} performed if the fragment stencil comparison test described by
+             * {@link GPUStencilFaceState#compare} passes.
+             */
+            passOp?: __types_webGPU__GPUStencilOperation;
+        }
+        export type __types_webGPU__GPUDepthBias = number;
+        export interface __types_webGPU__GPUDepthStencilState {
+            /**
+             * The {@link GPUTextureViewDescriptor#format} of {@link GPURenderPassDescriptor#depthStencilAttachment}
+             * this {@link GPURenderPipeline} will be compatible with.
+             */
+            format: __types_webGPU__GPUTextureFormat;
+            /**
+             * Indicates if this {@link GPURenderPipeline} can modify
+             * {@link GPURenderPassDescriptor#depthStencilAttachment} depth values.
+             */
+            depthWriteEnabled?: boolean;
+            /**
+             * The comparison operation used to test fragment depths against
+             * {@link GPURenderPassDescriptor#depthStencilAttachment} depth values.
+             */
+            depthCompare?: __types_webGPU__GPUCompareFunction;
+            /**
+             * Defines how stencil comparisons and operations are performed for front-facing primitives.
+             */
+            stencilFront?: __types_webGPU__GPUStencilFaceState;
+            /**
+             * Defines how stencil comparisons and operations are performed for back-facing primitives.
+             */
+            stencilBack?: __types_webGPU__GPUStencilFaceState;
+            /**
+             * Bitmask controlling which {@link GPURenderPassDescriptor#depthStencilAttachment} stencil value
+             * bits are read when performing stencil comparison tests.
+             */
+            stencilReadMask?: __types_webGPU__GPUStencilValue;
+            /**
+             * Bitmask controlling which {@link GPURenderPassDescriptor#depthStencilAttachment} stencil value
+             * bits are written to when performing stencil operations.
+             */
+            stencilWriteMask?: __types_webGPU__GPUStencilValue;
+            /**
+             * Constant depth bias added to each fragment. See [$biased fragment depth$] for details.
+             */
+            depthBias?: __types_webGPU__GPUDepthBias;
+            /**
+             * Depth bias that scales with the fragment’s slope. See [$biased fragment depth$] for details.
+             */
+            depthBiasSlopeScale?: number;
+            /**
+             * The maximum depth bias of a fragment. See [$biased fragment depth$] for details.
+             */
+            depthBiasClamp?: number;
+        }
+        export type __types_webGPU__GPUSampleMask = number;
+        export interface __types_webGPU__GPUMultisampleState {
+            /**
+             * Number of samples per pixel. This {@link GPURenderPipeline} will be compatible only
+             * with attachment textures ({@link GPURenderPassDescriptor#colorAttachments}
+             * and {@link GPURenderPassDescriptor#depthStencilAttachment})
+             * with matching {@link GPUTextureDescriptor#sampleCount}s.
+             */
+            count?: __types_webGPU__GPUSize32;
+            /**
+             * Mask determining which samples are written to.
+             */
+            mask?: __types_webGPU__GPUSampleMask;
+            /**
+             * When `true` indicates that a fragment's alpha channel should be used to generate a sample
+             * coverage mask.
+             */
+            alphaToCoverageEnabled?: boolean;
+        }
+        export type __types_webGPU__GPUBlendOperation = "add" | "subtract" | "reverse-subtract" | "min" | "max";
+        export type __types_webGPU__GPUBlendFactor = "zero" | "one" | "src" | "one-minus-src" | "src-alpha" | "one-minus-src-alpha" | "dst" | "one-minus-dst" | "dst-alpha" | "one-minus-dst-alpha" | "src-alpha-saturated" | "constant" | "one-minus-constant";
+        export interface __types_webGPU__GPUBlendComponent {
+            /**
+             * Defines the {@link GPUBlendOperation} used to calculate the values written to the target
+             * attachment components.
+             */
+            operation?: __types_webGPU__GPUBlendOperation;
+            /**
+             * Defines the {@link GPUBlendFactor} operation to be performed on values from the fragment shader.
+             */
+            srcFactor?: __types_webGPU__GPUBlendFactor;
+            /**
+             * Defines the {@link GPUBlendFactor} operation to be performed on values from the target attachment.
+             */
+            dstFactor?: __types_webGPU__GPUBlendFactor;
+        }
+        export interface __types_webGPU__GPUBlendState {
+            /**
+             * Defines the blending behavior of the corresponding render target for color channels.
+             */
+            color: __types_webGPU__GPUBlendComponent;
+            /**
+             * Defines the blending behavior of the corresponding render target for the alpha channel.
+             */
+            alpha: __types_webGPU__GPUBlendComponent;
+        }
+        export type __types_webGPU__GPUColorWriteFlags = number;
+        export interface __types_webGPU__GPUColorTargetState {
+            /**
+             * The {@link GPUTextureFormat} of this color target. The pipeline will only be compatible with
+             * {@link GPURenderPassEncoder}s which use a {@link GPUTextureView} of this format in the
+             * corresponding color attachment.
+             */
+            format: __types_webGPU__GPUTextureFormat;
+            /**
+             * The blending behavior for this color target. If left undefined, disables blending for this
+             * color target.
+             */
+            blend?: __types_webGPU__GPUBlendState;
+            /**
+             * Bitmask controlling which channels are are written to when drawing to this color target.
+             */
+            writeMask?: __types_webGPU__GPUColorWriteFlags;
+        }
+        export interface __types_webGPU__GPUFragmentState extends __types_webGPU__GPUProgrammableStage {
+            /**
+             * A list of {@link GPUColorTargetState} defining the formats and behaviors of the color targets
+             * this pipeline writes to.
+             */
+            targets: Iterable<__types_webGPU__GPUColorTargetState | null>;
+        }
+        export interface __types_webGPU__GPURenderPipelineDescriptor extends __types_webGPU__GPUPipelineDescriptorBase {
+            /**
+             * Describes the vertex shader entry point of the pipeline and its input buffer layouts.
+             */
+            vertex: __types_webGPU__GPUVertexState;
+            /**
+             * Describes the primitive-related properties of the pipeline.
+             */
+            primitive?: __types_webGPU__GPUPrimitiveState;
+            /**
+             * Describes the optional depth-stencil properties, including the testing, operations, and bias.
+             */
+            depthStencil?: __types_webGPU__GPUDepthStencilState;
+            /**
+             * Describes the multi-sampling properties of the pipeline.
+             */
+            multisample?: __types_webGPU__GPUMultisampleState;
+            /**
+             * Describes the fragment shader entry point of the pipeline and its output colors. If
+             * not map/exist|provided, the [[#no-color-output]] mode is enabled.
+             */
+            fragment?: __types_webGPU__GPUFragmentState;
+        }
+        export interface __types_webGPU__GPUPipelineBase {
+            /**
+             * Gets a {@link GPUBindGroupLayout} that is compatible with the {@link GPUPipelineBase}'s
+             * {@link GPUBindGroupLayout} at `index`.
+             * @param index - Index into the pipeline layout's {@link GPUPipelineLayout#[[bindGroupLayouts]]}
+             * 	sequence.
+             */
+            getBindGroupLayout(index: number): GPUBindGroupLayout;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUPipelineState {
+            gpuPrimitive: __types_webGPU__GPUPrimitiveTopology;
+            gpuShader: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUShader | null;
+            gpuPipelineLayout: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUPipelineLayout | null;
+            rs: gfx.RasterizerState;
+            dss: gfx.DepthStencilState;
+            stencilRef: number;
+            bs: gfx.BlendState;
+            dynamicStates: gfx.DynamicStateFlagBit[];
+            gpuRenderPass: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPURenderPass | null;
+            pipelineState: __types_webGPU__GPURenderPipelineDescriptor | undefined;
+            nativePipeline: __types_webGPU__GPUPipelineBase | undefined;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptor {
+            type: gfx.DescriptorType;
+            gpuBuffer: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer | null;
+            gpuTexture: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture | null;
+            gpuSampler: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUSampler | null;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptorSet {
+            gpuDescriptors: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptor[];
+            descriptorIndices: number[];
+            bindGroup: GPUBindGroup;
+            bindGroupLayout: GPUBindGroupLayout;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUDepthBias {
+            constantFactor: number;
+            clamp: number;
+            slopeFactor: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUDepthBounds {
+            minBounds: number;
+            maxBounds: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUStencilWriteMask {
+            face: gfx.StencilFace;
+            writeMask: number;
+        }
+        export interface _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUStencilCompareMask {
+            face: gfx.StencilFace;
+            reference: number;
+            compareMask: number;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBindStates extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            gpuPipelineState: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUPipelineState | null;
+            gpuInputAssembler: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUInputAssembler | null;
+            gpuDescriptorSets: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUDescriptorSet[];
+            dynamicOffsets: number[];
+            viewport: gfx.Viewport | null;
+            scissor: gfx.Rect | null;
+            lineWidth: number | null;
+            depthBias: _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUDepthBias | null;
+            blendConstants: number[];
+            depthBounds: _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUDepthBounds | null;
+            stencilWriteMask: _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUStencilWriteMask | null;
+            stencilCompareMask: _cocos_gfx_webgpu_webgpu_command_buffer__IWebGPUStencilCompareMask | null;
+            constructor();
+            clear(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdDraw extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            drawInfo: gfx.DrawInfo;
+            constructor();
+            clear(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdUpdateBuffer extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            gpuBuffer: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUGPUBuffer | null;
+            buffer: gfx.BufferSource | null;
+            offset: number;
+            size: number;
+            constructor();
+            clear(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdCopyBufferToTexture extends _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdObject {
+            gpuTexture: _cocos_gfx_webgpu_webgpu_gpu_objects__IWebGPUTexture | null;
+            buffers: ArrayBufferView[];
+            regions: gfx.BufferTextureCopy[];
+            constructor();
+            clear(): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdPackage {
+            cmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmd>;
+            beginRenderPassCmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBeginRenderPass>;
+            bindStatesCmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBindStates>;
+            drawCmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdDraw>;
+            updateBufferCmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdUpdateBuffer>;
+            copyBufferToTextureCmds: memop.CachedArray<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdCopyBufferToTexture>;
+            clearCmds(allocator: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandAllocator): void;
+        }
+        export class _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandAllocator {
+            beginRenderPassCmdPool: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBeginRenderPass>;
+            bindStatesCmdPool: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdBindStates>;
+            drawCmdPool: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdDraw>;
+            updateBufferCmdPool: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdUpdateBuffer>;
+            copyBufferToTextureCmdPool: _cocos_gfx_webgpu_webgpu_command_allocator__WebGPUCommandPool<_cocos_gfx_webgpu_webgpu_commands__WebGPUCmdCopyBufferToTexture>;
+            constructor();
+            clearCmds(cmdPackage: _cocos_gfx_webgpu_webgpu_commands__WebGPUCmdPackage): void;
+            releaseCmds(): void;
+        }
+        export class _cocos_gfx_webgpu_define__DefaultResources {
+            buffersDescLayout: Map<number, _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer>;
+            texturesDescLayout: Map<number, _cocos_gfx_webgpu_webgpu_texture__WebGPUTexture>;
+            samplersDescLayout: Map<number, _cocos_gfx_webgpu_webgpu_sampler__WebGPUSampler>;
+            buffer: _cocos_gfx_webgpu_webgpu_buffer__WebGPUBuffer;
+            texture: _cocos_gfx_webgpu_webgpu_texture__WebGPUTexture;
+            sampler: _cocos_gfx_webgpu_webgpu_sampler__WebGPUSampler;
+            setLayout: gfx.DescriptorSetLayout;
+            descSet: gfx.DescriptorSet;
+        }
+        export type __types_webGPU__PredefinedGPUColorSpace = "display-p3" | "srgb";
+        export type __types_webGPU__GPUCanvasAlphaMode = "opaque" | "premultiplied";
+        export interface __types_webGPU__GPUCanvasConfiguration {
+            /**
+             * The {@link GPUDevice} that textures returned by {@link GPUCanvasContext#getCurrentTexture} will be
+             * compatible with.
+             */
+            device: GPUDevice;
+            /**
+             * The format that textures returned by {@link GPUCanvasContext#getCurrentTexture} will have.
+             * Must be one of the Supported context formats.
+             */
+            format: __types_webGPU__GPUTextureFormat;
+            /**
+             * The usage that textures returned by {@link GPUCanvasContext#getCurrentTexture} will have.
+             * {@link GPUTextureUsage#RENDER_ATTACHMENT} is the default, but is not automatically included
+             * if the usage is explicitly set. Be sure to include {@link GPUTextureUsage#RENDER_ATTACHMENT}
+             * when setting a custom usage if you wish to use textures returned by
+             * {@link GPUCanvasContext#getCurrentTexture} as color targets for a render pass.
+             */
+            usage?: __types_webGPU__GPUTextureUsageFlags;
+            /**
+             * The formats that views created from textures returned by
+             * {@link GPUCanvasContext#getCurrentTexture} may use.
+             */
+            viewFormats?: Iterable<__types_webGPU__GPUTextureFormat>;
+            /**
+             * The color space that values written into textures returned by
+             * {@link GPUCanvasContext#getCurrentTexture} should be displayed with.
+             */
+            colorSpace?: __types_webGPU__PredefinedGPUColorSpace;
+            /**
+             * Determines the effect that alpha values will have on the content of textures returned by
+             * {@link GPUCanvasContext#getCurrentTexture} when read, displayed, or used as an image source.
+             */
+            alphaMode?: __types_webGPU__GPUCanvasAlphaMode;
+        }
+        export type __types_webGPU__GPUSupportedFeatures = ReadonlySet<string>;
+        export type __types_webGPU__GPUShaderStageFlags = number;
+        export type __types_webGPU__GPUBufferBindingType = "uniform" | "storage" | "read-only-storage";
+        export interface __types_webGPU__GPUBufferBindingLayout {
+            /**
+             * Indicates the type required for buffers bound to this bindings.
+             */
+            type?: __types_webGPU__GPUBufferBindingType;
+            /**
+             * Indicates whether this binding requires a dynamic offset.
+             */
+            hasDynamicOffset?: boolean;
+            /**
+             * Indicates the minimum {@link GPUBufferBinding#size} of a buffer binding used with this bind point.
+             * Bindings are always validated against this size in {@link GPUDevice#createBindGroup}.
+             * If this *is not* `0`, pipeline creation additionally [$validating shader binding|validates$]
+             * that this value &ge; the minimum buffer binding size of the variable.
+             * If this *is* `0`, it is ignored by pipeline creation, and instead draw/dispatch commands
+             * [$Validate encoder bind groups|validate$] that each binding in the {@link GPUBindGroup}
+             * satisfies the minimum buffer binding size of the variable.
+             * Note:
+             * Similar execution-time validation is theoretically possible for other
+             * binding-related fields specified for early validation, like
+             * {@link GPUTextureBindingLayout#sampleType} and {@link GPUStorageTextureBindingLayout#format},
+             * which currently can only be validated in pipeline creation.
+             * However, such execution-time validation could be costly or unnecessarily complex, so it is
+             * available only for {@link GPUBufferBindingLayout#minBindingSize} which is expected to have the
+             * most ergonomic impact.
+             */
+            minBindingSize?: __types_webGPU__GPUSize64;
+        }
+        export type __types_webGPU__GPUSamplerBindingType = "filtering" | "non-filtering" | "comparison";
+        export interface __types_webGPU__GPUSamplerBindingLayout {
+            /**
+             * Indicates the required type of a sampler bound to this bindings.
+             */
+            type?: __types_webGPU__GPUSamplerBindingType;
+        }
+        export type __types_webGPU__GPUTextureSampleType = "float" | "unfilterable-float" | "depth" | "sint" | "uint";
+        export interface __types_webGPU__GPUTextureBindingLayout {
+            /**
+             * Indicates the type required for texture views bound to this binding.
+             */
+            sampleType?: __types_webGPU__GPUTextureSampleType;
+            /**
+             * Indicates the required {@link GPUTextureViewDescriptor#dimension} for texture views bound to
+             * this binding.
+             */
+            viewDimension?: __types_webGPU__GPUTextureViewDimension;
+            /**
+             * Indicates whether or not texture views bound to this binding must be multisampled.
+             */
+            multisampled?: boolean;
+        }
+        export type __types_webGPU__GPUStorageTextureAccess = "write-only" | "read-only" | "read-write";
+        export interface __types_webGPU__GPUStorageTextureBindingLayout {
+            /**
+             * The access mode for this binding, indicating readability and writability.
+             */
+            access?: __types_webGPU__GPUStorageTextureAccess;
+            /**
+             * The required {@link GPUTextureViewDescriptor#format} of texture views bound to this binding.
+             */
+            format: __types_webGPU__GPUTextureFormat;
+            /**
+             * Indicates the required {@link GPUTextureViewDescriptor#dimension} for texture views bound to
+             * this binding.
+             */
+            viewDimension?: __types_webGPU__GPUTextureViewDimension;
+        }
+        export interface __types_webGPU__GPUExternalTextureBindingLayout {
+        }
+        export interface __types_webGPU__GPUBindGroupLayoutEntry {
+            /**
+             * A unique identifier for a resource binding within the {@link GPUBindGroupLayout}, corresponding
+             * to a {@link GPUBindGroupEntry#binding|GPUBindGroupEntry.binding} and a @binding
+             * attribute in the {@link GPUShaderModule}.
+             */
+            binding: __types_webGPU__GPUIndex32;
+            /**
+             * A bitset of the members of {@link GPUShaderStage}.
+             * Each set bit indicates that a {@link GPUBindGroupLayoutEntry}'s resource
+             * will be accessible from the associated shader stage.
+             */
+            visibility: __types_webGPU__GPUShaderStageFlags;
+            /**
+             * When map/exist|provided, indicates the binding resource type for this {@link GPUBindGroupLayoutEntry}
+             * is {@link GPUBufferBinding}.
+             */
+            buffer?: __types_webGPU__GPUBufferBindingLayout;
+            /**
+             * When map/exist|provided, indicates the binding resource type for this {@link GPUBindGroupLayoutEntry}
+             * is {@link GPUSampler}.
+             */
+            sampler?: __types_webGPU__GPUSamplerBindingLayout;
+            /**
+             * When map/exist|provided, indicates the binding resource type for this {@link GPUBindGroupLayoutEntry}
+             * is {@link GPUTextureView}.
+             */
+            texture?: __types_webGPU__GPUTextureBindingLayout;
+            /**
+             * When map/exist|provided, indicates the binding resource type for this {@link GPUBindGroupLayoutEntry}
+             * is {@link GPUTextureView}.
+             */
+            storageTexture?: __types_webGPU__GPUStorageTextureBindingLayout;
+            /**
+             * When map/exist|provided, indicates the binding resource type for this {@link GPUBindGroupLayoutEntry}
+             * is {@link GPUExternalTexture}.
+             */
+            externalTexture?: __types_webGPU__GPUExternalTextureBindingLayout;
         }
         /**
          * @en Test line and line
@@ -65876,6 +67217,183 @@ declare module "cc" {
          * @zh 计算点到直线的距离。如果这是一条线段并且垂足不在线段内，则会计算点到线段端点的距离。
          */
         function _cocos_physics_2d_builtin_intersection_2d__pointLineDistance(point: Readonly<math.Vec2>, start: Readonly<math.Vec2>, end: Readonly<math.Vec2>, isSegment: boolean): number;
+        export class _cocos_rendering_pipeline_serialization__RenderTextureConfig {
+            name: string;
+            texture: RenderTexture | null;
+        }
+        /**
+         * @en Render pipeline information descriptor
+         * @zh 渲染管线描述信息。
+         */
+        export interface _cocos_rendering_render_pipeline__IRenderPipelineInfo {
+            flows: RenderFlow[];
+            tag?: number;
+        }
+        /**
+         * @en Render flow information descriptor
+         * @zh 渲染流程描述信息。
+         */
+        export interface _cocos_rendering_render_flow__IRenderFlowInfo {
+            name: string;
+            priority: number;
+            stages: RenderStage[];
+            tag?: number;
+        }
+        export enum _cocos_rendering_pipeline_serialization__RenderQueueSortMode {
+            FRONT_TO_BACK = 0,
+            BACK_TO_FRONT = 1
+        }
+        /**
+         * @en The render queue descriptor
+         * @zh 渲染队列描述信息
+         */
+        export class _cocos_rendering_pipeline_serialization__RenderQueueDesc {
+            /**
+             * @en Whether the render queue is a transparent queue
+             * @zh 当前队列是否是半透明队列
+             */
+            isTransparent: boolean;
+            /**
+             * @en The sort mode of the render queue
+             * @zh 渲染队列的排序模式
+             */
+            sortMode: _cocos_rendering_pipeline_serialization__RenderQueueSortMode;
+            /**
+             * @en The stages using this queue
+             * @zh 使用当前渲染队列的阶段列表
+             */
+            stages: string[];
+        }
+        /**
+         * @en The render stage information descriptor
+         * @zh 渲染阶段描述信息。
+         */
+        export interface _cocos_rendering_render_stage__IRenderStageInfo {
+            name: string;
+            priority: number;
+            tag?: number;
+            renderQueues?: _cocos_rendering_pipeline_serialization__RenderQueueDesc[];
+        }
+        /**
+         * @en The render queue. It manages a GFX [[RenderPass]] queue which will be executed by the [[RenderStage]].
+         * @zh 渲染队列。它管理一个 GFX [[RenderPass]] 队列，队列中的渲染过程会被 [[RenderStage]] 所执行。
+         */
+        export class _cocos_rendering_render_queue__RenderQueue {
+            /**
+             * @en A cached array of render passes
+             * @zh 基于缓存数组的渲染过程队列。
+             */
+            queue: memop.CachedArray<pipeline.IRenderPass>;
+            /**
+             * @en Construct a RenderQueue with render queue descriptor
+             * @zh 利用渲染队列描述来构造一个 RenderQueue。
+             * @param desc Render queue descriptor
+             */
+            constructor(desc: pipeline.IRenderQueueDesc);
+            /**
+             * @en Clear the render queue
+             * @zh 清空渲染队列。
+             */
+            clear(): void;
+            /**
+             * @en Insert a render pass into the queue
+             * @zh 插入渲染过程。
+             * @param renderObj The render object of the pass
+             * @param modelIdx The model id
+             * @param passIdx The pass id
+             * @returns Whether the new render pass is successfully added
+             */
+            insertRenderPass(renderObj: pipeline.IRenderObject, subModelIdx: number, passIdx: number): boolean;
+            /**
+             * @en Sort the current queue
+             * @zh 排序渲染队列。
+             */
+            sort(): void;
+            recordCommandBuffer(device: gfx.Device, renderPass: gfx.RenderPass, cmdBuff: gfx.CommandBuffer): void;
+        }
+        /**
+         * @en Render queue for instanced batching
+         * @zh 渲染合批队列。
+         */
+        export class _cocos_rendering_render_instanced_queue__RenderInstancedQueue {
+            /**
+             * @en A set of instanced buffer
+             * @zh Instance 合批缓存集合。
+             */
+            queue: Set<InstancedBuffer>;
+            /**
+             * @en Clear the render queue
+             * @zh 清空渲染队列。
+             */
+            clear(): void;
+            sort(): void;
+            uploadBuffers(cmdBuff: gfx.CommandBuffer): void;
+            /**
+             * @en Record command buffer for the current queue
+             * @zh 记录命令缓冲。
+             * @param cmdBuff The command buffer to store the result
+             */
+            recordCommandBuffer(device: gfx.Device, renderPass: gfx.RenderPass, cmdBuff: gfx.CommandBuffer, descriptorSet?: gfx.DescriptorSet | null, dynamicOffsets?: Readonly<number[]>): void;
+        }
+        export class _cocos_rendering_render_pipeline__BloomRenderData {
+            renderPass: gfx.RenderPass;
+            sampler: gfx.Sampler;
+            prefiterTex: gfx.Texture;
+            downsampleTexs: gfx.Texture[];
+            upsampleTexs: gfx.Texture[];
+            combineTex: gfx.Texture;
+            prefilterFramebuffer: gfx.Framebuffer;
+            downsampleFramebuffers: gfx.Framebuffer[];
+            upsampleFramebuffers: gfx.Framebuffer[];
+            combineFramebuffer: gfx.Framebuffer;
+        }
+        export class _cocos_rendering_render_pipeline__PipelineRenderData {
+            outputFrameBuffer: gfx.Framebuffer;
+            outputRenderTargets: gfx.Texture[];
+            outputDepth: gfx.Texture;
+            sampler: gfx.Sampler;
+            bloom: _cocos_rendering_render_pipeline__BloomRenderData | null;
+        }
+        export class _cocos_rendering_deferred_deferred_pipeline__DeferredRenderData extends _cocos_rendering_render_pipeline__PipelineRenderData {
+            gbufferFrameBuffer: gfx.Framebuffer;
+            gbufferRenderTargets: gfx.Texture[];
+            constructor();
+        }
+        export class _cocos_rendering_pipeline_ubo__PipelineUBO {
+            static updateGlobalUBOView(window: renderer.RenderWindow, bufferView: Float32Array): void;
+            static updateCameraUBOView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, bufferView: Float32Array, camera: renderer.scene.Camera): void;
+            static getPCFRadius(shadowInfo: renderer.scene.Shadows, mainLight: renderer.scene.DirectionalLight): number;
+            static updatePlanarNormalAndDistance(shadowInfo: renderer.scene.Shadows, shadowUBO: Float32Array): void;
+            static updateShadowUBOView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, shadowBufferView: Float32Array, csmBufferView: Float32Array, camera: renderer.scene.Camera): void;
+            static updateShadowUBOLightView(pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime, shadowBufferView: Float32Array, light: renderer.scene.Light, level: number): void;
+            protected _globalUBO: Float32Array;
+            protected _cameraUBO: Float32Array;
+            protected _shadowUBO: Float32Array;
+            protected _csmUBO: Float32Array;
+            static _combineSignY: number;
+            protected _device: gfx.Device;
+            protected _pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime;
+            /**
+             *|combinedSignY|clipSpaceSignY|screenSpaceSignY| Backends   |
+             *|    :--:     |    :--:      |      :--:      |   :--:     |
+             *|      0      |      -1      |      -1        |  Vulkan    |
+             *|      1      |       1      |      -1        |Metal/WebGPU|
+             *|      2      |      -1      |       1        |            |
+             *|      3      |       1      |       1        |  GL-like   |
+             */
+            static getCombineSignY(): number;
+            activate(device: gfx.Device, pipeline: _cocos_rendering_custom_pipeline__PipelineRuntime): void;
+            /**
+             * @en Update all UBOs
+             * @zh 更新全部 UBO。
+             */
+            updateGlobalUBO(window: renderer.RenderWindow): void;
+            updateCameraUBO(camera: renderer.scene.Camera): void;
+            updateShadowUBO(camera: renderer.scene.Camera): void;
+            updateShadowUBOLight(globalDS: gfx.DescriptorSet, light: renderer.scene.Light, level?: number): void;
+            updateShadowUBORange(offset: number, data: math.Mat4 | math.Color): void;
+            destroy(): void;
+        }
         export class _cocos_particle_2d_particle_simulator_2d__Particle {
             pos: math.Vec2;
             startPos: math.Vec2;
@@ -66044,8 +67562,8 @@ declare module "cc" {
                 Local: number;
                 View: number;
             };
-            create(ps: any): void;
-            onInit(ps: any): void;
+            create(ps: ParticleSystem): void;
+            onInit(ps: ParticleSystem): void;
         }
         export interface _cocos_particle_particle__IParticleModule {
             target: _cocos_particle_renderer_particle_system_renderer_base__ParticleSystemRendererBase | null;
@@ -66094,8 +67612,11 @@ declare module "cc" {
             abstract beforeRender(): void;
             abstract setUseInstance(value: boolean): void;
             abstract getNoisePreview(out: number[], width: number, height: number): void;
+            abstract updateAlignSpace(space: number): void;
         }
         export abstract class _cocos_particle_particle__ParticleModuleBase implements _cocos_particle_particle__IParticleModule {
+            abstract get enable(): boolean;
+            abstract set enable(val: boolean);
             target: _cocos_particle_renderer_particle_system_renderer_base__ParticleSystemRendererBase | null;
             needUpdate: boolean;
             needAnimate: boolean;
@@ -66274,7 +67795,7 @@ declare module "cc" {
              * @param p @en Particle emitted. @zh 发射出来的粒子。
              * @internal
              */
-            emit(p: any): void;
+            emit(p: _cocos_particle_particle__Particle): void;
         }
         /**
          * @en
@@ -66437,7 +67958,7 @@ declare module "cc" {
              * @param worldTransform @en Particle system world transform. @zh 粒子系统的世界变换矩阵。
              * @internal
              */
-            update(space: any, worldTransform: any): void;
+            update(space: number, worldTransform: math.Mat4): void;
             /**
              * @en Apply force to particle.
              * @zh 作用力到粒子上。
@@ -66445,7 +67966,7 @@ declare module "cc" {
              * @param dt @en Update interval time. @zh 粒子系统更新的间隔时间。
              * @internal
              */
-            animate(p: _cocos_particle_particle__Particle, dt: any): void;
+            animate(p: _cocos_particle_particle__Particle, dt: number): void;
         }
         /**
          * @en
@@ -66771,7 +68292,7 @@ declare module "cc" {
              * @param width @en Texture width @zh 噪声图宽度
              * @param height @en Texture height @zh 噪声图高度
              */
-            getNoisePreview(out: number[], ps: any, width: number, height: number): void;
+            getNoisePreview(out: number[], ps: ParticleSystem, width: number, height: number): void;
         }
         export class _cocos_particle_renderer_trail__default {
             /**
@@ -66825,7 +68346,7 @@ declare module "cc" {
              */
             getModel(): renderer.scene.Model | null;
             constructor();
-            onInit(ps: any): void;
+            onInit(ps: ParticleSystem): void;
             onEnable(): void;
             onDisable(): void;
             /**
@@ -67744,9 +69265,6 @@ declare module "cc" {
             _syncAttachedNode(): void;
             matrixHandle(node: Node, bone: any): void;
         }
-        export type _cocos_spine_track_entry_listeners__TrackListener = (x: sp.spine.TrackEntry) => void;
-        export type _cocos_spine_track_entry_listeners__TrackListener2 = (x: sp.spine.TrackEntry, ev: sp.spine.Event) => void;
-        export type _cocos_spine_track_entry_listeners__CommonTrackEntryListener = _cocos_spine_track_entry_listeners__TrackListener | _cocos_spine_track_entry_listeners__TrackListener2;
         export class _cocos_spine_track_entry_listeners__TrackEntryListeners {
             start?: ((entry: sp.spine.TrackEntry) => void);
             interrupt?: ((entry: sp.spine.TrackEntry) => void);
@@ -67755,9 +69273,10 @@ declare module "cc" {
             complete?: ((entry: sp.spine.TrackEntry) => void);
             event?: ((entry: sp.spine.TrackEntry, event: sp.spine.Event) => void);
             static getListeners(entry: sp.spine.TrackEntry, instance: sp.spine.SkeletonInstance): sp.spine.AnimationStateListener;
-            static emitListener(id: number, entry: sp.spine.TrackEntry, event: sp.spine.Event): void;
+            static emitListener(id: number, entry: sp.spine.TrackEntry, event: sp.spine.Event, eventType: sp.spine.EventType): void;
             static emitTrackEntryListener(id: number, entry: sp.spine.TrackEntry, event: sp.spine.Event, eventType: sp.spine.EventType): void;
-            static addListener(listener: _cocos_spine_track_entry_listeners__CommonTrackEntryListener): number;
+            static addListener(listener: _cocos_spine_track_entry_listeners__TrackEntryListeners): number;
+            static removeListener(id: number): void;
         }
         export class _cocos_spine_skeleton_cache__SpineDrawItem {
             iCount: number;
@@ -68687,7 +70206,7 @@ declare module "cc" {
          * @zh Action 类是所有动作类型的基类。
          * @class Action
          */
-        export class _cocos_tween_actions_action__Action {
+        export abstract class _cocos_tween_actions_action__Action {
             /**
              * @en Default Action tag.
              * @zh 默认动作标签。
@@ -68696,9 +70215,61 @@ declare module "cc" {
              * @default -1
              */
             static TAG_INVALID: number;
-            protected originalTarget: Node | null;
-            protected target: Node | null;
+            /**
+             * The `originalTarget` and `target` are both assigned in `startWithTarget` method,
+             * and they get the same value normally. The difference between `originalTarget` and
+             * `target` is that `target` will be set to null after `stop` method is invoked
+             * but `originalTarget` will not. Therefore, ActionManager could remove a stopped action
+             * from hash map by searching action's `originalTarget`. You could refer to
+             * ActionManager.removeAction for the details.
+             */
+            protected originalTarget: unknown;
+            protected target: unknown;
+            /**
+             * The `workerTarget` was added from Cocos Creator 3.8.4 and it's used for nest `Tween` functionality.
+             * It stores the target of sub-tween and its value may be different from `target`.
+             *
+             * Example 1:
+             * ```ts
+             *   tween(node).to(1, { scale: new Vec3(2, 2, 2) }).start();
+             *   // target and original target are both `node`, workerTarget is `null`.
+             * ```
+             *
+             * Example 2:
+             * ```ts
+             *   tween(node).parallel(                                        // ----- Root tween
+             *       tween(node).to(1, { scale: new Vec3(2, 2, 2) }),         // ----- Sub tween 1
+             *       tween(node).to(1, { position: new Vec3(10, 10, 10) })    // ----- Sub Tween 2
+             *   ).start();
+             *   // Note that only root tween is started here. We call tweens in `parallel`/`sequence` sub tweens.
+             *   // The `target` and `originalTarget` of all internal actions are `node`.
+             *   // Actions in root tween: workerTarget = null
+             *   // Actions in sub tween 1: workerTarget = node
+             *   // Actions in sub tween 2: workerTarget = node
+             * ```
+             *
+             * Example 3:
+             * ```ts
+             *   tween(node).parallel(                                        // ----- Root tween
+             *       tween(node).to(1, { scale: new Vec3(2, 2, 2) }),         // ----- Sub tween 1
+             *       tween(node.getComponent(UITransform)).to(1, {            // ----- Sub Tween 2
+             *           contentSize: new Size(10, 10)
+             *       })
+             *   ).start();
+             *   // Note that only root tween is started here. We call tweens in `parallel`/`sequence` sub tweens.
+             *   // The `target` and `originalTarget` of all internal actions are `node`.
+             *   // Actions in root tween: workerTarget = null
+             *   // Actions in sub tween 1: workerTarget = node
+             *   // Actions in sub tween 2: workerTarget = node's UITransform component
+             * ```
+             */
+            workerTarget: unknown;
             protected tag: number;
+            /**
+             * @en The identifier that to mark an internal action.
+             */
+            protected _id: number | undefined;
+            protected _paused: boolean;
             /**
              * @en
              * to copy object with deep copy.
@@ -68707,7 +70278,7 @@ declare module "cc" {
              * @method clone
              * @return {Action}
              */
-            clone(): _cocos_tween_actions_action__Action;
+            abstract clone(): _cocos_tween_actions_action__Action;
             /**
              * @en
              * return true if the action has finished.
@@ -68716,32 +70287,32 @@ declare module "cc" {
              * @return {Boolean}
              */
             isDone(): boolean;
-            startWithTarget(target: any): void;
+            startWithTarget<T>(target: T | null): void;
             stop(): void;
-            step(dt: number): void;
-            update(dt: number): void;
+            abstract step(dt: number): void;
+            abstract update(dt: number): void;
             /**
              * @en get the target.
              * @zh 获取当前目标节点。
              * @method getTarget
              * @return {object}
              */
-            getTarget(): Node | null;
+            getTarget<T>(): T | null;
             /**
              * @en The action will modify the target properties.
              * @zh 设置目标节点。
              * @method setTarget
              * @param {object} target
              */
-            setTarget(target: Node): void;
+            setTarget<T>(target: T): void;
             /**
              * @en get the original target.
              * @zh 获取原始目标节点。
              * @method getOriginalTarget
              * @return {object}
              */
-            getOriginalTarget(): Node | null;
-            setOriginalTarget(originalTarget: any): void;
+            getOriginalTarget<T>(): T | null;
+            setOriginalTarget<T>(originalTarget: T): void;
             /**
              * @en get tag number.
              * @zh 获取用于识别动作的标签。
@@ -68757,6 +70328,17 @@ declare module "cc" {
              */
             setTag(tag: number): void;
             /**
+             * @en Set the identifier of the current action.
+             * @param id @en The identifier to set
+             */
+            setId(id: number): void;
+            /**
+             * @en Get the identifier of the current action.
+             * @return @en The identifier of the current action, it may be undefined if setId is never called.
+             */
+            getId(): number | undefined;
+            setPaused(paused: boolean): void;
+            /**
              * @en
              * Returns a reversed action. <br />
              * For example: <br />
@@ -68767,28 +70349,29 @@ declare module "cc" {
              * @method reverse
              * @return {Action | null}
              */
-            reverse(): _cocos_tween_actions_action__Action | null;
-            retain(): void;
-            release(): void;
+            abstract reverse(): _cocos_tween_actions_action__Action | null;
+        }
+        export class _cocos_tween_actions_action_manager__HashElement {
+            actions: _cocos_tween_actions_action__Action[];
+            target: unknown;
+            actionIndex: number;
+            currentAction: _cocos_tween_actions_action__Action | null;
+            paused: boolean;
+            lock: boolean;
         }
         /**
          * @en
          * `ActionManager` is a class that can manage actions.<br/>
-         * Normally you won't need to use this class directly. 99% of the cases you will use the CCNode interface,
+         * Normally you won't need to use this class directly. 99% of the cases you will use the `Tween` interface,
          * which uses this class's singleton object.
-         * But there are some cases where you might need to use this class. <br/>
-         * Examples:<br/>
-         * - When you want to run an action where the target is different from a CCNode.<br/>
          * - When you want to pause / resume the actions<br/>
          * @zh
          * `ActionManager` 是可以管理动作的单例类。<br/>
-         * 通常你并不需要直接使用这个类，99%的情况您将使用 CCNode 的接口。<br/>
+         * 通常你并不需要直接使用这个类，99%的情况您将使用 `Tween` 的接口。<br/>
          * 但也有一些情况下，您可能需要使用这个类。 <br/>
          * 例如：
-         *  - 当你想要运行一个动作，但目标不是 CCNode 类型时。 <br/>
          *  - 当你想要暂停/恢复动作时。 <br/>
          * @class ActionManager
-         * @example {@link cocos2d/core/CCActionManager/ActionManager.js}
          */
         export class _cocos_tween_actions_action_manager__ActionManager {
             /**
@@ -68809,7 +70392,7 @@ declare module "cc" {
              * @param {object} target
              * @param {Boolean} paused
              */
-            addAction(action: _cocos_tween_actions_action__Action, target: Node, paused: boolean): void;
+            addAction<T>(action: _cocos_tween_actions_action__Action | null, target: T, paused: boolean): void;
             /**
              * @en Removes all actions from all the targets.
              * @zh 移除所有对象的所有动作。
@@ -68824,49 +70407,49 @@ declare module "cc" {
              * 移除指定对象上的所有动作。<br/>
              * 属于该目标的所有的动作将被删除。
              * @method removeAllActionsFromTarget
-             * @param {Node} target
+             * @param {T} target
              */
-            removeAllActionsFromTarget(target: Node): void;
+            removeAllActionsFromTarget<T>(target: T): void;
             /**
              * @en Removes an action given an action reference.
              * @zh 移除指定的动作。
              * @method removeAction
              * @param {Action} action
              */
-            removeAction(action: _cocos_tween_actions_action__Action): void;
+            removeAction(action: _cocos_tween_actions_action__Action | null): void;
             /**
              * @internal
              */
-            _removeActionByTag(tag: number, element: any, target?: Node): void;
+            _removeActionByTag<T>(tag: number, element: _cocos_tween_actions_action_manager__HashElement, target?: T): void;
             /**
              * @internal
              */
-            _removeAllActionsByTag(tag: number, element: any, target?: Node): void;
+            _removeAllActionsByTag<T>(tag: number, element: _cocos_tween_actions_action_manager__HashElement, target?: T): void;
             /**
              * @en Removes an action given its tag and the target.
              * @zh 删除指定对象下特定标签的一个动作，将删除首个匹配到的动作。
              * @method removeActionByTag
              * @param {Number} tag
-             * @param {Node} target
+             * @param {T} target
              */
-            removeActionByTag(tag: number, target?: Node): void;
+            removeActionByTag<T>(tag: number, target?: T): void;
             /**
              * @en Removes all actions given the tag and the target.
              * @zh 删除指定对象下特定标签的所有动作。
              * @method removeAllActionsByTag
              * @param {Number} tag
-             * @param {Node} target
+             * @param {T} target
              */
-            removeAllActionsByTag(tag: number, target?: Node): void;
+            removeAllActionsByTag<T>(tag: number, target?: T): void;
             /**
              * @en Gets an action given its tag an a target.
              * @zh 通过目标对象和标签获取一个动作。
              * @method getActionByTag
              * @param {Number} tag
-             * @param {Node} target
+             * @param {T} target
              * @return {Action|null}  return the Action with the given tag on success
              */
-            getActionByTag(tag: number, target: Node): _cocos_tween_actions_action__Action | null;
+            getActionByTag<T>(tag: number, target: T): _cocos_tween_actions_action__Action | null;
             /**
              * @en
              * Returns the numbers of actions that are running in a certain target. <br/>
@@ -68882,55 +70465,46 @@ declare module "cc" {
              *  - 如果你正在运行 2 个序列动作（Sequence）和 5 个普通动作，这个函数将返回 7。<br/>
              *
              * @method getNumberOfRunningActionsInTarget
-             * @param {Node} target
+             * @param {T} target
              * @return {Number}
              */
-            getNumberOfRunningActionsInTarget(target: Node): number;
+            getNumberOfRunningActionsInTarget<T>(target: T): number;
             /**
              * @en Pauses the target: all running actions and newly added actions will be paused.
              * @zh 暂停指定对象：所有正在运行的动作和新添加的动作都将会暂停。
              * @method pauseTarget
-             * @param {Node} target
+             * @param {T} target
              */
-            pauseTarget(target: Node): void;
+            pauseTarget<T>(target: T): void;
             /**
              * @en Resumes the target. All queued actions will be resumed.
              * @zh 让指定目标恢复运行。在执行序列中所有被暂停的动作将重新恢复运行。
              * @method resumeTarget
-             * @param {Node} target
+             * @param {T} target
              */
-            resumeTarget(target: Node): void;
+            resumeTarget<T>(target: T): void;
             /**
              * @en Pauses all running actions, returning a list of targets whose actions were paused.
              * @zh 暂停所有正在运行的动作，返回一个包含了那些动作被暂停了的目标对象的列表。
              * @method pauseAllRunningActions
              * @return {Array}  a list of targets whose actions were paused.
              */
-            pauseAllRunningActions(): Array<any>;
+            pauseAllRunningActions(): unknown[];
             /**
              * @en Resume a set of targets (convenience function to reverse a pauseAllRunningActions or pauseTargets call).
              * @zh 让一组指定对象恢复运行（用来逆转 pauseAllRunningActions 效果的便捷函数）。
              * @method resumeTargets
              * @param {Array} targetsToResume
              */
-            resumeTargets(targetsToResume: Array<any>): void;
+            resumeTargets<T>(targetsToResume: Array<T>): void;
             /**
              * @en Pause a set of targets.
              * @zh 暂停一组指定对象。
              * @method pauseTargets
              * @param {Array} targetsToPause
              */
-            pauseTargets(targetsToPause: Array<any>): void;
-            /**
-             * @en
-             * purges the shared action manager. It releases the retained instance. <br/>
-             * because it uses this, so it can not be static.
-             * @zh
-             * 清除共用的动作管理器。它释放了持有的实例。 <br/>
-             * 因为它使用 this，因此它不能是静态的。
-             * @method purgeSharedManager
-             */
-            purgeSharedManager(): void;
+            pauseTargets<T>(targetsToPause: Array<T>): void;
+            isActionRunning(action: _cocos_tween_actions_action__Action): boolean;
             /**
              * @en The ActionManager update。
              * @zh ActionManager 主循环。
@@ -68939,15 +70513,15 @@ declare module "cc" {
              */
             update(dt: number): void;
         }
-        export type _cocos_tween_tween__FlagExcludedType<Base, Type> = {
-            [Key in keyof Base]: Base[Key] extends Type ? never : Key;
-        };
-        export type _cocos_tween_tween__AllowedNames<Base, Type> = _cocos_tween_tween__FlagExcludedType<Base, Type>[keyof Base];
-        export type _cocos_tween_tween__KeyPartial<T, K extends keyof T> = {
-            [P in K]?: T[P];
-        };
-        export type _cocos_tween_tween__OmitType<Base, Type> = _cocos_tween_tween__KeyPartial<Base, _cocos_tween_tween__AllowedNames<Base, Type>>;
-        export type _cocos_tween_tween__ConstructorType<T> = _cocos_tween_tween__OmitType<T, Function>;
+        export interface _cocos_tween_tween_action__IInternalTweenOption<T extends object> extends ITweenOption<T> {
+            /**
+             * @en
+             * Whether to use relative value calculation method during easing process
+             * @zh
+             * 缓动过程中是否采用相对值计算的方法
+             */
+            relative?: boolean;
+        }
         /**
          * @en
          * Base class actions that do have a finite time duration. <br/>
@@ -68960,9 +70534,10 @@ declare module "cc" {
          * @class FiniteTimeAction
          * @extends Action
          */
-        export class _cocos_tween_actions_action__FiniteTimeAction extends _cocos_tween_actions_action__Action {
-            _duration: number;
-            _timesForRepeat: number;
+        export abstract class _cocos_tween_actions_action__FiniteTimeAction extends _cocos_tween_actions_action__Action {
+            protected _duration: number;
+            constructor();
+            getDurationScaled(): number;
             /**
              * @en get duration of the action. (seconds).
              * @zh 获取动作以秒为单位的持续时间。
@@ -68979,13 +70554,15 @@ declare module "cc" {
             setDuration(duration: number): void;
             /**
              * @en
-             * to copy object with deep copy.
-             * returns a clone of action.
-             * @zh 返回一个克隆的动作。
+             * To copy object with deep copy.
+             * returns a clone of FiniteTimeAction.
+             * @zh 返回一个克隆的有限时间动作。
              * @method clone
              * @return {FiniteTimeAction}
              */
-            clone(): _cocos_tween_actions_action__FiniteTimeAction;
+            abstract clone(): _cocos_tween_actions_action__FiniteTimeAction;
+            abstract reverse(): _cocos_tween_actions_action__FiniteTimeAction;
+            abstract isUnknownDuration(): boolean;
         }
         /**
          * @en
@@ -69005,51 +70582,22 @@ declare module "cc" {
          * @extends FiniteTimeAction
          * @param {Number} d duration in seconds
          */
-        export class _cocos_tween_actions_action_interval__ActionInterval extends _cocos_tween_actions_action__FiniteTimeAction {
+        export abstract class _cocos_tween_actions_action_interval__ActionInterval extends _cocos_tween_actions_action__FiniteTimeAction {
             protected MAX_VALUE: number;
             protected _elapsed: number;
+            protected _startTime: number;
             protected _firstTick: boolean;
-            protected _easeList: Function[];
             protected _speed: number;
-            protected _repeatForever: boolean;
-            _repeatMethod: boolean;
-            protected _speedMethod: boolean;
             constructor(d?: number);
+            setStartTime(time: number): void;
             getElapsed(): number;
             initWithDuration(d: number): boolean;
             isDone(): boolean;
             _cloneDecoration(action: _cocos_tween_actions_action_interval__ActionInterval): void;
-            _reverseEaseList(action: _cocos_tween_actions_action_interval__ActionInterval): void;
-            clone(): _cocos_tween_actions_action_interval__ActionInterval;
-            /**
-             * @en Implementation of ease motion.
-             * @zh 缓动运动。
-             * @method easing
-             * @param {Object} easeObj
-             * @returns {ActionInterval}
-             * @example
-             * import { easeIn } from 'cc';
-             * action.easing(easeIn(3.0));
-             */
-            easing(easeObj: any): _cocos_tween_actions_action_interval__ActionInterval;
-            _computeEaseTime(dt: any): any;
+            abstract clone(): _cocos_tween_actions_action_interval__ActionInterval;
             step(dt: number): void;
-            startWithTarget(target: any): void;
-            reverse(): _cocos_tween_actions_action_interval__ActionInterval;
-            setAmplitudeRate(amp: any): void;
-            getAmplitudeRate(): number;
-            /**
-             * @en
-             * Changes the speed of an action, making it take longer (speed>1)
-             * or less (speed<1) time. <br/>
-             * Useful to simulate 'slow motion' or 'fast forward' effect.
-             * @zh
-             * 改变一个动作的速度，使它的执行使用更长的时间（speed > 1）<br/>
-             * 或更少（speed < 1）可以有效得模拟“慢动作”或“快进”的效果。
-             * @param {Number} speed
-             * @returns {Action}
-             */
-            speed(speed: number): _cocos_tween_actions_action__Action;
+            startWithTarget<T>(target: T | null): void;
+            abstract reverse(): _cocos_tween_actions_action_interval__ActionInterval;
             /**
              * @en
              * Get this action speed.
@@ -69066,27 +70614,24 @@ declare module "cc" {
              * @param {Number} speed
              * @returns {ActionInterval}
              */
-            setSpeed(speed: number): _cocos_tween_actions_action_interval__ActionInterval;
-            /**
-             * @en
-             * Repeats an action a number of times.
-             * To repeat an action forever use the CCRepeatForever action.
-             * @zh 重复动作可以按一定次数重复一个动作，使用 RepeatForever 动作来永远重复一个动作。
-             * @method repeat
-             * @param {Number} times
-             * @returns {ActionInterval}
-             */
-            repeat(times: number): _cocos_tween_actions_action_interval__ActionInterval;
-            /**
-             * @en
-             * Repeats an action for ever.  <br/>
-             * To repeat the an action for a limited number of times use the Repeat action. <br/>
-             * @zh 永远地重复一个动作，有限次数内重复一个动作请使用 Repeat 动作。
-             * @method repeatForever
-             * @returns {ActionInterval}
-             */
-            repeatForever(): _cocos_tween_actions_action_interval__ActionInterval;
+            setSpeed(speed: number): void;
+            getDurationScaled(): number;
         }
+        export type _cocos_tween_tween__ExtendsReturnResults<T, Base, Result1, Result2> = T extends Base ? Result1 : Result2;
+        export type _cocos_tween_tween__MaybeUnionStringNumber<T> = _cocos_tween_tween__ExtendsReturnResults<T, string, string | number, T>;
+        export type _cocos_tween_tween__ExtendsReturnResultOrNever<T, Base, Result> = _cocos_tween_tween__ExtendsReturnResults<T, Base, Result, never>;
+        export type _cocos_tween_tween__FlagExcludedType<Base, Type> = {
+            [Key in keyof Base]: Base[Key] extends Type ? never : Key;
+        };
+        export type _cocos_tween_tween__AllowedNames<Base, Type> = _cocos_tween_tween__FlagExcludedType<Base, Type>[keyof Base];
+        export type _cocos_tween_tween__StringToNumberOrNever<T> = _cocos_tween_tween__ExtendsReturnResultOrNever<T, string, string | number>;
+        export type _cocos_tween_tween__KeyPartial<T, K extends keyof T> = {
+            [P in K]?: (T[P] | (() => T[P]) | ITweenCustomProperty<T[P]> | _cocos_tween_tween__StringToNumberOrNever<T[P]>);
+        };
+        export type _cocos_tween_tween__OmitType<Base, Type> = _cocos_tween_tween__KeyPartial<Base, _cocos_tween_tween__AllowedNames<Base, Type>>;
+        export type _cocos_tween_tween__ConstructorType<T> = _cocos_tween_tween__OmitType<T, Function>;
+        export type _cocos_tween_actions_action_instant__CallFuncCallback<Target, Data> = (target?: Target, data?: Data) => void;
+        export type _cocos_tween_tween__TweenWithNodeTargetOrUnknown<T> = T extends Node ? Tween<T> : unknown;
         /**
          * @en Enum for transition type.
          *
@@ -69129,6 +70674,12 @@ declare module "cc" {
              * @param {Button} button - The Button component.
              */
             CLICK = "click"
+        }
+        export enum _cocos_ui_button__State {
+            NORMAL = 0,
+            HOVER = 1,
+            PRESSED = 2,
+            DISABLED = 3
         }
         /**
          * 定义了一些用于设置文本显示和文本格式化的标志位。
@@ -69757,15 +71308,33 @@ declare module "cc" {
         function _cocos_ui_widget_manager__updateAlignment(node: Node): void;
         export const _cocos_ui_view__View_base: new (...args: any[]) => System & _cocos_core_event_eventify__IEventified;
         /**
+         * @class EqualToFrame
+         * @extends ContainerStrategy
+         */
+        export class _cocos_ui_view__EqualToFrame extends _cocos_ui_view__ContainerStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): void;
+        }
+        /**
+         * @class ProportionalToFrame
+         * @extends ContainerStrategy
+         */
+        export class _cocos_ui_view__ProportionalToFrame extends _cocos_ui_view__ContainerStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): void;
+        }
+        /**
          * ContainerStrategy class is the root strategy class of container's scale strategy,
          * it controls the behavior of how to scale the cc.game.container and cc.game.canvas object
          */
         export class _cocos_ui_view__ContainerStrategy {
-            static EQUAL_TO_FRAME: any;
-            static PROPORTION_TO_FRAME: any;
+            static EQUAL_TO_FRAME: _cocos_ui_view__EqualToFrame;
+            static PROPORTION_TO_FRAME: _cocos_ui_view__ProportionalToFrame;
             name: string;
             /**
-             * @en Manipulation before appling the strategy
+             * @en Manipulation before applying the strategy
              * @zh 在应用策略之前的操作
              * @param view - The target view
              */
@@ -69797,6 +71366,31 @@ declare module "cc" {
             scale: number[];
             viewport?: null | math.Rect;
         }
+        export class _cocos_ui_view__ExactFit extends _cocos_ui_view__ContentStrategy {
+            name: string;
+            constructor();
+            apply(_view: View, designedResolution: math.Size): _cocos_ui_view__AdaptResult;
+        }
+        export class _cocos_ui_view__ShowAll extends _cocos_ui_view__ContentStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): _cocos_ui_view__AdaptResult;
+        }
+        export class _cocos_ui_view__NoBorder extends _cocos_ui_view__ContentStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): _cocos_ui_view__AdaptResult;
+        }
+        export class _cocos_ui_view__FixedHeight extends _cocos_ui_view__ContentStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): _cocos_ui_view__AdaptResult;
+        }
+        export class _cocos_ui_view__FixedWidth extends _cocos_ui_view__ContentStrategy {
+            name: string;
+            constructor();
+            apply(_view: any, designedResolution: any): _cocos_ui_view__AdaptResult;
+        }
         /**
          * @en
          * Emit when canvas resize.
@@ -69811,12 +71405,14 @@ declare module "cc" {
          * @class ContentStrategy
          */
         export class _cocos_ui_view__ContentStrategy {
-            static EXACT_FIT: any;
-            static SHOW_ALL: any;
-            static NO_BORDER: any;
-            static FIXED_HEIGHT: any;
-            static FIXED_WIDTH: any;
+            static EXACT_FIT: _cocos_ui_view__ExactFit;
+            static SHOW_ALL: _cocos_ui_view__ShowAll;
+            static NO_BORDER: _cocos_ui_view__NoBorder;
+            static FIXED_HEIGHT: _cocos_ui_view__FixedHeight;
+            static FIXED_WIDTH: _cocos_ui_view__FixedWidth;
             name: string;
+            protected _strategy: number;
+            get strategy(): number;
             constructor();
             /**
              * @en Manipulation before applying the strategy
@@ -69841,7 +71437,7 @@ declare module "cc" {
             /**
              * @deprecated since v3.5.0, this is an engine private interface that will be removed in the future.
              */
-            _buildResult(containerW: any, containerH: any, contentW: any, contentH: any, scaleX: any, scaleY: any): _cocos_ui_view__AdaptResult;
+            _buildResult(containerW: number, containerH: number, contentW: number, contentH: number, scaleX: number, scaleY: number): _cocos_ui_view__AdaptResult;
         }
         export enum _cocos_video_video_player_enums__EventType {
             /**

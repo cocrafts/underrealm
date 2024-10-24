@@ -206,9 +206,12 @@ export const animateGroundReveal = (
 					},
 				},
 			)
-			.call(resolve)
+			.call(() => resolve())
 			.start();
 
-		tween(node).parallel(translate, scale, rotate).call(resolve).start();
+		tween(node)
+			.parallel(translate, scale, rotate)
+			.call(() => resolve())
+			.start();
 	});
 };

@@ -75,7 +75,7 @@ export const showEndGameRibbon = async (
 				playBackgroundSound(sound, 0.5, false);
 			})
 			.to(0.5, { scale: new Vec3(1, 1, 1) }, { easing: 'backOut' })
-			.call(resolve)
+			.call(() => resolve())
 			.start();
 	});
 };
