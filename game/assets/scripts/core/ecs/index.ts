@@ -70,8 +70,8 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 	public updateCount = 0;
 
 	constructor(options?: { config?: Config; state?: DuelState }) {
-		if (options.config) this.config = options.config;
-		if (options.state) this.state = options.state;
+		if (options?.config) this.config = options.config;
+		if (options?.state) this.state = options.state;
 	}
 
 	createEntity(): Readonly<Entity<CM>> {
