@@ -18,7 +18,7 @@ export const endTurnEventHandler = () => {
 		const { type, playerEid } = event;
 
 		const player = ecs.queryById(event.playerEid);
-		if (player) {
+		if (!player) {
 			throw PlayerEntityNotFoundError(playerEid);
 		}
 
@@ -38,7 +38,7 @@ export const summonEventHandler = () => {
 		const { type, playerEid, cardEid, groundIndex } = event;
 
 		const player = ecs.queryById(playerEid);
-		if (player) {
+		if (!player) {
 			throw PlayerEntityNotFoundError(playerEid);
 		}
 
@@ -82,7 +82,7 @@ export const summonEventHandler = () => {
 			(c) => c.getComponent(ComponentType.CardPlace).index,
 		);
 		const max = Math.max(...groundIndexes);
-		const min = Math.max(...groundIndexes);
+		const min = Math.min(...groundIndexes);
 		if (groundIndex !== max + 1 || groundIndex !== min - 1) {
 			throw InvalidGroundIndexToSummonError(groundIndex, [min, max]);
 		}
