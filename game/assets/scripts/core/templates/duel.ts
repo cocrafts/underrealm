@@ -1,11 +1,11 @@
 import type { ComponentMap } from '../components';
-import { CardPlace, CardType, ComponentType, DuelPhase } from '../components';
+import { CardPlace, CardType, ComponentType } from '../components';
 import type { Config, ExportedECS } from '../ecs';
 import { ECS } from '../ecs';
 import type { EventType } from '../events';
 import { cloneComponents } from '../helper';
 
-export const defaultSetting: Config = {
+export const defaultSetting: Omit<Config, 'firstPlayerId'> = {
 	initialCardCount: 5,
 	initialPlayerHealth: 150,
 	elementalFactor: 0.1,
@@ -27,10 +27,7 @@ export const initializeDuel = (
 	[firstPlayer, secondPlayer]: Array<{ id: string }>,
 ) => {
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
-	const duelECS = new ECS({
-		config,
-		state: { phase: DuelPhase.Setup, turnOf: firstPlayer.id, summonCount: 0 },
-	});
+	const duelECS = new ECS(config);
 
 	const troopTemplates = template
 		.query(ComponentType.CardMetadata, { kind: CardType.Troop })

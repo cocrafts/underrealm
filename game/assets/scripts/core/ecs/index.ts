@@ -1,4 +1,5 @@
-import type { ComponentMap, DuelPhase } from '../components';
+import type { ComponentMap } from '../components';
+import { DuelPhase } from '../components';
 import type { EventMap } from '../events';
 
 export type QueryFilter<T extends keyof CM, CM> = Partial<Omit<CM[T], 'type'>>;
@@ -50,12 +51,14 @@ export type Config = {
 	perTurnHero: number;
 	perTurnSpell: number;
 	perTurnTroop: number;
+	firstPlayerId: string;
 };
 
 export type DuelState = {
 	phase: DuelPhase;
 	turnOf: string;
-	summonCount: number;
+	summonedHeroCount: number;
+	summonedTroopCount: number;
 };
 
 export class ECS<CM = ComponentMap, EM = EventMap> {
@@ -67,9 +70,19 @@ export class ECS<CM = ComponentMap, EM = EventMap> {
 	private nextEntityId = 0;
 	public updateCount = 0;
 
-	constructor(options?: { config?: Config; state?: DuelState }) {
-		if (options?.config) this.config = options.config;
-		if (options?.state) this.state = options.state;
+	constructor(config?: Config, state?: DuelState) {
+		if (config) {
+			this.config = config;
+
+			if (state) {
+				this.state = {
+					phase: DuelPhase.Setup,
+					turnOf: config.firstPlayerId,
+					summonedHeroCount: 0,
+					summonedTroopCount: 0,
+				};
+			}
+		}
 	}
 
 	createEntity(): Readonly<Entity<CM>> {
@@ -202,7 +215,7 @@ export class ECS<CM = ComponentMap, EM = EventMap> {
 
 	static fromJSON<CM, ET>(exported: ExportedECS): ECS<CM, ET> {
 		const { config, state } = exported;
-		const ecs = new ECS<CM, ET>({ config, state });
+		const ecs = new ECS<CM, ET>(config, state);
 
 		exported.entities.forEach(({ components }: Entity<CM>) => {
 			const entity = ecs.createEntity();

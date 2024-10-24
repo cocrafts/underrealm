@@ -53,3 +53,15 @@ export const queryFacingCard = (
 
 	return facingCard;
 };
+
+export const queryOpponentPlayer = (ecs: ECS, playerId: string) => {
+	const [opponent] = ecs
+		.query(ComponentType.PlayerAttribute)
+		.exec()
+		.filter((entity) => {
+			const { userId } = entity.getComponent(ComponentType.PlayerAttribute);
+			return userId !== playerId;
+		});
+
+	return opponent;
+};

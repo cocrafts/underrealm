@@ -1,4 +1,4 @@
-import { CardPlace, ComponentType, DuelPhase } from '../components';
+import { CardPlace, CardType, ComponentType, DuelPhase } from '../components';
 import type { ECS } from '../ecs';
 import {
 	CardComponentNotFoundError,
@@ -12,6 +12,7 @@ import {
 	UnexpectedTurnActionError,
 } from '../error';
 import type { EndTurnEvent, SummonCardEvent } from '../events';
+import { queryOpponentPlayer } from '../helper';
 
 export const endTurnEventHandler = () => {
 	const handle = (ecs: ECS, event: EndTurnEvent) => {
@@ -27,7 +28,16 @@ export const endTurnEventHandler = () => {
 			throw UnexpectedTurnActionError(type, playerId, ecs.state.turnOf);
 		}
 
-		ecs.state.phase = DuelPhase.PreFight;
+		if (ecs.state.turnOf !== ecs.config.firstPlayerId) {
+			ecs.state.phase = DuelPhase.PreFight;
+		}
+
+		const { userId } = queryOpponentPlayer(ecs, playerId).getComponent(
+			ComponentType.PlayerAttribute,
+		);
+		ecs.state.turnOf = userId;
+		ecs.state.summonedHeroCount = 0;
+		ecs.state.summonedTroopCount = 0;
 	};
 
 	return { handle };
@@ -47,13 +57,24 @@ export const summonEventHandler = () => {
 			throw UnexpectedTurnActionError(type, playerId, ecs.state.turnOf);
 		}
 
-		if (ecs.state.summonCount === ecs.config.perTurnSummon) {
-			throw MaxSummonReachedError();
-		}
-
 		const card = ecs.queryById(cardEntityId);
 		if (!card) {
 			throw CardEntityNotFoundError(cardEntityId);
+		}
+
+		const cardMetadata = card.getComponent(ComponentType.CardMetadata);
+		if (cardMetadata.kind === CardType.Troop) {
+			if (ecs.state.summonedTroopCount === ecs.config.perTurnTroop) {
+				throw MaxSummonReachedError(CardType.Troop);
+			}
+
+			ecs.state.summonedTroopCount++;
+		} else if (cardMetadata.kind === CardType.Hero) {
+			if (ecs.state.summonedHeroCount === ecs.config.perTurnHero) {
+				throw MaxSummonReachedError(CardType.Hero);
+			}
+
+			ecs.state.summonedHeroCount++;
 		}
 
 		const cardPlace = card.getComponent(ComponentType.CardPlace);

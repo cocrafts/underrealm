@@ -1,4 +1,4 @@
-import type { CardPlace, ComponentType } from './components';
+import type { CardPlace, CardType, ComponentType } from './components';
 
 export class CoreError extends Error {}
 
@@ -49,8 +49,8 @@ export const UnexpectedTurnActionError = (
 	);
 };
 
-export const MaxSummonReachedError = () => {
-	return new CoreError(`Reached max summon cards in this turn`);
+export const MaxSummonReachedError = (cardType: CardType) => {
+	return new CoreError(`Reached max summon ${cardType} cards in this turn`);
 };
 
 export const GroundLimitReachedError = () => {
