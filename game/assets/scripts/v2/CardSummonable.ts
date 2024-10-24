@@ -1,5 +1,5 @@
 import type { EventMouse } from 'cc';
-import { _decorator, CCInteger, Component, find, Node, tween } from 'cc';
+import { _decorator, CCInteger, Component, find, Node, tween, Vec3 } from 'cc';
 
 import { defaultCardScale } from '../tween/v2/card';
 import {
@@ -20,10 +20,10 @@ export class CardSummonable extends Component {
 	@property(Node)
 	public cardNode: Node;
 
-	private dragging: boolean = false;
+	private moveOffset = new Vec3();
 	private mouseUpCallback: Function = () => this.onMouseUp();
 	private mouseMoveCallback: Function = (e: EventMouse) => this.onMouseMove(e);
-	private mouseDownCallback: Function = () => this.onMouseDown();
+	private mouseDownCallback: Function = (e: EventMouse) => this.onMouseDown(e);
 
 	initialize() {
 		this.cardNode.on(MOUSE_DOWN, this.mouseDownCallback);
@@ -37,7 +37,10 @@ export class CardSummonable extends Component {
 		find('Canvas').off(MOUSE_UP, this.mouseUpCallback);
 	}
 
-	private onMouseDown() {
+	private onMouseDown(e: EventMouse) {
+		const { x, y } = e.getUILocation();
+		this.cardNode.getWorldPosition(this.moveOffset).subtract3f(x, y, 0);
+
 		safeCardUIState(this.entityId, (UIState) => {
 			UIState.dragging = true;
 		});
@@ -61,8 +64,8 @@ export class CardSummonable extends Component {
 	private onMouseMove(e: EventMouse) {
 		safeCardUIState(this.entityId, ({ dragging }) => {
 			if (!dragging) return;
-			const { x, y } = e.getUIDelta();
-			this.cardNode.position = this.cardNode.position.clone().add3f(x, y, 0);
+			const { x, y } = e.getUILocation();
+			this.cardNode.setWorldPosition(new Vec3(x, y, 0).add(this.moveOffset));
 		});
 	}
 }
