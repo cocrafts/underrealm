@@ -3,9 +3,9 @@ import {
 	CardType,
 	ClassType,
 	ComponentType as CT,
-} from './components';
-import { ECS } from './ecs';
-import { selectHand } from './helper';
+} from '../assets/scripts/core/components';
+import { ECS } from '../assets/scripts/core/ecs';
+import { selectHand } from '../assets/scripts/core/helper';
 
 describe('Test selectHand', () => {
 	test('selectHand should correctly return the player hand', () => {

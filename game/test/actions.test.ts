@@ -1,14 +1,13 @@
-import type { ComponentMap as CM } from '../../components';
+import type { ComponentMap as CM } from '../assets/scripts/core/components';
 import {
 	CardPlace,
 	CardType,
 	ClassType,
 	ComponentType as CT,
 	DuelPhase,
-} from '../../components';
-import { ECS } from '../../ecs';
-
-import { actions } from '.';
+} from '../assets/scripts/core/components';
+import { ECS } from '../assets/scripts/core/ecs';
+import { actions } from '../assets/scripts/core/systems/actions';
 
 const mockCard: Omit<CM[CT.CardMetadata], 'type'>[] = [
 	{
