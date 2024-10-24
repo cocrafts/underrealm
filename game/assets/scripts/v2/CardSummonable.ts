@@ -61,8 +61,8 @@ export class CardSummonable extends Component {
 	private onMouseMove(e: EventMouse) {
 		safeCardUIState(this.entityId, ({ dragging }) => {
 			if (!dragging) return;
-			const { x, y } = e.getDelta();
-			this.cardNode.position = this.cardNode.position.add3f(x, y, 0);
+			const { x, y } = e.getUIDelta();
+			this.cardNode.position = this.cardNode.position.clone().add3f(x, y, 0);
 		});
 	}
 }
