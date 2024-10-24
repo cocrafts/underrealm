@@ -1,41 +1,11 @@
 import {
 	ActivationType,
 	CardPlace,
-	CommandType,
 	ComponentType as CT,
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
 import { selectGround } from '../../helper';
-
-const summon = () => {
-	const update = (ecs: ECS) => {
-		if (ecs.state.phase !== DuelPhase.Setup) return;
-
-		const commands = ecs.query(CT.Command).exec();
-		const lastCommand = commands[commands.length - 1].getComponent(CT.Command);
-		const isValidSummonCommand =
-			lastCommand.commandType === CommandType.Summon &&
-			lastCommand.from.place === CardPlace.Hand &&
-			lastCommand.to.place === CardPlace.Ground;
-
-		if (!isValidSummonCommand) return;
-
-		const [card] = ecs.query(CT.CardPlace, lastCommand.from).exec();
-		const cardPlace = card.getComponent(CT.CardPlace);
-		cardPlace.place = lastCommand.to.place;
-		cardPlace.index = lastCommand.to.index;
-
-		const summonActivation = card.getComponent(CT.SummonActivation);
-		if (!summonActivation) return;
-
-		card.addComponent(CT.SkillActivating, {
-			activationType: ActivationType.Summon,
-		});
-	};
-
-	return { update };
-};
 
 const fight = () => {
 	const update = (ecs: ECS) => {
@@ -77,29 +47,6 @@ const fight = () => {
 
 			attributes2.health -= attributes1.attack - attributes2.defense;
 			attributes1.health -= attributes2.attack - attributes1.defense;
-		}
-	};
-
-	return { update };
-};
-
-export const endTurn = () => {
-	const update = (ecs: ECS) => {
-		const [endTurnCommand] = ecs
-			.query(CT.Command, { commandType: CommandType.EndTurn })
-			.exec();
-
-		if (!endTurnCommand || ecs.state.phase !== DuelPhase.Setup) return;
-
-		const [player1, player2] = ecs.query(CT.PlayerAttribute).exec();
-		const player1Id = player1.getComponent(CT.PlayerAttribute).id;
-		const player2Id = player2.getComponent(CT.PlayerAttribute).id;
-
-		if (ecs.state.turnOf == player1Id) {
-			ecs.state.turnOf = player2Id;
-		} else {
-			ecs.state.turnOf = player1.getComponent(CT.PlayerAttribute).id;
-			ecs.state.phase = DuelPhase.PreFight;
 		}
 	};
 
@@ -174,9 +121,7 @@ export const cleanUp = () => {
 };
 
 export const actions = {
-	summon,
 	fight,
-	endTurn,
 	changePhase,
 	cleanUp,
 };

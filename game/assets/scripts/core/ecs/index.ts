@@ -1,11 +1,7 @@
 import type { ComponentMap, DuelPhase } from '../components';
-import type { EventType } from '../events';
+import type { EventMap } from '../events';
 
-export type InferComponent<T extends keyof CM, CM> = CM[T];
-
-export type QueryFilter<T extends keyof CM, CM> = Partial<
-	Omit<InferComponent<T, CM>, 'type'>
->;
+export type QueryFilter<T extends keyof CM, CM> = Partial<Omit<CM[T], 'type'>>;
 
 export interface Component<T> {
 	type: T;
@@ -14,20 +10,20 @@ export interface Component<T> {
 export interface Entity<CM> {
 	id: number;
 	components: Record<string, Component<keyof CM>>;
-	getComponent: <T extends keyof CM>(type: T) => InferComponent<T, CM>;
+	getComponent: <T extends keyof CM>(type: T) => CM[T];
 	addComponent: <T extends keyof CM>(
 		type: T,
-		component: Omit<InferComponent<T, CM>, 'type'>,
+		component: Omit<CM[T], 'type'>,
 	) => Entity<CM>;
 	removeComponent(type: keyof CM): Entity<CM>;
 }
 
-export interface System<CM, ET = EventType> {
-	update(ecs: ECS<CM, ET>): void;
+export interface System<CM, EM> {
+	update(ecs: ECS<CM, EM>): void;
 }
 
-export interface Handler<CM, ET = EventType> {
-	handle(ecs: ECS<CM, ET>): void;
+export interface Handler<CM, EM, ET extends keyof EM> {
+	handle: (ecs: ECS<CM, EM>, event: EM[ET]) => void;
 }
 
 export type ExportedECS = {
@@ -50,6 +46,7 @@ export type Config = {
 	maxAttachment: number;
 	spellIncreaseCycle: number;
 	perTurnDraw: number;
+	perTurnSummon: number;
 	perTurnHero: number;
 	perTurnSpell: number;
 	perTurnTroop: number;
@@ -58,14 +55,15 @@ export type Config = {
 export type DuelState = {
 	phase: DuelPhase;
 	turnOf: string;
+	summonCount: number;
 };
 
-export class ECS<CM = ComponentMap, ET = EventType> {
+export class ECS<CM = ComponentMap, EM = EventMap> {
 	public config: Config;
 	public state: DuelState;
 	private entities: Entity<CM>[] = [];
-	private systems: System<CM, ET>[] = [];
-	private eventHandlers: Record<string, Handler<CM, ET>> = {};
+	private systems: System<CM, EM>[] = [];
+	private eventHandlers: Record<string, Handler<CM, EM, keyof EM>> = {};
 	private nextEntityId = 0;
 	public updateCount = 0;
 
@@ -105,7 +103,7 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 			throw Error(`Entity '${entity.id}': '${type.toString()}' not found`);
 		}
 
-		return entity.components[type.toString()] as InferComponent<T, CM>;
+		return entity.components[type.toString()] as CM[T];
 	}
 
 	addComponent(entityId: number, component: Component<keyof CM>): this {
@@ -164,21 +162,24 @@ export class ECS<CM = ComponentMap, ET = EventType> {
 	/**
 	 * Add system to ECS, the execution priority will bases on adding order
 	 */
-	addSystem<T = CM>(system: System<T, ET>): this {
+	addSystem<T = CM>(system: System<T, EM>): this {
 		this.systems.push(system as never);
 		return this;
 	}
 
-	addHandler(event: ET, handler: Handler<CM, ET>): this {
-		this.eventHandlers[event.toString()] = handler;
+	addHandler<T extends keyof E, K = CM, E = EM>(
+		event: T,
+		handler: Handler<K, E, T>,
+	): this {
+		this.eventHandlers[event.toString()] = handler as never;
 		return this;
 	}
 
-	handle(event: ET) {
+	handle<T = EM>(event: keyof T) {
 		const handler = this.eventHandlers[event.toString()];
 		if (!handler) return;
 
-		handler.handle(this);
+		handler.handle(this, event as never);
 		this.update();
 	}
 

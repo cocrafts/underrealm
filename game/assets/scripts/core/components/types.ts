@@ -52,16 +52,6 @@ export enum ComponentType {
 	MultiplyDamageAgainst = 'MultiplyDamageAgainst',
 	DoubleAttack = 'DoubleAttack',
 	Transform = 'Transform',
-
-	/**
-	 * Board components
-	 */
-
-	/**
-	 * Duel components
-	 */
-	DuelManager = 'DuelManager',
-	Command = 'Command',
 }
 
 export enum ClassType {

@@ -5,7 +5,6 @@ import type {
 	CardPlace as CardPlaceType,
 	CardType,
 	ClassType,
-	CommandType,
 	ComponentType,
 	ElementalType,
 	InspireSource,
@@ -56,8 +55,6 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
-
-	[ComponentType.Command]: Command;
 };
 
 /**
@@ -215,10 +212,3 @@ type MultiplyDamageAgainst = Component<ComponentType.MultiplyDamageAgainst> & {
 type DoubleAttack = Component<ComponentType.DoubleAttack>;
 
 type Transform = Component<ComponentType.Transform>;
-
-type Command = Component<ComponentType.Command> & {
-	index: number;
-	commandType: CommandType;
-	from?: CardPlace;
-	to?: CardPlace;
-};

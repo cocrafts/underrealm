@@ -15,6 +15,7 @@ export const defaultSetting: Config = {
 	maxAttachment: 2,
 	spellIncreaseCycle: 3,
 	perTurnDraw: 1,
+	perTurnSummon: 2,
 	perTurnHero: 1,
 	perTurnSpell: 2,
 	perTurnTroop: 1,
@@ -28,7 +29,7 @@ export const initializeDuel = (
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
 	const duelECS = new ECS({
 		config,
-		state: { phase: DuelPhase.InitialDistribution, turnOf: firstPlayer.id },
+		state: { phase: DuelPhase.Setup, turnOf: firstPlayer.id, summonCount: 0 },
 	});
 
 	const troopTemplates = template
