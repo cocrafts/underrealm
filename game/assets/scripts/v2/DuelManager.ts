@@ -1,8 +1,10 @@
 import { _decorator, Component } from 'cc';
 
+import { endTurnEventHandler, summonEventHandler } from '../core/handlers';
 import {
 	activation,
 	core,
+	EventType,
 	resetAllSkillActivatingSystem,
 	skill,
 } from '../game';
@@ -15,6 +17,9 @@ const { ccclass } = _decorator;
 @ccclass('DuelManager')
 export class DuelManager extends Component {
 	onLoad() {
+		core.addHandler(EventType.SummonCard, summonEventHandler());
+		core.addHandler(EventType.EndTurn, endTurnEventHandler());
+
 		/**
 		 * There are two approaches of registering system:
 		 * 1. all entities and queries will be called in all systems

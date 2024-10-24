@@ -1,47 +1,15 @@
 import {
 	ActivationType,
 	CardPlace,
-	CommandType,
 	ComponentType as CT,
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { getDuelManager, selectGround } from '../../helper';
-
-const summon = () => {
-	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.Setup) return;
-
-		const commands = ecs.query(CT.Command).exec();
-		const lastCommand = commands[commands.length - 1].getComponent(CT.Command);
-		const isValidSummonCommand =
-			lastCommand.commandType === CommandType.Summon &&
-			lastCommand.from.place === CardPlace.Hand &&
-			lastCommand.to.place === CardPlace.Ground;
-
-		if (!isValidSummonCommand) return;
-
-		const [card] = ecs.query(CT.CardPlace, lastCommand.from).exec();
-		const cardPlace = card.getComponent(CT.CardPlace);
-		cardPlace.place = lastCommand.to.place;
-		cardPlace.index = lastCommand.to.index;
-
-		const summonActivation = card.getComponent(CT.SummonActivation);
-		if (!summonActivation) return;
-
-		card.addComponent(CT.SkillActivating, {
-			activationType: ActivationType.Summon,
-		});
-	};
-
-	return { update };
-};
+import { queryGroundCards } from '../../helper';
 
 const fight = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.Fight) return;
+		if (ecs.state.phase !== DuelPhase.Fight) return;
 
 		const { groundSize } = ecs.config;
 		for (let i = 0; i < groundSize; i++) {
@@ -58,7 +26,7 @@ const fight = () => {
 					entity.getComponent(CT.PlayerAttribute),
 				);
 				const enemyPlayer = players.find(
-					(player) => player.id !== card1.getComponent(CT.Ownership).owner,
+					(player) => player.userId !== card1.getComponent(CT.Ownership).owner,
 				);
 				const { attack } = card1.getComponent(CT.CardAttribute);
 				enemyPlayer.health -= attack;
@@ -85,32 +53,9 @@ const fight = () => {
 	return { update };
 };
 
-export const endTurn = () => {
-	const update = (ecs: ECS) => {
-		const [endTurnCommand] = ecs
-			.query(CT.Command, { commandType: CommandType.EndTurn })
-			.exec();
-		const duelManager = getDuelManager(ecs);
-
-		if (!endTurnCommand || duelManager.phase !== DuelPhase.Setup) return;
-
-		const [player1, player2] = ecs.query(CT.PlayerAttribute).exec();
-
-		if (duelManager.turnOf == player1.getComponent(CT.PlayerAttribute).id) {
-			duelManager.turnOf = player2.getComponent(CT.PlayerAttribute).id;
-		} else {
-			duelManager.turnOf = player1.getComponent(CT.PlayerAttribute).id;
-			duelManager.phase = DuelPhase.PreFight;
-		}
-	};
-
-	return { update };
-};
-
 export const changePhase = (phase: DuelPhase) => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		duelManager.phase = phase;
+		ecs.state.phase = phase;
 	};
 
 	return { update };
@@ -118,8 +63,7 @@ export const changePhase = (phase: DuelPhase) => {
 
 export const cleanUp = () => {
 	const update = (ecs: ECS) => {
-		const duelManager = getDuelManager(ecs);
-		if (duelManager.phase !== DuelPhase.CleanUp) return;
+		if (ecs.state.phase !== DuelPhase.CleanUp) return;
 
 		// Increase charge
 		const chargeableCards = ecs.query(CT.CardChargeable).exec();
@@ -135,7 +79,7 @@ export const cleanUp = () => {
 		const centerIndex = 5;
 		playerEntities.forEach((entity) => {
 			const player = entity.getComponent(CT.PlayerAttribute);
-			const ground = selectGround(ecs, player.id);
+			const ground = queryGroundCards(ecs, player.userId);
 			const sortedGround = ground.sort((entityA, entityB) => {
 				const cardPlaceA = entityA.getComponent(CT.CardPlace);
 				const cardPlaceB = entityB.getComponent(CT.CardPlace);
@@ -177,9 +121,7 @@ export const cleanUp = () => {
 };
 
 export const actions = {
-	summon,
 	fight,
-	endTurn,
 	changePhase,
 	cleanUp,
 };

@@ -47,19 +47,19 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.Ownership, { owner: 'me' })
-	.addComponent(ComponentType.PlayerAttribute, { id: 'A', health: 149 });
+	.addComponent(ComponentType.PlayerAttribute, { userId: 'A', health: 149 });
 
 ecs
 	.createEntity()
 	.addComponent(ComponentType.Ownership, { owner: 'enemy' })
-	.addComponent(ComponentType.PlayerAttribute, { id: 'B', health: 149 });
+	.addComponent(ComponentType.PlayerAttribute, { userId: 'B', health: 149 });
 
 ecs
 	.createEntity()
 	.addComponent(ComponentType.Ownership, { owner: 'enemy' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 0 })
 	.addComponent(ComponentType.CardMetadata, {
-		id: '999990000',
+		metaId: '999990000',
 		name: 'Troop',
 		class: ClassType.Knight,
 		kind: CardType.Hero,
@@ -76,7 +76,7 @@ ecs
 	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 0 })
 	.addComponent(ComponentType.CardMetadata, {
-		id: '999990000',
+		metaId: '999990000',
 		name: 'Troop',
 		class: ClassType.Knight,
 		kind: CardType.Hero,
@@ -93,7 +93,7 @@ ecs
 	.addComponent(ComponentType.Ownership, { owner: 'me' })
 	.addComponent(ComponentType.CardPlace, { place: CardPlace.Hand, index: 1 })
 	.addComponent(ComponentType.CardMetadata, {
-		id: '999990000',
+		metaId: '999990000',
 		name: 'Troop',
 		class: ClassType.Knight,
 		kind: CardType.Hero,

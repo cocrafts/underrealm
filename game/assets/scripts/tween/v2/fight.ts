@@ -92,7 +92,10 @@ export const animateCardAttack = async (
 			translate.to(0.5, { position: from }, { easing: 'backOut' });
 		}
 
-		tween(node).parallel(translate, rotate).call(resolve).start();
+		tween(node)
+			.parallel(translate, rotate)
+			.call(() => resolve())
+			.start();
 	});
 };
 

@@ -146,6 +146,8 @@ declare namespace jsb {
     export let onResume: () => void | undefined;
     export let onPause: () => void | undefined;
     export let onClose: () => void | undefined;
+    export let onWindowLeave: () => void | undefined;
+    export let onWindowEnter: () => void | undefined;
     export function openURL(url: string): void;
     export function garbageCollect(): void;
     enum AudioFormat {
@@ -386,3 +388,4 @@ declare namespace ns {
  * Now we only support 'V8'
  */
 declare const scriptEngineType: 'V8';
+

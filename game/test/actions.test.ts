@@ -4,35 +4,34 @@ import {
 	CardType,
 	ClassType,
 	ComponentType as CT,
-	DuelPhase,
 } from '../assets/scripts/core/components';
 import { ECS } from '../assets/scripts/core/ecs';
 import { actions } from '../assets/scripts/core/systems/actions';
 
 const mockCard: Omit<CM[CT.CardMetadata], 'type'>[] = [
 	{
-		id: '1',
+		metaId: '1',
 		class: ClassType.Knight,
 		kind: CardType.Hero,
 		name: 'AAA',
 		rarity: 0,
 	},
 	{
-		id: '2',
+		metaId: '2',
 		class: ClassType.Knight,
 		kind: CardType.Hero,
 		name: 'BBB',
 		rarity: 0,
 	},
 	{
-		id: '3',
+		metaId: '3',
 		class: ClassType.Tanker,
 		kind: CardType.Hero,
 		name: 'CCC',
 		rarity: 0,
 	},
 	{
-		id: '4',
+		metaId: '4',
 		class: ClassType.Beast,
 		kind: CardType.Troop,
 		name: 'DDD',
@@ -46,10 +45,7 @@ describe('Test cleanUp', () => {
 
 		duelECS
 			.createEntity()
-			.addComponent(CT.DuelManager, { phase: DuelPhase.CleanUp, turnOf: 'A' });
-		duelECS
-			.createEntity()
-			.addComponent(CT.PlayerAttribute, { id: 'A', health: 150 });
+			.addComponent(CT.PlayerAttribute, { userId: 'A', health: 150 });
 		duelECS
 			.createEntity()
 			.addComponent(CT.Ownership, { owner: 'A' })

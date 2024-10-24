@@ -94,7 +94,7 @@ const initializeGameMatchV2 = async (
 	const firstPlayerId = firstFindingKey.split('#')[1];
 	const secondPlayerId = secondFindingKey.split('#')[1];
 
-	const duelECS = initializeDuel(ecsv1, defaultSetting, [
+	const duelECS = initializeDuel(ecsv1, { ...defaultSetting, firstPlayerId }, [
 		{ id: firstPlayerId },
 		{ id: secondPlayerId },
 	]);

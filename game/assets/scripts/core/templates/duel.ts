@@ -1,11 +1,11 @@
 import type { ComponentMap } from '../components';
-import { CardPlace, CardType, ComponentType, DuelPhase } from '../components';
+import { CardPlace, CardType, ComponentType } from '../components';
 import type { Config, ExportedECS } from '../ecs';
 import { ECS } from '../ecs';
 import type { EventType } from '../events';
 import { cloneComponents } from '../helper';
 
-export const defaultSetting: Config = {
+export const defaultSetting: Omit<Config, 'firstPlayerId'> = {
 	initialCardCount: 5,
 	initialPlayerHealth: 150,
 	elementalFactor: 0.1,
@@ -15,6 +15,7 @@ export const defaultSetting: Config = {
 	maxAttachment: 2,
 	spellIncreaseCycle: 3,
 	perTurnDraw: 1,
+	perTurnSummon: 2,
 	perTurnHero: 1,
 	perTurnSpell: 2,
 	perTurnTroop: 1,
@@ -27,11 +28,6 @@ export const initializeDuel = (
 ) => {
 	const template = ECS.fromJSON<ComponentMap, EventType>(cardTemplate);
 	const duelECS = new ECS(config);
-
-	duelECS.createEntity().addComponent(ComponentType.DuelManager, {
-		phase: DuelPhase.InitialDistribution,
-		turnOf: firstPlayer.id,
-	});
 
 	const troopTemplates = template
 		.query(ComponentType.CardMetadata, { kind: CardType.Troop })
@@ -48,11 +44,11 @@ export const initializeDuel = (
 	});
 
 	duelECS.createEntity().addComponent(ComponentType.PlayerAttribute, {
-		id: firstPlayer.id,
+		userId: firstPlayer.id,
 		health: duelECS.config.initialPlayerHealth,
 	});
 	duelECS.createEntity().addComponent(ComponentType.PlayerAttribute, {
-		id: secondPlayer.id,
+		userId: secondPlayer.id,
 		health: duelECS.config.initialPlayerHealth,
 	});
 

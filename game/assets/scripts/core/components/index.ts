@@ -5,9 +5,7 @@ import type {
 	CardPlace as CardPlaceType,
 	CardType,
 	ClassType,
-	CommandType,
 	ComponentType,
-	DuelPhase,
 	ElementalType,
 	InspireSource,
 } from './types';
@@ -57,9 +55,6 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
-
-	[ComponentType.DuelManager]: DuelManager;
-	[ComponentType.Command]: Command;
 };
 
 /**
@@ -73,7 +68,7 @@ type Ownership = Component<ComponentType.Ownership> & {
  * Player components
  */
 type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
-	id: string;
+	userId: string;
 	health: number;
 };
 
@@ -81,7 +76,7 @@ type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
  * Card components
  */
 type Metadata = Component<ComponentType.CardMetadata> & {
-	id: string;
+	metaId: string;
 	name: string;
 	class: ClassType;
 	kind: CardType;
@@ -217,18 +212,3 @@ type MultiplyDamageAgainst = Component<ComponentType.MultiplyDamageAgainst> & {
 type DoubleAttack = Component<ComponentType.DoubleAttack>;
 
 type Transform = Component<ComponentType.Transform>;
-
-/**
- * Duel components
- */
-type DuelManager = Component<ComponentType.DuelManager> & {
-	phase: DuelPhase;
-	turnOf: string;
-};
-
-type Command = Component<ComponentType.Command> & {
-	index: number;
-	commandType: CommandType;
-	from?: CardPlace;
-	to?: CardPlace;
-};

@@ -4,9 +4,6 @@ import { actions, activation, DuelPhase, turnCardDraw } from '@underrealm/game';
 export const addPackageSystems = (ecs: ECS<ComponentMap>) => {
 	ecs
 		.addSystem(turnCardDraw())
-		.addSystem(actions.summon())
-		// .addSystem(skill.destroyFacingMinHealth(ActivationType.Summon))
-		.addSystem(actions.endTurn())
 
 		.addSystem(activation.preFight())
 		// .addSystem(skill.destroyFacingMinHealth(ActivationType.PreFight))
