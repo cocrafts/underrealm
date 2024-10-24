@@ -15,14 +15,14 @@ import type { EndTurnEvent, SummonCardEvent } from '../events';
 
 export const endTurnEventHandler = () => {
 	const handle = (ecs: ECS, event: EndTurnEvent) => {
-		const { type, playerEid } = event;
+		const { type, playerEntityId } = event;
 
-		const player = ecs.queryById(event.playerEid);
+		const player = ecs.queryById(playerEntityId);
 		if (!player) {
-			throw PlayerEntityNotFoundError(playerEid);
+			throw PlayerEntityNotFoundError(playerEntityId);
 		}
 
-		const playerId = player.getComponent(ComponentType.PlayerAttribute).id;
+		const playerId = player.getComponent(ComponentType.PlayerAttribute).userId;
 		if (ecs.state.turnOf !== playerId) {
 			throw UnexpectedTurnActionError(type, playerId, ecs.state.turnOf);
 		}
@@ -35,14 +35,14 @@ export const endTurnEventHandler = () => {
 
 export const summonEventHandler = () => {
 	const handle = (ecs: ECS, event: SummonCardEvent) => {
-		const { type, playerEid, cardEid, groundIndex } = event;
+		const { type, playerEntityId, cardEntityId, groundIndex } = event;
 
-		const player = ecs.queryById(playerEid);
+		const player = ecs.queryById(playerEntityId);
 		if (!player) {
-			throw PlayerEntityNotFoundError(playerEid);
+			throw PlayerEntityNotFoundError(playerEntityId);
 		}
 
-		const playerId = player.getComponent(ComponentType.PlayerAttribute).id;
+		const playerId = player.getComponent(ComponentType.PlayerAttribute).userId;
 		if (ecs.state.turnOf !== playerId) {
 			throw UnexpectedTurnActionError(type, playerId, ecs.state.turnOf);
 		}
@@ -51,23 +51,27 @@ export const summonEventHandler = () => {
 			throw MaxSummonReachedError();
 		}
 
-		const card = ecs.queryById(cardEid);
+		const card = ecs.queryById(cardEntityId);
 		if (!card) {
-			throw CardEntityNotFoundError(cardEid);
+			throw CardEntityNotFoundError(cardEntityId);
 		}
 
 		const cardPlace = card.getComponent(ComponentType.CardPlace);
 		if (!cardPlace) {
-			throw CardComponentNotFoundError(cardEid, ComponentType.CardPlace);
+			throw CardComponentNotFoundError(cardEntityId, ComponentType.CardPlace);
 		} else if (cardPlace.place !== CardPlace.Hand) {
-			throw InvalidCardPlaceError(cardEid, CardPlace.Hand, cardPlace.place);
+			throw InvalidCardPlaceError(
+				cardEntityId,
+				CardPlace.Hand,
+				cardPlace.place,
+			);
 		}
 
 		const cardOwner = card.getComponent(ComponentType.Ownership);
 		if (!cardOwner) {
-			throw CardComponentNotFoundError(cardEid, ComponentType.Ownership);
+			throw CardComponentNotFoundError(cardEntityId, ComponentType.Ownership);
 		} else if (cardOwner.owner !== playerId) {
-			throw InvalidCardOwnershipError(cardEid, playerId, cardOwner.owner);
+			throw InvalidCardOwnershipError(cardEntityId, playerId, cardOwner.owner);
 		}
 
 		const cardsInGround = ecs

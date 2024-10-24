@@ -5,7 +5,7 @@ import {
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { selectGround } from '../../helper';
+import { queryGroundCards } from '../../helper';
 
 const fight = () => {
 	const update = (ecs: ECS) => {
@@ -26,7 +26,7 @@ const fight = () => {
 					entity.getComponent(CT.PlayerAttribute),
 				);
 				const enemyPlayer = players.find(
-					(player) => player.id !== card1.getComponent(CT.Ownership).owner,
+					(player) => player.userId !== card1.getComponent(CT.Ownership).owner,
 				);
 				const { attack } = card1.getComponent(CT.CardAttribute);
 				enemyPlayer.health -= attack;
@@ -79,7 +79,7 @@ export const cleanUp = () => {
 		const centerIndex = 5;
 		playerEntities.forEach((entity) => {
 			const player = entity.getComponent(CT.PlayerAttribute);
-			const ground = selectGround(ecs, player.id);
+			const ground = queryGroundCards(ecs, player.userId);
 			const sortedGround = ground.sort((entityA, entityB) => {
 				const cardPlaceA = entityA.getComponent(CT.CardPlace);
 				const cardPlaceB = entityB.getComponent(CT.CardPlace);

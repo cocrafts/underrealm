@@ -68,7 +68,7 @@ type Ownership = Component<ComponentType.Ownership> & {
  * Player components
  */
 type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
-	id: string;
+	userId: string;
 	health: number;
 };
 
@@ -76,7 +76,7 @@ type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
  * Card components
  */
 type Metadata = Component<ComponentType.CardMetadata> & {
-	id: string;
+	metaId: string;
 	name: string;
 	class: ClassType;
 	kind: CardType;

@@ -5,7 +5,7 @@ import {
 	DuelPhase,
 } from '../../components';
 import type { ECS } from '../../ecs';
-import { selectFacingCard } from '../../helper';
+import { queryFacingCard } from '../../helper';
 
 const passive = () => {
 	const update = (ecs: ECS) => {
@@ -110,7 +110,7 @@ const glory = () => {
 			.and(CT.CardPlace, { place: CardPlace.Ground })
 			.exec();
 		entities.forEach((entity) => {
-			const facingCard = selectFacingCard(ecs, entity);
+			const facingCard = queryFacingCard(ecs, entity);
 			if (facingCard) return;
 
 			entity.addComponent(CT.SkillActivating, {

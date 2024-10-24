@@ -2,21 +2,21 @@ import type { ComponentMap } from './components';
 import { CardPlace, ComponentType } from './components';
 import type { ECS, Entity } from './ecs';
 
-export const selectDeck = (ecs: ECS<ComponentMap>, playerId: string) => {
+export const queryDeckCards = (ecs: ECS<ComponentMap>, playerId: string) => {
 	return ecs
 		.query(ComponentType.CardPlace, { place: CardPlace.Deck })
 		.and(ComponentType.Ownership, { owner: playerId })
 		.exec();
 };
 
-export const selectHand = (ecs: ECS<ComponentMap>, playerId: string) => {
+export const queryHandCards = (ecs: ECS<ComponentMap>, playerId: string) => {
 	return ecs
 		.query(ComponentType.CardPlace, { place: CardPlace.Hand })
 		.and(ComponentType.Ownership, { owner: playerId })
 		.exec();
 };
 
-export const selectGround = (ecs: ECS<ComponentMap>, playerId: string) => {
+export const queryGroundCards = (ecs: ECS<ComponentMap>, playerId: string) => {
 	return ecs
 		.query(ComponentType.CardPlace, { place: CardPlace.Ground })
 		.and(ComponentType.Ownership, { owner: playerId })
@@ -32,7 +32,7 @@ export const cloneComponents = (
 	});
 };
 
-export const selectFacingCard = (
+export const queryFacingCard = (
 	ecs: ECS<ComponentMap>,
 	card: Entity<ComponentMap>,
 ) => {

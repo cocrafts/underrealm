@@ -5,7 +5,7 @@ import {
 	ComponentType as CT,
 } from '../assets/scripts/core/components';
 import { ECS } from '../assets/scripts/core/ecs';
-import { selectHand } from '../assets/scripts/core/helper';
+import { queryHandCards } from '../assets/scripts/core/helper';
 
 describe('Test selectHand', () => {
 	test('selectHand should correctly return the player hand', () => {
@@ -15,7 +15,7 @@ describe('Test selectHand', () => {
 		duelECS
 			.createEntity()
 			.addComponent(CT.CardMetadata, {
-				id: '00013',
+				metaId: '00013',
 				name: 'Legionnaire',
 				kind: CardType.Hero,
 				class: ClassType.Knight,
@@ -30,7 +30,7 @@ describe('Test selectHand', () => {
 		duelECS
 			.createEntity()
 			.addComponent(CT.CardMetadata, {
-				id: '00014',
+				metaId: '00014',
 				name: 'Head Hunter',
 				kind: CardType.Hero,
 				class: ClassType.Knight,
@@ -42,7 +42,7 @@ describe('Test selectHand', () => {
 			})
 			.addComponent(CT.Ownership, { owner: 'B' });
 
-		const hand = selectHand(duelECS, 'A');
+		const hand = queryHandCards(duelECS, 'A');
 		const output = hand.map((cardInHand) =>
 			cardInHand.getComponent(CT.CardMetadata),
 		);

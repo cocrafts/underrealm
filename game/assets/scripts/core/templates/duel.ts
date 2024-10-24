@@ -47,11 +47,11 @@ export const initializeDuel = (
 	});
 
 	duelECS.createEntity().addComponent(ComponentType.PlayerAttribute, {
-		id: firstPlayer.id,
+		userId: firstPlayer.id,
 		health: duelECS.config.initialPlayerHealth,
 	});
 	duelECS.createEntity().addComponent(ComponentType.PlayerAttribute, {
-		id: secondPlayer.id,
+		userId: secondPlayer.id,
 		health: duelECS.config.initialPlayerHealth,
 	});
 

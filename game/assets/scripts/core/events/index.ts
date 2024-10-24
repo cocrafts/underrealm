@@ -12,12 +12,12 @@ export type Event = EndTurnEvent | SummonCardEvent;
 
 export type EndTurnEvent = {
 	type: EventType.EndTurn;
-	playerEid: number;
+	playerEntityId: number;
 };
 
 export type SummonCardEvent = {
 	type: EventType.SummonCard;
-	playerEid: number;
-	cardEid: number;
+	playerEntityId: number;
+	cardEntityId: number;
 	groundIndex: number;
 };
